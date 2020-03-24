@@ -4,7 +4,7 @@ public enum Level {
     LEVEL1 (1),
     LEVEL2 (2),
     LEVEL3 (3),
-    DOOM (4);
+    DOME (4);
     
     private final int level; // in meters
     Level(int level) {
