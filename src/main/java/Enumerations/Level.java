@@ -1,3 +1,5 @@
+package Enumerations;
+
 public enum Level {
     
     GROUND (0),
@@ -6,7 +8,7 @@ public enum Level {
     LEVEL3 (3),
     DOME (4);
     
-    private final int level; // in meters
+    private final int level;
     Level(int level) {
         this.level = level;
     }
