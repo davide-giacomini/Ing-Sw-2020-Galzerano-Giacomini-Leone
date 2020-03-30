@@ -1,9 +1,10 @@
 package Model.God;
 
 import Model.Enumerations.Level;
+import Model.PlayerBehaviour;
 import Model.Worker;
 
-public class Pan {
+public class Pan implements PlayerBehaviour {
 
     public Pan () {
 

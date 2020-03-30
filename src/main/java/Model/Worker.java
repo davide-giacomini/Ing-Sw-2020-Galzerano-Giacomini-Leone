@@ -2,160 +2,176 @@ package Model;
 
 import Model.Enumerations.Gender;
 import Model.Enumerations.Level;
-import Model.Exceptions.InvalidActionException;
+import Model.Exceptions.SlotOccupiedException;
 
 import java.awt.*;
 
 public class Worker {
+    /**
+     * Variable which represents a male. It's useful to call the male worker through the player's array.
+     */
+    public final static int MALE = 0;
+    /**
+     * Variable which represents a female. It's useful to call the female worker through the player's array.
+     */
+    public final static int FEMALE = 1;
     private Color color;
     private Gender gender;
-    private Level workerLevel;
-    private Slot workerSlot;
+    private Level level;
+    private Slot slot;
     private boolean winnerMoveUp;
 
-    public Worker(Color c) {
-        this.color = c;
-        this.workerLevel = Level.GROUND;
-
+    public Worker(Color color, Gender gender) {
+        this.color = color;
+        this.gender = gender;
+        this.level = Level.GROUND;
+    }
+    
+    /**
+     * @param slot slot where {@link Worker} is going to be placed
+     * @return true if the slot was set, false otherwise.
+     */
+    public boolean setSlot(Slot slot) {
+        if (!slot.isOccupied()) {
+            this.slot = slot;
+            return true;
+        }
+        else return false;
     }
 
-        //bisogna implementare l'eccezione per cui la casella è già piena
-        public void setWorkerSlot(Slot slot) {
-                if (!slot.isThereAWorker()) {
-                    this.workerSlot = slot;
-                }
+    public Slot getSlot() {
+            return this.slot;
+    }
+
+    public Level getLevel() { return this.level; }
+
+    public Color getColor() { return this.color; }
+
+    public Gender getGender() { return this.gender; }
+    
+    
+    /**
+     * @return true if the worker reached the level 3, false otherwise
+     * @param slotDestination the slot where the worker is going to move to
+     */
+    private boolean updatePosition(Slot slotDestination) {
+        this.slot = slotDestination;
+        this.level = this.slot.getLevel();
+        
+        return this.level == Level.LEVEL3;
+    }
+    
+    /**
+     * @return true if the worker reached the third level
+     * @throws IndexOutOfBoundsException if there isn't a slot in the left
+     * @throws SlotOccupiedException if the slot is occupied
+     */
+    public boolean goLeft() throws IndexOutOfBoundsException, SlotOccupiedException {
+        if (slot.getColumn()<1) throw new IndexOutOfBoundsException();
+        
+        Slot leftSlot = Board.getBoard().getLeftSlot(slot);
+        if (leftSlot.isOccupied()) throw new SlotOccupiedException();
+        else {
+            return updatePosition(leftSlot);
         }
-
-        public Slot getWorkerSlot() {
-                return this.workerSlot;
+    }
+    /**
+     * @return true if the worker reached the third right
+     * @throws IndexOutOfBoundsException if there isn't a slot in the left
+     * @throws SlotOccupiedException if the slot is occupied
+     */
+    public boolean goRight() throws IndexOutOfBoundsException, SlotOccupiedException {
+        if (slot.getColumn()>Board.COLUMNSNUMBER -2) throw new IndexOutOfBoundsException();
+    
+        Slot rightSlot = Board.getBoard().getRightSlot(slot);
+        if (rightSlot.isOccupied()) throw new SlotOccupiedException();
+        else {
+            return updatePosition(rightSlot);
         }
-
-        public Level getWorkerLevel() { return this.workerLevel; }
-
-        public Color getWorkerColor() { return this.color; }
-
-    public Gender getWorkerGender() { return this.gender; }
-
-        /*public void moveUp() throws WorkerCannotGoUpException {
-                if (this.workerLevel == Level.GROUND) {
-                    this.workerLevel = Level.LEVEL1;
-                }
-                else if (this.workerLevel == Level.LEVEL1) {
-                    this.workerLevel = Level.LEVEL2;
-                }
-
-                else if (this.workerLevel == Level.LEVEL2) {
-                    this.workerLevel = Level.LEVEL3;
-                    this.winnerMoveUp = true;
-                }
-                else throw new WorkerCannotGoUpException();
-
-
+    }
+    /**
+     * @return true if the worker reached the third level
+     * @throws IndexOutOfBoundsException if there isn't a slot up
+     * @throws SlotOccupiedException if the slot is occupied
+     */
+    public boolean goUp() throws IndexOutOfBoundsException, SlotOccupiedException {
+        if (slot.getRow()>Board.ROWSNUMBER -2) throw new IndexOutOfBoundsException();
+        
+        Slot upSlot = Board.getBoard().getUpSlot(slot);
+        if (upSlot.isOccupied()) throw new SlotOccupiedException();
+        else {
+            return updatePosition(upSlot);
         }
-
-        public void moveDown(Slot newSlot) {
-                this.workerLevel = newSlot.getSlotLevel();
-
-        } */ //move up e down are not useful
-
-
-
-        public void updateWorkerLevel () {
-            this.workerLevel = workerSlot.getSlotLevel();
+    }
+    /**
+     * @return true if the worker reached the third level
+     * @throws IndexOutOfBoundsException if there isn't a slot down
+     * @throws SlotOccupiedException if the slot is occupied
+     */
+    public boolean goDown() throws IndexOutOfBoundsException, SlotOccupiedException {
+        if (slot.getRow()<1) throw new IndexOutOfBoundsException();
+        
+        Slot downSlot = Board.getBoard().getDownSlot(slot);
+        if (downSlot.isOccupied()) throw new SlotOccupiedException();
+        else {
+            return updatePosition(downSlot);
         }
-
-        public void goLeft() throws InvalidActionException {
-         //ordinal() method to cast enum to int
-
-          if ( (workerSlot.getLeftSlot(workerSlot).isThereAWorker() ==false) && (workerSlot.getLeftSlot(workerSlot).getSlotLevel().ordinal() - workerLevel.ordinal() < 2)
-              && (workerSlot.getColumn() > 0)) {
-              workerSlot.becomeUnoccupied();
-              workerSlot = workerSlot.getLeftSlot(workerSlot);
-              workerSlot.becomeOccupied(this);
-              updateWorkerLevel();
-          }
-            else throw new InvalidActionException();
+    }
+    /**
+     * @return true if the worker reached the third level
+     * @throws IndexOutOfBoundsException if there isn't a slot up-left
+     * @throws SlotOccupiedException if the slot is occupied
+     */
+    public boolean goUpLeft() throws IndexOutOfBoundsException, SlotOccupiedException {
+        if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()<1) throw new IndexOutOfBoundsException();
+        
+        Slot upLeftSlot = Board.getBoard().getUpLeftSlot(slot);
+        if (upLeftSlot.isOccupied()) throw new SlotOccupiedException();
+        else {
+            return updatePosition(upLeftSlot);
         }
-
-        public void goRight() throws InvalidActionException{
-            if ( (workerSlot.getRightSlot(workerSlot).isThereAWorker() ==false) && (workerSlot.getRightSlot(workerSlot).getSlotLevel().ordinal() - workerLevel.ordinal() < 2)
-                    && (workerSlot.getColumn() < 4)) {
-                workerSlot.becomeUnoccupied();
-                workerSlot = workerSlot.getRightSlot(workerSlot);
-                workerSlot.becomeOccupied(this);
-                updateWorkerLevel();
-            }
-            else throw new InvalidActionException();
+    }
+    /**
+     * @return true if the worker reached the third level
+     * @throws IndexOutOfBoundsException if there isn't a slot up-right
+     * @throws SlotOccupiedException if the slot is occupied
+     */
+    public boolean goUpRight() throws IndexOutOfBoundsException, SlotOccupiedException {
+        if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
+        
+        Slot upRightSlot = Board.getBoard().getUpRightSlot(slot);
+        if (upRightSlot.isOccupied()) throw new SlotOccupiedException();
+        else {
+            return updatePosition(upRightSlot);
         }
-
-        public void goUp() throws InvalidActionException{
-            if ( (workerSlot.getUpSlot(workerSlot).isThereAWorker() ==false) && (workerSlot.getUpSlot(workerSlot).getSlotLevel().ordinal() - workerLevel.ordinal() < 2)
-                    && (workerSlot.getRow() > 0)) {
-                workerSlot.becomeUnoccupied();
-                workerSlot = workerSlot.getUpSlot(workerSlot);
-                workerSlot.becomeOccupied(this);
-                updateWorkerLevel();
-            }
-            else throw new InvalidActionException();
+    }
+    /**
+     * @return true if the worker reached the third level
+     * @throws IndexOutOfBoundsException if there isn't a slot down-left
+     * @throws SlotOccupiedException if the slot is occupied
+     */
+    public boolean goDownLeft() throws IndexOutOfBoundsException, SlotOccupiedException {
+        if (slot.getRow()<1|| slot.getColumn()<1) throw new IndexOutOfBoundsException();
+        
+        Slot downLeftSlot = Board.getBoard().getDownLeftSlot(slot);
+        if (downLeftSlot.isOccupied()) throw new SlotOccupiedException();
+        else {
+            return updatePosition(downLeftSlot);
         }
-
-        public void goDown() throws InvalidActionException{
-            if ( (workerSlot.getDownSlot(workerSlot).isThereAWorker() ==false) && (workerSlot.getDownSlot(workerSlot).getSlotLevel().ordinal() - workerLevel.ordinal() < 2)
-                    && (workerSlot.getRow() < 4)) {
-                workerSlot.becomeUnoccupied();
-                workerSlot = workerSlot.getDownSlot(workerSlot);
-                workerSlot.becomeOccupied(this);
-                updateWorkerLevel();
-            }
-            else throw new InvalidActionException();
+    }
+    /**
+     * @return true if the worker reached the third level
+     * @throws IndexOutOfBoundsException if there isn't a slot down-right
+     * @throws SlotOccupiedException if the slot is occupied
+     */
+    public boolean goDownRight() throws IndexOutOfBoundsException, SlotOccupiedException {
+        if (slot.getRow()<1 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
+        
+        Slot downRightSlot = Board.getBoard().getDownRightSlot(slot);
+        if (downRightSlot.isOccupied()) throw new SlotOccupiedException();
+        else {
+            return updatePosition(downRightSlot);
         }
-
-        public void goUpLeft() throws InvalidActionException{
-            if ( (workerSlot.getUpLeftSlot(workerSlot).isThereAWorker() ==false) && (workerSlot.getUpLeftSlot(workerSlot).getSlotLevel().ordinal() - workerLevel.ordinal() < 2)
-                    && (workerSlot.getRow() > 0)) {
-                workerSlot.becomeUnoccupied();
-                workerSlot = workerSlot.getUpLeftSlot(workerSlot);
-                workerSlot.becomeOccupied(this);
-            }
-            else throw new InvalidActionException();
-        }
-
-        public void goUpRight() throws InvalidActionException{
-            if ( (workerSlot.getUpRightSlot(workerSlot).isThereAWorker() ==false) && (workerSlot.getUpRightSlot(workerSlot).getSlotLevel().ordinal() - workerLevel.ordinal() < 2)
-                    || (workerSlot.getRow() > 0)) {
-                workerSlot.becomeUnoccupied();
-                workerSlot = workerSlot.getUpRightSlot(workerSlot);
-                workerSlot.becomeOccupied(this);
-                updateWorkerLevel();
-            }
-            else throw new InvalidActionException();
-
-        }
-
-        public void goDownLeft() throws InvalidActionException{
-            if ( (workerSlot.getDownLeftSlot(workerSlot).isThereAWorker() ==false) && (workerSlot.getDownLeftSlot(workerSlot).getSlotLevel().ordinal() - workerLevel.ordinal() < 2)
-                    && (workerSlot.getRow() > 0)){
-            workerSlot.becomeUnoccupied();
-            workerSlot = workerSlot.getDownLeftSlot(workerSlot);
-            workerSlot.becomeOccupied(this);
-            updateWorkerLevel();
-            }
-            else throw new InvalidActionException();
-        }
-
-        public void goDownRight() throws InvalidActionException{
-            if ( (workerSlot.getDownRightSlot(workerSlot).isThereAWorker() ==false) && (workerSlot.getDownRightSlot(workerSlot).getSlotLevel().ordinal() - workerLevel.ordinal() < 2)
-                    && (workerSlot.getRow() > 0)) {
-                workerSlot.becomeUnoccupied();
-                workerSlot = workerSlot.getDownRightSlot(workerSlot);
-                workerSlot.becomeOccupied(this);
-                updateWorkerLevel();
-            }
-            else throw new InvalidActionException();
-
-        }
-
-
-        //build here or in player
-
-        }
+    }
+    
+}

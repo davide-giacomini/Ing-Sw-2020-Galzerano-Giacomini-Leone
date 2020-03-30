@@ -1,9 +1,10 @@
 package Model.God;
 
+import Model.PlayerBehaviour;
 import Model.Slot;
 import Model.Worker;
 
-public class Atlante {
+public class Atlante implements PlayerBehaviour {
 
     public Atlante (){
 

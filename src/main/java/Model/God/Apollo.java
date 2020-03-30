@@ -1,9 +1,10 @@
 package Model.God;
 
+import Model.PlayerBehaviour;
 import Model.Slot;
 import Model.Worker;
 
-public class Apollo {
+public class Apollo implements PlayerBehaviour {
     public Apollo () {
 
     }
