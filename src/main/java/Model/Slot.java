@@ -1,6 +1,6 @@
 package Model;
 
-import Enumerations.Level;
+import Model.Enumerations.Level;
 
 public class Slot {
     private final int column;
@@ -10,13 +10,16 @@ public class Slot {
     private Level slotLevel;
     private static Board gameBoard;
 
-    Slot (int i, int j) {
+
+    public Slot (int i, int j) {
         this.row = i;
         this.column = j;
         this.isThereAWorker = false;
-        this.slotLevel = Level.GROUND;
+        slotLevel = Level.GROUND;
         gameBoard = Game.gameBoard;
     }
+
+
 
     public boolean isThereAWorker() {
         return isThereAWorker;
@@ -40,6 +43,8 @@ public class Slot {
         return row;
     }
 
+    public boolean getIfBusyOrNot (){ return isThereAWorker; }
+
     public Worker getSlotWorker() {
         return slotWorker;
     }
@@ -56,8 +61,36 @@ public class Slot {
         this.slotLevel = slotLevel;
     }
 
+
+
     public Slot getLeftSlot (Slot actualSlot) {
-        return gameBoard.getLeftSlot(actualSlot);
+        return Game.gameBoard.getLeftSlot(actualSlot);
     }
+
+    public Slot getRightSlot (Slot actualSlot) {
+        return Game.gameBoard.getRightSlot(actualSlot);
+    }
+
+    public Slot getUpSlot (Slot actualSlot) {
+        return Game.gameBoard.getUpSlot(actualSlot);
+    }
+
+    public Slot getDownSlot (Slot actualSlot) {
+        return Game.gameBoard.getDownSlot(actualSlot);
+    }
+
+    public Slot getUpLeftSlot (Slot actualSlot) { return Game.gameBoard.getUpLeftSlot(actualSlot); }
+
+    public Slot getDownLeftSlot (Slot actualSlot) {
+        return Game.gameBoard.getDownLeftSlot(actualSlot);
+    }
+
+    public Slot getUpRightSlot (Slot actualSlot) {
+        return Game.gameBoard.getUpRightSlot(actualSlot);
+    }
+
+    public Slot getDownRightSlot (Slot actualSlot) { return Game.gameBoard.getDownRightSlot(actualSlot); }
+
+
 
 }

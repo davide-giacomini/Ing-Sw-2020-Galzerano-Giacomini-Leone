@@ -1,6 +1,6 @@
 package Model;
 
-import Enumerations.Move;
+import Model.Enumerations.Move;
 
 import java.awt.*;
 
@@ -47,9 +47,12 @@ public class Player {
         return Move.DOWN; // andrebbero implementate tutte ed otto
     }
 
+
+    //Here or in controller?
+
     public void move(Slot wishedSlot, Worker choseWorker) {
         switch (checkMove(wishedSlot, choseWorker)) {
-            case LEFT : choseWorker.goLeft();
+            case LEFT : //choseWorker.goLeft();
             case LEFTUP:
             case UP:
                 break;
