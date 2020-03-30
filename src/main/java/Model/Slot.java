@@ -2,37 +2,33 @@ package Model;
 
 import Model.Enumerations.Level;
 
+/**
+ * This class represent a slot of the board.
+ * The slot can't be instanced by anyone. It is thought to be instanced only one time by the {@link Board}, therefore
+ * it's got a protected constructor.
+ */
 public class Slot {
     private final int column;
     private final int row;
-    private boolean isThereAWorker;
-    private Worker slotWorker;
-    private Level slotLevel;
-    private static Board gameBoard;
-
-
-    public Slot (int i, int j) {
+    private boolean isWorkerOn;
+    private Worker worker;
+    private Level level;
+    
+    /**
+     * Solo constructor. It is thought to be called only by {@link Board}
+     * @param i slot's row
+     * @param j slot's column
+     */
+    protected Slot (int i, int j) {
         this.row = i;
         this.column = j;
-        this.isThereAWorker = false;
-        slotLevel = Level.GROUND;
-        gameBoard = Game.gameBoard;
+        this.isWorkerOn = false;
+        level = Level.GROUND;
     }
 
 
-
-    public boolean isThereAWorker() {
-        return isThereAWorker;
-    }
-
-    public void becomeOccupied(Worker w) {
-        this.isThereAWorker = true;
-        this.slotWorker = w;
-    }
-
-    public void becomeUnoccupied() {
-        this.isThereAWorker = false;
-        this.slotWorker = null;
+    public boolean isWorkerOn() {
+        return isWorkerOn;
     }
 
     public int getColumn() {
@@ -42,55 +38,29 @@ public class Slot {
     public int getRow() {
         return row;
     }
-
-    public boolean getIfBusyOrNot (){ return isThereAWorker; }
-
-    public Worker getSlotWorker() {
-        return slotWorker;
+    
+    public Worker getWorker() {
+        return worker;
     }
 
-    public void setSlotWorker(Worker slotWorker) {
-        this.slotWorker = slotWorker;
+    public void setWorker(Worker worker) {
+        this.worker = worker;
     }
 
-    public Level getSlotLevel() {
-        return slotLevel;
+    public Level getLevel() {
+        return level;
     }
 
-    public void setSlotLevel(Level slotLevel) {
-        this.slotLevel = slotLevel;
+    public void setLevel(Level level) {
+        this.level = level;
     }
-
-
-
-    public Slot getLeftSlot (Slot actualSlot) {
-        return Game.gameBoard.getLeftSlot(actualSlot);
+    
+    public boolean isOccupied() {
+        return worker!=null && level==Level.DOME;
     }
-
-    public Slot getRightSlot (Slot actualSlot) {
-        return Game.gameBoard.getRightSlot(actualSlot);
+    
+    public String toString() {
+        return "Row: " + row + "\nColumn: " + column;
     }
-
-    public Slot getUpSlot (Slot actualSlot) {
-        return Game.gameBoard.getUpSlot(actualSlot);
-    }
-
-    public Slot getDownSlot (Slot actualSlot) {
-        return Game.gameBoard.getDownSlot(actualSlot);
-    }
-
-    public Slot getUpLeftSlot (Slot actualSlot) { return Game.gameBoard.getUpLeftSlot(actualSlot); }
-
-    public Slot getDownLeftSlot (Slot actualSlot) {
-        return Game.gameBoard.getDownLeftSlot(actualSlot);
-    }
-
-    public Slot getUpRightSlot (Slot actualSlot) {
-        return Game.gameBoard.getUpRightSlot(actualSlot);
-    }
-
-    public Slot getDownRightSlot (Slot actualSlot) { return Game.gameBoard.getDownRightSlot(actualSlot); }
-
-
 
 }

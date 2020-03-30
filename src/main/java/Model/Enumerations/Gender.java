@@ -1,4 +1,4 @@
-package Enumerations;
+package Model.Enumerations;
 
 public enum Gender {
 

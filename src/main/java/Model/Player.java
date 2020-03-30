@@ -1,71 +1,57 @@
 package Model;
 
-import Model.Enumerations.Move;
+import Model.Enumerations.Gender;
 
 import java.awt.*;
 
+/**
+ * This class represents the user. A user can have two workers, male and female, and each player can move differently
+ * depending on the god assigned to them. Hence, a state pattern has been used in order to devolve the moves to the
+ * {@link PlayerBehaviour} interface.
+ */
 public class Player {
+    /**
+     * Number of workers a player has got.
+     */
+    public final static int WORKERSNUMBER = 2;
     private String username;
     private Worker workers[];
     private boolean isWinning;
-    private PlayerBehaviour state;
+    private PlayerBehaviour god;
     private boolean isGodActive;
 
 
-    Player(String u, Color c) {
-        this.username = u;
+    Player(String username, Color workersColor) {
+        this.username = username;
 
-        workers = new Worker[2];
-        workers[0] = new Worker(c);
-        workers[1] = new Worker(c);
+        workers = new Worker[WORKERSNUMBER];
+        workers[Worker.MALE] = new Worker(workersColor, Gender.MALE);
+        workers[Worker.FEMALE] = new Worker(workersColor, Gender.FEMALE);
     }
 
-    public void setState(PlayerBehaviour state) {
-        this.state = state;
+    public void setGod(PlayerBehaviour god) {
+        this.god = god;
     }
 
-    public Worker chooseWorker (int i) {
+    public Worker getWorker(int i) {
         return workers[i];
     }
-
-    public void putWorker(Worker w, Slot s) {
-        w.setWorkerSlot(s);
-        w.getWorkerSlot().becomeOccupied(w);
+    
+    /**
+     * Put the worker on a slot of the board.
+     * @param worker player's worker
+     * @param slot slot chosen to put on the worker
+     */
+    public void putWorkerOnSlot(Worker worker, Slot slot) {
+        worker.setSlot(slot);
     }
-
-    public Slot getWorkerPosition(Worker w) {
-        return w.getWorkerSlot();
+    
+    /**
+     * @param worker worker whose the caller wants to know the position
+     * @return the slot where the worker is on
+     */
+    public Slot getWorkerPosition(Worker worker) {
+        return worker.getSlot();
     }
-
-    //manca l'eccezione per cui la casella è già piena
-    public Move checkMove (Slot wishedSlot, Worker choseWorker) {
-        int i = choseWorker.getWorkerSlot().getRow() -  wishedSlot.getRow();
-        int j = choseWorker.getWorkerSlot().getColumn() - wishedSlot.getColumn();
-        if (i == 0 && j == -1) {
-            return Move.LEFT;
-        }
-        return Move.DOWN; // andrebbero implementate tutte ed otto
-    }
-
-
-    //Here or in controller?
-
-    public void move(Slot wishedSlot, Worker choseWorker) {
-        switch (checkMove(wishedSlot, choseWorker)) {
-            case LEFT : //choseWorker.goLeft();
-            case LEFTUP:
-            case UP:
-                break;
-            case RIGHTUP:
-                break;
-            case RIGHT:
-                break;
-            case RIGHTDOWN:
-                break;
-            case DOWN:
-                break;
-            case LEFTDOWN:
-                break;
-        }
-    }
+    
 }
