@@ -22,16 +22,4 @@ public class WorkerTest {
     public void tearDown() throws Exception {
         worker = null;
     }
-    
-    @Test
-    public void goLeft_correctInput_correctOutput() {
-        Slot slotBefore = worker.getSlot();
-        
-        try {
-            worker.goLeft();
-        }
-        catch (SlotOccupiedException e) {}
-        
-        Assert.assertEquals(worker.getSlot(), Board.getBoard().getLeftSlot(slotBefore));
-    }
 }
