@@ -1,0 +1,135 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Game</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Game (Model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Game</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.awt.*;
+<i>4</i>&nbsp;import java.util.ArrayList;
+<i>5</i>&nbsp;import java.util.Random;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * This class has to be completed yet.
+<i>9</i>&nbsp; */
+<i>10</i>&nbsp;public class Game {
+<i>11</i>&nbsp;    private boolean start;
+<i>12</i>&nbsp;    private boolean end;
+<i>13</i>&nbsp;    private ArrayList&lt;Player&gt; players;
+<i>14</i>&nbsp;
+<b class="nc"><i>15</i>&nbsp;    public static final Random rand = new Random();</b>
+<i>16</i>&nbsp;    // Array dichiarato da tre giocatori, ma se fossero due?
+<b class="nc"><i>17</i>&nbsp;    public Game() {</b>
+<i>18</i>&nbsp;        //this.players = new Player[3];
+<b class="nc"><i>19</i>&nbsp;        this.start = false;</b>
+<b class="nc"><i>20</i>&nbsp;        this.end = false;</b>
+<b class="nc"><i>21</i>&nbsp;        players = new ArrayList&lt;&gt;();</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    public void addPlayer (String username, Color c, int i) {
+<b class="nc"><i>25</i>&nbsp;        players.set(i, new Player(username, c));</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;    public void addPlayer(Player player) {
+<b class="nc"><i>28</i>&nbsp;        if (start == true )</b>
+<i>29</i>&nbsp;            //throw exception because game has already started and
+<i>30</i>&nbsp;            //it is not possible to add a player
+<i>31</i>&nbsp;
+<b class="nc"><i>32</i>&nbsp;            if (players.size() &gt;= 4) //throw exception because it&#39;s not</b>
+<i>33</i>&nbsp;                //possible to have more than 3 players
+<b class="nc"><i>34</i>&nbsp;                players.add(player);</b>
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public Slot getSlot(int row, int column) {
+<b class="nc"><i>38</i>&nbsp;        return Board.getBoard().getSlot(row, column);</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;    
+<i>41</i>&nbsp;    public boolean isGameEnded() {
+<b class="nc"><i>42</i>&nbsp;        return end;</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    public boolean isGameStarted() {
+<b class="nc"><i>46</i>&nbsp;        return start;</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    public ArrayList&lt;Player&gt; getPlayers() {
+<b class="nc"><i>50</i>&nbsp;        return players;</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-03-31 12:58</div>
+</div>
+</body>
+</html>
