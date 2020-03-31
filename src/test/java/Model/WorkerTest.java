@@ -24,7 +24,7 @@ public class WorkerTest {
     }
     
     @Test
-    public void goLeft_correctInput_crrectOutput() {
+    public void goLeft_correctInput_correctOutput() {
         Slot slotBefore = worker.getSlot();
         
         try {
