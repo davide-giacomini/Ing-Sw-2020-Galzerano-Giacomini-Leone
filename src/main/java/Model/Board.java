@@ -1,6 +1,8 @@
 package Model;
 
 import Model.Enumerations.Direction;
+import Model.Enumerations.Level;
+import Model.Exceptions.InvalidActionException;
 
 /**
  * This class represents the model of the board of the game, with inside it 25 slots, each one represented by the class
@@ -23,7 +25,7 @@ public class Board {
             }
         }
     }
-    private synchronized static Board createBoard(){
+    private static Board createBoard(){
         if (board==null) board = new Board();
         return board;
     }
@@ -45,7 +47,7 @@ public class Board {
      * @return the slot nearby the current slot, in the direction specified
      * @throws Exception if none of the cases are verified.
      */
-    public Slot getNearbySlot(Direction direction, Slot currentSlot) throws Exception {
+    public Slot getNearbySlot(Direction direction, Slot currentSlot) throws InvalidActionException {
         switch (direction){
             case LEFT:
                 return slots[currentSlot.getRow()][currentSlot.getColumn()-1];
@@ -64,7 +66,16 @@ public class Board {
             case RIGHTDOWN:
                 return slots[currentSlot.getRow()+1][currentSlot.getColumn()+1];
             default:
-                throw new Exception();
+                throw new InvalidActionException();
+        }
+    }
+
+    public void clearBoard() {
+        for (int i = 0; i < ROWSNUMBER; i++) {
+            for (int j = 0; j < COLUMNSNUMBER; j++) {
+                slots[i][j].setWorker(null);
+                slots[i][j].setLevel(Level.GROUND);
+            }
         }
     }
     
