@@ -15,18 +15,35 @@ public class Player {
      */
     public final static int WORKERSNUMBER = 2;
     private String username;
-    private Worker workers[];
+    private Worker[] workers;
     private boolean isWinning;
+    private boolean cantMoveUp;
     private PlayerBehaviour god;
     private boolean isGodActive;
 
 
-    Player(String username, Color workersColor) {
+    public Player(String username, Color workersColor) {
         this.username = username;
 
         workers = new Worker[WORKERSNUMBER];
         workers[Worker.MALE] = new Worker(workersColor, Gender.MALE);
         workers[Worker.FEMALE] = new Worker(workersColor, Gender.FEMALE);
+    }
+
+    public void setWinning(boolean winning) {
+        isWinning = winning;
+    }
+
+    public boolean isWinning() {
+        return isWinning;
+    }
+
+    public boolean cantMoveUp() {
+        return cantMoveUp;
+    }
+
+    public void setCantMoveUp(boolean cantMoveUp) {
+        this.cantMoveUp = cantMoveUp;
     }
 
     public void setGod(PlayerBehaviour god) {
@@ -42,6 +59,7 @@ public class Player {
      * @param worker player's worker
      * @param slot slot chosen to put on the worker
      */
+
     public void putWorkerOnSlot(Worker worker, Slot slot) {
         worker.setSlot(slot);
     }
