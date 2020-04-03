@@ -66,7 +66,7 @@ public class Turn {
      */
     public boolean validateEndTurn() {
         player.setCantMoveUp(false);
-        return numberOfBuilding >= MIN_MOVEMENT && (numberOfMovement >= MIN_BUILDING || player.isWinning());
+        return numberOfBuilding >= MIN_BUILDING && (numberOfMovement >= MIN_MOVEMENT || player.isWinning());
     }
 
 }
