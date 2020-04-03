@@ -13,7 +13,7 @@ public class MoveTwiceTurn extends Turn{
     private final static int MAX_MOVEMENT = 2;
 
     public MoveTwiceTurn(Player player, int indexOfWorker) {
-        super(player, indexOfWorker);
+        super(player);
     }
 
     /**
@@ -45,20 +45,20 @@ public class MoveTwiceTurn extends Turn{
      */
     @Override
     public void executeMove(Direction direction) throws Exception {
-        if (numberOfMovement == MAX_MOVEMENT) {
+        if (numberOfMovements == MAX_MOVEMENT) {
             throw new InvalidActionException();
         }
-        else if (numberOfMovement == 0) {
+        else if (numberOfMovements == 0) {
             player.getWorker(indexOfWorker).move(direction);
-            numberOfMovement++;
+            numberOfMovements++;
             firstMovementDirection = direction;
         }
-        else if (numberOfMovement == 1) {
+        else if (numberOfMovements == 1) {
             if(checkOppositeDirection(firstMovementDirection, direction)) {
                 throw new WrongBuildOrMoveException();
             }
             player.getWorker(indexOfWorker).move(direction);
-            numberOfMovement++;
+            numberOfMovements++;
         }
     }
 

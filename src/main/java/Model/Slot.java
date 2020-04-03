@@ -52,9 +52,11 @@ public class Slot {
     public boolean isOccupied() {
         return worker!=null || level==Level.DOME;
     }
-
-
     
+    
+    /**
+     * @return a string which display the row and the column of the slot.
+     */
     public String toString() {
         return "Row: " + row + "\nColumn: " + column;
     }

@@ -10,8 +10,8 @@ import Model.Player;
 public class BuildBeforeMoveTurn extends Turn{
     private final static int MAX_BUILDING = 2;
 
-    public BuildBeforeMoveTurn(Player player, int indexOfWorker) {
-        super(player, indexOfWorker);
+    public BuildBeforeMoveTurn(Player player) {
+        super(player);
     }
 
     /**
@@ -20,19 +20,19 @@ public class BuildBeforeMoveTurn extends Turn{
      */
     @Override
     public void executeBuild(Direction direction) throws Exception {
-        if (numberOfMovement < MIN_MOVEMENT && numberOfBuilding == 0) {
+        if (numberOfMovements < MIN_MOVEMENTS && numberOfBuildings == 0) {
             player.getWorker(indexOfWorker).build(direction);
             player.setCantMoveUp(true);
-            numberOfBuilding++;
+            numberOfBuildings++;
         }
-        else if (numberOfMovement < MIN_MOVEMENT && numberOfBuilding == 1) {
+        else if (numberOfMovements < MIN_MOVEMENTS && numberOfBuildings == 1) {
             throw new InvalidActionException();
         }
-        else if (numberOfMovement == MAX_MOVEMENT && numberOfBuilding < MAX_BUILDING) {
+        else if (numberOfMovements == MAX_MOVEMENTS && numberOfBuildings < MAX_BUILDING) {
             player.getWorker(indexOfWorker).build(direction);
-            numberOfBuilding++;
+            numberOfBuildings++;
         }
-        else if (numberOfBuilding == MAX_BUILDING) {
+        else if (numberOfBuildings == MAX_BUILDING) {
             throw new InvalidActionException();
         }
     }

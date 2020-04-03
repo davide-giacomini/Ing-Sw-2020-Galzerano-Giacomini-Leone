@@ -11,28 +11,37 @@ import Model.Player;
  *
  */
 public class Turn {
-    static final int MIN_MOVEMENT = 1;
-    static final int MIN_BUILDING = 1;
-    static final int MAX_MOVEMENT = 1;
-    static final int MAX_BUILDING = 1;
-    int numberOfMovement;
-    int numberOfBuilding;
+    // DA MODIFICARE // da mettere private quando ho finito
+    final int MIN_MOVEMENTS;
+    final int MIN_BUILDINGS;
+    final int MAX_MOVEMENTS;
+    final int MAX_BUILDINGS;
+    int numberOfMovements;
+    int numberOfBuildings;
     protected Player player;
     int indexOfWorker;
 
-    public Turn(Player player, int indexOfWorker) {
-        this.numberOfMovement = 0;
-        this.numberOfBuilding = 0;
+    
+    public Turn(Player player) {
+        this.numberOfMovements = 0;
+        this.numberOfBuildings = 0;
         this.player = player;
+        MIN_MOVEMENTS = player.getGod().getMIN_MOVEMENTS();
+        MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();
+        MAX_MOVEMENTS = player.getGod().getMAX_MOVEMENTS();
+        MAX_BUILDINGS = player.getGod().getMAX_BUILDINGS();
+    }
+
+    public void setNumberOfMovements(int newNumber) {
+        this.numberOfMovements = newNumber;
+    }
+
+    public void setNumberOfBuildings(int newNumber) {
+        this.numberOfBuildings = newNumber;
+    }
+    
+    public void setIndexOfWorker (int indexOfWorker){
         this.indexOfWorker = indexOfWorker;
-    }
-
-    public void setNumberOfMovement(int newNumber) {
-        this.numberOfMovement = newNumber;
-    }
-
-    public void setNumberOfBuilding(int newNumber) {
-        this.numberOfBuilding = newNumber;
     }
 
     /**
@@ -40,11 +49,11 @@ public class Turn {
      * @throws InvalidActionException if he cannot do this action
      */
     public void executeMove(Direction direction) throws Exception {
-        if (numberOfMovement == MAX_MOVEMENT) {
+        if (numberOfMovements == MAX_MOVEMENTS) {
             throw new InvalidActionException();
         }
-        player.getWorker(indexOfWorker).move(direction);
-        numberOfMovement++;
+        player.move(direction, player.getWorker(indexOfWorker));
+        numberOfMovements++;
     }
 
     /**
@@ -52,11 +61,11 @@ public class Turn {
      * @throws InvalidActionException if he cannot do this action (for example he still has not moved)
      */
     public void executeBuild(Direction direction) throws Exception {
-        if (numberOfMovement < MIN_MOVEMENT || numberOfBuilding == MAX_BUILDING) {
+        if (numberOfMovements < MIN_MOVEMENTS || numberOfBuildings == MAX_BUILDINGS) {
             throw new InvalidActionException();
         }
-        player.getWorker(indexOfWorker).build(direction);
-        numberOfBuilding++;
+        player.build(direction, player.getWorker(indexOfWorker));
+        numberOfBuildings++;
     }
 
     /**
@@ -66,7 +75,7 @@ public class Turn {
      */
     public boolean validateEndTurn() {
         player.setCantMoveUp(false);
-        return numberOfBuilding >= MIN_BUILDING && (numberOfMovement >= MIN_MOVEMENT || player.isWinning());
+        return numberOfBuildings >= MIN_BUILDINGS && (numberOfMovements >= MIN_MOVEMENTS || player.isWinning());
     }
 
 }

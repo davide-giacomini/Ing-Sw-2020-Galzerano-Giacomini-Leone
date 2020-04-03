@@ -17,7 +17,7 @@ public class TurnTest {
     @Before
     public void setUp() {
         player = new Player("Monica", Color.BLUE);
-        turn = new Turn(player, 0);
+        turn = new Turn(player);
         }
 
     @After

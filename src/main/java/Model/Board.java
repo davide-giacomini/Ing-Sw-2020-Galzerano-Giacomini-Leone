@@ -10,9 +10,15 @@ import Model.Exceptions.InvalidActionException;
  * The board can be instanced only one time, hence it's a thread-safe singleton.
  */
 public class Board {
+    /**
+     * Number of rows of the board.
+     */
     public final static int ROWSNUMBER = 5;
+    /**
+     * Number of columns of the board
+     */
     public final static int COLUMNSNUMBER = 5;
-    private Slot[][] slots = new Slot[5][5];
+    private static Slot[][] slots = new Slot[5][5];
     private static Board board = null;
     
     /**
@@ -45,9 +51,9 @@ public class Board {
      * @param direction specifies which next slot you want to get
      * @param currentSlot you want to get the slot nearby this parameter
      * @return the slot nearby the current slot, in the direction specified
-     * @throws Exception if none of the cases are verified.
+     * @throws InvalidActionException if none of the cases are verified.
      */
-    public Slot getNearbySlot(Direction direction, Slot currentSlot) throws InvalidActionException {
+    public static Slot getNearbySlot(Direction direction, Slot currentSlot) throws InvalidActionException {
         switch (direction){
             case LEFT:
                 return slots[currentSlot.getRow()][currentSlot.getColumn()-1];

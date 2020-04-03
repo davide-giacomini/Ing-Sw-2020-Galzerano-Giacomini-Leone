@@ -15,8 +15,8 @@ public class BuildTwiceTurn extends Turn{
     private final static int MAX_BUILDING = 2;
 
 
-    public BuildTwiceTurn(Player player, int indexOfWorker) {
-        super(player, indexOfWorker);
+    public BuildTwiceTurn(Player player) {
+        super(player);
     }
 
     /**
@@ -26,27 +26,27 @@ public class BuildTwiceTurn extends Turn{
      */
     @Override
     public void executeBuild(Direction direction) throws Exception {
-        if (numberOfMovement < MIN_MOVEMENT || numberOfBuilding == MAX_BUILDING) {
+        if (numberOfMovements < MIN_MOVEMENTS || numberOfBuildings == MAX_BUILDING) {
             throw new InvalidActionException();
         }
-        else if (numberOfBuilding == 0) {
+        else if (numberOfBuildings == 0) {
             player.getWorker(indexOfWorker).build(direction);
-            numberOfBuilding++;
+            numberOfBuildings++;
             firstBuildDirection = direction;
         }
-        else if (numberOfBuilding == 1) { //va aggiunta la condizione player.getState() == DEMETRA
+        else if (numberOfBuildings == 1) { //va aggiunta la condizione player.getState() == DEMETRA
             if (firstBuildDirection == direction) {
                 throw new WrongBuildOrMoveException();
             }
             player.getWorker(indexOfWorker).build(direction);
-            numberOfBuilding++;
+            numberOfBuildings++;
         }
-        else if (numberOfBuilding == 1 ) { //va aggiunta la condizione player.getState() == EFESTO
+        else if (numberOfBuildings == 1 ) { //va aggiunta la condizione player.getState() == EFESTO
             if (firstBuildDirection != direction) {     // NB la condizione che non sia una cupola va gestita
                 throw new WrongBuildOrMoveException();      // dal pattern state nel player!!
             }
             player.getWorker(indexOfWorker).build(direction);
-            numberOfBuilding++;
+            numberOfBuildings++;
         }
     }
 }

@@ -22,11 +22,13 @@ public class Worker {
     private Gender gender;
     private Level level;
     private Slot slot;
+    private Player player;
 
-    public Worker(Color color, Gender gender) {
+    public Worker(Color color, Gender gender, Player player) {
         this.color = color;
         this.gender = gender;
         this.level = Level.GROUND;
+        this.player = player;
     }
     
     /**
@@ -52,6 +54,13 @@ public class Worker {
 
     public Gender getGender() { return this.gender; }
     
+    public Player getPlayer() {
+        return player;
+    }
+    
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
     
     /**
      * This method update some parameters that are modified with a worker's movement
@@ -73,7 +82,7 @@ public class Worker {
      * @return true if the level three is reached, false otherwise.
      * @throws SlotOccupiedException if the destination slot is occupied by a dome or another worker
      * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current
-     * slot
+     * @throws InvalidActionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
      */
     public boolean move (Direction direction) throws SlotOccupiedException, NotReachableLevelException, InvalidActionException {
 
@@ -89,7 +98,7 @@ public class Worker {
     /**
      * This method build in the specified direction.
      * @param direction where the worker wants to build to.
-     * @throws SlotOccupiedException
+     * @throws SlotOccupiedException if the destination slot is occupied.
      */
     public void build (Direction direction) throws SlotOccupiedException, InvalidActionException {
 
