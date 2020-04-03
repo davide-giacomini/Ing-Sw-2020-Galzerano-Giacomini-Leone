@@ -1,13 +1,14 @@
 package Model.Turns;
 
 import Model.Enumerations.Direction;
-import Model.Exceptions.InvalidActionException;
+import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.WrongBuildOrMoveException;
 import Model.Player;
 
 /**
  * This class implements an Artemis' turn, who is enable to move twice.
  */
+//PER IL MOMENTO E' UN COMMENTO
 public class MoveTwiceTurn extends Turn{
     private Direction firstMovementDirection;
     private final static int MAX_MOVEMENT = 2;
@@ -24,7 +25,7 @@ public class MoveTwiceTurn extends Turn{
      * @return true if the two directions are opposed
      * @throws Exception in the default case
      */
-    private boolean checkOppositeDirection(Direction oldDirection, Direction newDirection) throws Exception {
+/*    private boolean checkOppositeDirection(Direction oldDirection, Direction newDirection) throws Exception {
         switch (oldDirection) {
             case LEFT: return (newDirection == Direction.RIGHT);
             case LEFTUP: return (newDirection == Direction.RIGHTDOWN);
@@ -36,17 +37,17 @@ public class MoveTwiceTurn extends Turn{
             case LEFTDOWN: return (newDirection == Direction.RIGHTUP);
             default: throw new Exception();
         }
-    }
+    }   */
 
     /**
      * This method allows the player to move twice if he wants
      * @param direction the direction player wants to move to
      * @throws WrongBuildOrMoveException if the direction of the second move isn't allowed by the rules
      */
-    @Override
+ /*   @Override
     public void executeMove(Direction direction) throws Exception {
         if (numberOfMovements == MAX_MOVEMENT) {
-            throw new InvalidActionException();
+            throw new InvalidDirectionException();
         }
         else if (numberOfMovements == 0) {
             player.getWorker(indexOfWorker).move(direction);
@@ -61,5 +62,5 @@ public class MoveTwiceTurn extends Turn{
             numberOfMovements++;
         }
     }
-
+            */
 }

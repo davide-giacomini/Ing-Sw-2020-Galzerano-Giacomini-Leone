@@ -1,9 +1,8 @@
 package Model;
 
 import Model.Enumerations.Direction;
-import Model.Enumerations.Gender;
 import Model.Enumerations.Level;
-import Model.Exceptions.InvalidActionException;
+import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;
 import org.junit.After;
@@ -65,7 +64,7 @@ public class WorkerTest {
             System.out.println("Yet occupied slot");
         } catch (NotReachableLevelException e) {
             System.out.println("Too high level");
-        } catch (InvalidActionException e) {
+        } catch (InvalidDirectionException e) {
             System.out.println("Invalid Action");
         }
     }
@@ -84,7 +83,7 @@ public class WorkerTest {
             assertTrue(board.getSlot(4,2).isOccupied());
         } catch (NotReachableLevelException e) {
             System.out.println("Too high level");
-        } catch (InvalidActionException e) {
+        } catch (InvalidDirectionException e) {
             System.out.println("Invalid action");
         }
     }
@@ -97,7 +96,7 @@ public class WorkerTest {
             assertEquals(Level.LEVEL1, board.getSlot(4,4).getLevel());
         } catch (SlotOccupiedException e) {
             System.out.println("Yet occupied slot");
-        } catch (InvalidActionException e) {
+        } catch (InvalidDirectionException e) {
             System.out.println("Invalid Action");
         }
     }
@@ -110,7 +109,7 @@ public class WorkerTest {
             workerMale.build(Direction.RIGHTDOWN);
         } catch (SlotOccupiedException e) {
             System.out.println("Yet occupied slot");
-        } catch (InvalidActionException e) {
+        } catch (InvalidDirectionException e) {
             System.out.println("Invalid Action");
         }
     }
@@ -131,7 +130,7 @@ public class WorkerTest {
         } catch (SlotOccupiedException e) {
             System.out.println("Yet occupied slot");
             assertEquals(board.getSlot(4,4).getLevel(), Level.DOME);
-        } catch (InvalidActionException e) {
+        } catch (InvalidDirectionException e) {
             System.out.println("Invalid Action");
         }
     }

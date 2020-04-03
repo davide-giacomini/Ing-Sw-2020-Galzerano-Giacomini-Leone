@@ -1,7 +1,7 @@
 package Model.Turns;
 
 import Model.Enumerations.Direction;
-import Model.Exceptions.InvalidActionException;
+import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.WrongBuildOrMoveException;
 import Model.Player;
 
@@ -10,6 +10,7 @@ import Model.Player;
  * the only difference between them is that the first one must build in two different slots,
  * and the second one must do that in the same.
  */
+// PER IL MOMENTO E' UN COMMENTO
 public class BuildTwiceTurn extends Turn{
     private Direction firstBuildDirection;
     private final static int MAX_BUILDING = 2;
@@ -24,10 +25,11 @@ public class BuildTwiceTurn extends Turn{
      * @param direction the direction player wants to build to
      * @throws WrongBuildOrMoveException if the direction of the second build isn't allowed by the rules
      */
+  /*
     @Override
     public void executeBuild(Direction direction) throws Exception {
         if (numberOfMovements < MIN_MOVEMENTS || numberOfBuildings == MAX_BUILDING) {
-            throw new InvalidActionException();
+            throw new InvalidDirectionException();
         }
         else if (numberOfBuildings == 0) {
             player.getWorker(indexOfWorker).build(direction);
@@ -49,4 +51,6 @@ public class BuildTwiceTurn extends Turn{
             numberOfBuildings++;
         }
     }
+    
+            */
 }

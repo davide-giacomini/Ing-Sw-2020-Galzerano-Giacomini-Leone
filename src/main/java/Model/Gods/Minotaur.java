@@ -12,12 +12,12 @@ import Model.Slot;
 import Model.Worker;
 
 /**
- * If a {@link Player} has Apollo, their {@link Worker} can move into an opponent worker's space (using normal movements
- * rules) and swap their position.
+ * {@link Player}'s {@link Worker} may move into an opponent worker's {@link Slot} (using normal movements rules), if
+ * the next slot in the same direction is unoccupied. Their worker is forced into that slot (regardless of it's level).
  */
-public class Apollo extends God {
+public class Minotaur extends God {
     
-    public Apollo(Player player, String name) {
+    public Minotaur(Player player, String name) {
         super(player, name);
         MIN_MOVEMENTS = 1;
         MIN_BUILDINGS = 1;
@@ -25,28 +25,36 @@ public class Apollo extends God {
         MAX_BUILDINGS = 1;
     }
     
-
     @Override
     public boolean move(Direction direction, Worker worker)
-            throws NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, SlotOccupiedException, WrongBuildOrMoveException {
-        
+            throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
+    
         if (worker.getPlayer().getTurn().getNumberOfMovements() > 0)  throw new WrongBuildOrMoveException();
-        
+    
         int previousLevel = worker.getSlot().getLevel().ordinal();
         try {
             worker.move(direction);
             int nextLevel = worker.getSlot().getLevel().ordinal();
             return nextLevel-previousLevel>0 && worker.getSlot().getLevel()==Level.LEVEL3;
         } catch (SlotOccupiedException e) {
+            Slot opponentSLot = Board.getNearbySlot(direction, worker.getSlot());
+            // the slot in the same direction of the worker. If there is not a slot, the move is not available.
+            Slot slotNearOpponentSlot;
+            try {
+                slotNearOpponentSlot = Board.getNearbySlot(direction, opponentSLot);
+            } catch (IndexOutOfBoundsException er){
+                // this exception advises the caller that the slot is occupied and the opponent worker cannot move.
+                throw new SlotOccupiedException();
+            }
             // the worker set in the destination slot
-            Worker opponentWorker = Board.getNearbySlot(direction, worker.getSlot()).getWorker();
+            Worker opponentWorker = opponentSLot.getWorker();
             Slot previousSlot = worker.getSlot();
-            
-            // if there is actually an opponent worker on the destination slot
-            if (opponentWorker!=null && opponentWorker.getPlayer()!=worker.getPlayer()) {
+        
+            // if the slot next to the opponent worker is free and the destination slot is actually occupied by an opponent worker
+            if (opponentWorker!=null && opponentWorker.getPlayer()!=worker.getPlayer() && !slotNearOpponentSlot.isOccupied()) {
                 // manually move player's worker in the destination slot
-                opponentWorker.getSlot().setWorker(worker);
-                previousSlot.setWorker(opponentWorker);
+                opponentWorker.updatePosition(slotNearOpponentSlot);
+                worker.updatePosition(opponentSLot);
                 int nextLevel = worker.getSlot().getLevel().ordinal();
                 return nextLevel-previousLevel>0 && worker.getSlot().getLevel()==Level.LEVEL3;
             }
@@ -60,7 +68,7 @@ public class Apollo extends God {
     public void build(Direction direction, Worker worker)
             throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
         
-        if (worker.getPlayer().getTurn().getNumberOfMovements() == 0)  throw new WrongBuildOrMoveException();
+        if (worker.getPlayer().getTurn().getNumberOfMovements() == 0) throw new WrongBuildOrMoveException();
         
         worker.build(direction);
     }
@@ -69,5 +77,4 @@ public class Apollo extends God {
     public void resetParameters() {
         // nothing is necessary
     }
-    
 }

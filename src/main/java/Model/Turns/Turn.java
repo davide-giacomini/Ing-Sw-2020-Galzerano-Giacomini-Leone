@@ -1,8 +1,11 @@
 package Model.Turns;
 
+import Model.Board;
 import Model.Enumerations.Direction;
-import Model.Exceptions.InvalidActionException;
+import Model.Exceptions.*;
 import Model.Player;
+import Model.Slot;
+import Model.Worker;
 
 /**
  * This class implements a default turn, which is shared by Gods as Apollo, Athena,
@@ -11,29 +14,38 @@ import Model.Player;
  *
  */
 public class Turn {
-    // DA MODIFICARE // da mettere private quando ho finito
-    final int MIN_MOVEMENTS;
-    final int MIN_BUILDINGS;
-    final int MAX_MOVEMENTS;
-    final int MAX_BUILDINGS;
-    int numberOfMovements;
-    int numberOfBuildings;
-    protected Player player;
-    int indexOfWorker;
-
+    private final int MIN_MOVEMENTS;
+    private final int MIN_BUILDINGS;
+    private final int MAX_MOVEMENTS;
+    private final int MAX_BUILDINGS;
+    private int numberOfMovements;
+    private int numberOfBuildings;
+    private Player player;
+    private int indexOfWorker;
+    
     
     public Turn(Player player) {
         this.numberOfMovements = 0;
         this.numberOfBuildings = 0;
         this.player = player;
+        player.setTurn(this);
+        player.getGod().resetParameters();
         MIN_MOVEMENTS = player.getGod().getMIN_MOVEMENTS();
         MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();
         MAX_MOVEMENTS = player.getGod().getMAX_MOVEMENTS();
         MAX_BUILDINGS = player.getGod().getMAX_BUILDINGS();
     }
-
+    
+    public int getNumberOfMovements() {
+        return numberOfMovements;
+    }
+    
     public void setNumberOfMovements(int newNumber) {
         this.numberOfMovements = newNumber;
+    }
+    
+    public int getNumberOfBuildings() {
+        return numberOfBuildings;
     }
 
     public void setNumberOfBuildings(int newNumber) {
@@ -45,25 +57,43 @@ public class Turn {
     }
 
     /**
-     * This method implements a player's move
-     * @throws InvalidActionException if he cannot do this action
+     * This method implements a {@link Player}'s move
+     * @param direction where the player's {@link Worker} is going to move
+     * @return true if the worker moved voluntarily up on the third level, false otherwise
+     * @throws IndexOutOfBoundsException if the destination {@link Slot} doesn't exist in the {@link Board}.
+     * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current.
+     * @throws SlotOccupiedException if the destination {@link Slot} is occupied
+     * @throws InvalidDirectionException if the switch-case of getNearbySlot of {@link Board} entered the default case. It
+     * shouldn't happen.
+     * @throws NoAvailableMovementsException if the worker has been already moved enough times.
+     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
      */
-    public void executeMove(Direction direction) throws Exception {
-        if (numberOfMovements == MAX_MOVEMENTS) {
-            throw new InvalidActionException();
-        }
-        player.move(direction, player.getWorker(indexOfWorker));
+    public boolean executeMove(Direction direction)
+            throws IndexOutOfBoundsException, NotReachableLevelException, SlotOccupiedException, InvalidDirectionException, NoAvailableMovementsException, WrongBuildOrMoveException {
+        
+        if (numberOfMovements == MAX_MOVEMENTS) throw new NoAvailableMovementsException();
+        
+        // player.move returns a boolean, but the method can throw all the exceptions above.
+        // Hence, numberOfMovements has to be incremented only after the method.
+        boolean thirdLevelReached = player.move(direction, player.getWorker(indexOfWorker));
         numberOfMovements++;
+        
+        return thirdLevelReached;
     }
-
+    
     /**
-     * This method implements a player's build
-     * @throws InvalidActionException if he cannot do this action (for example he still has not moved)
+     * This method builds a construction on the {@link Slot} adjacent to the {@link Worker}, in the direction chosen.
+     * @param direction specifies the slot where to build
+     * @throws IndexOutOfBoundsException if the {@link Slot} where to build is outside the {@link Board}
+     * @throws SlotOccupiedException if the slot where to build is occupied by a dome or another worker
+     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
+     * @throws NoAvailableBuildingsException if the worker has already built enough times.
+     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
      */
-    public void executeBuild(Direction direction) throws Exception {
-        if (numberOfMovements < MIN_MOVEMENTS || numberOfBuildings == MAX_BUILDINGS) {
-            throw new InvalidActionException();
-        }
+    public void executeBuild(Direction direction)
+            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, NoAvailableBuildingsException, WrongBuildOrMoveException {
+        if (numberOfBuildings == MAX_BUILDINGS) throw new NoAvailableBuildingsException();
+        
         player.build(direction, player.getWorker(indexOfWorker));
         numberOfBuildings++;
     }
