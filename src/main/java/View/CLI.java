@@ -25,7 +25,7 @@ public class CLI {
 
         String un = c.askUsername() ;
 
-        System.out.println( un + " is your username ! \n");
+        System.out.println( un + " is your username! \n");
 
         String color = c.askColorWorkers() ;
 

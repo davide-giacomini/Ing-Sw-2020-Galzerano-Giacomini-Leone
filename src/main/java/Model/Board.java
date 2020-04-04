@@ -1,14 +1,24 @@
 package Model;
 
+import Model.Enumerations.Direction;
+import Model.Enumerations.Level;
+import Model.Exceptions.InvalidDirectionException;
+
 /**
  * This class represents the model of the board of the game, with inside it 25 slots, each one represented by the class
  * {@link Slot}.
  * The board can be instanced only one time, hence it's a thread-safe singleton.
  */
 public class Board {
+    /**
+     * Number of rows of the board.
+     */
     public final static int ROWSNUMBER = 5;
+    /**
+     * Number of columns of the board
+     */
     public final static int COLUMNSNUMBER = 5;
-    private Slot[][] slots = new Slot[5][5];
+    private static Slot[][] slots = new Slot[5][5];
     private static Board board = null;
     
     /**
@@ -21,7 +31,7 @@ public class Board {
             }
         }
     }
-    private synchronized static Board createBoard(){
+    private static Board createBoard(){
         if (board==null) board = new Board();
         return board;
     }
@@ -36,75 +46,43 @@ public class Board {
     }
     
     /**
-     * @param actualSlot {@link Slot} of origin
-     * @return  {@link Slot} at the left of the origin slot.
+     * This method return the slot nearby the slot you pass, in the direction which you specify.
+     *
+     * @param direction specifies which next slot you want to get
+     * @param currentSlot you want to get the slot nearby this parameter
+     * @return the slot nearby the current slot, in the direction specified
+     * @throws InvalidDirectionException if none of the cases are verified.
      */
-    public Slot getLeftSlot(Slot actualSlot) {
-        int i = actualSlot.getRow();
-        int j = actualSlot.getColumn() - 1;
-        return slots[i][j];
+    public static Slot getNearbySlot(Direction direction, Slot currentSlot) throws InvalidDirectionException {
+        switch (direction){
+            case LEFT:
+                return slots[currentSlot.getRow()][currentSlot.getColumn()-1];
+            case UP:
+                return slots[currentSlot.getRow()-1][currentSlot.getColumn()];
+            case DOWN:
+                return slots[currentSlot.getRow()+1][currentSlot.getColumn()];
+            case RIGHT:
+                return slots[currentSlot.getRow()][currentSlot.getColumn()+1];
+            case LEFTUP:
+                return slots[currentSlot.getRow()-1][currentSlot.getColumn()-1];
+            case RIGHTUP:
+                return slots[currentSlot.getRow()-1][currentSlot.getColumn()+1];
+            case LEFTDOWN:
+                return slots[currentSlot.getRow()+1][currentSlot.getColumn()-1];
+            case RIGHTDOWN:
+                return slots[currentSlot.getRow()+1][currentSlot.getColumn()+1];
+            default:
+                throw new InvalidDirectionException();
+        }
     }
-    /**
-     * @param actualSlot {@link Slot} of origin
-     * @return  {@link Slot} at the right of the origin slot.
-     */
-    public Slot getRightSlot(Slot actualSlot) {
-        int i = actualSlot.getRow();
-        int j = actualSlot.getColumn() + 1;
-        return slots[i][j];
+
+    public void clearBoard() {
+        for (int i = 0; i < ROWSNUMBER; i++) {
+            for (int j = 0; j < COLUMNSNUMBER; j++) {
+                slots[i][j].setWorker(null);
+                slots[i][j].setLevel(Level.GROUND);
+            }
+        }
     }
-    /**
-     * @param actualSlot {@link Slot} of origin
-     * @return  {@link Slot} up respect to the origin slot.
-     */
-    public Slot getUpSlot(Slot actualSlot) {
-        int i = actualSlot.getRow() - 1;
-        int j = actualSlot.getColumn() ;
-        return slots[i][j];
-    }
-    /**
-     * @param actualSlot {@link Slot} of origin
-     * @return  {@link Slot} down respect to the origin slot.
-     */
-    public Slot getDownSlot(Slot actualSlot) {
-        int i = actualSlot.getRow() + 1;
-        int j = actualSlot.getColumn() ;
-        return slots[i][j];
-    }
-    /**
-     * @param actualSlot {@link Slot} of origin
-     * @return  {@link Slot} at the up-left position respect to the origin slot.
-     */
-    public Slot getUpLeftSlot(Slot actualSlot) {
-        int i = actualSlot.getRow() - 1;
-        int j = actualSlot.getColumn() - 1 ;
-        return slots[i][j];
-    }
-    /**
-     * @param actualSlot {@link Slot} of origin
-     * @return  {@link Slot} at the down-left position respect to the origin slot.
-     */
-    public Slot getDownLeftSlot(Slot actualSlot) {
-        int i = actualSlot.getRow() + 1;
-        int j = actualSlot.getColumn() - 1 ;
-        return slots[i][j];
-    }
-    /**
-     * @param actualSlot {@link Slot} of origin
-     * @return  {@link Slot} at the up-right position respect to the origin slot.
-     */
-    public Slot getUpRightSlot(Slot actualSlot) {
-        int i = actualSlot.getRow() - 1;
-        int j = actualSlot.getColumn() + 1;
-        return slots[i][j];
-    }
-    /**
-     * @param actualSlot {@link Slot} of origin
-     * @return  {@link Slot} at the down-right position respect to the origin slot.
-     */
-    public Slot getDownRightSlot(Slot actualSlot) {
-        int i = actualSlot.getRow() + 1;
-        int j = actualSlot.getColumn() + 1;
-        return slots[i][j];
-    }
+    
 }

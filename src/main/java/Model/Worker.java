@@ -1,7 +1,10 @@
 package Model;
 
+import Model.Enumerations.Direction;
 import Model.Enumerations.Gender;
 import Model.Enumerations.Level;
+import Model.Exceptions.InvalidDirectionException;
+import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;
 
 import java.awt.*;
@@ -17,14 +20,13 @@ public class Worker {
     public final static int FEMALE = 1;
     private Color color;
     private Gender gender;
-    private Level level;
     private Slot slot;
-    private boolean winnerMoveUp;
+    private Player player;
 
-    public Worker(Color color, Gender gender) {
+    public Worker(Color color, Gender gender, Player player) {
         this.color = color;
         this.gender = gender;
-        this.level = Level.GROUND;
+        this.player = player;
     }
     
     /**
@@ -34,6 +36,7 @@ public class Worker {
     public boolean setSlot(Slot slot) {
         if (!slot.isOccupied()) {
             this.slot = slot;
+            this.slot.setWorker(this);
             return true;
         }
         else return false;
@@ -42,136 +45,107 @@ public class Worker {
     public Slot getSlot() {
             return this.slot;
     }
-
-    public Level getLevel() { return this.level; }
-
+    
     public Color getColor() { return this.color; }
 
     public Gender getGender() { return this.gender; }
     
+    public Player getPlayer() {
+        return player;
+    }
     
-    /**
-     * @return true if the worker reached the level 3, false otherwise
-     * @param slotDestination the slot where the worker is going to move to
-     */
-    private boolean updatePosition(Slot slotDestination) {
-        this.slot = slotDestination;
-        this.level = this.slot.getLevel();
-        
-        return this.level == Level.LEVEL3;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
     
     /**
-     * @return true if the worker reached the third level
-     * @throws IndexOutOfBoundsException if there isn't a slot in the left
-     * @throws SlotOccupiedException if the slot is occupied
+     * This method update some parameters that are modified with a worker's movement
+     * Who calls the method has to keep in mind that this method set the worker of the previous slot null and THEN put
+     * the worker in the new slot.
+     * @return true if the worker voluntarily moved up to the level 3, false otherwise
+     * @param destinationSlot the slot where the worker is going to move to
      */
-    public boolean goLeft() throws IndexOutOfBoundsException, SlotOccupiedException {
-        if (slot.getColumn()<1) throw new IndexOutOfBoundsException();
+    public boolean updatePosition(Slot destinationSlot) {
+        int previousLevel = getSlot().getLevel().ordinal();
+        this.slot.setWorker(null);
+        this.slot = destinationSlot;
+        this.slot.setWorker(this);
+        int nextLevel = getSlot().getLevel().ordinal();
         
-        Slot leftSlot = Board.getBoard().getLeftSlot(slot);
-        if (leftSlot.isOccupied()) throw new SlotOccupiedException();
-        else {
-            return updatePosition(leftSlot);
-        }
-    }
-    /**
-     * @return true if the worker reached the third right
-     * @throws IndexOutOfBoundsException if there isn't a slot in the left
-     * @throws SlotOccupiedException if the slot is occupied
-     */
-    public boolean goRight() throws IndexOutOfBoundsException, SlotOccupiedException {
-        if (slot.getColumn()>Board.COLUMNSNUMBER -2) throw new IndexOutOfBoundsException();
-    
-        Slot rightSlot = Board.getBoard().getRightSlot(slot);
-        if (rightSlot.isOccupied()) throw new SlotOccupiedException();
-        else {
-            return updatePosition(rightSlot);
-        }
-    }
-    /**
-     * @return true if the worker reached the third level
-     * @throws IndexOutOfBoundsException if there isn't a slot up
-     * @throws SlotOccupiedException if the slot is occupied
-     */
-    public boolean goUp() throws IndexOutOfBoundsException, SlotOccupiedException {
-        if (slot.getRow()>Board.ROWSNUMBER -2) throw new IndexOutOfBoundsException();
-        
-        Slot upSlot = Board.getBoard().getUpSlot(slot);
-        if (upSlot.isOccupied()) throw new SlotOccupiedException();
-        else {
-            return updatePosition(upSlot);
-        }
-    }
-    /**
-     * @return true if the worker reached the third level
-     * @throws IndexOutOfBoundsException if there isn't a slot down
-     * @throws SlotOccupiedException if the slot is occupied
-     */
-    public boolean goDown() throws IndexOutOfBoundsException, SlotOccupiedException {
-        if (slot.getRow()<1) throw new IndexOutOfBoundsException();
-        
-        Slot downSlot = Board.getBoard().getDownSlot(slot);
-        if (downSlot.isOccupied()) throw new SlotOccupiedException();
-        else {
-            return updatePosition(downSlot);
-        }
-    }
-    /**
-     * @return true if the worker reached the third level
-     * @throws IndexOutOfBoundsException if there isn't a slot up-left
-     * @throws SlotOccupiedException if the slot is occupied
-     */
-    public boolean goUpLeft() throws IndexOutOfBoundsException, SlotOccupiedException {
-        if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()<1) throw new IndexOutOfBoundsException();
-        
-        Slot upLeftSlot = Board.getBoard().getUpLeftSlot(slot);
-        if (upLeftSlot.isOccupied()) throw new SlotOccupiedException();
-        else {
-            return updatePosition(upLeftSlot);
-        }
-    }
-    /**
-     * @return true if the worker reached the third level
-     * @throws IndexOutOfBoundsException if there isn't a slot up-right
-     * @throws SlotOccupiedException if the slot is occupied
-     */
-    public boolean goUpRight() throws IndexOutOfBoundsException, SlotOccupiedException {
-        if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
-        
-        Slot upRightSlot = Board.getBoard().getUpRightSlot(slot);
-        if (upRightSlot.isOccupied()) throw new SlotOccupiedException();
-        else {
-            return updatePosition(upRightSlot);
-        }
-    }
-    /**
-     * @return true if the worker reached the third level
-     * @throws IndexOutOfBoundsException if there isn't a slot down-left
-     * @throws SlotOccupiedException if the slot is occupied
-     */
-    public boolean goDownLeft() throws IndexOutOfBoundsException, SlotOccupiedException {
-        if (slot.getRow()<1|| slot.getColumn()<1) throw new IndexOutOfBoundsException();
-        
-        Slot downLeftSlot = Board.getBoard().getDownLeftSlot(slot);
-        if (downLeftSlot.isOccupied()) throw new SlotOccupiedException();
-        else {
-            return updatePosition(downLeftSlot);
-        }
-    }
-    /**
-     * @return true if the worker reached the third level
-     * @throws IndexOutOfBoundsException if there isn't a slot down-right
-     * @throws SlotOccupiedException if the slot is occupied
-     */
-    public boolean goDownRight() throws IndexOutOfBoundsException, SlotOccupiedException {
-        if (slot.getRow()<1 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
-        
-        Slot downRightSlot = Board.getBoard().getDownRightSlot(slot);
-        if (downRightSlot.isOccupied()) throw new SlotOccupiedException();
-        else {
-            return updatePosition(downRightSlot);
-        }
+        return nextLevel-previousLevel>0 && getSlot().getLevel()==Level.LEVEL3;
     }
     
+    /**
+     * This method moves a worker from a slot to another, towards the destination specified.
+     * @param direction where the worker wants to move to.
+     * @return true if the worker voluntarily moved up to the level 3, false otherwise
+     * @throws SlotOccupiedException if the destination slot is occupied by a dome or another worker
+     * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current
+     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
+     * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
+     */
+    public boolean move (Direction direction)
+            throws IndexOutOfBoundsException, SlotOccupiedException, NotReachableLevelException, InvalidDirectionException {
+
+        checkDirection(direction);
+
+        Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
+        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
+        if (destinationSlot.getLevel().ordinal() - slot.getLevel().ordinal()>1) throw new NotReachableLevelException();
+        return updatePosition(destinationSlot);
+    }
+
+    /**
+     * This method builds in the specified direction.
+     * @param direction where the worker wants to build to.
+     * @throws SlotOccupiedException if the destination {@link Slot} is occupied.
+     * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
+     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
+     */
+    public void build (Direction direction)
+            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException {
+
+        checkDirection(direction);
+
+        Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
+        if(destinationSlot.isOccupied()) throw new SlotOccupiedException();
+        Level levelToUpdate;
+        levelToUpdate = destinationSlot.getLevel();
+        switch (levelToUpdate) {
+            case LEVEL3: destinationSlot.setLevel(Level.DOME);
+            break;
+            case LEVEL2: destinationSlot.setLevel(Level.LEVEL3);
+            break;
+            case LEVEL1: destinationSlot.setLevel(Level.LEVEL2);
+            break;
+            case GROUND: destinationSlot.setLevel(Level.LEVEL1);
+        }
+    }
+
+    /**
+     * This method check if in the direction chosen by the {@link Player} exists a slot.
+     * @param direction the chosen direction
+     * @throws IndexOutOfBoundsException if the slot in the direction doesn't exist.
+     */
+    private void checkDirection(Direction direction) throws IndexOutOfBoundsException {
+        switch (direction){
+            case LEFT:
+                if (slot.getColumn()<1) throw new IndexOutOfBoundsException();
+            case DOWN:
+                if (slot.getRow()> Board.ROWSNUMBER -2) throw new IndexOutOfBoundsException();
+            case UP:
+                if (slot.getRow()<1) throw new IndexOutOfBoundsException();
+            case RIGHT:
+                if (slot.getColumn()>Board.COLUMNSNUMBER -2) throw new IndexOutOfBoundsException();
+            case LEFTDOWN:
+                if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()<1) throw new IndexOutOfBoundsException();
+            case RIGHTDOWN:
+                if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
+            case LEFTUP:
+                if (slot.getRow()<1|| slot.getColumn()<1) throw new IndexOutOfBoundsException();
+            case RIGHTUP:
+                if (slot.getRow()<1 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
+        }
+    }
+
 }

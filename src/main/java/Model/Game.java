@@ -13,7 +13,7 @@ public class Game {
     private ArrayList<Player> players;
 
     public static final Random rand = new Random();
-    // Array dichiarato da tre giocatori, ma se fossero due?
+
     public Game() {
         //this.players = new Player[3];
         this.start = false;
@@ -24,8 +24,9 @@ public class Game {
     public void addPlayer (String username, Color c, int i) {
         players.set(i, new Player(username, c));
     }
+
     public void addPlayer(Player player) {
-        if (start == true )
+        if (start)
             //throw exception because game has already started and
             //it is not possible to add a player
 

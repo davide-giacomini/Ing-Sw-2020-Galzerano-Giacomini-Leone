@@ -10,7 +10,6 @@ import Model.Enumerations.Level;
 public class Slot {
     private final int column;
     private final int row;
-    private boolean isWorkerOn;
     private Worker worker;
     private Level level;
     
@@ -22,13 +21,8 @@ public class Slot {
     protected Slot (int i, int j) {
         this.row = i;
         this.column = j;
-        this.isWorkerOn = false;
+        this.worker = null;
         level = Level.GROUND;
-    }
-
-
-    public boolean isWorkerOn() {
-        return isWorkerOn;
     }
 
     public int getColumn() {
@@ -56,9 +50,13 @@ public class Slot {
     }
     
     public boolean isOccupied() {
-        return worker!=null && level==Level.DOME;
+        return worker!=null || level==Level.DOME;
     }
     
+    
+    /**
+     * @return a string which display the row and the column of the slot.
+     */
     public String toString() {
         return "Row: " + row + "\nColumn: " + column;
     }
