@@ -3,7 +3,7 @@ package Model;
 import Model.Enumerations.Direction;
 import Model.Enumerations.Gender;
 import Model.Enumerations.Level;
-import Model.Exceptions.InvalidActionException;
+import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;
 
@@ -20,13 +20,13 @@ public class Worker {
     public final static int FEMALE = 1;
     private Color color;
     private Gender gender;
-    private Level level;
     private Slot slot;
+    private Player player;
 
-    public Worker(Color color, Gender gender) {
+    public Worker(Color color, Gender gender, Player player) {
         this.color = color;
         this.gender = gender;
-        this.level = Level.GROUND;
+        this.player = player;
     }
     
     /**
@@ -45,37 +45,47 @@ public class Worker {
     public Slot getSlot() {
             return this.slot;
     }
-
-    public Level getLevel() { return this.level; }
-
+    
     public Color getColor() { return this.color; }
 
     public Gender getGender() { return this.gender; }
     
+    public Player getPlayer() {
+        return player;
+    }
+    
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
     
     /**
      * This method update some parameters that are modified with a worker's movement
-     * @return true if the worker reached the level 3, false otherwise
+     * Who calls the method has to keep in mind that this method set the worker of the previous slot null and THEN put
+     * the worker in the new slot.
+     * @return true if the worker voluntarily moved up to the level 3, false otherwise
      * @param destinationSlot the slot where the worker is going to move to
      */
-    private boolean updatePosition(Slot destinationSlot) {
+    public boolean updatePosition(Slot destinationSlot) {
+        int previousLevel = getSlot().getLevel().ordinal();
         this.slot.setWorker(null);
         this.slot = destinationSlot;
         this.slot.setWorker(this);
-        this.level = this.slot.getLevel();
-    
-        return this.level == Level.LEVEL3;
+        int nextLevel = getSlot().getLevel().ordinal();
+        
+        return nextLevel-previousLevel>0 && getSlot().getLevel()==Level.LEVEL3;
     }
     
     /**
      * This method moves a worker from a slot to another, towards the destination specified.
      * @param direction where the worker wants to move to.
-     * @return true if the level three is reached, false otherwise.
+     * @return true if the worker voluntarily moved up to the level 3, false otherwise
      * @throws SlotOccupiedException if the destination slot is occupied by a dome or another worker
      * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current
-     * slot
+     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
+     * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
      */
-    public boolean move (Direction direction) throws SlotOccupiedException, NotReachableLevelException, InvalidActionException {
+    public boolean move (Direction direction)
+            throws IndexOutOfBoundsException, SlotOccupiedException, NotReachableLevelException, InvalidDirectionException {
 
         checkDirection(direction);
 
@@ -83,15 +93,17 @@ public class Worker {
         if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
         if (destinationSlot.getLevel().ordinal() - slot.getLevel().ordinal()>1) throw new NotReachableLevelException();
         return updatePosition(destinationSlot);
-
     }
 
     /**
-     * This method build in the specified direction.
+     * This method builds in the specified direction.
      * @param direction where the worker wants to build to.
-     * @throws SlotOccupiedException
+     * @throws SlotOccupiedException if the destination {@link Slot} is occupied.
+     * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
+     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
      */
-    public void build (Direction direction) throws SlotOccupiedException, InvalidActionException {
+    public void build (Direction direction)
+            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException {
 
         checkDirection(direction);
 
@@ -111,10 +123,11 @@ public class Worker {
     }
 
     /**
-     * This method check if the direction the player chose doesn't throw an IndexOutOfBoundException
+     * This method check if in the direction chosen by the {@link Player} exists a slot.
      * @param direction the chosen direction
+     * @throws IndexOutOfBoundsException if the slot in the direction doesn't exist.
      */
-    private void checkDirection(Direction direction) {
+    private void checkDirection(Direction direction) throws IndexOutOfBoundsException {
         switch (direction){
             case LEFT:
                 if (slot.getColumn()<1) throw new IndexOutOfBoundsException();

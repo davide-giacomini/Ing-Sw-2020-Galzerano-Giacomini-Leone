@@ -2,7 +2,7 @@ package Model;
 
 import Model.Enumerations.Direction;
 import Model.Enumerations.Level;
-import Model.Exceptions.InvalidActionException;
+import Model.Exceptions.InvalidDirectionException;
 
 /**
  * This class represents the model of the board of the game, with inside it 25 slots, each one represented by the class
@@ -10,9 +10,15 @@ import Model.Exceptions.InvalidActionException;
  * The board can be instanced only one time, hence it's a thread-safe singleton.
  */
 public class Board {
+    /**
+     * Number of rows of the board.
+     */
     public final static int ROWSNUMBER = 5;
+    /**
+     * Number of columns of the board
+     */
     public final static int COLUMNSNUMBER = 5;
-    private Slot[][] slots = new Slot[5][5];
+    private static Slot[][] slots = new Slot[5][5];
     private static Board board = null;
     
     /**
@@ -45,9 +51,9 @@ public class Board {
      * @param direction specifies which next slot you want to get
      * @param currentSlot you want to get the slot nearby this parameter
      * @return the slot nearby the current slot, in the direction specified
-     * @throws Exception if none of the cases are verified.
+     * @throws InvalidDirectionException if none of the cases are verified.
      */
-    public Slot getNearbySlot(Direction direction, Slot currentSlot) throws InvalidActionException {
+    public static Slot getNearbySlot(Direction direction, Slot currentSlot) throws InvalidDirectionException {
         switch (direction){
             case LEFT:
                 return slots[currentSlot.getRow()][currentSlot.getColumn()-1];
@@ -66,7 +72,7 @@ public class Board {
             case RIGHTDOWN:
                 return slots[currentSlot.getRow()+1][currentSlot.getColumn()+1];
             default:
-                throw new InvalidActionException();
+                throw new InvalidDirectionException();
         }
     }
 
