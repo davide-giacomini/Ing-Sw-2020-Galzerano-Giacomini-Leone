@@ -23,7 +23,7 @@ public class Prometheus extends God {
         MAX_MOVEMENTS = 1;
         MIN_MOVEMENTS = 1;
         canBuildDome = false;
-        canUseMoreWorkers = false;
+        canUseBothWorkers = false;
     }
     
     @Override

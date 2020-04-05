@@ -24,7 +24,7 @@ public class Minotaur extends God {
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
         canBuildDome = false;
-        canUseMoreWorkers = false;
+        canUseBothWorkers = false;
     }
     
     @Override
@@ -33,9 +33,7 @@ public class Minotaur extends God {
 
         int previousLevel = worker.getSlot().getLevel().ordinal();
         try {
-            worker.move(direction);
-            int nextLevel = worker.getSlot().getLevel().ordinal();
-            return nextLevel-previousLevel>0 && worker.getSlot().getLevel()==Level.LEVEL3;
+            return worker.move(direction);
         } catch (SlotOccupiedException e) {
             Slot opponentSLot = Board.getNearbySlot(direction, worker.getSlot());
             // the slot in the same direction of the worker. If there is not a slot, the move is not available.
@@ -48,15 +46,12 @@ public class Minotaur extends God {
             }
             // the worker set in the destination slot
             Worker opponentWorker = opponentSLot.getWorker();
-            Slot previousSlot = worker.getSlot();
         
             // if the slot next to the opponent worker is free and the destination slot is actually occupied by an opponent worker
             if (opponentWorker!=null && opponentWorker.getColor()!=worker.getColor() && !slotNearOpponentSlot.isOccupied()) {
                 // manually move player's worker in the destination slot
                 opponentWorker.updatePosition(slotNearOpponentSlot);
-                worker.updatePosition(opponentSLot);
-                int nextLevel = worker.getSlot().getLevel().ordinal();
-                return nextLevel-previousLevel>0 && worker.getSlot().getLevel()==Level.LEVEL3;
+                return worker.updatePosition(opponentSLot);
             }
             // if there is a dome or a player's worker, the slot is occupied for Apollo too
             else

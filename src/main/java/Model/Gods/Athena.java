@@ -9,8 +9,6 @@ import Model.Game;
 import Model.Player;
 import Model.Worker;
 
-import java.util.ArrayList;
-
 public class Athena extends God{
     public Athena(Player player, String name) {
         super(player, name);
@@ -19,7 +17,7 @@ public class Athena extends God{
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
         canBuildDome = false;
-        canUseMoreWorkers = false;
+        canUseBothWorkers = false;
     }
 
     @Override
