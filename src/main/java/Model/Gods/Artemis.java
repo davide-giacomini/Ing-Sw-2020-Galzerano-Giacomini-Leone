@@ -19,7 +19,7 @@ public class Artemis extends God {
         MAX_MOVEMENTS = 2;
         MAX_BUILDINGS = 1;
         canBuildDome = false;
-        canUseMoreWorkers = false;
+        canUseBothWorkers = false;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class Artemis extends God {
     }
 
     /**
-     * This method check if two direction are opposite: this must be checked as Artemis
+     * This method check if two directions are opposite: this must be checked as Artemis
      * cannot return in her first position moving the second time
      * @param oldDirection the first direction
      * @param newDirection the second direction

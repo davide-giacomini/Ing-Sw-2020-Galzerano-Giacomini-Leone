@@ -1,7 +1,6 @@
 package Model.Gods;
 
 import Model.Enumerations.Direction;
-import Model.Enumerations.Level;
 import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;
@@ -10,7 +9,7 @@ import Model.Player;
 import Model.Worker;
 
 /**
- * {@link Player}'s {@link Worker} may build a dome .
+ * {@link Player}'s {@link Worker} may build a dome.
  */
 public class Atlas extends God {
 
@@ -21,7 +20,7 @@ public class Atlas extends God {
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
         canBuildDome = true;
-        canUseMoreWorkers = false;
+        canUseBothWorkers = false;
     }
 
     @Override
@@ -41,8 +40,9 @@ public class Atlas extends God {
         else if (!player.getTurn().WantsToBuildDome()) {
             worker.build(direction);
         } else if (player.getTurn().WantsToBuildDome() && !player.CanBuildDome()) {
-            throw new WrongBuildOrMoveException(); }
-
+            throw new WrongBuildOrMoveException();
+        }
+        
     }
 
     @Override

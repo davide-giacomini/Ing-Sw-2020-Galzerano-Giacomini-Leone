@@ -1,6 +1,7 @@
 package Model;
 
 import Model.Enumerations.Direction;
+import Model.Enumerations.Gender;
 import Model.Enumerations.Level;
 import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.NotReachableLevelException;
@@ -25,8 +26,8 @@ public class WorkerTest {
         board = Board.getBoard();
         player = new Player("first", Color.LIGHT_GRAY);
         otherPlayer = new Player("second", Color.BLUE);
-        otherWorkerMale = otherPlayer.getWorker(0);
-        workerMale = player.getWorker(0);
+        otherWorkerMale = otherPlayer.getWorker(Gender.MALE);
+        workerMale = player.getWorker(Gender.MALE);
     }
 
     @After

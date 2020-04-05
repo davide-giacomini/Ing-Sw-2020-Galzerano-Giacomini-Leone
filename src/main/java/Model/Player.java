@@ -7,7 +7,6 @@ import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;
 import Model.Exceptions.WrongBuildOrMoveException;
 import Model.Gods.God;
-import Model.Turns.Turn;
 
 import java.awt.*;
 
@@ -67,8 +66,8 @@ public class Player {
         return god;
     }
 
-    public Worker getWorker(int i) {
-        return workers[i];
+    public Worker getWorker(Gender i) {
+        return workers[i.ordinal()];
     }
     
     public void setTurn (Turn turn) {
@@ -77,6 +76,10 @@ public class Player {
     
     public Turn getTurn() {
         return turn;
+    }
+    
+    public String getUsername(){
+        return username;
     }
     
     /**

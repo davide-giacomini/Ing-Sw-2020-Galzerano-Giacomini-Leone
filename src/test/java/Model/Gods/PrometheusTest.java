@@ -2,11 +2,12 @@ package Model.Gods;
 
 import Model.Board;
 import Model.Enumerations.Direction;
+import Model.Enumerations.Gender;
 import Model.Enumerations.Level;
 import Model.Exceptions.*;
 import Model.Player;
 import Model.Slot;
-import Model.Turns.Turn;
+import Model.Turn;
 import Model.Worker;
 import org.junit.After;
 import org.junit.Before;
@@ -29,24 +30,16 @@ public class PrometheusTest {
         slot1 = board.getSlot(1,1);
         slot2 = board.getSlot(2,2);
         player = new Player("testUsername", Color.BLUE);
-        worker = player.getWorker(0);
+        worker = player.getWorker(Gender.MALE);
         worker.setSlot(slot1);
         player.setGod(new Prometheus(player, "Prometeo"));
         turn = new Turn(player);
+        turn.setWorkerGender(Gender.MALE);
     }
     
     @After
     public void tearDown() throws Exception {
-        turn = null;
-        player = null;
-        worker = null;
-        slot1.setLevel(Level.GROUND);
-        slot2.setLevel(Level.GROUND);
-        slot1.setWorker(null);
-        slot2.setWorker(null);
-        slot2 = null;
-        slot1 = null;
-        board = null;
+        Board.getBoard().clearBoard();
     }
     
     @Test

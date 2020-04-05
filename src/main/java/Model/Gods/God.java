@@ -11,7 +11,8 @@ import Model.Slot;
 import Model.Worker;
 
 /**
- *
+ * This class is a skeleton to be implemented when gods are added.
+ * When a god (as subclass) is created, every field MUST be initialized. Otherwise, the game may not work correctly.
  */
 public abstract class God {
     protected int MIN_MOVEMENTS;
@@ -19,13 +20,14 @@ public abstract class God {
     protected int MAX_MOVEMENTS;
     protected int MAX_BUILDINGS;
     protected boolean canBuildDome;
-    protected boolean canUseMoreWorkers;
+    protected boolean canUseBothWorkers;
     protected Player player;
     protected String name;  // useless until now
     
     public God(Player player, String name) {
         this.player = player;
-        this.name = getClass().toString();
+        this.name = name;
+        player.setGod(this);
     }
     
     /**
@@ -57,11 +59,16 @@ public abstract class God {
      * @return if the god is allowed to build dome at any level
      */
     public boolean canBuildDome() {
-        return canBuildDome; }
-
-    public boolean canUseMoreWorkers() {
-        return canUseMoreWorkers;
+        return canBuildDome;
     }
+    
+    /**
+     * @return true if the god is allowed to use both the workers during a single turn.
+     */
+    public boolean canUseBothWorkers() {
+        return canUseBothWorkers;
+    }
+    
     /**
      * This method moves a {@link Worker} from a {@link Slot} to another, towards the destination specified.
      * @param direction where the worker wants to move to.

@@ -1,11 +1,8 @@
-package Model.Turns;
+package Model;
 
-import Model.Board;
 import Model.Enumerations.Direction;
+import Model.Enumerations.Gender;
 import Model.Exceptions.*;
-import Model.Player;
-import Model.Slot;
-import Model.Worker;
 
 /**
  * This class implements a default turn, which is shared by Gods as Apollo, Athena,
@@ -21,9 +18,10 @@ public class Turn {
     private int numberOfMovements;
     private int numberOfBuildings;
     private Player player;
-    private int indexOfWorker;
+    private Gender workerGender;
     private boolean wantsToBuildDome;
-    private boolean canUseMoreWorkers;
+    private boolean canUseBothWorkers;
+    private boolean alreadySetWorker;
     
     public Turn(Player player) {
         this.numberOfMovements = 0;
@@ -35,30 +33,46 @@ public class Turn {
         MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();
         MAX_MOVEMENTS = player.getGod().getMAX_MOVEMENTS();
         MAX_BUILDINGS = player.getGod().getMAX_BUILDINGS();
-        this.canUseMoreWorkers = player.getGod().canUseMoreWorkers();
+        this.canUseBothWorkers = player.getGod().canUseBothWorkers();
+        this.alreadySetWorker = false;
+    }
+    
+    /**
+     * @deprecated
+     * It has to be used only for testing.
+     */
+    public boolean isAlreadySetWorker() {
+        return alreadySetWorker;
+    }
+    /**
+     * @deprecated
+     * It has to be used only for testing.
+     */
+    public boolean canUseBothWorkers() {
+        return canUseBothWorkers;
+    }
+    /**
+     * @deprecated
+     * It has to be used only for testing.
+     */
+    public Gender getWorkergender() {
+        return workerGender;
     }
     
     public int getNumberOfMovements() {
         return numberOfMovements;
     }
     
-    public void setNumberOfMovements(int newNumber) {
-        this.numberOfMovements = newNumber;
-    }
-    
     public int getNumberOfBuildings() {
         return numberOfBuildings;
     }
-
-    public void setNumberOfBuildings(int newNumber) {
-        this.numberOfBuildings = newNumber;
-    }
     
-    public void setIndexOfWorker (int indexOfWorker) throws WrongBuildOrMoveException{
-        if (!canUseMoreWorkers) {
+    public void setWorkerGender(Gender workerGender) throws WrongBuildOrMoveException{
+        if (!alreadySetWorker)
+            this.alreadySetWorker = true;
+        else if (!canUseBothWorkers)
             throw new WrongBuildOrMoveException();
-        }
-        this.indexOfWorker = indexOfWorker;
+        this.workerGender = workerGender;
     }
 
     public boolean WantsToBuildDome() {
@@ -88,7 +102,7 @@ public class Turn {
         
         // player.move returns a boolean, but the method can throw all the exceptions above.
         // Hence, numberOfMovements has to be incremented only after the method.
-        boolean thirdLevelReached = player.move(direction, player.getWorker(indexOfWorker));
+        boolean thirdLevelReached = player.move(direction, player.getWorker(workerGender));
         numberOfMovements++;
         
         return thirdLevelReached;
@@ -107,7 +121,7 @@ public class Turn {
             throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, NoAvailableBuildingsException, WrongBuildOrMoveException {
         if (numberOfBuildings == MAX_BUILDINGS) throw new NoAvailableBuildingsException();
         
-        player.build(direction, player.getWorker(indexOfWorker));
+        player.build(direction, player.getWorker(workerGender));
         numberOfBuildings++;
     }
 

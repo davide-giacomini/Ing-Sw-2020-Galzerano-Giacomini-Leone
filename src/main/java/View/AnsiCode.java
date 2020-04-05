@@ -4,9 +4,9 @@ import Model.Exceptions.AnsiCodeException;
 
 public class AnsiCode {
         /**
-         * Variables to convert the ansi codes into names with meaning
+         * Variables to convert the ansi codes into names with a meaning
          */
-        static final  String ANSI_RED = "\u001B[31m" ;
+        static final String ANSI_RED = "\u001B[31m" ;
         static final String ANSI_GREEN = "\u001B[32m" ;
         static final String ANSI_YELLOW = "\u001B[33m" ;
         static final String ANSI_BLUE = "\u001B[34m" ;

@@ -22,7 +22,7 @@ public class Worker {
     private Gender gender;
     private Slot slot;
 
-    public Worker(Color color, Gender gender, Player player) {
+    protected Worker(Color color, Gender gender, Player player) {
         this.color = color;
         this.gender = gender;
     }

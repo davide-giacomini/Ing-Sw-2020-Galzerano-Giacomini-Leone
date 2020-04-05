@@ -24,7 +24,7 @@ public class Apollo extends God {
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
         canBuildDome = false;
-        canUseMoreWorkers = false;
+        canUseBothWorkers = false;
     }
     
 

@@ -1,9 +1,9 @@
 package Model.Turns;
 
 import Model.Enumerations.Direction;
-import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.WrongBuildOrMoveException;
 import Model.Player;
+import Model.Turn;
 
 /**
  * This class implements a Demeter or Hephaestus turn, as they can build twice:
@@ -11,7 +11,7 @@ import Model.Player;
  * and the second one must do that in the same.
  */
 // PER IL MOMENTO E' UN COMMENTO
-public class BuildTwiceTurn extends Turn{
+public class BuildTwiceTurn extends Turn {
     private Direction firstBuildDirection;
     private final static int MAX_BUILDING = 2;
 

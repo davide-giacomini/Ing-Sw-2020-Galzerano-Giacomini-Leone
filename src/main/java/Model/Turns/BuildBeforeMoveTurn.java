@@ -1,13 +1,12 @@
 package Model.Turns;
 
-import Model.Enumerations.Direction;
-import Model.Exceptions.InvalidDirectionException;
 import Model.Player;
+import Model.Turn;
 
 /**
  *  PER IL MOMENTO SETTATA AI COMMENTI
  */
-public class BuildBeforeMoveTurn extends Turn{
+public class BuildBeforeMoveTurn extends Turn {
     private final static int MAX_BUILDING = 2;
 
     public BuildBeforeMoveTurn(Player player) {

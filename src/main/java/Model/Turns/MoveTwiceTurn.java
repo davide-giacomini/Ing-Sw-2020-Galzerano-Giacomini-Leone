@@ -1,15 +1,15 @@
 package Model.Turns;
 
 import Model.Enumerations.Direction;
-import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.WrongBuildOrMoveException;
 import Model.Player;
+import Model.Turn;
 
 /**
  * This class implements an Artemis' turn, who is enable to move twice.
  */
 //PER IL MOMENTO E' UN COMMENTO
-public class MoveTwiceTurn extends Turn{
+public class MoveTwiceTurn extends Turn {
     private Direction firstMovementDirection;
     private final static int MAX_MOVEMENT = 2;
 

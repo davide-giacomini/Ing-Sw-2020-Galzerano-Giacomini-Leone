@@ -75,7 +75,11 @@ public class Board {
                 throw new InvalidDirectionException();
         }
     }
-
+    
+    /**
+     * This method sets everything in the board null.
+     * It's useful for testing.
+     */
     public void clearBoard() {
         for (int i = 0; i < ROWSNUMBER; i++) {
             for (int j = 0; j < COLUMNSNUMBER; j++) {
