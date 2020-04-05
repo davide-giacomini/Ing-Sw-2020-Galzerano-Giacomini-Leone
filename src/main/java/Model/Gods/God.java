@@ -18,6 +18,8 @@ public abstract class God {
     protected int MIN_BUILDINGS;
     protected int MAX_MOVEMENTS;
     protected int MAX_BUILDINGS;
+    protected boolean canBuildDome;
+    protected boolean canUseMoreWorkers;
     protected Player player;
     protected String name;  // useless until now
     
@@ -50,7 +52,16 @@ public abstract class God {
     public int getMAX_BUILDINGS() {
         return MAX_BUILDINGS;
     }
-    
+
+    /**
+     * @return if the god is allowed to build dome at any level
+     */
+    public boolean canBuildDome() {
+        return canBuildDome; }
+
+    public boolean canUseMoreWorkers() {
+        return canUseMoreWorkers;
+    }
     /**
      * This method moves a {@link Worker} from a {@link Slot} to another, towards the destination specified.
      * @param direction where the worker wants to move to.

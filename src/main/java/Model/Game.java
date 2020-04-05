@@ -10,7 +10,7 @@ import java.util.Random;
 public class Game {
     private boolean start;
     private boolean end;
-    private ArrayList<Player> players;
+    private static ArrayList<Player> players;
 
     public static final Random rand = new Random();
 
@@ -50,4 +50,8 @@ public class Game {
     public ArrayList<Player> getPlayers() {
         return players;
     }
+
+    public static Player getPlayer(int i) { return players.get(i); }
+
 }
+

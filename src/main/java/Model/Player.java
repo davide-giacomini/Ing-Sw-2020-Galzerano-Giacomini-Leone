@@ -25,8 +25,8 @@ public class Player {
     private Worker[] workers;
     private boolean isWinning;
     private boolean cantMoveUp;
+    private boolean canBuildDome;
     private God god;
-    private boolean isGodActive;
     private Turn turn;
 
 
@@ -50,10 +50,19 @@ public class Player {
         this.cantMoveUp = cantMoveUp;
     }
 
+    public boolean isCantMoveUp() {
+        return cantMoveUp;
+    }
+
     public void setGod(God god) {
         this.god = god;
+        this.canBuildDome = god.canBuildDome();
     }
-    
+
+    public boolean CanBuildDome() {
+        return canBuildDome;
+    }
+
     public God getGod() {
         return god;
     }
@@ -101,6 +110,11 @@ public class Player {
      */
     public boolean move(Direction direction, Worker worker)
             throws IndexOutOfBoundsException, NotReachableLevelException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
+        int previousLevel = worker.getSlot().getLevel().ordinal();
+        int wishedLevel = Board.getNearbySlot(direction, worker.getSlot()).getLevel().ordinal();
+        if (cantMoveUp && wishedLevel > previousLevel) {
+            throw new NotReachableLevelException();
+        }
         return god.move(direction, worker);
     }
     
@@ -117,5 +131,5 @@ public class Player {
             throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
         god.build(direction, worker);
     }
-    
+
 }

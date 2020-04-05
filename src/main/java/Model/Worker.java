@@ -21,12 +21,10 @@ public class Worker {
     private Color color;
     private Gender gender;
     private Slot slot;
-    private Player player;
 
     public Worker(Color color, Gender gender, Player player) {
         this.color = color;
         this.gender = gender;
-        this.player = player;
     }
     
     /**
@@ -49,14 +47,7 @@ public class Worker {
     public Color getColor() { return this.color; }
 
     public Gender getGender() { return this.gender; }
-    
-    public Player getPlayer() {
-        return player;
-    }
-    
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
+
     
     /**
      * This method update some parameters that are modified with a worker's movement
@@ -120,6 +111,14 @@ public class Worker {
             break;
             case GROUND: destinationSlot.setLevel(Level.LEVEL1);
         }
+    }
+
+    public void buildDome (Direction direction) throws InvalidDirectionException, SlotOccupiedException {
+        checkDirection(direction);
+
+        Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
+        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
+        destinationSlot.setLevel(Level.DOME);
     }
 
     /**

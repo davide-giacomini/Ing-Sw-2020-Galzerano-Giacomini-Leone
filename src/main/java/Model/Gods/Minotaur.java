@@ -23,14 +23,14 @@ public class Minotaur extends God {
         MIN_BUILDINGS = 1;
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
+        canBuildDome = false;
+        canUseMoreWorkers = false;
     }
     
     @Override
     public boolean move(Direction direction, Worker worker)
-            throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
-    
-        if (worker.getPlayer().getTurn().getNumberOfMovements() > 0)  throw new WrongBuildOrMoveException();
-    
+            throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException {
+
         int previousLevel = worker.getSlot().getLevel().ordinal();
         try {
             worker.move(direction);
@@ -51,7 +51,7 @@ public class Minotaur extends God {
             Slot previousSlot = worker.getSlot();
         
             // if the slot next to the opponent worker is free and the destination slot is actually occupied by an opponent worker
-            if (opponentWorker!=null && opponentWorker.getPlayer()!=worker.getPlayer() && !slotNearOpponentSlot.isOccupied()) {
+            if (opponentWorker!=null && opponentWorker.getColor()!=worker.getColor() && !slotNearOpponentSlot.isOccupied()) {
                 // manually move player's worker in the destination slot
                 opponentWorker.updatePosition(slotNearOpponentSlot);
                 worker.updatePosition(opponentSLot);
@@ -68,7 +68,7 @@ public class Minotaur extends God {
     public void build(Direction direction, Worker worker)
             throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
         
-        if (worker.getPlayer().getTurn().getNumberOfMovements() == 0) throw new WrongBuildOrMoveException();
+        if (player.getTurn().getNumberOfMovements() == 0) throw new WrongBuildOrMoveException();
         
         worker.build(direction);
     }

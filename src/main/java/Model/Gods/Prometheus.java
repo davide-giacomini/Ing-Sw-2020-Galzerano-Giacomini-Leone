@@ -22,16 +22,15 @@ public class Prometheus extends God {
         MIN_BUILDINGS = 1;
         MAX_MOVEMENTS = 1;
         MIN_MOVEMENTS = 1;
+        canBuildDome = false;
+        canUseMoreWorkers = false;
     }
     
     @Override
     public boolean move(Direction direction, Worker worker)
             throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
-        int numberOfMovements = worker.getPlayer().getTurn().getNumberOfMovements();
-        int numberOfBuildings = worker.getPlayer().getTurn().getNumberOfBuildings();
-        
-        if (numberOfMovements > 0) throw new WrongBuildOrMoveException();
-        
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
         if (numberOfBuildings==0) {
             moveThenBuilt = true;
             return worker.move(direction);
@@ -50,8 +49,8 @@ public class Prometheus extends God {
     @Override
     public void build(Direction direction, Worker worker)
             throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
-        int numberOfMovements = worker.getPlayer().getTurn().getNumberOfMovements();
-        int numberOfBuildings = worker.getPlayer().getTurn().getNumberOfBuildings();
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
         
         if (numberOfMovements==0 && numberOfBuildings==1) throw new WrongBuildOrMoveException();
         if (numberOfBuildings==1 && moveThenBuilt)  throw new WrongBuildOrMoveException();

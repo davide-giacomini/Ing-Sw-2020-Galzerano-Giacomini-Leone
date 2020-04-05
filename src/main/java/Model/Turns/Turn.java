@@ -22,7 +22,8 @@ public class Turn {
     private int numberOfBuildings;
     private Player player;
     private int indexOfWorker;
-    
+    private boolean wantsToBuildDome;
+    private boolean canUseMoreWorkers;
     
     public Turn(Player player) {
         this.numberOfMovements = 0;
@@ -34,6 +35,7 @@ public class Turn {
         MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();
         MAX_MOVEMENTS = player.getGod().getMAX_MOVEMENTS();
         MAX_BUILDINGS = player.getGod().getMAX_BUILDINGS();
+        this.canUseMoreWorkers = player.getGod().canUseMoreWorkers();
     }
     
     public int getNumberOfMovements() {
@@ -52,8 +54,19 @@ public class Turn {
         this.numberOfBuildings = newNumber;
     }
     
-    public void setIndexOfWorker (int indexOfWorker){
+    public void setIndexOfWorker (int indexOfWorker) throws WrongBuildOrMoveException{
+        if (!canUseMoreWorkers) {
+            throw new WrongBuildOrMoveException();
+        }
         this.indexOfWorker = indexOfWorker;
+    }
+
+    public boolean WantsToBuildDome() {
+        return wantsToBuildDome;
+    }
+
+    public void setWantsToBuildDome(boolean wantsToBuildDome) {
+        this.wantsToBuildDome = wantsToBuildDome;
     }
 
     /**
@@ -105,7 +118,7 @@ public class Turn {
      */
     public boolean validateEndTurn() {
         player.setCantMoveUp(false);
-        return numberOfBuildings >= MIN_BUILDINGS && (numberOfMovements >= MIN_MOVEMENTS || player.isWinning());
+        return numberOfMovements >= MIN_MOVEMENTS && (numberOfBuildings >= MIN_BUILDINGS || player.isWinning());
     }
 
 }

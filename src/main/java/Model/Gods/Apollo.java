@@ -23,27 +23,25 @@ public class Apollo extends God {
         MIN_BUILDINGS = 1;
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
+        canBuildDome = false;
+        canUseMoreWorkers = false;
     }
     
 
     @Override
     public boolean move(Direction direction, Worker worker)
-            throws NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, SlotOccupiedException, WrongBuildOrMoveException {
-        
-        if (worker.getPlayer().getTurn().getNumberOfMovements() > 0)  throw new WrongBuildOrMoveException();
-        
+            throws NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, SlotOccupiedException {
+
         int previousLevel = worker.getSlot().getLevel().ordinal();
         try {
-            worker.move(direction);
-            int nextLevel = worker.getSlot().getLevel().ordinal();
-            return nextLevel-previousLevel>0 && worker.getSlot().getLevel()==Level.LEVEL3;
+            return worker.move(direction);
         } catch (SlotOccupiedException e) {
             // the worker set in the destination slot
             Worker opponentWorker = Board.getNearbySlot(direction, worker.getSlot()).getWorker();
             Slot previousSlot = worker.getSlot();
             
             // if there is actually an opponent worker on the destination slot
-            if (opponentWorker!=null && opponentWorker.getPlayer()!=worker.getPlayer()) {
+            if (opponentWorker!=null && opponentWorker.getColor()!=worker.getColor()) {
                 // manually move player's worker in the destination slot
                 opponentWorker.getSlot().setWorker(worker);
                 previousSlot.setWorker(opponentWorker);
@@ -60,7 +58,7 @@ public class Apollo extends God {
     public void build(Direction direction, Worker worker)
             throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
         
-        if (worker.getPlayer().getTurn().getNumberOfMovements() == 0)  throw new WrongBuildOrMoveException();
+        if (player.getTurn().getNumberOfMovements() == 0)  throw new WrongBuildOrMoveException();
         
         worker.build(direction);
     }
