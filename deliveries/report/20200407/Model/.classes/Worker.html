@@ -1,0 +1,259 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Worker</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Worker (Model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Worker</td>
+<td class="coverageStat">
+  <span class="percent">
+    70%
+  </span>
+  <span class="absValue">
+    (7/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84,3%
+  </span>
+  <span class="absValue">
+    (43/ 51)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Worker$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    72,7%
+  </span>
+  <span class="absValue">
+    (8/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84,9%
+  </span>
+  <span class="absValue">
+    (45/ 53)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Model.Enumerations.Direction;
+<i>4</i>&nbsp;import Model.Enumerations.Gender;
+<i>5</i>&nbsp;import Model.Enumerations.Level;
+<i>6</i>&nbsp;import Model.Exceptions.InvalidDirectionException;
+<i>7</i>&nbsp;import Model.Exceptions.NotReachableLevelException;
+<i>8</i>&nbsp;import Model.Exceptions.SlotOccupiedException;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.awt.*;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;public class Worker {
+<i>13</i>&nbsp;    /**
+<i>14</i>&nbsp;     * Variable which represents a male. It&#39;s useful to call the male worker through the player&#39;s array.
+<i>15</i>&nbsp;     */
+<i>16</i>&nbsp;    public final static int MALE = 0;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * Variable which represents a female. It&#39;s useful to call the female worker through the player&#39;s array.
+<i>19</i>&nbsp;     */
+<i>20</i>&nbsp;    public final static int FEMALE = 1;
+<i>21</i>&nbsp;    private Color color;
+<i>22</i>&nbsp;    private Gender gender;
+<i>23</i>&nbsp;    private Slot slot;
+<i>24</i>&nbsp;
+<b class="fc"><i>25</i>&nbsp;    protected Worker(Color color, Gender gender, Player player) {</b>
+<b class="fc"><i>26</i>&nbsp;        this.color = color;</b>
+<b class="fc"><i>27</i>&nbsp;        this.gender = gender;</b>
+<b class="fc"><i>28</i>&nbsp;    }</b>
+<i>29</i>&nbsp;    
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * @param slot slot where {@link Worker} is going to be placed
+<i>32</i>&nbsp;     * @return true if the slot was set, false otherwise.
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    public boolean setSlot(Slot slot) {
+<b class="fc"><i>35</i>&nbsp;        if (!slot.isOccupied()) {</b>
+<b class="fc"><i>36</i>&nbsp;            this.slot = slot;</b>
+<b class="fc"><i>37</i>&nbsp;            this.slot.setWorker(this);</b>
+<b class="fc"><i>38</i>&nbsp;            return true;</b>
+<i>39</i>&nbsp;        }
+<b class="fc"><i>40</i>&nbsp;        else return false;</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    public Slot getSlot() {
+<b class="fc"><i>44</i>&nbsp;            return this.slot;</b>
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;    
+<b class="nc"><i>47</i>&nbsp;    public Color getColor() { return this.color; }</b>
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;    public Gender getGender() { return this.gender; }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     * This method update some parameters that are modified with a worker&#39;s movement
+<i>54</i>&nbsp;     * Who calls the method has to keep in mind that this method set the worker of the previous slot null and THEN put
+<i>55</i>&nbsp;     * the worker in the new slot.
+<i>56</i>&nbsp;     * @return true if the worker voluntarily moved up to the level 3, false otherwise
+<i>57</i>&nbsp;     * @param destinationSlot the slot where the worker is going to move to
+<i>58</i>&nbsp;     */
+<i>59</i>&nbsp;    public boolean updatePosition(Slot destinationSlot) {
+<b class="fc"><i>60</i>&nbsp;        int previousLevel = getSlot().getLevel().ordinal();</b>
+<b class="fc"><i>61</i>&nbsp;        this.slot.setWorker(null);</b>
+<b class="fc"><i>62</i>&nbsp;        this.slot = destinationSlot;</b>
+<b class="fc"><i>63</i>&nbsp;        this.slot.setWorker(this);</b>
+<b class="fc"><i>64</i>&nbsp;        int nextLevel = getSlot().getLevel().ordinal();</b>
+<i>65</i>&nbsp;        
+<b class="fc"><i>66</i>&nbsp;        return nextLevel-previousLevel&gt;0 &amp;&amp; getSlot().getLevel()==Level.LEVEL3;</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;    
+<i>69</i>&nbsp;    /**
+<i>70</i>&nbsp;     * This method moves a worker from a slot to another, towards the destination specified.
+<i>71</i>&nbsp;     * @param direction where the worker wants to move to.
+<i>72</i>&nbsp;     * @return true if the worker voluntarily moved up to the level 3, false otherwise
+<i>73</i>&nbsp;     * @throws SlotOccupiedException if the destination slot is occupied by a dome or another worker
+<i>74</i>&nbsp;     * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current
+<i>75</i>&nbsp;     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn&#39;t happen.
+<i>76</i>&nbsp;     * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
+<i>77</i>&nbsp;     */
+<i>78</i>&nbsp;    public boolean move (Direction direction)
+<i>79</i>&nbsp;            throws IndexOutOfBoundsException, SlotOccupiedException, NotReachableLevelException, InvalidDirectionException {
+<i>80</i>&nbsp;
+<b class="fc"><i>81</i>&nbsp;        checkDirection(direction);</b>
+<i>82</i>&nbsp;
+<b class="fc"><i>83</i>&nbsp;        Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);</b>
+<b class="fc"><i>84</i>&nbsp;        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();</b>
+<b class="fc"><i>85</i>&nbsp;        if (destinationSlot.getLevel().ordinal() - slot.getLevel().ordinal()&gt;1) throw new NotReachableLevelException();</b>
+<b class="fc"><i>86</i>&nbsp;        return updatePosition(destinationSlot);</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * This method builds in the specified direction.
+<i>91</i>&nbsp;     * @param direction where the worker wants to build to.
+<i>92</i>&nbsp;     * @throws SlotOccupiedException if the destination {@link Slot} is occupied.
+<i>93</i>&nbsp;     * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
+<i>94</i>&nbsp;     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn&#39;t happen.
+<i>95</i>&nbsp;     */
+<i>96</i>&nbsp;    public void build (Direction direction)
+<i>97</i>&nbsp;            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException {
+<i>98</i>&nbsp;
+<b class="fc"><i>99</i>&nbsp;        checkDirection(direction);</b>
+<i>100</i>&nbsp;
+<b class="fc"><i>101</i>&nbsp;        Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);</b>
+<b class="fc"><i>102</i>&nbsp;        if(destinationSlot.isOccupied()) throw new SlotOccupiedException();</b>
+<i>103</i>&nbsp;        Level levelToUpdate;
+<b class="fc"><i>104</i>&nbsp;        levelToUpdate = destinationSlot.getLevel();</b>
+<b class="fc"><i>105</i>&nbsp;        switch (levelToUpdate) {</b>
+<b class="fc"><i>106</i>&nbsp;            case LEVEL3: destinationSlot.setLevel(Level.DOME);</b>
+<b class="fc"><i>107</i>&nbsp;            break;</b>
+<b class="fc"><i>108</i>&nbsp;            case LEVEL2: destinationSlot.setLevel(Level.LEVEL3);</b>
+<b class="fc"><i>109</i>&nbsp;            break;</b>
+<b class="fc"><i>110</i>&nbsp;            case LEVEL1: destinationSlot.setLevel(Level.LEVEL2);</b>
+<b class="fc"><i>111</i>&nbsp;            break;</b>
+<b class="fc"><i>112</i>&nbsp;            case GROUND: destinationSlot.setLevel(Level.LEVEL1);</b>
+<i>113</i>&nbsp;        }
+<b class="fc"><i>114</i>&nbsp;    }</b>
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    public void buildDome (Direction direction) throws InvalidDirectionException, SlotOccupiedException {
+<b class="nc"><i>117</i>&nbsp;        checkDirection(direction);</b>
+<i>118</i>&nbsp;
+<b class="nc"><i>119</i>&nbsp;        Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);</b>
+<b class="nc"><i>120</i>&nbsp;        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();</b>
+<b class="nc"><i>121</i>&nbsp;        destinationSlot.setLevel(Level.DOME);</b>
+<b class="nc"><i>122</i>&nbsp;    }</b>
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    /**
+<i>125</i>&nbsp;     * This method check if in the direction chosen by the {@link Player} exists a slot.
+<i>126</i>&nbsp;     * @param direction the chosen direction
+<i>127</i>&nbsp;     * @throws IndexOutOfBoundsException if the slot in the direction doesn&#39;t exist.
+<i>128</i>&nbsp;     */
+<i>129</i>&nbsp;    private void checkDirection(Direction direction) throws IndexOutOfBoundsException {
+<b class="fc"><i>130</i>&nbsp;        switch (direction){</b>
+<i>131</i>&nbsp;            case LEFT:
+<b class="nc"><i>132</i>&nbsp;                if (slot.getColumn()&lt;1) throw new IndexOutOfBoundsException();</b>
+<i>133</i>&nbsp;            case DOWN:
+<b class="fc"><i>134</i>&nbsp;                if (slot.getRow()&gt; Board.ROWSNUMBER -2) throw new IndexOutOfBoundsException();</b>
+<i>135</i>&nbsp;            case UP:
+<b class="fc"><i>136</i>&nbsp;                if (slot.getRow()&lt;1) throw new IndexOutOfBoundsException();</b>
+<i>137</i>&nbsp;            case RIGHT:
+<b class="fc"><i>138</i>&nbsp;                if (slot.getColumn()&gt;Board.COLUMNSNUMBER -2) throw new IndexOutOfBoundsException();</b>
+<i>139</i>&nbsp;            case LEFTDOWN:
+<b class="fc"><i>140</i>&nbsp;                if (slot.getRow()&gt;Board.ROWSNUMBER-2 || slot.getColumn()&lt;1) throw new IndexOutOfBoundsException();</b>
+<i>141</i>&nbsp;            case RIGHTDOWN:
+<b class="fc"><i>142</i>&nbsp;                if (slot.getRow()&gt;Board.ROWSNUMBER-2 || slot.getColumn()&gt;Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();</b>
+<i>143</i>&nbsp;            case LEFTUP:
+<b class="fc"><i>144</i>&nbsp;                if (slot.getRow()&lt;1|| slot.getColumn()&lt;1) throw new IndexOutOfBoundsException();</b>
+<i>145</i>&nbsp;            case RIGHTUP:
+<b class="fc"><i>146</i>&nbsp;                if (slot.getRow()&lt;1 || slot.getColumn()&gt;Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();</b>
+<i>147</i>&nbsp;        }
+<b class="fc"><i>148</i>&nbsp;    }</b>
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-07 13:19</div>
+</div>
+</body>
+</html>
