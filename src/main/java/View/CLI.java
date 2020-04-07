@@ -1,8 +1,12 @@
 package View;
 
 import Controller.GameController;
+import Model.Board;
+import Model.Enumerations.Gender;
 import Model.Player;
+import Model.Worker;
 
+import java.awt.*;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Random;
@@ -38,9 +42,17 @@ public class CLI {
 
         c.reset(c.out);
 
-        System.out.println("\n Now the empty Board will be printed : \n");
+        System.out.println("\n Now the empty Board will be printed : \n"+AnsiCode.ANSI_RESET);
         PrintSupport p = new PrintSupport();
         p.PrintEmptyBoard(c.out);
+
+        Board board = Board.getBoard();
+        Player player = new Player("first", Color.LIGHT_GRAY);
+        Worker workerMale = player.getWorker(Gender.MALE);
+
+        workerMale.setSlot(board.getSlot(1,3));
+
+        p.printCurrentBoard(p.buildCurrentBoard(board),c.out);
 
     }
 
@@ -103,7 +115,7 @@ public class CLI {
         String color = null;
 
         out.println("Here are the possible workers' colors : \n ");
-        out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_BLUE);
+        out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_BLUE); //inserisci nomi colori
         out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_YELLOW);
         out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_GREEN);
         out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RED);

@@ -42,7 +42,7 @@ public class AnsiCode {
          * @param name is the name as a string of the color/item
          * @return ansi code of the item
          */
-        public String getAnsiByName (String name )  {
+        public static String getAnsiByName(String name)  {
 
 
                 switch (name.toUpperCase()) {
