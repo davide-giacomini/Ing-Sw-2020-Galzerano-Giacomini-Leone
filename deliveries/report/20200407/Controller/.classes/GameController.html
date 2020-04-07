@@ -1,0 +1,118 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameController (Controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Model.Game;
+<i>4</i>&nbsp;import Model.Player;
+<i>5</i>&nbsp;import java.util.ArrayList;
+<i>6</i>&nbsp;import java.util.Random;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;public class GameController {
+<i>9</i>&nbsp;    private static Game game;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    //costruttore
+<b class="nc"><i>12</i>&nbsp;    public GameController(){</b>
+<b class="nc"><i>13</i>&nbsp;        game = new Game();</b>
+<i>14</i>&nbsp;    }
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * This method is used at the beginning of the game to randomly pick from the list of players
+<i>18</i>&nbsp;     * the first one that will play
+<i>19</i>&nbsp;     * @return username of the first player
+<i>20</i>&nbsp;     */
+<i>21</i>&nbsp;    public static String RandomPick1stPlayer(){
+<b class="nc"><i>22</i>&nbsp;        ArrayList&lt;Player&gt; list4RandomPick = game.getPlayers();</b>
+<i>23</i>&nbsp;        Player FirstPlayer ;
+<b class="nc"><i>24</i>&nbsp;        String username1stPlayer = null;</b>
+<b class="nc"><i>25</i>&nbsp;        int numberPlayers = list4RandomPick.size();</b>
+<b class="nc"><i>26</i>&nbsp;        Random rand = new Random();</b>
+<i>27</i>&nbsp;
+<b class="nc"><i>28</i>&nbsp;        FirstPlayer = list4RandomPick.get(rand.nextInt(numberPlayers));</b>
+<i>29</i>&nbsp;        //at this point the player picked has to be moved at the beginning of the arraylist
+<i>30</i>&nbsp;
+<b class="nc"><i>31</i>&nbsp;        username1stPlayer = FirstPlayer.getUsername();</b>
+<i>32</i>&nbsp;
+<b class="nc"><i>33</i>&nbsp;        return username1stPlayer;</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-07 13:19</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Pan</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Model.Gods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Pan (Model.Gods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Pan</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Model.Gods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Model.Enumerations.Direction;
+<i>4</i>&nbsp;import Model.Exceptions.InvalidDirectionException;
+<i>5</i>&nbsp;import Model.Exceptions.NotReachableLevelException;
+<i>6</i>&nbsp;import Model.Exceptions.SlotOccupiedException;
+<i>7</i>&nbsp;import Model.Exceptions.WrongBuildOrMoveException;
+<i>8</i>&nbsp;import Model.Player;
+<i>9</i>&nbsp;import Model.Worker;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;public class Pan extends God{
+<i>12</i>&nbsp;    public Pan(Player player, String name) {
+<b class="nc"><i>13</i>&nbsp;        super(player, name);</b>
+<b class="nc"><i>14</i>&nbsp;        MIN_MOVEMENTS = 1;</b>
+<b class="nc"><i>15</i>&nbsp;        MIN_BUILDINGS = 1;</b>
+<b class="nc"><i>16</i>&nbsp;        MAX_MOVEMENTS = 1;</b>
+<b class="nc"><i>17</i>&nbsp;        MAX_BUILDINGS = 1;</b>
+<b class="nc"><i>18</i>&nbsp;        canBuildDome = false;</b>
+<b class="nc"><i>19</i>&nbsp;        canUseBothWorkers = false;</b>
+<i>20</i>&nbsp;    }
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    @Override
+<i>23</i>&nbsp;    public boolean move(Direction direction, Worker worker) throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
+<b class="nc"><i>24</i>&nbsp;        int previousLevel = worker.getSlot().getLevel().ordinal();</b>
+<b class="nc"><i>25</i>&nbsp;        boolean winCondition = worker.move(direction);</b>
+<b class="nc"><i>26</i>&nbsp;        int actualLevel = worker.getSlot().getLevel().ordinal();</b>
+<b class="nc"><i>27</i>&nbsp;        return winCondition || (actualLevel - previousLevel &lt; -1);</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    @Override
+<i>31</i>&nbsp;    public void build(Direction direction, Worker worker) throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
+<b class="nc"><i>32</i>&nbsp;        if (player.getTurn().getNumberOfMovements() == 0) throw new WrongBuildOrMoveException();</b>
+<i>33</i>&nbsp;
+<b class="nc"><i>34</i>&nbsp;        worker.build(direction);</b>
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    @Override
+<i>38</i>&nbsp;    public void resetParameters() {
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-07 13:19</div>
+</div>
+</body>
+</html>

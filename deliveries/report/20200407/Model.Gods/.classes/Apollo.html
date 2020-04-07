@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Apollo</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Model.Gods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Apollo (Model.Gods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Apollo</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Model.Gods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Model.Board;
+<i>4</i>&nbsp;import Model.Enumerations.Direction;
+<i>5</i>&nbsp;import Model.Enumerations.Level;
+<i>6</i>&nbsp;import Model.Exceptions.InvalidDirectionException;
+<i>7</i>&nbsp;import Model.Exceptions.NotReachableLevelException;
+<i>8</i>&nbsp;import Model.Exceptions.SlotOccupiedException;
+<i>9</i>&nbsp;import Model.Exceptions.WrongBuildOrMoveException;
+<i>10</i>&nbsp;import Model.Player;
+<i>11</i>&nbsp;import Model.Slot;
+<i>12</i>&nbsp;import Model.Worker;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * If a {@link Player} has Apollo, their {@link Worker} can move into an opponent worker&#39;s space (using normal movements
+<i>16</i>&nbsp; * rules) and swap their position.
+<i>17</i>&nbsp; */
+<i>18</i>&nbsp;public class Apollo extends God {
+<i>19</i>&nbsp;    
+<i>20</i>&nbsp;    public Apollo(Player player, String name) {
+<b class="nc"><i>21</i>&nbsp;        super(player, name);</b>
+<b class="nc"><i>22</i>&nbsp;        MIN_MOVEMENTS = 1;</b>
+<b class="nc"><i>23</i>&nbsp;        MIN_BUILDINGS = 1;</b>
+<b class="nc"><i>24</i>&nbsp;        MAX_MOVEMENTS = 1;</b>
+<b class="nc"><i>25</i>&nbsp;        MAX_BUILDINGS = 1;</b>
+<b class="nc"><i>26</i>&nbsp;        canBuildDome = false;</b>
+<b class="nc"><i>27</i>&nbsp;        canUseBothWorkers = false;</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;    
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    @Override
+<i>32</i>&nbsp;    public boolean move(Direction direction, Worker worker)
+<i>33</i>&nbsp;            throws NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, SlotOccupiedException {
+<i>34</i>&nbsp;
+<b class="nc"><i>35</i>&nbsp;        int previousLevel = worker.getSlot().getLevel().ordinal();</b>
+<i>36</i>&nbsp;        try {
+<b class="nc"><i>37</i>&nbsp;            return worker.move(direction);</b>
+<b class="nc"><i>38</i>&nbsp;        } catch (SlotOccupiedException e) {</b>
+<i>39</i>&nbsp;            // the worker set in the destination slot
+<b class="nc"><i>40</i>&nbsp;            Worker opponentWorker = Board.getNearbySlot(direction, worker.getSlot()).getWorker();</b>
+<b class="nc"><i>41</i>&nbsp;            Slot previousSlot = worker.getSlot();</b>
+<i>42</i>&nbsp;            
+<i>43</i>&nbsp;            // if there is actually an opponent worker on the destination slot
+<b class="nc"><i>44</i>&nbsp;            if (opponentWorker!=null &amp;&amp; opponentWorker.getColor()!=worker.getColor()) {</b>
+<i>45</i>&nbsp;                // manually move player&#39;s worker in the destination slot
+<b class="nc"><i>46</i>&nbsp;                opponentWorker.getSlot().setWorker(worker);</b>
+<b class="nc"><i>47</i>&nbsp;                previousSlot.setWorker(opponentWorker);</b>
+<b class="nc"><i>48</i>&nbsp;                int nextLevel = worker.getSlot().getLevel().ordinal();</b>
+<b class="nc"><i>49</i>&nbsp;                return nextLevel-previousLevel&gt;0 &amp;&amp; worker.getSlot().getLevel()==Level.LEVEL3;</b>
+<i>50</i>&nbsp;            }
+<i>51</i>&nbsp;            // if there is a dome or a player&#39;s worker, the slot is occupied for Apollo too
+<i>52</i>&nbsp;            else
+<b class="nc"><i>53</i>&nbsp;                throw new SlotOccupiedException();</b>
+<i>54</i>&nbsp;        }
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;    
+<i>57</i>&nbsp;    @Override
+<i>58</i>&nbsp;    public void build(Direction direction, Worker worker)
+<i>59</i>&nbsp;            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
+<i>60</i>&nbsp;        
+<b class="nc"><i>61</i>&nbsp;        if (player.getTurn().getNumberOfMovements() == 0)  throw new WrongBuildOrMoveException();</b>
+<i>62</i>&nbsp;        
+<b class="nc"><i>63</i>&nbsp;        worker.build(direction);</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;    
+<i>66</i>&nbsp;    @Override
+<i>67</i>&nbsp;    public void resetParameters() {
+<i>68</i>&nbsp;        // nothing is necessary
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;    
+<i>71</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-07 13:19</div>
+</div>
+</body>
+</html>
