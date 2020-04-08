@@ -68,4 +68,24 @@ public class Apollo extends God {
         // nothing is necessary
     }
     
+    @Override
+    protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean validateEndTurn() {
+        return false;
+    }
+    
 }

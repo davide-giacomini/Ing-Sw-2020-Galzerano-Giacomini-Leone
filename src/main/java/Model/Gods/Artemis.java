@@ -54,7 +54,27 @@ public class Artemis extends God {
     public void resetParameters() {
         firstDirection = null;
     }
-
+    
+    @Override
+    protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean validateEndTurn() {
+        return false;
+    }
+    
     /**
      * This method check if two directions are opposite: this must be checked as Artemis
      * cannot return in her first position moving the second time

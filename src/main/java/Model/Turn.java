@@ -3,6 +3,7 @@ package Model;
 import Model.Enumerations.Direction;
 import Model.Enumerations.Gender;
 import Model.Exceptions.*;
+import Model.Gods.God;
 
 /**
  * This class implements a default turn, which is shared by Gods as Apollo, Athena,
@@ -23,7 +24,7 @@ public class Turn {
     private boolean canUseBothWorkers;
     private boolean alreadySetWorker;
     
-    public Turn(Player player) {
+    public Turn(Player player) throws InvalidDirectionException {
         this.numberOfMovements = 0;
         this.numberOfBuildings = 0;
         this.player = player;
@@ -35,28 +36,7 @@ public class Turn {
         MAX_BUILDINGS = player.getGod().getMAX_BUILDINGS();
         this.canUseBothWorkers = player.getGod().canUseBothWorkers();
         this.alreadySetWorker = false;
-    }
-    
-    /**
-     * @deprecated
-     * It has to be used only for testing.
-     */
-    public boolean isAlreadySetWorker() {
-        return alreadySetWorker;
-    }
-    /**
-     * @deprecated
-     * It has to be used only for testing.
-     */
-    public boolean canUseBothWorkers() {
-        return canUseBothWorkers;
-    }
-    /**
-     * @deprecated
-     * It has to be used only for testing.
-     */
-    public Gender getWorkergender() {
-        return workerGender;
+        deleteWorkersIfParalyzed();
     }
     
     public int getNumberOfMovements() {
@@ -86,7 +66,6 @@ public class Turn {
     /**
      * This method implements a {@link Player}'s move
      * @param direction where the player's {@link Worker} is going to move
-     * @return true if the worker moved voluntarily up on the third level, false otherwise
      * @throws IndexOutOfBoundsException if the destination {@link Slot} doesn't exist in the {@link Board}.
      * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current.
      * @throws SlotOccupiedException if the destination {@link Slot} is occupied
@@ -95,7 +74,7 @@ public class Turn {
      * @throws NoAvailableMovementsException if the worker has been already moved enough times.
      * @throws WrongBuildOrMoveException if the order of the moves is not ok.
      */
-    public boolean executeMove(Direction direction)
+    public void executeMove(Direction direction)
             throws IndexOutOfBoundsException, NotReachableLevelException, SlotOccupiedException, InvalidDirectionException, NoAvailableMovementsException, WrongBuildOrMoveException {
         
         if (numberOfMovements == MAX_MOVEMENTS) throw new NoAvailableMovementsException();
@@ -104,8 +83,7 @@ public class Turn {
         // Hence, numberOfMovements has to be incremented only after the method.
         boolean thirdLevelReached = player.move(direction, player.getWorker(workerGender));
         numberOfMovements++;
-        
-        return thirdLevelReached;
+        player.setWinning(thirdLevelReached);
     }
     
     /**
@@ -124,15 +102,18 @@ public class Turn {
         player.build(direction, player.getWorker(workerGender));
         numberOfBuildings++;
     }
-
+    
     /**
-     * This method control if the player can end his turn: he must move and build to do that,
-     * or he has to do the winning move (in this case he doesn't have to build).
-     * Before ending turn the CantMoveUp boolean become false as God's effect ends with the end of the turn.
+     * This method check if both the player's workers are paralyzed in every conditions.
+     * In that case, the player loses the game.
      */
-    public boolean validateEndTurn() {
-        player.setCantMoveUp(false);
-        return numberOfMovements >= MIN_MOVEMENTS && (numberOfBuildings >= MIN_BUILDINGS || player.isWinning());
+    private void deleteWorkersIfParalyzed() throws InvalidDirectionException {
+        Worker maleWorker = player.getWorker(Gender.MALE);
+        Worker femaleWorker = player.getWorker(Gender.FEMALE);
+        God playerGod = player.getGod();
+        
+        if (!playerGod.checkIfCanGoOn(maleWorker) && !playerGod.checkIfCanGoOn(femaleWorker))
+            player.setLoosing(true);    // it also deletes the workers.
     }
 
 }

@@ -9,6 +9,7 @@ import Model.Game;
 import Model.Player;
 import Model.Worker;
 
+
 public class Athena extends God{
     public Athena(Player player, String name) {
         super(player, name);
@@ -28,14 +29,14 @@ public class Athena extends God{
         if (actualLevel>initialLevel) {
             for (int i = 0; i<3; i++) {
                 if (Game.getPlayer(i) != null && Game.getPlayer(i) != player) {
-                    Game.getPlayer(i).setCantMoveUp(true);
+                    Game.getPlayer(i).setCannotMoveUp(true);
                 }
             }
         }
         else {
             for (int i = 0; i<3; i++) {
                 if (Game.getPlayer(i) != null && Game.getPlayer(i) != player) {
-                    Game.getPlayer(i).setCantMoveUp(false);
+                    Game.getPlayer(i).setCannotMoveUp(false);
                 }
             }
         }
@@ -53,5 +54,25 @@ public class Athena extends God{
     public void resetParameters() {
 
     }
-
+    
+    @Override
+    protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean validateEndTurn() {
+        return false;
+    }
+    
 }

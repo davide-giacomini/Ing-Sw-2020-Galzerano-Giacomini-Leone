@@ -14,7 +14,7 @@ import Model.Worker;
  */
 public class Prometheus extends God {
     // true if the player began with a move. In this case it's impossible to build two times
-    private boolean moveThenBuilt = false;
+    private boolean moveThenBuild = false;
     
     public Prometheus(Player player, String name) {
         super(player, name);
@@ -32,11 +32,11 @@ public class Prometheus extends God {
         int numberOfBuildings = player.getTurn().getNumberOfBuildings();
 
         if (numberOfBuildings==0) {
-            moveThenBuilt = true;
+            moveThenBuild = true;
             return worker.move(direction);
         }
         else if (numberOfBuildings==1){
-            moveThenBuilt = false;
+            moveThenBuild = false;
             // if the destination slot is higher than the current slot
             if (worker.getSlot().getLevel().ordinal() < Board.getNearbySlot(direction, worker.getSlot()).getLevel().ordinal())
                 throw new NotReachableLevelException();
@@ -53,13 +53,48 @@ public class Prometheus extends God {
         int numberOfBuildings = player.getTurn().getNumberOfBuildings();
         
         if (numberOfMovements==0 && numberOfBuildings==1) throw new WrongBuildOrMoveException();
-        if (numberOfBuildings==1 && moveThenBuilt)  throw new WrongBuildOrMoveException();
+        if (numberOfBuildings==1 && moveThenBuild)  throw new WrongBuildOrMoveException();
         
         worker.build(direction);
     }
     
     @Override
     public void resetParameters() {
-        moveThenBuilt = false;
+        moveThenBuild = false;
+    }
+    
+    @Override
+    protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
+        return checkIfCanMoveInNormalConditions(worker);
+    }
+    
+    @Override
+    protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
+        return checkIfCanBuildInNormalConditions(worker);
+    }
+    
+    @Override
+    public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+        
+        if (numberOfMovements==0 && numberOfBuildings==0)
+            return checkIfCanMove(worker) || checkIfCanBuild(worker);
+        if (numberOfMovements==1 && numberOfBuildings==0 && moveThenBuild || numberOfMovements==1 && numberOfBuildings==1 && !moveThenBuild)
+            return checkIfCanBuild(worker);
+        if (numberOfMovements==0 && numberOfBuildings==1 && !moveThenBuild)
+            return checkIfCanMove(worker);
+        
+        return false;
+    }
+    
+    @Override
+    public boolean validateEndTurn() {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+        
+        return numberOfMovements==1 && numberOfBuildings==1 && moveThenBuild
+                || numberOfMovements==1 && numberOfBuildings==2 && !moveThenBuild
+                || player.isWinning();
     }
 }
