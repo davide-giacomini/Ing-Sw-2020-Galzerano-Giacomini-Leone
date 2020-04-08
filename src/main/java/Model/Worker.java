@@ -22,7 +22,7 @@ public class Worker {
     private Gender gender;
     private Slot slot;
 
-    protected Worker(Color color, Gender gender, Player player) {
+    protected Worker(Color color, Gender gender) {
         this.color = color;
         this.gender = gender;
     }
@@ -126,7 +126,7 @@ public class Worker {
      * @param direction the chosen direction
      * @throws IndexOutOfBoundsException if the slot in the direction doesn't exist.
      */
-    private void checkDirection(Direction direction) throws IndexOutOfBoundsException {
+    public void checkDirection(Direction direction) throws IndexOutOfBoundsException {
         switch (direction){
             case LEFT:
                 if (slot.getColumn()<1) throw new IndexOutOfBoundsException();

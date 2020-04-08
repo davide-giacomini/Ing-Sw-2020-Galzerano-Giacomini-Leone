@@ -48,4 +48,24 @@ public class Atlas extends God {
     @Override
     public void resetParameters() {
     }
+    
+    @Override
+    protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean validateEndTurn() {
+        return false;
+    }
 }

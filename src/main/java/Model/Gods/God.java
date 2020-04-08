@@ -101,4 +101,95 @@ public abstract class God {
      */
     public abstract void resetParameters();
     
+    /**
+     * @return true if it's possible to move,false otherwise.
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @throws InvalidDirectionException if the default case in the choice of the direction is reached.
+     */
+    protected abstract boolean checkIfCanMove(Worker worker) throws InvalidDirectionException;
+    
+    /**
+     * See {@link #checkIfCanGoOn(Worker)}
+     *
+     * @return true if it's possible to build, false otherwise.
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     */
+    protected abstract boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException;
+    
+    /**
+     * See {@link #checkIfCanGoOn(Worker)}
+     *
+     * This method is a way not to repeat for each god the same check
+     * in the case them don't modify the normal conditions.
+     *
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @return true if it's possible to move in normal conditions, false otherwise.
+     * @throws InvalidDirectionException if the default case in the choice of the direction is reached.
+     */
+    protected boolean checkIfCanMoveInNormalConditions(Worker worker) throws InvalidDirectionException{
+        for (Direction direction : Direction.values()) {
+            try {
+                // If the direction is out of the board, jump to the catch
+                worker.checkDirection(direction);
+                Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
+                // else, check if the worker can move to the destinationSlot
+                if (!destinationSlot.isOccupied()){
+                    // if the player can move up and the destinationSlot hasn't got too many levels, the player can move.
+                    if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() < worker.getSlot().getLevel().ordinal()+1)
+                        return true;
+                    // if the player cannot move up but the destinationSlot is equal or less high than the current slot, the player can move.
+                    else if (player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal())
+                        return true;
+                }
+            }
+            catch (IndexOutOfBoundsException e){
+                // just let the for continue
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * See {@link #checkIfCanGoOn(Worker)}
+     *
+     * This method is a way not to repeat for each god the same check,
+     * in the case them don't modify the normal conditions.
+     *
+     * @return true if it's possible to build in normal conditions, false otherwise.
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @throws InvalidDirectionException if the default case in the choice of the direction is reached.
+     */
+    protected boolean checkIfCanBuildInNormalConditions(Worker worker) throws InvalidDirectionException {
+        for (Direction direction: Direction.values()){
+            Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
+            try {
+                // If the direction is out of the board, jump to the catch
+                worker.checkDirection(direction);
+                // else, check if the worker can build on the destinationSlot
+                if (!destinationSlot.isOccupied())  return true;
+            }
+            catch (IndexOutOfBoundsException e) {
+                // just let the for continue
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * This method checks, using {@link #checkIfCanBuild(Worker)}, {@link #checkIfCanMove(Worker)},
+     * {@link #checkIfCanBuildInNormalConditions(Worker)} and {@link #checkIfCanMoveInNormalConditions(Worker)}, can
+     * understand if the worker chosen can go on or they are eliminated.
+     * @param worker the worker chosen to be checked.
+     * @return true if the worker can go on, false otherwise.
+     * @throws InvalidDirectionException if the default case in the choice of the direction is reached.
+     */
+    public abstract boolean checkIfCanGoOn (Worker worker) throws InvalidDirectionException;
+    
+    /**
+     * This method control if the player can end his turn. If the player is winning, it returns true.
+     * @return true if the player can end his turn.
+     */
+    public abstract boolean validateEndTurn();
 }

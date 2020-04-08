@@ -2,6 +2,7 @@ package Model.Gods;
 
 import Model.Board;
 import Model.Enumerations.Gender;
+import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.WrongBuildOrMoveException;
 import Model.Player;
 import Model.Turn;
@@ -18,7 +19,7 @@ public class PanTest {
     private Turn turn;
 
     @Before
-    public void setUp () throws WrongBuildOrMoveException {
+    public void setUp () throws WrongBuildOrMoveException, InvalidDirectionException {
         board = board.getBoard();
         player = new Player("Monica", Color.YELLOW);
         worker = player.getWorker(Gender.MALE);

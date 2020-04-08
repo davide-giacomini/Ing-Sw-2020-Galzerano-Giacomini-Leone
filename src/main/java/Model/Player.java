@@ -19,11 +19,12 @@ public class Player {
     /**
      * Number of workers a player has got.
      */
-    public final static int WORKERSNUMBER = 2;
+    public final int WORKERS_NUMBER = 2;
     private String username;
     private Worker[] workers;
     private boolean isWinning;
-    private boolean cantMoveUp;
+    private boolean isLoosing;
+    private boolean cannotMoveUp;
     private boolean canBuildDome;
     private God god;
     private Turn turn;
@@ -32,11 +33,28 @@ public class Player {
     public Player(String username, Color workersColor) {
         this.username = username;
 
-        workers = new Worker[WORKERSNUMBER];
-        workers[Worker.MALE] = new Worker(workersColor, Gender.MALE, this);
-        workers[Worker.FEMALE] = new Worker(workersColor, Gender.FEMALE, this);
+        workers = new Worker[WORKERS_NUMBER];
+        workers[Worker.MALE] = new Worker(workersColor, Gender.MALE);
+        workers[Worker.FEMALE] = new Worker(workersColor, Gender.FEMALE);
     }
-
+    
+    public int getWorkersNumber() {
+        return WORKERS_NUMBER;
+    }
+    
+    /**
+     * If it sets the player in loosing conditions, it also deletes their workers.
+     * @param loosing the condition of loosing. If true, the player loses the game.
+     */
+    public void setLoosing(boolean loosing) {
+        isLoosing = loosing;
+        if (loosing) {
+            for (Worker worker : workers) {
+                workers[worker.getGender().ordinal()] = null;
+            }
+        }
+    }
+    
     public void setWinning(boolean winning) {
         isWinning = winning;
     }
@@ -45,12 +63,12 @@ public class Player {
         return isWinning;
     }
 
-    public void setCantMoveUp(boolean cantMoveUp) {
-        this.cantMoveUp = cantMoveUp;
+    public void setCannotMoveUp(boolean cannotMoveUp) {
+        this.cannotMoveUp = cannotMoveUp;
     }
 
-    public boolean isCantMoveUp() {
-        return cantMoveUp;
+    public boolean cannotMoveUp() {
+        return cannotMoveUp;
     }
 
     public void setGod(God god) {
@@ -80,6 +98,27 @@ public class Player {
     
     public String getUsername(){
         return username;
+    }
+    
+    /**
+     * This method delete a worker of the player.
+     * If player's workers become zero, the player loose.
+     *
+     * @param worker the worker to be deleted
+     */
+    public void deleteWorker (Worker worker) {
+        if (workers[worker.getGender().ordinal()]==null)
+            throw new NullPointerException("The worker chosen to be deleted doesn't exist.");
+        workers[worker.getGender().ordinal()] = null;
+        
+        boolean isLoosing = true;
+        for (Worker w : workers) {
+            if (w != null) {
+                isLoosing = false;
+            }
+        }
+        
+        this.isLoosing = isLoosing;
     }
     
     /**
@@ -115,7 +154,7 @@ public class Player {
             throws IndexOutOfBoundsException, NotReachableLevelException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
         int previousLevel = worker.getSlot().getLevel().ordinal();
         int wishedLevel = Board.getNearbySlot(direction, worker.getSlot()).getLevel().ordinal();
-        if (cantMoveUp && wishedLevel > previousLevel) {
+        if (cannotMoveUp && wishedLevel > previousLevel) {
             throw new NotReachableLevelException();
         }
         return god.move(direction, worker);

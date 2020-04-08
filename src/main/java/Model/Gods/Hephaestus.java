@@ -12,7 +12,7 @@ import Model.Worker;
 
 
 /**
- * {@link Player}'s {@link Worker} may build one additional time, but only on the same space.
+ * {@link Player}'s {@link Worker} may build one additional block (not dome) on top of your first block.
  */
 public class Hephaestus extends God {
 
@@ -28,7 +28,7 @@ public class Hephaestus extends God {
         MIN_MOVEMENTS = 1;
         canBuildDome = false;
         canUseBothWorkers = false;
-}
+    }
 
     @Override
     public boolean move(Direction direction, Worker worker)  throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
@@ -54,5 +54,25 @@ public class Hephaestus extends God {
     public void resetParameters() {
         doubleBuildSlot = null;
     }
-
+    
+    @Override
+    protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
+        return checkIfCanMoveInNormalConditions(worker);
+    }
+    
+    @Override
+    protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        return false;
+    }
+    
+    @Override
+    public boolean validateEndTurn() {
+        return false;
+    }
+    
 }

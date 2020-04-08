@@ -72,4 +72,58 @@ public class Minotaur extends God {
     public void resetParameters() {
         // nothing is necessary
     }
+    
+    @Override
+    protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
+        for (Direction direction : Direction.values()) {
+            try {
+                // If the direction is out of the board, jump to the catch
+                worker.checkDirection(direction);
+                Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
+                Slot slotNearOpponentSlot = Board.getBoard().getNearbySlot(direction, destinationSlot);
+                // else, check if the worker can move to the destinationSlot
+                if (!destinationSlot.isOccupied()){
+                    // if the player can move up and the destinationSlot hasn't got too many levels, the player can move.
+                    if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() < worker.getSlot().getLevel().ordinal()+1)
+                        return true;
+                        // if the player cannot move up but the destinationSlot is equal or less high than the current slot, the player can move.
+                    else if (player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal())
+                        return true;
+                }
+                else if (slotNearOpponentSlot!=null && !slotNearOpponentSlot.isOccupied())
+                    return true;
+            }
+            catch (IndexOutOfBoundsException e){
+                // just let the for continue
+            }
+        }
+    
+        return false;
+    }
+    
+    @Override
+    protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
+        return checkIfCanBuildInNormalConditions(worker);
+    }
+    
+    @Override
+    public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+        
+        if (numberOfMovements==0 && numberOfBuildings==0)
+            return checkIfCanMove(worker);
+        if (numberOfMovements==1 && numberOfBuildings==0)
+            return checkIfCanBuild(worker);
+        
+        return false;
+    }
+    
+    @Override
+    public boolean validateEndTurn() {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+        
+        return numberOfMovements==1 && numberOfBuildings==1 || player.isWinning();
+    }
 }
