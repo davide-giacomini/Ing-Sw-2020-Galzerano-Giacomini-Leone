@@ -8,6 +8,9 @@ import Model.Exceptions.WrongBuildOrMoveException;
 import Model.Player;
 import Model.Worker;
 
+/**
+ * {@link Player} can win also if his {@link Worker} moves down two or more levels.
+ */
 public class Pan extends God{
     public Pan(Player player, String name) {
         super(player, name);
@@ -19,6 +22,12 @@ public class Pan extends God{
         canUseBothWorkers = false;
     }
 
+    /**
+     * @param direction where the worker wants to move to.
+     * @param worker the {@link Player}'s {@link Worker} to be moved.
+     * @return true if the worker moved voluntarily up on the third level or if moves down
+     * two or more levels, false otherwise
+     */
     @Override
     public boolean move(Direction direction, Worker worker) throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
         int previousLevel = worker.getSlot().getLevel().ordinal();
@@ -34,28 +43,41 @@ public class Pan extends God{
         worker.build(direction);
     }
 
+    /**
+     * In this case there is no need to do anything.
+     */
     @Override
     public void resetParameters() {
-
     }
-    
+
     @Override
     protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
-        return false;
+        return checkIfCanMoveInNormalConditions(worker);
     }
     
     @Override
     protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
-        return false;
+        return checkIfCanBuildInNormalConditions(worker);
     }
     
     @Override
     public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        if (numberOfMovements==0)
+            return checkIfCanMove(worker);
+        else if (numberOfMovements==1 && numberOfBuildings==0)
+            return checkIfCanBuild(worker);
         return false;
     }
     
     @Override
     public boolean validateEndTurn() {
-        return false;
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        return numberOfBuildings >= MIN_BUILDINGS && numberOfMovements >= MIN_MOVEMENTS
+                || numberOfMovements >= MIN_MOVEMENTS && player.isWinning();
     }
 }

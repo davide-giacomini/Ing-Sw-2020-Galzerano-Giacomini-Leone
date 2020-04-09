@@ -135,4 +135,28 @@ public class WorkerTest {
             System.out.println("Invalid Action");
         }
     }
+
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void move_IndexOutOfBound_1() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException, IndexOutOfBoundsException {
+        workerMale.setSlot(board.getSlot(0,3));
+        workerMale.move(Direction.UP);
+    }
+
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void move_IndexOutOfBound_2() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException, IndexOutOfBoundsException {
+        workerMale.setSlot(board.getSlot(2,4));
+        workerMale.move(Direction.RIGHT);
+    }
+
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void move_IndexOutOfBound_3() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException, IndexOutOfBoundsException {
+        workerMale.setSlot(board.getSlot(4,2));
+        workerMale.move(Direction.DOWN);
+    }
+
+    @Test
+    public void move_Correct() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException {
+        workerMale.setSlot(board.getSlot(3,3));
+        workerMale.move(Direction.RIGHTUP);
+    }
 }

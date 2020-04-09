@@ -130,20 +130,28 @@ public class Worker {
         switch (direction){
             case LEFT:
                 if (slot.getColumn()<1) throw new IndexOutOfBoundsException();
+                break;
             case DOWN:
                 if (slot.getRow()> Board.ROWSNUMBER -2) throw new IndexOutOfBoundsException();
+                break;
             case UP:
                 if (slot.getRow()<1) throw new IndexOutOfBoundsException();
+                break;
             case RIGHT:
                 if (slot.getColumn()>Board.COLUMNSNUMBER -2) throw new IndexOutOfBoundsException();
+                break;
             case LEFTDOWN:
                 if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()<1) throw new IndexOutOfBoundsException();
+                break;
             case RIGHTDOWN:
                 if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
+                break;
             case LEFTUP:
                 if (slot.getRow()<1|| slot.getColumn()<1) throw new IndexOutOfBoundsException();
+                break;
             case RIGHTUP:
                 if (slot.getRow()<1 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
+                break;
         }
     }
 

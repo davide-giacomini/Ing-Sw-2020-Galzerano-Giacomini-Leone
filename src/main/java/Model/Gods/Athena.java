@@ -27,14 +27,14 @@ public class Athena extends God{
         boolean winCondition = worker.move(direction);
         int actualLevel = worker.getSlot().getLevel().ordinal();
         if (actualLevel>initialLevel) {
-            for (int i = 0; i<3; i++) {
+            for (int i = 0; i<Game.getNumberOfPlayers(); i++) {
                 if (Game.getPlayer(i) != null && Game.getPlayer(i) != player) {
                     Game.getPlayer(i).setCannotMoveUp(true);
                 }
             }
         }
         else {
-            for (int i = 0; i<3; i++) {
+            for (int i = 0; i<Game.getNumberOfPlayers(); i++) {
                 if (Game.getPlayer(i) != null && Game.getPlayer(i) != player) {
                     Game.getPlayer(i).setCannotMoveUp(false);
                 }
@@ -54,25 +54,36 @@ public class Athena extends God{
     public void resetParameters() {
 
     }
-    
+
     @Override
     protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
-        return false;
+        return checkIfCanMoveInNormalConditions(worker);
     }
-    
+
     @Override
     protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
-        return false;
+        return checkIfCanBuildInNormalConditions(worker);
     }
-    
+
     @Override
     public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        if (numberOfMovements==0)
+            return checkIfCanMove(worker);
+        else if (numberOfMovements==1 && numberOfBuildings==0)
+            return checkIfCanBuild(worker);
         return false;
     }
-    
+
     @Override
     public boolean validateEndTurn() {
-        return false;
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        return numberOfBuildings >= MIN_BUILDINGS && numberOfMovements >= MIN_MOVEMENTS
+                || numberOfMovements >= MIN_MOVEMENTS && player.isWinning();
     }
     
 }

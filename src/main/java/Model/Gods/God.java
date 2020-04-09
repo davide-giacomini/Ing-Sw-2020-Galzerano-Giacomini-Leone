@@ -135,7 +135,7 @@ public abstract class God {
                 // else, check if the worker can move to the destinationSlot
                 if (!destinationSlot.isOccupied()){
                     // if the player can move up and the destinationSlot hasn't got too many levels, the player can move.
-                    if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() < worker.getSlot().getLevel().ordinal()+1)
+                    if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal()+1)
                         return true;
                     // if the player cannot move up but the destinationSlot is equal or less high than the current slot, the player can move.
                     else if (player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal())

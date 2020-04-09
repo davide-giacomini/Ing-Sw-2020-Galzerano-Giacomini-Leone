@@ -8,6 +8,7 @@ import java.util.Random;
  * This class has to be completed yet.
  */
 public class Game {
+    private static int numberOfPlayers;
     private boolean start;
     private boolean end;
     private static ArrayList<Player> players;
@@ -52,6 +53,14 @@ public class Game {
     }
 
     public static Player getPlayer(int i) { return players.get(i); }
+
+    public static int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public static void setNumberOfPlayers(int numberOfPlayers) {
+        Game.numberOfPlayers = numberOfPlayers;
+    }
 
 }
 
