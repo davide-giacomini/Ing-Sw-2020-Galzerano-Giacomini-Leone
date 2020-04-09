@@ -36,18 +36,17 @@ public class WorkerTest {
     }
 
     @Test
-    public void setSlot_ifNotOccupied() {
-        boolean result = workerMale.setSlot(board.getSlot(1,3));
-        assertTrue(result);
+    public void setSlot_ifSlotNotNull() {
+        workerMale.setSlot(board.getSlot(1,3));
         assertEquals(board.getSlot(1,3), workerMale.getSlot());
     }
-
+    
     @Test
-    public void setSlot_ifOccupied() {
-        otherWorkerMale.setSlot(board.getSlot(4,4));
-        boolean result = workerMale.setSlot(board.getSlot(4,4));
-        assertFalse(result);
+    public void setSlot_IfSlotNull_SlotInWorkerIsNull_But_WorkerInSlotIsNotNull() {
+        workerMale.setSlot(board.getSlot(1,3));
+        workerMale.setSlot(null);
         assertNull(workerMale.getSlot());
+        assertEquals(workerMale, board.getSlot(1,3).getWorker());
     }
 
     @Test

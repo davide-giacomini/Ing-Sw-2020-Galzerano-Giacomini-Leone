@@ -25,7 +25,7 @@ public class PanTest {
     private Worker otherWorker;
 
     @Before
-    public void setUp () throws WrongBuildOrMoveException, InvalidDirectionException {
+    public void setUp () throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSet {
         board = Board.getBoard();
         player = new Player("Monica", Color.YELLOW);
         player.setGod(new Pan(player, "Pan"));

@@ -36,8 +36,15 @@ public class Slot {
     public Worker getWorker() {
         return worker;
     }
-
-    public void setWorker(Worker worker) {
+    
+    /**
+     * This method sets the worker, but it has to be called only if it's not necessary
+     * to update the slot under the worker. Indeed, it doesn't update it.
+     * See {@link Worker#setSlot(Slot)}
+     *
+     * @param worker the worker to be put on this slot.
+     */
+    void setWorker(Worker worker) {
         this.worker = worker;
     }
 

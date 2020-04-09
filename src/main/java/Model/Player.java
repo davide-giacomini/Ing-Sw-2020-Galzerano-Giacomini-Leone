@@ -38,6 +38,10 @@ public class Player {
         workers[Worker.FEMALE] = new Worker(workersColor, Gender.FEMALE);
     }
     
+    public boolean isLoosing() {
+        return isLoosing;
+    }
+    
     public int getWorkersNumber() {
         return WORKERS_NUMBER;
     }
@@ -50,6 +54,7 @@ public class Player {
         isLoosing = loosing;
         if (loosing) {
             for (Worker worker : workers) {
+                worker.setSlot(null);
                 workers[worker.getGender().ordinal()] = null;
             }
         }

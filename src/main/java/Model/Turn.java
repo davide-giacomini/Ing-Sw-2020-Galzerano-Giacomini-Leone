@@ -24,11 +24,13 @@ public class Turn {
     private boolean canUseBothWorkers;
     private boolean alreadySetWorker;
     
-    public Turn(Player player) throws InvalidDirectionException {
+    public Turn(Player player) throws InvalidDirectionException, GodNotSet {
         this.numberOfMovements = 0;
         this.numberOfBuildings = 0;
         this.player = player;
         player.setTurn(this);
+        if (player.getGod() == null)
+            throw new GodNotSet();
         player.getGod().resetParameters();
         MIN_MOVEMENTS = player.getGod().getMIN_MOVEMENTS();
         MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();
