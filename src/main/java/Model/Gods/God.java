@@ -192,4 +192,11 @@ public abstract class God {
      * @return true if the player can end his turn.
      */
     public abstract boolean validateEndTurn();
+
+    /**
+     * @return the name of the god.
+     */
+    public String getName() {
+        return name;
+    }
 }

@@ -36,6 +36,7 @@ public class Turn {
         MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();
         MAX_MOVEMENTS = player.getGod().getMAX_MOVEMENTS();
         MAX_BUILDINGS = player.getGod().getMAX_BUILDINGS();
+        this.wantsToBuildDome = false;
         this.canUseBothWorkers = player.getGod().canUseBothWorkers();
         this.alreadySetWorker = false;
         deleteWorkersIfParalyzed();
@@ -48,7 +49,13 @@ public class Turn {
     public int getNumberOfBuildings() {
         return numberOfBuildings;
     }
-    
+
+    /**
+     * This method set the worker that will be used during the turn.
+     * @param workerGender the gender of the chosen worker
+     * @throws WrongBuildOrMoveException if the player has already chosen its worker and he cannot change
+     * it during the turn.
+     */
     public void setWorkerGender(Gender workerGender) throws WrongBuildOrMoveException{
         if (!alreadySetWorker)
             this.alreadySetWorker = true;
@@ -61,7 +68,15 @@ public class Turn {
         return wantsToBuildDome;
     }
 
-    public void setWantsToBuildDome(boolean wantsToBuildDome) {
+    /**
+     * This method set if the player wants to build a dome instead of the rules' level.
+     * @param wantsToBuildDome true if he wants to build a dome, false otherwise
+     * @throws WrongBuildOrMoveException if the player wants to build a dome but
+     * he isn't allowed to: he can do that only if he has Atlas' effect.
+     */
+    public void setWantsToBuildDome(boolean wantsToBuildDome) throws WrongBuildOrMoveException {
+        if (player.getGod().getName() != "Atlas" && wantsToBuildDome)
+            throw new WrongBuildOrMoveException();
         this.wantsToBuildDome = wantsToBuildDome;
     }
 
@@ -114,7 +129,7 @@ public class Turn {
         Worker femaleWorker = player.getWorker(Gender.FEMALE);
         God playerGod = player.getGod();
         
-        if (!playerGod.checkIfCanGoOn(maleWorker) && !playerGod.checkIfCanGoOn(femaleWorker))
+        if (!playerGod.checkIfCanGoOn(femaleWorker) && !playerGod.checkIfCanGoOn(maleWorker))
             player.setLoosing(true);    // it also deletes the workers.
     }
 

@@ -9,7 +9,9 @@ import Model.Game;
 import Model.Player;
 import Model.Worker;
 
-
+/**
+ * If {@link Player}'s {@link Worker} moves up, all the other players cannot move up in their turns.
+ */
 public class Athena extends God{
     public Athena(Player player, String name) {
         super(player, name);
@@ -21,6 +23,18 @@ public class Athena extends God{
         canUseBothWorkers = false;
     }
 
+    /**
+     * This method control if the player has moved up in this turn. If he has, the boolean CannotMoveUp of the other players
+     * is setted as true, so they won't be able to move up until this player do another turn.
+     * If he hasn't, this boolean is setted as false, so they become able to move up.
+     * @param direction where the worker wants to move to.
+     * @param worker the {@link Player}'s {@link Worker} to be moved.
+     * @return true if the winning condition has been verified, false otherwise
+     * @throws SlotOccupiedException if the worker try to move in an occupied slot
+     * @throws NotReachableLevelException if the worker try to move in an unreachable slot
+     * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
+     * @throws InvalidDirectionException if there are some troubles of I/O.
+     */
     @Override
     public boolean move(Direction direction, Worker worker) throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException {
         int initialLevel = worker.getSlot().getLevel().ordinal();
@@ -43,6 +57,16 @@ public class Athena extends God{
         return winCondition;
     }
 
+    /**
+     * This method calls the standard build of a worker:
+     * Athena doesn't modify the building rules.
+     * @param direction specifies the slot where to build
+     * @param worker one of the player's workers
+     * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
+     * @throws SlotOccupiedException if the worker try to build in an occupied slot
+     * @throws InvalidDirectionException if there are some troubles of I/O.
+     * @throws WrongBuildOrMoveException if the worker try to build but he still hasn't moved.
+     */
     @Override
     public void build(Direction direction, Worker worker) throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
         if (player.getTurn().getNumberOfMovements() == 0) throw new WrongBuildOrMoveException();
@@ -50,21 +74,44 @@ public class Athena extends God{
         worker.build(direction);
     }
 
+    /**
+     * It does nothing.
+     */
     @Override
     public void resetParameters() {
 
     }
 
+    /**
+     * This method directly calls the God's method checkIfCanMoveInNormalConditions,
+     * as in this case there is nothing else to control.
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @return true if the worker can move, false otherwise
+     * @throws InvalidDirectionException if there are some I/O troubles.
+     */
     @Override
     protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
         return checkIfCanMoveInNormalConditions(worker);
     }
 
+    /**
+     * This method directly calls the God's method checkIfCanBuildInNormalConditions,
+     * as in this case there is nothing else to control.
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @return true if the worker can build, false otherwise.
+     * @throws InvalidDirectionException if there are some I/O troubles.
+     */
     @Override
     protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
         return checkIfCanBuildInNormalConditions(worker);
     }
 
+    /**
+     * This method checks if the worker is paralyzed or not.
+     * @param worker the worker chosen to be checked.
+     * @return true if the worker can go on, false otherwise.
+     * @throws InvalidDirectionException if there are some I/O troubles.
+     */
     @Override
     public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
         int numberOfMovements = player.getTurn().getNumberOfMovements();
@@ -77,6 +124,10 @@ public class Athena extends God{
         return false;
     }
 
+    /**
+     * This method checks if the player has completed a turn or if he still have to do some actions.
+     * @return true if he can end his turn, false otherwise.
+     */
     @Override
     public boolean validateEndTurn() {
         int numberOfMovements = player.getTurn().getNumberOfMovements();

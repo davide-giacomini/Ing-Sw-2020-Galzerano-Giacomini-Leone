@@ -19,6 +19,7 @@ public class Game {
         //this.players = new Player[3];
         this.start = false;
         this.end = false;
+        numberOfPlayers = 0;
         players = new ArrayList<>();
     }
 
@@ -27,13 +28,16 @@ public class Game {
     }
 
     public void addPlayer(Player player) {
-        if (start)
+        if (start) {
             //throw exception because game has already started and
             //it is not possible to add a player
-
-            if (players.size() >= 4) //throw exception because it's not
-                //possible to have more than 3 players
-                players.add(player);
+        }
+        if (players.size() >= 4) {
+            //throw exception because it's not
+            //possible to have more than 3 players
+        }
+        players.add(player);
+        numberOfPlayers++;
     }
 
     public Slot getSlot(int row, int column) {
