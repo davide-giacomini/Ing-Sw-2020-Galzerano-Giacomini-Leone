@@ -26,7 +26,7 @@ public class Hephaestus extends God {
         MIN_BUILDINGS = 1;
         MAX_MOVEMENTS = 1;
         MIN_MOVEMENTS = 1;
-        canBuildDome = false;
+        canAlwaysBuildDome = false;
         canUseBothWorkers = false;
     }
 

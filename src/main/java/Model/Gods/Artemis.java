@@ -23,7 +23,7 @@ public class Artemis extends God {
         MIN_BUILDINGS = 1;
         MAX_MOVEMENTS = 2;
         MAX_BUILDINGS = 1;
-        canBuildDome = false;
+        canAlwaysBuildDome = false;
         canUseBothWorkers = false;
     }
 

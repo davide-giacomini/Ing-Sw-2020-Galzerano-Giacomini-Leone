@@ -19,7 +19,7 @@ public class Atlas extends God {
         MIN_BUILDINGS = 1;
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
-        canBuildDome = true;
+        canAlwaysBuildDome = true;
         canUseBothWorkers = false;
     }
 
@@ -54,10 +54,10 @@ public class Atlas extends God {
             throw new WrongBuildOrMoveException();
         }
 
-        if (player.getTurn().WantsToBuildDome() && player.CanBuildDome()) {
+        if (player.getTurn().wantsToBuildDome() && player.CanBuildDome()) {
             worker.buildDome(direction);
         }
-        else if (!player.getTurn().WantsToBuildDome()) {
+        else if (!player.getTurn().wantsToBuildDome()) {
             worker.build(direction);
         }
         

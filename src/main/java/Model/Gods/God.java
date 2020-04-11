@@ -19,7 +19,7 @@ public abstract class God {
     protected int MIN_BUILDINGS;
     protected int MAX_MOVEMENTS;
     protected int MAX_BUILDINGS;
-    protected boolean canBuildDome;
+    protected boolean canAlwaysBuildDome;
     protected boolean canUseBothWorkers;
     protected Player player;
     protected String name;  // useless until now
@@ -58,8 +58,8 @@ public abstract class God {
     /**
      * @return if the god is allowed to build dome at any level
      */
-    public boolean canBuildDome() {
-        return canBuildDome;
+    public boolean canAlwaysBuildDome() {
+        return canAlwaysBuildDome;
     }
     
     /**

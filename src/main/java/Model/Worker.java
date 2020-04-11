@@ -29,7 +29,7 @@ public class Worker {
     
     /**
      * This methods automatically updates the {@link Slot}'s worker.
-     * The method {@link Slot#setWorker(Worker)} must not be called.
+     * The method {@link Slot#setWorker(Worker)} mustn't be called.
      *
      * @param slot slot where {@link Worker} is going to be placed
      */

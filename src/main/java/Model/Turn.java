@@ -5,6 +5,8 @@ import Model.Enumerations.Gender;
 import Model.Exceptions.*;
 import Model.Gods.God;
 
+import javax.print.attribute.standard.NumberUp;
+
 /**
  * This class implements a default turn, which is shared by Gods as Apollo, Athena,
  * Atlas, Minotaur, Pan and Prometheus, as their effects don't change which are the actions
@@ -23,6 +25,7 @@ public class Turn {
     private boolean wantsToBuildDome;
     private boolean canUseBothWorkers;
     private boolean alreadySetWorker;
+    private boolean canAlwaysBuildDome;
     
     public Turn(Player player) throws InvalidDirectionException, GodNotSet {
         this.numberOfMovements = 0;
@@ -38,8 +41,24 @@ public class Turn {
         MAX_BUILDINGS = player.getGod().getMAX_BUILDINGS();
         this.wantsToBuildDome = false;
         this.canUseBothWorkers = player.getGod().canUseBothWorkers();
+        this.canAlwaysBuildDome = player.getGod().canAlwaysBuildDome();
         this.alreadySetWorker = false;
         deleteWorkersIfParalyzed();
+    }
+    
+    /**
+     * This function has to be used for now because there isn't the god that let the player change his
+     * worker DURING the turn. Hence, it shouldn't be used to set canUseBothWorkers run-time.
+     *
+     * @param canUseBothWorkers it's true if the player can choose both workers, false otherwise.
+     */
+    @Deprecated
+    public void setCanUseBothWorkers(boolean canUseBothWorkers){
+        this.canUseBothWorkers = canUseBothWorkers;
+    }
+    
+    public Gender getWorkerGender () {
+        return workerGender;
     }
     
     public int getNumberOfMovements() {
@@ -64,18 +83,17 @@ public class Turn {
         this.workerGender = workerGender;
     }
 
-    public boolean WantsToBuildDome() {
+    public boolean wantsToBuildDome() {
         return wantsToBuildDome;
     }
 
     /**
      * This method set if the player wants to build a dome instead of the rules' level.
      * @param wantsToBuildDome true if he wants to build a dome, false otherwise
-     * @throws WrongBuildOrMoveException if the player wants to build a dome but
-     * he isn't allowed to: he can do that only if he has Atlas' effect.
+     * @throws WrongBuildOrMoveException if the player wants to build a dome but he isn't allowed to.
      */
     public void setWantsToBuildDome(boolean wantsToBuildDome) throws WrongBuildOrMoveException {
-        if (player.getGod().getName() != "Atlas" && wantsToBuildDome)
+        if (!canAlwaysBuildDome && wantsToBuildDome)
             throw new WrongBuildOrMoveException();
         this.wantsToBuildDome = wantsToBuildDome;
     }
@@ -129,8 +147,21 @@ public class Turn {
         Worker femaleWorker = player.getWorker(Gender.FEMALE);
         God playerGod = player.getGod();
         
-        if (!playerGod.checkIfCanGoOn(femaleWorker) && !playerGod.checkIfCanGoOn(maleWorker))
-            player.setLoosing(true);    // it also deletes the workers.
+        if (femaleWorker!=null && maleWorker!=null) {
+            if (femaleWorker.getSlot() != null && maleWorker.getSlot() != null && !playerGod.checkIfCanGoOn(femaleWorker) && !playerGod.checkIfCanGoOn(maleWorker)
+                    || femaleWorker.getSlot() == null && maleWorker.getSlot()!=null && !playerGod.checkIfCanGoOn(maleWorker)
+                    || maleWorker.getSlot() == null && femaleWorker.getSlot()!=null && !playerGod.checkIfCanGoOn(femaleWorker)) {
+                player.setLoosing(true);    // it also deletes the workers.
+            }
+        }
+        else if (femaleWorker!=null) {
+            if (femaleWorker.getSlot() != null && !playerGod.checkIfCanGoOn(femaleWorker))
+                player.setLoosing(true);
+        }
+        else {
+            if (maleWorker.getSlot()!=null && !playerGod.checkIfCanGoOn(maleWorker))
+                player.setLoosing(true);
+        }
     }
 
 }

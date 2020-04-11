@@ -54,6 +54,8 @@ public class Player {
         isLoosing = loosing;
         if (loosing) {
             for (Worker worker : workers) {
+                if (worker==null)
+                    continue;
                 worker.setSlot(null);
                 workers[worker.getGender().ordinal()] = null;
             }
@@ -78,7 +80,7 @@ public class Player {
 
     public void setGod(God god) {
         this.god = god;
-        this.canBuildDome = god.canBuildDome();
+        this.canBuildDome = god.canAlwaysBuildDome();
     }
 
     public boolean CanBuildDome() {

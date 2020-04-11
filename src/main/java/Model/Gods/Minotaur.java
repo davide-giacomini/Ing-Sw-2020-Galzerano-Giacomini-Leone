@@ -2,7 +2,6 @@ package Model.Gods;
 
 import Model.Board;
 import Model.Enumerations.Direction;
-import Model.Enumerations.Level;
 import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;
@@ -23,7 +22,7 @@ public class Minotaur extends God {
         MIN_BUILDINGS = 1;
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
-        canBuildDome = false;
+        canAlwaysBuildDome = false;
         canUseBothWorkers = false;
     }
     
