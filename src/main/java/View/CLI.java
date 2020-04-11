@@ -3,6 +3,7 @@ package View;
 import Controller.GameController;
 import Model.Board;
 import Model.Enumerations.Gender;
+import Model.Enumerations.Level;
 import Model.Player;
 import Model.Worker;
 
@@ -51,8 +52,10 @@ public class CLI {
         Worker workerMale = player.getWorker(Gender.MALE);
 
         workerMale.setSlot(board.getSlot(1,3));
+        //board.getSlot(1,3).setWorker(workerMale);
 
-        p.printCurrentBoard(p.buildCurrentBoard(board),c.out);
+        board.getSlot(2,2).setLevel(Level.DOME);
+        p.printCurrBoard(p.buildCurrBoard(board),c.out);
 
     }
 

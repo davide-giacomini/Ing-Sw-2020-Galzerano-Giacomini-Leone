@@ -120,7 +120,7 @@ public abstract class God {
      * See {@link #checkIfCanGoOn(Worker)}
      *
      * This method is a way not to repeat for each god the same check
-     * in the case them don't modify the normal conditions.
+     * in case they don't modify the normal conditions.
      *
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
      * @return true if it's possible to move in normal conditions, false otherwise.

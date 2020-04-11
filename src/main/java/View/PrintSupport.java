@@ -16,17 +16,17 @@ public class PrintSupport {
     private static final String MIDDLE_FREE_PART_SLOT ="|        |";
 
 
-    private static final String WITH_LEV1_PART_SLOT = " ___" + AnsiCode.ANSI_LEVEL1+ "___";
+    private static final String WITH_LEV1_PART_SLOT = "|___" + AnsiCode.ANSI_LEVEL1+ "___|";
     private static final String WITH_LEV2_PART_SLOT = "|   " + AnsiCode.ANSI_LEVEL2+ "   |";
     private static final String WITH_LEV3_PART_SLOT = "|   " + AnsiCode.ANSI_LEVEL3 + "   |";
     private static final String WITH_DOME_PART_SLOT = "|   " + AnsiCode.ANSI_DOME + "   |";
 
-    private String WITH_WORKER_PART_SLOT = " ___" + AnsiCode.ANSI_WORKER + "____";
+    private String WITH_WORKER_PART_SLOT = "|___" + AnsiCode.ANSI_WORKER + "____|";
 
     private static final String[] EMPTY_PARTS = new String[5];
 
-    private String[] SLOT_PARTS = new String[5];
-    private String[][] BOARD_PARTS = new String[5][5];
+
+    private String[][][] BOARD_PARTS = new String[5][5][5];
 
 
     public PrintSupport() {
@@ -50,10 +50,10 @@ public class PrintSupport {
 
     }
 
-    public String[][] buildCurrentBoard (Board board){
+    public String[][][] buildCurrBoard (Board board){
         for (int j = 0 ; j<5; j++){
             for (int k = 0; k<5 ; k++){
-                BOARD_PARTS[j] = buildOneByOneSlot(board.getSlot(j, k));
+                BOARD_PARTS[j][k] = buildOneByOneSlot(board.getSlot(j, k));
             }
         }
         return BOARD_PARTS;
@@ -63,10 +63,11 @@ public class PrintSupport {
     public String[] buildOneByOneSlot(Slot slot){
         int level = slot.getLevel().ordinal();
         Worker worker = slot.getWorker();
+         String[] SLOT_PARTS = new String[5];
 
         if ( worker != null) {
             String color = AnsiCode.getAnsiByName(worker.getColor().toString());
-            WITH_WORKER_PART_SLOT = " ___" + color+ AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "____";
+            WITH_WORKER_PART_SLOT = "|___" + color+ AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "____|";
 
             switch (level){
                 case 0 :
@@ -148,7 +149,7 @@ public class PrintSupport {
                     SLOT_PARTS[4]= WITH_LEV1_PART_SLOT;
                     SLOT_PARTS[3]= WITH_LEV2_PART_SLOT;
                     SLOT_PARTS[2]=WITH_LEV3_PART_SLOT;
-                    SLOT_PARTS[1]=WITH_DOME_PART_SLOT;
+                    SLOT_PARTS[1]= WITH_DOME_PART_SLOT;
                     SLOT_PARTS[0]= UPPER_PART_SLOT;
 
                     return SLOT_PARTS;
@@ -159,11 +160,20 @@ public class PrintSupport {
         }
     }
 
-    public void printCurrentBoard (String[][] finishedBoard, PrintStream out){
+
+    public void printCurrBoard (String[][][] finishedBoard, PrintStream out){
+        int count = 0;
+        out.println("    0         1         2         3         4");
         for (int i = 0 ; i<5; i++){
             for (int j = 0 ; j<5; j++){
                 for (int k = 0; k<5 ; k++){
-                    out.print(finishedBoard[i][j]);
+
+                    out.print(finishedBoard[i][k][j]);
+
+                    if (j == 2 && k==4) {
+                        out.print(" "+count);
+                        count++;
+                    }
                 }
                 out.print("\n");
             }

@@ -29,7 +29,7 @@ public class AnsiCode {
         static final String ANSI_LEVEL1 = "\u2B1C"+"\uFE0F";
         static final String ANSI_LEVEL2 = "\u25FB" + "\uFE0F";
         static final String ANSI_LEVEL3 = "\u25FD" + "\uFE0F";
-        static final String ANSI_DOME = "\uD83D\uDD35\n" ;
+        static final String ANSI_DOME = "🔹";
 
 
 

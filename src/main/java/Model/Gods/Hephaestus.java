@@ -43,7 +43,7 @@ public class Hephaestus extends God {
 
         if (player.getTurn().getNumberOfBuildings() == 0)
             doubleBuildSlot = Board.getNearbySlot(direction, worker.getSlot());
-        else if (!Board.getNearbySlot(direction, worker.getSlot()).equals(doubleBuildSlot))
+        else if (!Board.getNearbySlot(direction, worker.getSlot()).equals(doubleBuildSlot) || (worker.getSlot().getLevel().ordinal()== 3) )
             throw new WrongBuildOrMoveException();
 
         worker.build(direction);
@@ -62,17 +62,52 @@ public class Hephaestus extends God {
     
     @Override
     protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        if (numberOfBuildings==0)
+            return checkIfCanBuildInNormalConditions(worker);
+        ///THIS PART HERE IS TO CHECK AGAIN AND MAYBE DELETE
+        if (numberOfBuildings==1) {
+            for (Direction direction: Direction.values()){
+                Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
+                try {
+
+                    worker.checkDirection(direction);
+                    // else, check if the worker can build on the destinationSlot
+                    if (destinationSlot.equals(doubleBuildSlot) && !destinationSlot.isOccupied())
+                        return true;
+                }
+                catch (IndexOutOfBoundsException e) {
+                    // just let the for continue
+                }
+            }
+        }
+
         return false;
     }
     
     @Override
     public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        if (numberOfMovements==0 && numberOfBuildings==0)
+            return checkIfCanMove(worker);
+        if (numberOfMovements==1 && numberOfBuildings==0)
+            return checkIfCanBuild(worker);
+        if (numberOfMovements==1 && numberOfBuildings==1)
+            return checkIfCanBuild(worker);
+
         return false;
     }
     
     @Override
     public boolean validateEndTurn() {
-        return false;
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        return numberOfBuildings==1 && numberOfMovements==1 || numberOfBuildings==2 && numberOfMovements==1;
     }
+
     
 }

@@ -84,13 +84,13 @@ public class Minotaur extends God {
                 // else, check if the worker can move to the destinationSlot
                 if (!destinationSlot.isOccupied()){
                     // if the player can move up and the destinationSlot hasn't got too many levels, the player can move.
-                    if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() < worker.getSlot().getLevel().ordinal()+1)
+                    if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal()+1)
                         return true;
                         // if the player cannot move up but the destinationSlot is equal or less high than the current slot, the player can move.
                     else if (player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal())
                         return true;
                 }
-                else if (slotNearOpponentSlot!=null && !slotNearOpponentSlot.isOccupied())
+                else if (slotNearOpponentSlot!=null && !slotNearOpponentSlot.isOccupied() && destinationSlot.getWorker()!=null && destinationSlot.getWorker().getColor()!=worker.getColor())
                     return true;
             }
             catch (IndexOutOfBoundsException e){

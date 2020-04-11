@@ -71,22 +71,58 @@ public class Apollo extends God {
     
     @Override
     protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
+        for (Direction direction : Direction.values()) {
+            try {
+
+                worker.checkDirection(direction);
+                Slot destinationSlot = Board.getNearbySlot(direction, worker.getSlot());
+
+                // else, check if the worker can move to the destinationSlot
+                //if it is occupied do the special check
+                if (destinationSlot!=null && destinationSlot.isOccupied() ){
+                    //Since there has to be a switch between workers following the rules, I have to consider that
+                    //in both movements the difference of levels has to be max 1
+                    if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal()+1)
+                        return true;
+                        // if the player cannot move up but the destinationSlot has the same level, the player can move.
+                    else if (player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal())
+                        return true;
+                }
+                else //if the dest slot is free do the normal check
+                    return checkIfCanMoveInNormalConditions(worker);
+            }
+            catch (IndexOutOfBoundsException e){
+                // just let the "for" continue
+            }
+        }
+
         return false;
     }
     
     @Override
     protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
-        return false;
+        return checkIfCanBuildInNormalConditions(worker);
     }
     
     @Override
     public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        if (numberOfMovements==0 && numberOfBuildings==0)
+            return checkIfCanMove(worker);
+        if (numberOfMovements==1 && numberOfBuildings==0)
+            return checkIfCanBuild(worker);
+
         return false;
     }
     
     @Override
     public boolean validateEndTurn() {
-        return false;
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        return numberOfMovements==1 && numberOfBuildings==1 || player.isWinning();
     }
     
 }
