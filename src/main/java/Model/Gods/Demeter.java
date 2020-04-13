@@ -65,10 +65,10 @@ public class Demeter extends God {
             return checkIfCanBuildInNormalConditions(worker);
         if (numberOfBuildings==1) {
             for (Direction direction: Direction.values()){
-                Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                 try {
                     // If the direction is out of the board, jump to the catch
                     worker.checkDirection(direction);
+                    Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                     // else, check if the worker can build on the destinationSlot
                     if (!destinationSlot.equals(previousSlot) && !destinationSlot.isOccupied())
                         return true;

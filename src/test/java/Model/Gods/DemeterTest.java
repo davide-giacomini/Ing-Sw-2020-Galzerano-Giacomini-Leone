@@ -128,8 +128,8 @@ public class DemeterTest {
         turn.executeBuild(Direction.RIGHT);
     }
 
-    @Test (expected = IndexOutOfBoundsException.class)
-    public void build_IndexOutOfBoundsException_firstBuild() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+    @Test
+    public void checkIfCanBuild_firstBuild_OutputFalse() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
         turn.executeMove(Direction.RIGHT);
         board.getSlot(2,4).setLevel(Level.DOME);
         board.getSlot(2,3).setLevel(Level.DOME);
@@ -140,8 +140,8 @@ public class DemeterTest {
 
     }
 
-    @Test (expected = IndexOutOfBoundsException.class)
-    public void build_IndexOutOfBoundsException_secondBuild() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+    @Test
+    public void checkIfCanBuild_SecondBuild_OutputFalse() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
         turn.executeMove(Direction.RIGHT);
         turn.executeBuild(Direction.LEFT);
         board.getSlot(2,4).setLevel(Level.DOME);

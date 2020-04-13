@@ -7,6 +7,7 @@ import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;
 import Model.Exceptions.WrongBuildOrMoveException;
 import Model.Player;
+import Model.Slot;
 import Model.Worker;
 
 /**
@@ -26,6 +27,18 @@ public class Prometheus extends God {
         canUseBothWorkers = false;
     }
     
+    /**
+     * This method moves a {@link Worker} from a {@link Slot} to another, towards the destination specified.
+     * @param direction where the worker wants to move to.
+     * @param worker the {@link Player}'s {@link Worker} to be moved.
+     * @return true if the worker moved voluntarily up on the third level, false otherwise
+     * @throws SlotOccupiedException if the destination slot is occupied by a dome or another worker
+     * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current
+     * @throws InvalidDirectionException if the switch-else of {@link Board#getNearbySlot(Direction, Slot)} enters
+     * the default case. It shouldn't happen.
+     * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
+     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
+     */
     @Override
     public boolean move(Direction direction, Worker worker)
             throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
@@ -46,6 +59,15 @@ public class Prometheus extends God {
         else throw new WrongBuildOrMoveException();
     }
     
+    /**
+     * This method builds a construction on the {@link Slot} adjacent to the {@link Worker} in the direction chosen.
+     * @param direction specifies the slot where to build
+     * @param worker one of the player's workers
+     * @throws IndexOutOfBoundsException if the {@link Slot} where to build is outside the {@link Board}
+     * @throws SlotOccupiedException if the slot where to build is occupied by a dome or another worker
+     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
+     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
+     */
     @Override
     public void build(Direction direction, Worker worker)
             throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
@@ -96,5 +118,14 @@ public class Prometheus extends God {
         return numberOfMovements==1 && numberOfBuildings==1 && moveThenBuild
                 || numberOfMovements==1 && numberOfBuildings==2 && !moveThenBuild
                 || player.isWinning();
+    }
+    
+    /**
+     * This method return the status of Prometheus.
+     * It isn't callable by the interface {@link God}, because it's a Prometheus' personal field.
+     * @return true if Prometheus is obligated to do a normal turn (because he moved before having built).
+     */
+    public boolean moveThenBuild() {
+        return moveThenBuild;
     }
 }

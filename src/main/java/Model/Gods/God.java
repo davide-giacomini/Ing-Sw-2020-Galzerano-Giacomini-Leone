@@ -162,10 +162,10 @@ public abstract class God {
      */
     protected boolean checkIfCanBuildInNormalConditions(Worker worker) throws InvalidDirectionException {
         for (Direction direction: Direction.values()){
-            Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
             try {
                 // If the direction is out of the board, jump to the catch
                 worker.checkDirection(direction);
+                Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                 // else, check if the worker can build on the destinationSlot
                 if (!destinationSlot.isOccupied())  return true;
             }

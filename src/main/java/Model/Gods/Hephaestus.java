@@ -69,10 +69,10 @@ public class Hephaestus extends God {
         ///THIS PART HERE IS TO CHECK AGAIN AND MAYBE DELETE
         if (numberOfBuildings==1) {
             for (Direction direction: Direction.values()){
-                Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                 try {
-
+                    // If the direction is out of the board, jump to the catch
                     worker.checkDirection(direction);
+                    Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                     // else, check if the worker can build on the destinationSlot
                     if (destinationSlot.equals(doubleBuildSlot) && !destinationSlot.isOccupied())
                         return true;

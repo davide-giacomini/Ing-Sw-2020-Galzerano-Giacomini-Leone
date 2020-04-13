@@ -13,6 +13,7 @@ import Model.Worker;
  */
 public class Atlas extends God {
 
+    
     public Atlas(Player player, String name) {
         super(player, name);
         MIN_MOVEMENTS = 1;
