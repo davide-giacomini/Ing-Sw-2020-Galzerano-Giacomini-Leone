@@ -14,11 +14,11 @@ import java.awt.*;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
-public class MinotaurTest {
+public class ApolloTest {
     private Turn turn;
     private Player player;
-    private Worker workerM, workerF;
-    private Slot slot2, slotM,slotF;
+    private Worker workerF,workerM;
+    private Slot slotF, slotM, slot2;
     private Board board;
     private Player secondPlayer;
     private Worker secondWorker;
@@ -27,10 +27,11 @@ public class MinotaurTest {
     public void setUp() throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSet {
         board = Board.getBoard();
         slotM = board.getSlot(2,2);
-        slotF = board.getSlot(0,0);
         slot2 = board.getSlot(3,3);
+        slotF = board.getSlot(0,0);
+
         player = new Player("Arianna", Color.BLUE);
-        secondPlayer = new Player("David", Color.BLACK);
+        secondPlayer = new Player("Monichella", Color.BLACK);
 
         workerM = player.getWorker(Gender.MALE);
         workerF = player.getWorker(Gender.FEMALE);
@@ -40,20 +41,21 @@ public class MinotaurTest {
         workerF.setSlot(slotF);
         secondWorker.setSlot(slot2);
 
-        player.setGod(new Minotaur(player, "Minotaur"));
+        player.setGod(new Apollo(player, "Apollo"));
 
         turn = new Turn(player);
         turn.setWorkerGender(Gender.MALE);
     }
 
     @After
-    public void tearDown() {
+    public void tearDown()  {
         board.clearBoard();
     }
 
+
     @Test
     public void turn_CorrectInput_CorrectOutput_withoutSpecialMove()  throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException{
-
+        assertEquals(player.getGod().getName(), "Apollo");
         assertTrue (player.getGod().checkIfCanMove(workerM));
         turn.executeMove(Direction.RIGHT);
         assertTrue(player.getGod().checkIfCanGoOn(workerM));
@@ -76,7 +78,7 @@ public class MinotaurTest {
         assertFalse(player.getGod().validateEndTurn());
 
         assertTrue(player.getGod().checkIfCanBuild(workerM));
-        turn.executeBuild(Direction.LEFTUP);
+        turn.executeBuild(Direction.LEFT);
         assertFalse(player.getGod().checkIfCanGoOn(workerM));
         assertTrue(player.getGod().validateEndTurn());
 
@@ -84,27 +86,23 @@ public class MinotaurTest {
     }
 
     @Test (expected = SlotOccupiedException.class)
-    public void move_SlotOccupiedException_becauseOutOfBoard() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException {
-        secondWorker.setSlot(board.getSlot(2,4));
-        workerM.setSlot(board.getSlot(2,3));
-        turn.executeMove(Direction.RIGHT);
+    public void move_SlotOccupiedException()  throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+        board.getSlot(1,1).setLevel(Level.DOME);
+        turn.executeMove(Direction.LEFTUP);
+
     }
 
-    @Test (expected = SlotOccupiedException.class)
-    public void move_SlotOccupiedException_becauseOccupied() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException {
-        secondWorker.setSlot(board.getSlot(2,3));
-        secondWorker.build(Direction.RIGHT);
-        secondWorker.build(Direction.RIGHT);
-        secondWorker.build(Direction.RIGHT);
-        secondWorker.build(Direction.RIGHT);
-        turn.executeMove(Direction.RIGHT);
+        @Test
+    public void checkIfCanMove_withCannotMoveUp() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException,NoAvailableBuildingsException {
+        player.setCannotMoveUp(true);
+        secondWorker.setSlot(board.getSlot(2,1));
+        assertTrue(player.getGod().checkIfCanMove(workerM));
     }
 
     @Test
-    public void checkIfCanMove_withCannotMoveUp() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException,NoAvailableBuildingsException {
+    public void checkIfCanMoveInNormalCondition_withCannotMoveUp() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException,NoAvailableBuildingsException {
         player.setCannotMoveUp(true);
         assertTrue(player.getGod().checkIfCanMove(workerM));
-
     }
 
     @Test
@@ -115,19 +113,11 @@ public class MinotaurTest {
     }
 
     @Test
-    public void build_IndexOutOfBoundsException_firstBuild() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+    public void move_IndexOutOfBoundsException() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
         workerM.setSlot(board.getSlot(4,4));
         board.getSlot(3,3).setLevel(Level.DOME);
         board.getSlot(3,4).setLevel(Level.DOME);
         board.getSlot(4,3).setLevel(Level.DOME);
-        /*
-        board.getSlot(2,4).setLevel(Level.DOME);
-        board.getSlot(2,3).setLevel(Level.DOME);
-
-
-        board.getSlot(4,2).setLevel(Level.DOME);
-        board.getSlot(2,2).setLevel(Level.DOME);
-        board.getSlot(3,2).setLevel(Level.DOME);*/
 
         assertFalse(player.getGod().checkIfCanMove(workerM));
 
@@ -135,5 +125,4 @@ public class MinotaurTest {
 
 
 
-
-    }
+}

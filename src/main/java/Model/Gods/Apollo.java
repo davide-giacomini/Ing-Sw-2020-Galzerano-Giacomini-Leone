@@ -85,8 +85,9 @@ public class Apollo extends God {
                     if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal()+1)
                         return true;
                         // if the player cannot move up but the destinationSlot has the same level, the player can move.
-                    else if (player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal())
+                    else if (player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal()) {
                         return true;
+                    }
                 }
                 else //if the dest slot is free do the normal check
                     return checkIfCanMoveInNormalConditions(worker);

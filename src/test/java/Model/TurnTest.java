@@ -223,4 +223,6 @@ public class TurnTest {
     public void TurnConstructor_PlayerWithoutGod_ThrowsGodNotSet () throws Exception{
         new Turn(new Player("test", Color.BLACK));
     }
+
+
 }

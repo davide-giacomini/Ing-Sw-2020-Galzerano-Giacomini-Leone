@@ -3,6 +3,7 @@ package Model.Gods;
 import Model.*;
 import Model.Enumerations.Direction;
 import Model.Enumerations.Gender;
+import Model.Enumerations.Level;
 import Model.Exceptions.*;
 import org.junit.After;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import java.awt.*;
 
 import static junit.framework.TestCase.*;
+import static org.junit.Assert.assertFalse;
 
 public class ArtemisTest {
     private Board board;
@@ -181,4 +183,32 @@ public class ArtemisTest {
         turn.executeMove(Direction.LEFT);
         turn.executeMove(Direction.RIGHT);
     }
+
+    @Test (expected = InvalidDirectionException.class)
+    public void turn_tryToBackInTheFirst_9() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+        turn.executeMove(Direction.LEFT);
+        Direction d = null;
+        turn.executeMove(d.LEFT);
+    }
+
+    @Test
+    public void checkIfCanMove_withCannotMoveUp() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException,NoAvailableBuildingsException {
+        player.setCannotMoveUp(true);
+        turn.executeMove(Direction.LEFT);
+        assertTrue(player.getGod().checkIfCanMove(maleWorker));
+    }
+
+    @Test
+    public void move_IndexOutOfBoundsException() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+        board.getSlot(1,1).setLevel(Level.LEVEL2);
+        maleWorker.setSlot(board.getSlot(1,1));
+        turn.executeMove(Direction.LEFTUP);
+
+        board.getSlot(0,1).setLevel(Level.DOME);
+        board.getSlot(1,0).setLevel(Level.DOME);
+
+        assertFalse(player.getGod().checkIfCanMove(maleWorker));
+
+    }
+
 }
