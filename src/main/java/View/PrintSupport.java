@@ -181,4 +181,12 @@ public class PrintSupport {
         out.print("\n");
     }
 
+    /**
+     * Clears the console
+     */
+    static void clearConsole(PrintStream out) {
+        out.print(AnsiCode.ANSI_CLEARCONSOLE);
+        out.flush();
+    }
+
 }

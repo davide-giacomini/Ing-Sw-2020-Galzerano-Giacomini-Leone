@@ -40,12 +40,15 @@ public class CLI {
         String worker = a.getAnsiByName("WORKER");
 
         System.out.println( ansiColor + worker) ;
+        PrintSupport p = new PrintSupport();
+
 
         c.reset(c.out);
 
         System.out.println("\n Now the empty Board will be printed : \n"+AnsiCode.ANSI_RESET);
-        PrintSupport p = new PrintSupport();
+
         p.PrintEmptyBoard(c.out);
+        p.clearConsole(c.out);
 
         Board board = Board.getBoard();
         Player player = new Player("first", Color.LIGHT_GRAY);
@@ -56,6 +59,8 @@ public class CLI {
 
         board.getSlot(2,2).setLevel(Level.DOME);
         p.printCurrBoard(p.buildCurrBoard(board),c.out);
+
+        p.clearConsole(c.out);
 
     }
 

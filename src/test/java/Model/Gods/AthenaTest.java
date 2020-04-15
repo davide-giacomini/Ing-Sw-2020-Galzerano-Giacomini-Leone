@@ -24,7 +24,7 @@ public class AthenaTest {
     private Worker otherAthenaWorker;
 
     @Before
-    public void setUp () throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSet {
+    public void setUp () throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSetException, GameAlreadyStartedException {
         board = Board.getBoard();
         athenaPlayer = new Player("Monica", Color.YELLOW);
         athenaPlayer.setGod(new Athena(athenaPlayer, "Athena"));

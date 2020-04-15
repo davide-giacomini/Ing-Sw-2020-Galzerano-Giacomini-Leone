@@ -27,13 +27,13 @@ public class Turn {
     private boolean alreadySetWorker;
     private boolean canAlwaysBuildDome;
     
-    public Turn(Player player) throws InvalidDirectionException, GodNotSet {
+    public Turn(Player player) throws InvalidDirectionException, GodNotSetException {
         this.numberOfMovements = 0;
         this.numberOfBuildings = 0;
         this.player = player;
         player.setTurn(this);
         if (player.getGod() == null)
-            throw new GodNotSet();
+            throw new GodNotSetException();
         player.getGod().resetParameters();
         MIN_MOVEMENTS = player.getGod().getMIN_MOVEMENTS();
         MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();

@@ -1,8 +1,8 @@
 package Model.Exceptions;
 
-public class GodNotSet extends Exception {
+public class GodNotSetException extends Exception {
     
-    public GodNotSet () {
+    public GodNotSetException () {
         super("Set God in this player before constructing the turn.");
     }
 }

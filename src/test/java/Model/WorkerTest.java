@@ -24,7 +24,7 @@ public class WorkerTest {
     @Before
     public void setUp() {
         board = Board.getBoard();
-        player = new Player("first", Color.LIGHT_GRAY);
+        player = new Player("first", Color.RED);
         otherPlayer = new Player("second", Color.BLUE);
         otherWorkerMale = otherPlayer.getWorker(Gender.MALE);
         workerMale = player.getWorker(Gender.MALE);
@@ -37,29 +37,29 @@ public class WorkerTest {
 
     @Test
     public void setSlot_ifSlotNotNull() {
-        workerMale.setSlot(board.getSlot(1,3));
-        assertEquals(board.getSlot(1,3), workerMale.getSlot());
+        workerMale.setSlot(board.getSlot(1, 3));
+        assertEquals(board.getSlot(1, 3), workerMale.getSlot());
     }
-    
+
     @Test
     public void setSlot_IfSlotNull_SlotInWorkerIsNull_But_WorkerInSlotIsNotNull() {
-        workerMale.setSlot(board.getSlot(1,3));
+        workerMale.setSlot(board.getSlot(1, 3));
         workerMale.setSlot(null);
         assertNull(workerMale.getSlot());
-        assertEquals(workerMale, board.getSlot(1,3).getWorker());
+        assertEquals(workerMale, board.getSlot(1, 3).getWorker());
     }
 
     @Test
     public void move_CorrectInput_CorrectOutput_SameLevel() {
-        workerMale.setSlot(board.getSlot(3,3));
+        workerMale.setSlot(board.getSlot(3, 3));
         boolean result;
         try {
             result = workerMale.move(Direction.LEFTDOWN);
             assertFalse(result);
-            assertNull(board.getSlot(3,3).getWorker());
-            assertEquals(workerMale, board.getSlot(4,2).getWorker());
-            assertFalse(board.getSlot(3,3).isOccupied());
-            assertTrue(board.getSlot(4,2).isOccupied());
+            assertNull(board.getSlot(3, 3).getWorker());
+            assertEquals(workerMale, board.getSlot(4, 2).getWorker());
+            assertFalse(board.getSlot(3, 3).isOccupied());
+            assertTrue(board.getSlot(4, 2).isOccupied());
         } catch (SlotOccupiedException e) {
             System.out.println("Yet occupied slot");
         } catch (NotReachableLevelException e) {
@@ -71,16 +71,16 @@ public class WorkerTest {
 
     @Test
     public void move_SlotOccupiedException() {
-        workerMale.setSlot(board.getSlot(3,3));
-        otherWorkerMale.setSlot(board.getSlot(4,2));
+        workerMale.setSlot(board.getSlot(3, 3));
+        otherWorkerMale.setSlot(board.getSlot(4, 2));
         try {
             workerMale.move(Direction.LEFTDOWN);
         } catch (SlotOccupiedException e) {
             System.out.println("Yet occupied slot");
-            assertEquals(workerMale, board.getSlot(3,3).getWorker());
-            assertEquals(otherWorkerMale, board.getSlot(4,2).getWorker());
-            assertTrue(board.getSlot(3,3).isOccupied());
-            assertTrue(board.getSlot(4,2).isOccupied());
+            assertEquals(workerMale, board.getSlot(3, 3).getWorker());
+            assertEquals(otherWorkerMale, board.getSlot(4, 2).getWorker());
+            assertTrue(board.getSlot(3, 3).isOccupied());
+            assertTrue(board.getSlot(4, 2).isOccupied());
         } catch (NotReachableLevelException e) {
             System.out.println("Too high level");
         } catch (InvalidDirectionException e) {
@@ -90,10 +90,10 @@ public class WorkerTest {
 
     @Test
     public void build_CorrectInput_CorrectOutput() {
-        workerMale.setSlot(board.getSlot(3,3));
+        workerMale.setSlot(board.getSlot(3, 3));
         try {
             workerMale.build(Direction.RIGHTDOWN);
-            assertEquals(Level.LEVEL1, board.getSlot(4,4).getLevel());
+            assertEquals(Level.LEVEL1, board.getSlot(4, 4).getLevel());
         } catch (SlotOccupiedException e) {
             System.out.println("Yet occupied slot");
         } catch (InvalidDirectionException e) {
@@ -103,8 +103,8 @@ public class WorkerTest {
 
     @Test
     public void build_SlotOccupiedException_otherWorker() {
-        workerMale.setSlot(board.getSlot(3,3));
-        otherWorkerMale.setSlot(board.getSlot(4,4));
+        workerMale.setSlot(board.getSlot(3, 3));
+        otherWorkerMale.setSlot(board.getSlot(4, 4));
         try {
             workerMale.build(Direction.RIGHTDOWN);
         } catch (SlotOccupiedException e) {
@@ -116,46 +116,60 @@ public class WorkerTest {
 
     @Test
     public void build_SlotOccupiedException_dome() {
-        workerMale.setSlot(board.getSlot(3,3));
+        workerMale.setSlot(board.getSlot(3, 3));
         try {
             workerMale.build(Direction.RIGHTDOWN);
-            assertEquals(board.getSlot(4,4).getLevel(), Level.LEVEL1);
+            assertEquals(board.getSlot(4, 4).getLevel(), Level.LEVEL1);
             workerMale.build(Direction.RIGHTDOWN);
-            assertEquals(board.getSlot(4,4).getLevel(), Level.LEVEL2);
+            assertEquals(board.getSlot(4, 4).getLevel(), Level.LEVEL2);
             workerMale.build(Direction.RIGHTDOWN);
-            assertEquals(board.getSlot(4,4).getLevel(), Level.LEVEL3);
+            assertEquals(board.getSlot(4, 4).getLevel(), Level.LEVEL3);
             workerMale.build(Direction.RIGHTDOWN);
-            assertEquals(board.getSlot(4,4).getLevel(), Level.DOME);
+            assertEquals(board.getSlot(4, 4).getLevel(), Level.DOME);
             workerMale.build(Direction.RIGHTDOWN);
         } catch (SlotOccupiedException e) {
             System.out.println("Yet occupied slot");
-            assertEquals(board.getSlot(4,4).getLevel(), Level.DOME);
+            assertEquals(board.getSlot(4, 4).getLevel(), Level.DOME);
         } catch (InvalidDirectionException e) {
             System.out.println("Invalid Action");
         }
     }
 
-    @Test (expected = IndexOutOfBoundsException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void move_IndexOutOfBound_1() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException, IndexOutOfBoundsException {
-        workerMale.setSlot(board.getSlot(0,3));
+        workerMale.setSlot(board.getSlot(0, 3));
         workerMale.move(Direction.UP);
     }
 
-    @Test (expected = IndexOutOfBoundsException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void move_IndexOutOfBound_2() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException, IndexOutOfBoundsException {
-        workerMale.setSlot(board.getSlot(2,4));
+        workerMale.setSlot(board.getSlot(2, 4));
         workerMale.move(Direction.RIGHT);
     }
 
-    @Test (expected = IndexOutOfBoundsException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void move_IndexOutOfBound_3() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException, IndexOutOfBoundsException {
-        workerMale.setSlot(board.getSlot(4,2));
+        workerMale.setSlot(board.getSlot(4, 2));
         workerMale.move(Direction.DOWN);
     }
 
     @Test
     public void move_Correct() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException {
-        workerMale.setSlot(board.getSlot(3,3));
+        workerMale.setSlot(board.getSlot(3, 3));
         workerMale.move(Direction.RIGHTUP);
     }
+
+    @Test
+    public void getColor() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException {
+        assertEquals(workerMale.getColor(), Color.RED);
+    }
+
+    @Test
+    public void getGender() throws SlotOccupiedException, NotReachableLevelException, InvalidDirectionException {
+        assertEquals(workerMale.getGender(), Gender.MALE);
+    }
+
+
+
+
 }

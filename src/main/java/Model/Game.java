@@ -1,5 +1,7 @@
 package Model;
 
+import Model.Exceptions.GameAlreadyStartedException;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,16 +25,19 @@ public class Game {
         players = new ArrayList<>();
     }
 
-    public void addPlayer (String username, Color c, int i) {
+    //when a player is added it goes at the end of the arraylist
+    /*public void addPlayer (String username, Color c, int i) {
         players.set(i, new Player(username, c));
-    }
+    }*/
 
-    public void addPlayer(Player player) {
+    public void addPlayer(Player player) throws GameAlreadyStartedException {
         if (start) {
+            throw new GameAlreadyStartedException( "A new player cannot be added because the game is started");
             //throw exception because game has already started and
             //it is not possible to add a player
         }
-        if (players.size() >= 4) {
+        if (players.size() >= 3) {
+            throw new GameAlreadyStartedException( "A new player cannot be added because the number of player is already MAX");
             //throw exception because it's not
             //possible to have more than 3 players
         }
@@ -40,9 +45,9 @@ public class Game {
         numberOfPlayers++;
     }
 
-    public Slot getSlot(int row, int column) {
+   /*public Slot getSlot(int row, int column) {
         return Board.getBoard().getSlot(row, column);
-    }
+    }*/
     
     public boolean isGameEnded() {
         return end;
@@ -65,6 +70,10 @@ public class Game {
     public static void setNumberOfPlayers(int numberOfPlayers) {
         Game.numberOfPlayers = numberOfPlayers;
     }
+
+    public void setStart(){ start = true; }
+
+    public void setEnd(){ end = true; }
 
 }
 

@@ -43,7 +43,7 @@ public class TurnTest {
     }
     
     @Test
-    public void deleteWorkersIfParalyzed_BothWorkersParalyzed_WorkersDeleted () throws InvalidDirectionException, GodNotSet {
+    public void deleteWorkersIfParalyzed_BothWorkersParalyzed_WorkersDeleted () throws InvalidDirectionException, GodNotSetException {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         
         turn = new Turn(player);    // the constructor calls implicitly deleteWorkersIfParalyzed
@@ -53,7 +53,7 @@ public class TurnTest {
         assertNull(player.getWorker(Gender.FEMALE));
     }
     @Test
-    public void deleteWorkersIfParalyzed_MaleWorkerParalyzed_WorkersNotDeleted () throws InvalidDirectionException, GodNotSet {
+    public void deleteWorkersIfParalyzed_MaleWorkerParalyzed_WorkersNotDeleted () throws InvalidDirectionException, GodNotSetException {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         // I am going to free the female worker (this is Prometheus, he can build)
         slots[3][3].setLevel(Level.LEVEL2);
@@ -64,7 +64,7 @@ public class TurnTest {
         assertEquals(player.getWorker(Gender.MALE), player.getWorker(Gender.MALE));
     }
     @Test
-    public void deleteWorkersIfParalyzed_FemaleWorkerParalyzed_WorkersNotDeleted () throws InvalidDirectionException, GodNotSet {
+    public void deleteWorkersIfParalyzed_FemaleWorkerParalyzed_WorkersNotDeleted () throws InvalidDirectionException, GodNotSetException {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         // I am going to free the female worker (this is Prometheus, he can build)
         slots[0][0].setLevel(Level.GROUND);
@@ -96,7 +96,7 @@ public class TurnTest {
         assertNull(player.getWorker(Gender.MALE));
         assertNull(player.getWorker(Gender.FEMALE));
     }
-    private void setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(Player player, Worker maleWorker, Worker femaleWorker) throws InvalidDirectionException, GodNotSet {
+    private void setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(Player player, Worker maleWorker, Worker femaleWorker) throws InvalidDirectionException, GodNotSetException {
         god = new Prometheus(player, "Prometheus");   // Prometheus has normal conditions checking
 
         // I am going to paralyze the workers.
@@ -219,7 +219,7 @@ public class TurnTest {
         turn.executeBuild(Direction.DOWN);
     }
     
-    @Test (expected = GodNotSet.class)
+    @Test (expected = GodNotSetException.class)
     public void TurnConstructor_PlayerWithoutGod_ThrowsGodNotSet () throws Exception{
         new Turn(new Player("test", Color.BLACK));
     }

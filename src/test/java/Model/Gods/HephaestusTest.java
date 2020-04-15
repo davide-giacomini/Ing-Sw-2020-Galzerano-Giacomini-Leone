@@ -25,7 +25,7 @@ public class HephaestusTest {
     private Worker secondWorker;
 
     @Before
-    public void setUp() throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSet {
+    public void setUp() throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSetException {
 
         board = Board.getBoard();
 

@@ -24,7 +24,7 @@ public class MinotaurTest {
     private Worker secondWorker;
 
     @Before
-    public void setUp() throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSet {
+    public void setUp() throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSetException {
         board = Board.getBoard();
         slotM = board.getSlot(2,2);
         slotF = board.getSlot(0,0);

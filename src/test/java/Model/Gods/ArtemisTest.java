@@ -24,7 +24,7 @@ public class ArtemisTest {
     private Worker otherWorker;
 
     @Before
-    public void setUp () throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSet {
+    public void setUp () throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSetException {
         board = Board.getBoard();
         player = new Player("Monica", Color.YELLOW);
         player.setGod(new Artemis(player, "Artemis"));
@@ -182,13 +182,6 @@ public class ArtemisTest {
     public void turn_tryToBackInTheFirst_8() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
         turn.executeMove(Direction.LEFT);
         turn.executeMove(Direction.RIGHT);
-    }
-
-    @Test (expected = InvalidDirectionException.class)
-    public void turn_tryToBackInTheFirst_9() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
-        turn.executeMove(Direction.LEFT);
-        Direction d = null;
-        turn.executeMove(d.LEFT);
     }
 
     @Test
