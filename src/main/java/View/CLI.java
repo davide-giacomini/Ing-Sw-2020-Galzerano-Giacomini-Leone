@@ -6,6 +6,7 @@ import Model.Enumerations.Gender;
 import Model.Enumerations.Level;
 import Model.Player;
 import Model.Worker;
+import Network.Client.Client;
 
 import java.awt.*;
 import java.io.PrintStream;
@@ -13,13 +14,14 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class CLI {
+public class CLI extends View {
+
 
     private Scanner in;
     private PrintStream out;
 
     //main per prova
-    public static void main(String[] args)
+    /*public static void main(String[] args)
     {
         CLI c = new CLI();
 
@@ -62,12 +64,29 @@ public class CLI {
 
         p.clearConsole(c.out);
 
-    }
+    }*/
 
     //costruttore
-    public CLI() {
+    public CLI(Client client) {
+        super(client);
         this.in = new Scanner(System.in);
         this.out = new PrintStream(System.out);
+    }
+
+    @Override
+    public void startConnection(){
+
+        printSantorini();
+
+        System.out.println("IP address of server?");
+        String ip = in.nextLine();
+
+        String username = askUsername();
+
+        String color = askColorWorkers();
+
+        currentClient.setConnection(ip ,SOCKET_PORT, username, color );
+
     }
 
     /**
@@ -104,8 +123,6 @@ public class CLI {
 
                 username = in.nextLine();
                 if(username.equals("")) {
-                 //da inserire qui un metodo del controller che verifica che l'username sia diverso da quello degli
-                 //altri giocatori prima di prenderlo
                 out.println("Username not inserted or wrong!\n");
                 username = null;
             }}

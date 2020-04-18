@@ -171,12 +171,12 @@ public class TurnTest {
         
         assertEquals(0, turn.getNumberOfMovements());
         
-        slots[0][0].setLevel(Level.LEVEL3);
-        slots[0][1].setLevel(Level.LEVEL2);
-        player.getWorker(Gender.MALE).setSlot(slots[0][1]);
+        slots[1][0].setLevel(Level.LEVEL3);
+        slots[1][1].setLevel(Level.LEVEL2);
+        player.getWorker(Gender.MALE).setSlot(slots[1][1]);
         turn.executeMove(Direction.LEFT);
         
-        assertEquals(slots[0][0].getWorker(), player.getWorker(Gender.MALE));
+        assertEquals(slots[1][0].getWorker(), player.getWorker(Gender.MALE));
         assertEquals(1, turn.getNumberOfMovements());
         assertTrue(player.isWinning());
         

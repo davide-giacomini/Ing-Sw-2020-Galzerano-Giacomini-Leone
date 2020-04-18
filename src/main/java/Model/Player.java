@@ -114,7 +114,7 @@ public class Player {
      * @param worker the worker to be deleted
      */
     public void deleteWorker (Worker worker) {
-        if (workers[worker.getGender().ordinal()]==null)
+        if (worker == null)
             throw new NullPointerException("The worker chosen to be deleted doesn't exist.");
         workers[worker.getGender().ordinal()] = null;
         
