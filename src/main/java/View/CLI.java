@@ -137,13 +137,13 @@ public class CLI extends View {
         String color = null;
 
         out.println("Here are the possible workers' colors : \n ");
-        out.println(AnsiCode.ANSI_BLUE + AnsiCode.ANSI_WORKER + "this is blue");
-        out.println(AnsiCode.ANSI_YELLOW + AnsiCode.ANSI_WORKER + "this is yellow");
-        out.println(AnsiCode.ANSI_GREEN + AnsiCode.ANSI_WORKER +"this is green");
-        out.println(AnsiCode.ANSI_RED + AnsiCode.ANSI_WORKER +"this is red");
-        out.println(AnsiCode.ANSI_WHITE + AnsiCode.ANSI_WORKER + "this is white");
-        out.println(AnsiCode.ANSI_CYAN + AnsiCode.ANSI_WORKER + "this is cyan");
-        out.println(AnsiCode.ANSI_PURPLE + AnsiCode.ANSI_WORKER + "this is purple");
+        out.println(AnsiCode.ANSI_BLUE + AnsiCode.ANSI_WORKER + " This is blue");
+        out.println(AnsiCode.ANSI_YELLOW + AnsiCode.ANSI_WORKER + " This is yellow");
+        out.println(AnsiCode.ANSI_GREEN + AnsiCode.ANSI_WORKER +" This is green");
+        out.println(AnsiCode.ANSI_RED + AnsiCode.ANSI_WORKER +" This is red");
+        out.println(AnsiCode.ANSI_WHITE + AnsiCode.ANSI_WORKER + " This is white");
+        out.println(AnsiCode.ANSI_CYAN + AnsiCode.ANSI_WORKER + " This is cyan");
+        out.println(AnsiCode.ANSI_PURPLE + AnsiCode.ANSI_WORKER + " This is purple" + AnsiCode.ANSI_RESET);
 
         do {
             out.println("Insert the color you prefer : \n ");

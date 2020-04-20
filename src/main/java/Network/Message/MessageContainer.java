@@ -1,13 +1,15 @@
 package Network.Message;
 
-public class MessageContenitor {
+import java.io.Serializable;
+
+public class MessageContainer implements Serializable {
 
     private final Object content;
     private int type;
     public static final int MV_EVENT=0;
     public static final int CV_EVENT=1;
 
-    public MessageContenitor(int type, Object content){
+    public MessageContainer(int type, Object content){
         this.type=type;
         this.content = content;
     }

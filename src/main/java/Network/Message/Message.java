@@ -1,11 +1,12 @@
 package Network.Message;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Message {
+public abstract class Message{
     private ArrayList<MessageListener> messageListeners;
 
-    public void notify_listeners() {
+    public void notifyListeners() {
         for (MessageListener messageListener : messageListeners) {
             messageListener.update();
         }

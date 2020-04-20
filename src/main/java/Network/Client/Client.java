@@ -23,7 +23,7 @@ public class Client implements Runnable{
        while (connectionNotSet)
        {
            NetworkHandler clientSocket = new NetworkHandler(ipServer, port, username, color, view);
-           clientSocket.run();
+           clientSocket.openConnection();
            connectionNotSet = false ;
        }
     }
