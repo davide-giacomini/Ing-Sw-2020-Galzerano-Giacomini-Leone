@@ -1,6 +1,6 @@
 package Model;
 
-import Model.Enumerations.Level;
+import Enumerations.Level;
 
 /**
  * This class represent a slot of the board.

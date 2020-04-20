@@ -1,8 +1,8 @@
 package Model.Gods;
 
 import Model.Board;
-import Model.Enumerations.Direction;
-import Model.Enumerations.Level;
+import Enumerations.Direction;
+import Enumerations.Level;
 import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;

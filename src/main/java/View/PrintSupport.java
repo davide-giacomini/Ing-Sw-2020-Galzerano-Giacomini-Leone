@@ -1,13 +1,10 @@
 package View;
 
 import Model.Board;
-import Model.Enumerations.Level;
 import Model.Slot;
 import Model.Worker;
 
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Objects;
 
 public class PrintSupport {
 

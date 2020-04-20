@@ -1,17 +1,9 @@
 package View;
 
 import Controller.GameController;
-import Model.Board;
-import Model.Enumerations.Gender;
-import Model.Enumerations.Level;
-import Model.Player;
-import Model.Worker;
 import Network.Client.Client;
 
-import java.awt.*;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
 public class CLI extends View {
@@ -73,19 +65,24 @@ public class CLI extends View {
         this.out = new PrintStream(System.out);
     }
 
+    /**
+     * This method starts the connection with the server asking for the ip, the username and the color.
+     */
     @Override
     public void startConnection(){
-
+        String ip;
         printSantorini();
 
-        System.out.println("IP address of server?");
-        String ip = in.nextLine();
+        do {
+            System.out.println("IP address of server?");
+            ip = in.nextLine();
+        } while (!ip.equals("127.0.0.1"));
 
         String username = askUsername();
 
         String color = askColorWorkers();
 
-        currentClient.setConnection(ip ,SOCKET_PORT, username, color );
+        currentClient.setConnection(ip, SOCKET_PORT, username, color);
 
     }
 
@@ -140,25 +137,23 @@ public class CLI extends View {
         String color = null;
 
         out.println("Here are the possible workers' colors : \n ");
-        out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_BLUE); //inserisci nomi colori
-        out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_YELLOW);
-        out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_GREEN);
-        out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RED);
-        out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_WHITE);
-        out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_CYAN);
-        out.println(AnsiCode.ANSI_WORKER + AnsiCode.ANSI_PURPLE);
+        out.println(AnsiCode.ANSI_BLUE + AnsiCode.ANSI_WORKER + "this is blue");
+        out.println(AnsiCode.ANSI_YELLOW + AnsiCode.ANSI_WORKER + "this is yellow");
+        out.println(AnsiCode.ANSI_GREEN + AnsiCode.ANSI_WORKER +"this is green");
+        out.println(AnsiCode.ANSI_RED + AnsiCode.ANSI_WORKER +"this is red");
+        out.println(AnsiCode.ANSI_WHITE + AnsiCode.ANSI_WORKER + "this is white");
+        out.println(AnsiCode.ANSI_CYAN + AnsiCode.ANSI_WORKER + "this is cyan");
+        out.println(AnsiCode.ANSI_PURPLE + AnsiCode.ANSI_WORKER + "this is purple");
 
         do {
             out.println("Insert the color you prefer : \n ");
 
             if (in.hasNextLine())
-
                 color = in.nextLine();
             else
                 out.println("Color not inserted or not available! \n");
 
         }while (color == null);
-
 
         return color;
     }
@@ -234,6 +229,10 @@ public class CLI extends View {
     public void reset( PrintStream o) {
         o.println(AnsiCode.ANSI_RESET);
         o.flush();
+    }
+
+    public void print(String text) {
+        System.out.println(text);
     }
 
 }

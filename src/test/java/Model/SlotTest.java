@@ -4,11 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Model.Enumerations.Direction;
-import Model.Enumerations.Gender;
-import Model.Enumerations.Level;
-import Model.Exceptions.*;
-import Model.Gods.*;
+import Enumerations.Gender;
+import Enumerations.Level;
 
 import java.awt.*;
 

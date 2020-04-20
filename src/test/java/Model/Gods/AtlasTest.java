@@ -1,9 +1,9 @@
 package Model.Gods;
 
 import Model.Board;
-import Model.Enumerations.Direction;
-import Model.Enumerations.Gender;
-import Model.Enumerations.Level;
+import Enumerations.Direction;
+import Enumerations.Gender;
+import Enumerations.Level;
 import Model.Exceptions.*;
 import Model.Player;
 import Model.Turn;

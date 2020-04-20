@@ -1,9 +1,9 @@
 package Model.Gods;
 
 import Model.*;
-import Model.Enumerations.Direction;
-import Model.Enumerations.Gender;
-import Model.Enumerations.Level;
+import Enumerations.Direction;
+import Enumerations.Gender;
+import Enumerations.Level;
 import Model.Exceptions.*;
 import org.junit.After;
 import org.junit.Before;

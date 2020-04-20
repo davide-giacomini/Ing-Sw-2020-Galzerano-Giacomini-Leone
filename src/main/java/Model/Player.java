@@ -1,7 +1,7 @@
 package Model;
 
-import Model.Enumerations.Direction;
-import Model.Enumerations.Gender;
+import Enumerations.Direction;
+import Enumerations.Gender;
 import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;

@@ -1,22 +1,42 @@
 package Network.Server;
 
+import Network.Message.MessageContenitor;
+import Network.Message.MessageVC;
+
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 
 public class ClientHandler implements Runnable{
+    private boolean connected;
+    private VirtualView virtualView;
     private Socket client;
+    private ServerSocket serverSocket;
+    private SantoriniServer server;
     private int numberOfThread;
+    private String username;
+    private String color;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+    private Thread listener;
 
-    ClientHandler(Socket client, int numberOfThread)
+    ClientHandler(Socket client, ServerSocket serverSocket, int numberOfThread, String username, String color, ObjectInputStream in, ObjectOutputStream out, SantoriniServer server)
     {
         this.client = client;
+        this.serverSocket = serverSocket;
         this.numberOfThread = numberOfThread;
+        this.username = username;
+        this.color = color;
+        this.in = in;
+        this.out = out;
+        this.server = server;
+        listener = new Thread();
+        listener.start();
+        connected = true;
     }
 
     private void AskToThe1stThreadNumberOfPlayers(){
@@ -27,42 +47,61 @@ public class ClientHandler implements Runnable{
     }
 
 
-    @Override
-    public void run() {
-        try {
-            handleClientConnection();
-        } catch (IOException e) {
-            System.out.println("client " + client.getInetAddress() + " connection dropped");
-        }
-    }
-
-
-
-    private void handleClientConnection() throws IOException
+    public void run()
     {
         System.out.println("Connected to " + client.getInetAddress());
 
-        ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
-        ObjectInputStream input = new ObjectInputStream(client.getInputStream());
-
         try {
-            while (true) {
-                /* read a String from the stream and write an uppercase string in response */
-                Object next = input.readObject();
-                String str = (String)next;
-
-                try {
-                    /* simulate a complex computation */
-                    TimeUnit.SECONDS.sleep(10);
-                } catch (InterruptedException e) { }
-
-                output.writeObject(str.toUpperCase());
+            while (!Thread.currentThread().isInterrupted()) {
+                ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
+                ObjectInputStream input = new ObjectInputStream(client.getInputStream());
+                MessageVC message = (MessageVC) input.readObject();
+                update(message);
             }
-        } catch (ClassNotFoundException | ClassCastException e) {
+        } catch (ClassNotFoundException e) {
             System.out.println("invalid stream from client");
+        } catch (IOException e) {
+            System.out.println("Connection dropped");
         }
 
-        client.close();
+    }
+
+    public void update(MessageVC message) {
+        // message.accept(vView.getController());
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void send(MessageContenitor message) {
+        try {
+            out.writeObject(message);
+            out.flush();
+            out.reset();
+        } catch (IOException e) {
+            // ??
+        }
+    }
+
+    public void disconnect() {
+        if (connected) {
+            try {
+                if (!client.isClosed()) {
+                    client.close();
+                }
+            } catch (IOException e) {
+                //what to do?
+            }
+
+            listener.interrupt();
+            connected = false;
+            server.onDisconnect(this);
+        }
     }
 }
 

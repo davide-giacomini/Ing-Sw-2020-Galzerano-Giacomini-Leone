@@ -1,11 +1,9 @@
 package Model;
 
-import Model.Enumerations.Direction;
-import Model.Enumerations.Gender;
+import Enumerations.Direction;
+import Enumerations.Gender;
 import Model.Exceptions.*;
 import Model.Gods.God;
-
-import javax.print.attribute.standard.NumberUp;
 
 /**
  * This class implements a default turn, which is shared by Gods as Apollo, Athena,

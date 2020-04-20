@@ -1,4 +1,4 @@
-package Model.Enumerations;
+package Enumerations;
 
 public enum God {
     APOLLO ("Apollo"),

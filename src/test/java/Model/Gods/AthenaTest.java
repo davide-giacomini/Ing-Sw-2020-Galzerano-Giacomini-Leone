@@ -1,8 +1,8 @@
 package Model.Gods;
 
 import Model.*;
-import Model.Enumerations.Direction;
-import Model.Enumerations.Gender;
+import Enumerations.Direction;
+import Enumerations.Gender;
 import Model.Exceptions.*;
 import org.junit.After;
 import org.junit.Before;

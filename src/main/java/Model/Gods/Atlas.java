@@ -1,6 +1,6 @@
 package Model.Gods;
 
-import Model.Enumerations.Direction;
+import Enumerations.Direction;
 import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;
