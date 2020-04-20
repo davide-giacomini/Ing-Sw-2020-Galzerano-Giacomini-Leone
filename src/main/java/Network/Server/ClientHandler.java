@@ -1,6 +1,6 @@
 package Network.Server;
 
-import Network.Message.MessageContenitor;
+import Network.Message.MessageContainer;
 import Network.Message.MessageVC;
 
 import java.net.ServerSocket;
@@ -78,7 +78,7 @@ public class ClientHandler implements Runnable{
         return color;
     }
 
-    public void send(MessageContenitor message) {
+    public void send(MessageContainer message) {
         try {
             out.writeObject(message);
             out.flush();

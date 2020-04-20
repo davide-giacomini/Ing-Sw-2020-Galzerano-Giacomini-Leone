@@ -6,9 +6,10 @@ import View.View;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 
-public class NetworkHandler implements Runnable{
+public class NetworkHandler implements Runnable, Serializable {
     private String ipServer;
     private int port;
     private String username;
@@ -85,17 +86,18 @@ public class NetworkHandler implements Runnable{
 
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                MessageContenitor message = (MessageContenitor) in.readObject();
-                if (message.getType() == MessageContenitor.MV_EVENT) {
+                System.out.println("Ci seiii");
+                MessageContainer message = (MessageContainer) in.readObject();
+                if (message.getType() == MessageContainer.MV_EVENT) {
                     //do something
                 }
-                else if (message.getType() == MessageContenitor.CV_EVENT) {
+                else if (message.getType() == MessageContainer.CV_EVENT) {
                     MessageCV messageCV = (MessageCV) message.getContent();
                     messageCV.accept(this);
                 }
                 }
             } catch (IOException e) {
-                view.print("invalid stream from server");
+                view.print("Server has dropped the connection");
             } catch (ClassNotFoundException e) {
                 //what to do?
             }

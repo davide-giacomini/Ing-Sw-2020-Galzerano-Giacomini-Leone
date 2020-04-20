@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.Remote;
 import java.util.ArrayList;
 
 ///ip server è sempre 127.0.0.1 ???????
@@ -56,7 +57,7 @@ public class SantoriniServer
         if (clients.isEmpty()) {
             clients.add(clientHandler);
             ConnectionResponse connectionResponse = new ConnectionResponse("Successfully connected");
-            MessageContenitor message = new MessageContenitor(MessageContenitor.CV_EVENT, connectionResponse);
+            MessageContainer message = new MessageContainer(MessageContainer.CV_EVENT, connectionResponse);
             clientHandler.send(message);
             return true;
         } else {
@@ -64,12 +65,12 @@ public class SantoriniServer
                 clients.add(clientHandler);
                 System.out.println(username + " è stato aggiunto all'elenco\n");
                 ConnectionResponse connectionResponse = new ConnectionResponse("Successfully connected");
-                MessageContenitor message = new MessageContenitor(MessageContenitor.CV_EVENT, connectionResponse);
+                MessageContainer message = new MessageContainer(MessageContainer.CV_EVENT, connectionResponse);
                 clientHandler.send(message);
                 return true;
             } else {
                 ConnectionResponse connectionResponse = new ConnectionResponse("Tentativo di connessione non riuscito per username e colore invalidi");
-                MessageContenitor message = new MessageContenitor(MessageContenitor.CV_EVENT, connectionResponse);
+                MessageContainer message = new MessageContainer(MessageContainer.CV_EVENT, connectionResponse);
                 clientHandler.send(message);
                 clientHandler.disconnect();
                 return false;
