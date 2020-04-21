@@ -4,6 +4,7 @@ import Enumerations.Direction;
 import Enumerations.Gender;
 import Enumerations.Level;
 import Model.Exceptions.InvalidDirectionException;
+import Model.Exceptions.InvalidMoveException;
 import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.SlotOccupiedException;
 
@@ -69,19 +70,25 @@ public class Worker {
      * This method moves a worker from a slot to another, towards the destination specified.
      * @param direction where the worker wants to move to.
      * @return true if the worker voluntarily moved up to the level 3, false otherwise
-     * @throws SlotOccupiedException if the destination slot is occupied by a dome or another worker
-     * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current
-     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
-     * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
+     * @throws IndexOutOfBoundsException if the direction is out of the board.
+     * @throws InvalidMoveException if the destination {@link Slot} is outside the {@link Board}
      */
     public boolean move (Direction direction)
-            throws IndexOutOfBoundsException, SlotOccupiedException, NotReachableLevelException, InvalidDirectionException {
+            throws InvalidMoveException, IndexOutOfBoundsException {
 
         checkDirection(direction);
 
-        Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
-        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
-        if (destinationSlot.getLevel().ordinal() - slot.getLevel().ordinal()>1) throw new NotReachableLevelException();
+        Slot destinationSlot;
+        try {
+            destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
+        }
+        catch (InvalidDirectionException e){
+            throw new InvalidMoveException("Invalid direction of the getNearBySlot.");
+        }
+        if (destinationSlot.isOccupied()) throw new InvalidMoveException("Slot occupied, douche!");
+        if (destinationSlot.getLevel().ordinal() - slot.getLevel().ordinal()>1)
+            throw new InvalidMoveException("Level unreachable, douche!");
+        
         return updatePosition(destinationSlot);
     }
 

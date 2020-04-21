@@ -58,7 +58,7 @@ public class Game {
     }
 
     public ArrayList<Player> getPlayers() {
-        return players;
+        return new ArrayList<>(Game.players);
     }
 
     public static Player getPlayer(int i) { return players.get(i); }
