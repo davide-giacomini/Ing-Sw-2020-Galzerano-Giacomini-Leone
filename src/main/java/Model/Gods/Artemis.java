@@ -28,7 +28,7 @@ public class Artemis extends God {
     }
 
     /**
-     * This method check the numberOfMovements of the actual turn: if it's zero, it just calls the standard move of a
+     * This method checks the numberOfMovements of the actual turn: if it's zero, it just calls the standard move of a
      * worker and save the chosen direction; if it's one, it control if the chosen direction is opposed to the first,
      * then it calls the standard move of a worker.
      * @param direction where the worker wants to move to.
@@ -62,7 +62,7 @@ public class Artemis extends God {
 
     /**
      * This method calls the standard build of a worker:
-     * Athena doesn't modify the building rules.
+     * Artemis doesn't modify the building rules.
      * @param direction specifies the slot where to build
      * @param worker one of the player's workers
      * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
