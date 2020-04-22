@@ -137,7 +137,8 @@ public class PlayerTest {
     }
 
     @Test
-    public void move() throws IndexOutOfBoundsException, NotReachableLevelException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
+    public void move()
+            throws Exception {
         Board board = Board.getBoard();
         player.setGod(new Apollo(player, "Apollo"));
         player.putWorkerOnSlot(player.getWorker(Gender.MALE), board.getSlot(1, 1));

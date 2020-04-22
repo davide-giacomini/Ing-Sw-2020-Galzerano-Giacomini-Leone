@@ -70,14 +70,14 @@ public class Turn {
     /**
      * This method set the worker that will be used during the turn.
      * @param workerGender the gender of the chosen worker
-     * @throws WrongBuildOrMoveException if the player has already chosen its worker and he cannot change
+     * @throws InvalidMoveException if the player has already chosen its worker and he cannot change
      * it during the turn.
      */
-    public void setWorkerGender(Gender workerGender) throws WrongBuildOrMoveException{
+    public void setWorkerGender(Gender workerGender) throws InvalidMoveException {
         if (!alreadySetWorker)
             this.alreadySetWorker = true;
         else if (!canUseBothWorkers)
-            throw new WrongBuildOrMoveException();
+            throw new InvalidMoveException("You cannot choose an other worker in the middle of the turn");
         this.workerGender = workerGender;
     }
 
@@ -88,11 +88,11 @@ public class Turn {
     /**
      * This method set if the player wants to build a dome instead of the rules' level.
      * @param wantsToBuildDome true if he wants to build a dome, false otherwise
-     * @throws WrongBuildOrMoveException if the player wants to build a dome but he isn't allowed to.
+     * @throws InvalidBuildException if the player wants to build a dome but he isn't allowed to.
      */
-    public void setWantsToBuildDome(boolean wantsToBuildDome) throws WrongBuildOrMoveException {
+    public void setWantsToBuildDome(boolean wantsToBuildDome) throws InvalidBuildException {
         if (!canAlwaysBuildDome && wantsToBuildDome)
-            throw new WrongBuildOrMoveException();
+            throw new InvalidBuildException("You cannot build multiple times");
         this.wantsToBuildDome = wantsToBuildDome;
     }
 

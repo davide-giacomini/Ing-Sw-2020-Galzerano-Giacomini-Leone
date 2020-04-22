@@ -2,10 +2,7 @@ package Model.Gods;
 
 import Model.Board;
 import Enumerations.Direction;
-import Model.Exceptions.InvalidDirectionException;
-import Model.Exceptions.NotReachableLevelException;
-import Model.Exceptions.SlotOccupiedException;
-import Model.Exceptions.WrongBuildOrMoveException;
+import Model.Exceptions.*;
 import Model.Player;
 import Model.Slot;
 import Model.Worker;
@@ -32,31 +29,38 @@ public class Prometheus extends God {
      * @param direction where the worker wants to move to.
      * @param worker the {@link Player}'s {@link Worker} to be moved.
      * @return true if the worker moved voluntarily up on the third level, false otherwise
-     * @throws SlotOccupiedException if the destination slot is occupied by a dome or another worker
-     * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current
      * @throws InvalidDirectionException if the switch-else of {@link Board#getNearbySlot(Direction, Slot)} enters
      * the default case. It shouldn't happen.
      * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
-     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
+     * @throws InvalidMoveException if the move is not permitted.
      */
     @Override
     public boolean move(Direction direction, Worker worker)
-            throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
+            throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
         int numberOfBuildings = player.getTurn().getNumberOfBuildings();
 
         if (numberOfBuildings==0) {
             moveThenBuild = true;
-            return worker.move(direction);
+            try {
+                return worker.move(direction);
+            } catch (SlotOccupiedException e) {
+                throw new InvalidMoveException("Slot occupied");
+            }
         }
         else if (numberOfBuildings==1){
             moveThenBuild = false;
             // if the destination slot is higher than the current slot
             if (worker.getSlot().getLevel().ordinal() < Board.getNearbySlot(direction, worker.getSlot()).getLevel().ordinal())
-                throw new NotReachableLevelException();
-            else
-                return worker.move(direction);
+                throw new InvalidMoveException("Since you built before moving, you cannot go up");
+            else {
+                try {
+                    return worker.move(direction);
+                } catch (SlotOccupiedException e) {
+                    throw new InvalidMoveException("Slot occupied");
+                }
+            }
         }
-        else throw new WrongBuildOrMoveException();
+        else throw new InvalidMoveException("Order of movements not correct");
     }
     
     /**
@@ -64,20 +68,22 @@ public class Prometheus extends God {
      * @param direction specifies the slot where to build
      * @param worker one of the player's workers
      * @throws IndexOutOfBoundsException if the {@link Slot} where to build is outside the {@link Board}
-     * @throws SlotOccupiedException if the slot where to build is occupied by a dome or another worker
-     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
-     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
+     * @throws InvalidMoveException if the move is not permitted.
      */
     @Override
     public void build(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
+            throws IndexOutOfBoundsException, InvalidBuildException {
         int numberOfMovements = player.getTurn().getNumberOfMovements();
         int numberOfBuildings = player.getTurn().getNumberOfBuildings();
         
-        if (numberOfMovements==0 && numberOfBuildings==1) throw new WrongBuildOrMoveException();
-        if (numberOfBuildings==1 && moveThenBuild)  throw new WrongBuildOrMoveException();
-        
-        worker.build(direction);
+        if (numberOfMovements==0 && numberOfBuildings==1) throw new InvalidBuildException("Order of movements not correct");
+        if (numberOfBuildings==1 && moveThenBuild)  throw new InvalidBuildException("Order of movements not correct");
+
+        try {
+            worker.build(direction);
+        } catch (SlotOccupiedException e) {
+            throw new InvalidBuildException("Slot occupied");
+        }
     }
 
     /**

@@ -24,7 +24,8 @@ public class ApolloTest {
     private Worker secondWorker;
 
     @Before
-    public void setUp() throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSetException {
+    public void setUp()
+            throws Exception {
         board = Board.getBoard();
         slotM = board.getSlot(2,2);
         slot2 = board.getSlot(3,3);

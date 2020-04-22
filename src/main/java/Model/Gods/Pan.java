@@ -1,10 +1,7 @@
 package Model.Gods;
 
 import Enumerations.Direction;
-import Model.Exceptions.InvalidDirectionException;
-import Model.Exceptions.NotReachableLevelException;
-import Model.Exceptions.SlotOccupiedException;
-import Model.Exceptions.WrongBuildOrMoveException;
+import Model.Exceptions.*;
 import Model.Player;
 import Model.Worker;
 
@@ -30,15 +27,18 @@ public class Pan extends God{
      * @param worker the {@link Player}'s {@link Worker} to be moved.
      * @return true if the worker moved voluntarily up on the third level or if moves down
      * two or more levels, false otherwise
-     * @throws SlotOccupiedException if the worker try to move in an occupied slot
-     * @throws NotReachableLevelException if the worker try to move in an unreachable slot
      * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
-     * @throws InvalidDirectionException if there are some troubles of I/O.
+     * @throws InvalidMoveException if the move is not permitted.
      */
     @Override
-    public boolean move(Direction direction, Worker worker) throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
+    public boolean move(Direction direction, Worker worker) throws IndexOutOfBoundsException,  InvalidMoveException {
         int previousLevel = worker.getSlot().getLevel().ordinal();
-        boolean winCondition = worker.move(direction);
+        boolean winCondition = false;
+        try {
+            winCondition = worker.move(direction);
+        } catch (SlotOccupiedException e) {
+            throw new InvalidMoveException("Slot occupied");
+        }
         int actualLevel = worker.getSlot().getLevel().ordinal();
         return winCondition || (actualLevel - previousLevel < -1);
     }
@@ -49,15 +49,18 @@ public class Pan extends God{
      * @param direction specifies the slot where to build
      * @param worker one of the player's workers
      * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
-     * @throws SlotOccupiedException if the worker try to build in an occupied slot
      * @throws InvalidDirectionException if there are some troubles of I/O.
-     * @throws WrongBuildOrMoveException if the worker try to build but he still hasn't moved.
+     * @throws InvalidBuildException if the build is not permitted.
      */
     @Override
-    public void build(Direction direction, Worker worker) throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
-        if (player.getTurn().getNumberOfMovements() == 0) throw new WrongBuildOrMoveException();
+    public void build(Direction direction, Worker worker) throws IndexOutOfBoundsException,InvalidBuildException{
+        if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements not correct");
 
-        worker.build(direction);
+        try {
+            worker.build(direction);
+        } catch (SlotOccupiedException e) {
+            throw new InvalidBuildException("Slot occupied");
+        }
     }
 
     /**

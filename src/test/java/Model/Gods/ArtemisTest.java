@@ -71,7 +71,7 @@ public class ArtemisTest {
         assertTrue(player.getGod().validateEndTurn());
     }
 
-    @Test (expected = InvalidBuildException.class)
+    @Test (expected = InvalidMoveException.class)
     public void turn_tryToBackInTheFirst()
             throws Exception {
         turn.executeMove(Direction.RIGHT);
