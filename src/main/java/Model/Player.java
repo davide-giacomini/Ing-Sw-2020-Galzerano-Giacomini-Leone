@@ -2,10 +2,7 @@ package Model;
 
 import Enumerations.Direction;
 import Enumerations.Gender;
-import Model.Exceptions.InvalidDirectionException;
-import Model.Exceptions.NotReachableLevelException;
-import Model.Exceptions.SlotOccupiedException;
-import Model.Exceptions.WrongBuildOrMoveException;
+import Model.Exceptions.*;
 import Model.Gods.God;
 
 import java.awt.*;
@@ -150,19 +147,16 @@ public class Player {
      * @param direction direction where the worker is going to move to
      * @param worker one of the two player's workers
      * @return true if the worker moved voluntarily up on the third level, false otherwise
-     * @throws IndexOutOfBoundsException if the destination {@link Slot} doesn't exist in the {@link Board}.
-     * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current.
-     * @throws SlotOccupiedException if the destination {@link Slot} is occupied
-     * @throws InvalidDirectionException if the switch-case of getNearbySlot of {@link Board} entered the default case. It
-     * shouldn't happen.
-     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
+     * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
+     * @throws InvalidDirectionException if there are some troubles of I/O.
+     * @throws InvalidMoveException if the move is invalid.
      */
     public boolean move(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, NotReachableLevelException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
+            throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
         int previousLevel = worker.getSlot().getLevel().ordinal();
         int wishedLevel = Board.getNearbySlot(direction, worker.getSlot()).getLevel().ordinal();
         if (cannotMoveUp && wishedLevel > previousLevel) {
-            throw new NotReachableLevelException();
+            throw new InvalidMoveException("Level not reachable");
         }
         return god.move(direction, worker);
     }
@@ -171,13 +165,12 @@ public class Player {
      * This method builds a construction on the {@link Slot} adjacent to the {@link Worker} in the direction chosen.
      * @param direction specifies the slot where to build
      * @param worker one of the player's workers
-     * @throws IndexOutOfBoundsException if the {@link Slot} where to build is outside the {@link Board}
-     * @throws SlotOccupiedException if the slot where to build is occupied by a dome or another worker
-     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
-     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
+     * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
+     * @throws InvalidDirectionException if there are some troubles of I/O.
+     * @throws InvalidBuildException if building is not permitted.
      */
     public void build(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
+            throws IndexOutOfBoundsException, InvalidDirectionException, InvalidBuildException {
         god.build(direction, worker);
     }
 
