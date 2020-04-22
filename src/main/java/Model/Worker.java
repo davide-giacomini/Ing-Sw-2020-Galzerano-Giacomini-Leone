@@ -3,10 +3,7 @@ package Model;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Enumerations.Level;
-import Model.Exceptions.InvalidDirectionException;
-import Model.Exceptions.InvalidMoveException;
-import Model.Exceptions.NotReachableLevelException;
-import Model.Exceptions.SlotOccupiedException;
+import Model.Exceptions.*;
 
 import java.awt.*;
 
@@ -72,9 +69,10 @@ public class Worker {
      * @return true if the worker voluntarily moved up to the level 3, false otherwise
      * @throws IndexOutOfBoundsException if the direction is out of the board.
      * @throws InvalidMoveException if the destination {@link Slot} is outside the {@link Board}
+     * @throws SlotOccupiedException if the destination {@link Slot} is occupied.
      */
     public boolean move (Direction direction)
-            throws InvalidMoveException, IndexOutOfBoundsException {
+            throws InvalidMoveException, IndexOutOfBoundsException, SlotOccupiedException {
 
         checkDirection(direction);
 
@@ -85,9 +83,9 @@ public class Worker {
         catch (InvalidDirectionException e){
             throw new InvalidMoveException("Invalid direction of the getNearBySlot.");
         }
-        if (destinationSlot.isOccupied()) throw new InvalidMoveException("Slot occupied, douche!");
+        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
         if (destinationSlot.getLevel().ordinal() - slot.getLevel().ordinal()>1)
-            throw new InvalidMoveException("Level unreachable, douche!");
+            throw new InvalidMoveException("Level unreachable");
         
         return updatePosition(destinationSlot);
     }
@@ -97,14 +95,20 @@ public class Worker {
      * @param direction where the worker wants to build to.
      * @throws SlotOccupiedException if the destination {@link Slot} is occupied.
      * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
-     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
+     * @throws InvalidBuildException if the build is not permitted.
      */
     public void build (Direction direction)
-            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException {
+            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidBuildException {
 
         checkDirection(direction);
-
-        Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
+        
+        Slot destinationSlot;
+        try {
+            destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
+        }
+        catch (InvalidDirectionException e){
+            throw new InvalidBuildException("Invalid direction for the destination slot");
+        }
         if(destinationSlot.isOccupied()) throw new SlotOccupiedException();
         Level levelToUpdate;
         levelToUpdate = destinationSlot.getLevel();
