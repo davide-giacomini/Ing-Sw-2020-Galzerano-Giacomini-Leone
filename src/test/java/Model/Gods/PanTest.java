@@ -26,7 +26,7 @@ public class PanTest {
     private Worker femaleWorker;
 
     @Before
-    public void setUp () throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSetException {
+    public void setUp () throws Exception{
         board = Board.getBoard();
         player = new Player("Monica", Color.YELLOW);
         player.setGod(new Pan(player, "Pan"));
@@ -46,7 +46,8 @@ public class PanTest {
     }
 
     @Test
-    public void turn_CorrectInput_CorrectOutput() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+    public void turn_CorrectInput_CorrectOutput()
+            throws Exception{
         turn.executeMove(Direction.LEFT);
         assertTrue(player.getGod().checkIfCanGoOn(worker));
         assertFalse(player.getGod().validateEndTurn());
@@ -56,42 +57,47 @@ public class PanTest {
         assertTrue(player.getGod().validateEndTurn());
     }
 
-    @Test (expected = SlotOccupiedException.class)
-    public void move_SlotOccupiedException() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException {
+    @Test (expected = InvalidMoveException.class)
+    public void move_SlotOccupiedException() throws Exception{
         otherWorker.setSlot(board.getSlot(2,3));
         turn.executeMove(Direction.UP);
     }
 
-    @Test (expected = NotReachableLevelException.class)
-    public void move_NotReachableLevelException() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, WrongBuildOrMoveException, NoAvailableMovementsException {
+    @Test (expected = InvalidMoveException.class)
+    public void move_NotReachableLevelException()
+            throws Exception{
         otherWorker.setSlot(board.getSlot(2,2));
         otherWorker.build(Direction.RIGHT);
         otherWorker.build(Direction.RIGHT);
         turn.executeMove(Direction.UP);
     }
 
-    @Test (expected = NoAvailableMovementsException.class)
-    public void move_NoAvailableMovementsException() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException {
+    @Test (expected = InvalidMoveException.class)
+    public void move_NoAvailableMovementsException()
+            throws Exception{
         turn.executeMove(Direction.LEFT);
         turn.executeMove(Direction.RIGHTUP);
     }
 
-    @Test (expected = SlotOccupiedException.class)
-    public void build_SlotOccupiedException() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+    @Test (expected = InvalidBuildException.class)
+    public void build_SlotOccupiedException()
+            throws Exception{
         otherWorker.setSlot(board.getSlot(2,2));
         turn.executeMove(Direction.LEFT);
         turn.executeBuild(Direction.UP);
     }
 
-    @Test (expected = NoAvailableBuildingsException.class)
-    public void build_NoAvailableBuildingsException() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+    @Test (expected = InvalidBuildException.class)
+    public void build_NoAvailableBuildingsException()
+            throws Exception{
         turn.executeMove(Direction.LEFT);
         turn.executeBuild(Direction.UP);
         turn.executeBuild(Direction.DOWN);
     }
 
-    @Test (expected = WrongBuildOrMoveException.class)
-    public void build_WrongBuildOrMoveException() throws InvalidDirectionException, SlotOccupiedException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+    @Test (expected = InvalidBuildException.class)
+    public void build_WrongBuildOrMoveException()
+            throws Exception{
         turn.executeBuild(Direction.UP);
     }
 }

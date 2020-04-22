@@ -68,7 +68,7 @@ public class Worker {
      * @param direction where the worker wants to move to.
      * @return true if the worker voluntarily moved up to the level 3, false otherwise
      * @throws IndexOutOfBoundsException if the direction is out of the board.
-     * @throws InvalidMoveException if the destination {@link Slot} is outside the {@link Board}
+     * @throws InvalidMoveException if the move is not permitted.
      * @throws SlotOccupiedException if the destination {@link Slot} is occupied.
      */
     public boolean move (Direction direction)

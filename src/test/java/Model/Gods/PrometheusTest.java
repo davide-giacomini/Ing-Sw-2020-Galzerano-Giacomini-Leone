@@ -4,6 +4,8 @@ import Model.Board;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Enumerations.Level;
+import Model.Exceptions.InvalidBuildException;
+import Model.Exceptions.InvalidMoveException;
 import Model.Exceptions.NotReachableLevelException;
 import Model.Exceptions.WrongBuildOrMoveException;
 import Model.Player;
@@ -124,7 +126,7 @@ public class PrometheusTest {
         assertEquals(player.getWorker(Gender.MALE), Board.getBoard().getSlot(1, 2).getWorker());
     }
     
-    @Test(expected = NotReachableLevelException.class)
+    @Test(expected = InvalidMoveException.class)
     public void move_NumberOfBuildingsOne_ThrowNotReachableLevelException() throws Exception {
         turn.executeBuild(Direction.LEFT);
         turn.executeMove(Direction.RIGHT);
@@ -140,7 +142,7 @@ public class PrometheusTest {
         assertFalse(prometheus.moveThenBuild());
     }
     
-    @Test(expected = WrongBuildOrMoveException.class)
+    @Test(expected = InvalidMoveException.class)
     public void move_NumberOfBuildingsTwo_WrongBuildOrMoveException() throws Exception {
         turn.executeBuild(Direction.LEFT);
         turn.executeMove(Direction.UP);
@@ -155,13 +157,13 @@ public class PrometheusTest {
         assertEquals(Board.getBoard().getSlot(1, 0).getLevel(), Level.LEVEL1);
     }
     
-    @Test(expected = WrongBuildOrMoveException.class)
+    @Test(expected = InvalidBuildException.class)
     public void build_NumberOfBuildingsOne_numberOfMovementsZero_WrongBuildOrMoveException() throws Exception {
         turn.executeBuild(Direction.LEFT);
         turn.executeBuild(Direction.UP);
     }
     
-    @Test(expected = WrongBuildOrMoveException.class)
+    @Test(expected = InvalidBuildException.class)
     public void build_MoveThenBuildTrue_NumberOfBuildingsOne_WrongBuildOrMoveException() throws Exception {
         turn.executeMove(Direction.LEFT);
         turn.executeBuild(Direction.DOWN);
