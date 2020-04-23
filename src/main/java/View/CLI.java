@@ -3,6 +3,7 @@ package View;
 import Controller.GameController;
 import Network.Client.Client;
 
+import java.awt.*;
 import java.io.PrintStream;
 import java.util.Scanner;
 
@@ -80,9 +81,9 @@ public class CLI extends View {
 
         String username = askUsername();
 
-        String color = askColorWorkers();
+        Color color = askColorWorkers();
 
-        currentClient.setConnection(ip, SOCKET_PORT, username, color);
+       // currentClient.setConnection(ip, SOCKET_PORT, username, color);
 
     }
 
@@ -133,7 +134,7 @@ public class CLI extends View {
      * This method asks the user which color he/she wants for the workers
      * @return string which indicates the name of the color
      */
-    public String askColorWorkers() {
+    public Color askColorWorkers() {
         String color = null;
 
         out.println("Here are the possible workers' colors : \n ");
@@ -154,8 +155,33 @@ public class CLI extends View {
                 out.println("Color not inserted or not available! \n");
 
         }while (color == null);
-
-        return color;
+    
+        return stringToColor(color);
+    }
+    /**
+     * @deprecated
+     * for debugging, it has to be deleted.
+     */
+    private Color stringToColor(String string){
+        String str = string.toUpperCase();
+        switch (str){
+            case "BLUE":
+                return Color.BLUE;
+            case "YELLOW":
+                return Color.YELLOW;
+            case "GREEN":
+                return Color.GREEN;
+            case "RED":
+                return Color.RED;
+            case "WHITE":
+                return Color.WHITE;
+            case "CYAN":
+                return Color.CYAN;
+            case "PURPLE":
+                return Color.MAGENTA;
+            default:
+                return Color.BLACK;
+        }
     }
 
     /**
@@ -234,5 +260,27 @@ public class CLI extends View {
     public void print(String text) {
         System.out.println(text);
     }
-
+    
+    @Override
+    public int askNumberOfPlayers() {
+        int numberOfPlayers = 0;
+        
+        out.println("How many players do you want in the game?");
+        if (in.hasNextLine())
+            numberOfPlayers = Integer.parseInt(in.nextLine());
+        
+        return numberOfPlayers;
+    }
+    
+    @Override
+    public String askServerIpAddress() {
+        String ipAddress = null;
+    
+        out.println("Write server address?");
+        if (in.hasNextLine())
+            ipAddress = in.nextLine();
+    
+        return ipAddress;
+    }
+    
 }
