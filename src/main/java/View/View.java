@@ -1,8 +1,11 @@
 package View;
 
 import Network.Client.Client;
+import Network.Message.ErrorMessages.ConnectionFailed;
 
+import java.awt.*;
 import java.io.PrintStream;
+import java.security.PublicKey;
 import java.util.Scanner;
 
 public abstract class View {
@@ -17,8 +20,12 @@ public abstract class View {
 
     public abstract String askUsername();
 
-    public abstract String askColorWorkers();
+    public abstract Color askColorWorkers();
 
     public abstract void print(String text);
+    
+    public abstract int askNumberOfPlayers();
+    
+    public abstract String askServerIpAddress();
 
 }
