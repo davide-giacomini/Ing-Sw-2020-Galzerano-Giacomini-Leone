@@ -96,6 +96,15 @@ public class ArtemisTest {
     }
 
     @Test (expected = InvalidMoveException.class)
+    public void move_SlotOccupiedException_atSecondMove()
+            throws Exception {
+        otherWorker.setSlot(board.getSlot(1,2));
+        turn.executeMove(Direction.DOWN);
+        turn.executeMove(Direction.RIGHTUP);
+
+    }
+
+    @Test (expected = InvalidMoveException.class)
     public void move_NotReachableLevelException()
             throws Exception {
         otherWorker.setSlot(board.getSlot(2,2));

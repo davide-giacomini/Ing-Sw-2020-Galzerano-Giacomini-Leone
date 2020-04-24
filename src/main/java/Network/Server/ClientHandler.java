@@ -1,5 +1,6 @@
 package Network.Server;
 
+import Enumerations.Color;
 import Enumerations.MessageType;
 import Network.Message.ErrorMessages.ConnectionFailed;
 import Network.Message.RequestNumberOfPlayers;
@@ -104,7 +105,6 @@ public class ClientHandler implements Runnable{
     public void dispatchMessages() throws IOException{
         while (true){
             System.out.println("Started listening");
-            inputClient = new ObjectInputStream(clientSocket.getInputStream());
             Message message;
             try {
                 message = (Message) inputClient.readObject();

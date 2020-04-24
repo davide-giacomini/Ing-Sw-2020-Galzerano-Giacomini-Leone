@@ -118,4 +118,14 @@ public class AtlasTest {
             throws Exception {
         turn.executeBuild(Direction.RIGHTDOWN);
     }
+
+    @Test (expected = InvalidBuildException.class)
+    public void build_SlotOccupiedException_secondCheck()
+            throws Exception {
+        otherWorker.setSlot(board.getSlot(1,1));
+        turn.executeMove(Direction.DOWN);
+        turn.wantsToBuildDome();
+        player.CanBuildDome();
+        turn.executeBuild(Direction.RIGHT);
+    }
 }

@@ -132,6 +132,14 @@ public class MinotaurTest {
 
     }
 
+    @Test (expected = InvalidBuildException.class)
+    public void build_SlotOccupiedException()  throws Exception {
+        board.getSlot(1,1).setLevel(Level.DOME);
+        turn.executeMove(Direction.LEFT);
+        turn.executeBuild(Direction.UP);
+
+    }
+
 
 
 

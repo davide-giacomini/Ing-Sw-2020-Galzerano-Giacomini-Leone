@@ -1,5 +1,6 @@
 package Network.Client;
 
+import Enumerations.Color;
 import Network.Message.ErrorMessages.ConnectionFailed;
 import Network.Message.RequestNumberOfPlayers;
 import Network.Message.Message;

@@ -1,12 +1,11 @@
 package Network.Message;
 
+import Enumerations.Color;
 import Enumerations.MessageType;
-
-import java.awt.*;
 
 public class RequestConnection extends Message {
     private String username;
-    private Color color;
+    private Enumerations.Color color;
 
     public RequestConnection(){
         super(MessageType.REQUEST_CONNECTION);
@@ -24,7 +23,7 @@ public class RequestConnection extends Message {
         this.username = username;
     }
     
-    public void setColor(Color color) {
+    public void setColor(Enumerations.Color color) {
         this.color = color;
     }
 }

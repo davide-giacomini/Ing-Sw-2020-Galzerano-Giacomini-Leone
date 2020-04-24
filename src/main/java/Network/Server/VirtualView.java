@@ -1,5 +1,6 @@
 package Network.Server;
 
+import Enumerations.Color;
 import Network.Message.Message;
 import Network.Message.MessageListener;
 
@@ -7,7 +8,7 @@ import java.awt.*;
 
 public class VirtualView implements MessageListener {
     private final String username;
-    private final Color color;
+    private final Enumerations.Color color;
     
     public VirtualView (String username, Color color){
         this.username = username;
@@ -18,7 +19,7 @@ public class VirtualView implements MessageListener {
         return username;
     }
     
-    public Color getColor() {
+    public Enumerations.Color getColor() {
         return color;
     }
     

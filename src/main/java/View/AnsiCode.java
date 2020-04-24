@@ -1,7 +1,5 @@
 package View;
 
-import Model.Exceptions.AnsiCodeException;
-
 public class AnsiCode {
         /**
          * Variables to convert the ansi codes into names with a meaning
@@ -14,6 +12,7 @@ public class AnsiCode {
         static final String ANSI_CYAN = "\u001B[36m";
         static final String ANSI_WHITE = "\u001B[37m";
         static final String ANSI_ENTER_KEY = "\u21A9";
+        static final String ANSI_WRONG = "";
         /**
          * Variable to Reset the game
          */
@@ -60,13 +59,9 @@ public class AnsiCode {
                                 return ANSI_CYAN ;
                         case "WHITE" :
                                 return ANSI_WHITE ;
-                        case "WORKER" :
-                                return ANSI_WORKER ;
-                        case "RESET" :
-                                return ANSI_RESET ;
                         default :
                                 //throw  new AnsiCodeException ();
-                                return ANSI_WHITE;
+                                return ANSI_WRONG;
 
                 }
          }
