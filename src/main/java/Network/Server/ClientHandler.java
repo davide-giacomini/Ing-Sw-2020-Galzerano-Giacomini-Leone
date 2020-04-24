@@ -1,107 +1,121 @@
 package Network.Server;
 
-import Network.Message.MessageContainer;
-import Network.Message.MessageVC;
+import Enumerations.MessageType;
+import Network.Message.ErrorMessages.ConnectionFailed;
+import Network.Message.RequestNumberOfPlayers;
+import Network.Message.Message;
+import Network.Message.RequestConnection;
 
-import java.net.ServerSocket;
+import java.awt.*;
+import java.io.*;
 import java.net.Socket;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-
 public class ClientHandler implements Runnable{
-    private boolean connected;
-    private VirtualView virtualView;
-    private Socket client;
-    private ServerSocket serverSocket;
-    private SantoriniServer server;
-    private int numberOfThread;
-    private String username;
-    private String color;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
-    private Thread listener;
-
-    ClientHandler(Socket client, ServerSocket serverSocket, int numberOfThread, String username, String color, ObjectInputStream in, ObjectOutputStream out, SantoriniServer server)
-    {
-        this.client = client;
-        this.serverSocket = serverSocket;
-        this.numberOfThread = numberOfThread;
-        this.username = username;
-        this.color = color;
-        this.in = in;
-        this.out = out;
+    private Socket clientSocket;
+    private Server server;
+    private boolean firstConnection;
+    VirtualView virtualView;
+    ObjectInputStream inputClient;
+    ObjectOutputStream outputClient;
+    
+    public ClientHandler(Socket clientSocket, Server server){
+        this.clientSocket = clientSocket;
         this.server = server;
-        listener = new Thread();
-        listener.start();
-        connected = true;
+        this.firstConnection = true;
     }
-
-    private void AskToThe1stThreadNumberOfPlayers(){
-        if(numberOfThread == 0){}
-            //tell the controller to ask to the user from the view
-            //the number of players, a message with an int as parameter
-            //will be sent to the server
-    }
-
-
-    public void run()
-    {
-        System.out.println("Connected to " + client.getInetAddress());
-
+    
+    @Override
+    public void run() {
         try {
-            while (!Thread.currentThread().isInterrupted()) {
-                ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
-                ObjectInputStream input = new ObjectInputStream(client.getInputStream());
-                MessageVC message = (MessageVC) input.readObject();
-                update(message);
-            }
-        } catch (ClassNotFoundException e) {
-            System.out.println("invalid stream from client");
-        } catch (IOException e) {
-            System.out.println("Connection dropped");
+            if (firstConnection)
+                handleFirstConnection();
+            dispatchMessages();
+            //TODO sistemare l'ordine con cui viene fatto dispatchMessages
         }
-
-    }
-
-    public void update(MessageVC message) {
-        // message.accept(vView.getController());
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void send(MessageContainer message) {
-        try {
-            out.writeObject(message);
-            out.flush();
-            out.reset();
-        } catch (IOException e) {
-            // ??
+        catch (IOException e){
+            System.out.println("client " + clientSocket.getInetAddress() + " connection dropped.");
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e){
+            System.out.println("Serialization failed.");
         }
     }
-
-    public void disconnect() {
-        if (connected) {
-            try {
-                if (!client.isClosed()) {
-                    client.close();
+    
+    public VirtualView getVirtualView() {
+        return virtualView;
+    }
+    
+    /**
+     * Handle the first connection.
+     * If the connection went well, the client is added and his {@link VirtualView} is instantiated.
+     * If not, an error message is sent.
+     * @throws IOException if an I/O problem is found
+     * @throws ClassNotFoundException if the cast from {@link Message} to the subclass is incorrect.
+     */
+    public void handleFirstConnection() throws IOException, ClassNotFoundException {
+        System.out.println("handle first connection");
+        inputClient = new ObjectInputStream(clientSocket.getInputStream());
+        outputClient = new ObjectOutputStream(clientSocket.getOutputStream());
+        
+        Message message = (Message) inputClient.readObject();
+        if (message.getMessageType()== MessageType.REQUEST_CONNECTION) {
+            RequestConnection requestConnection = (RequestConnection) message;
+            String username = requestConnection.getUsername();
+            Color color = requestConnection.getColor();
+            
+            for (ClientHandler clientHandler: server.getPlayers()){
+                if (clientHandler.getVirtualView().getUsername().equals(username)){
+                    ConnectionFailed connectionFailed = new ConnectionFailed();
+                    connectionFailed.setErrorMessage("Somebody else has already taken this username.");
+                    outputClient.writeObject(connectionFailed);
+                    return;
                 }
-            } catch (IOException e) {
-                //what to do?
+                else if (clientHandler.getVirtualView().getColor().equals(color)){
+                    ConnectionFailed connectionFailed = new ConnectionFailed();
+                    connectionFailed.setErrorMessage("Somebody else has already taken this color.");
+                    outputClient.writeObject(connectionFailed);
+                    return;
+                }
+                else if (server.getPlayers().size()==server.getMaxNumberOfPlayers()){
+                    ConnectionFailed connectionFailed = new ConnectionFailed();
+                    connectionFailed.setErrorMessage("The game is already started.");
+                    outputClient.writeObject(connectionFailed);
+                    return;
+                }
             }
-
-            listener.interrupt();
-            connected = false;
-            server.onDisconnect(this);
+            
+            // the virtual view is added and it is added to the message listeners.
+            virtualView = new VirtualView(username, color);
+            requestConnection.addListener(virtualView);
+            // if the player is the first, he will decide the number of players
+            if (server.getPlayers().size()==0)
+                outputClient.writeObject(new RequestNumberOfPlayers());
+            // if the number of players is reached, the game is initialized.
+            else if (server.getPlayers().size()== server.getMaxNumberOfPlayers())
+                server.initGame();
+            
+            server.addClient(this);
+            firstConnection = false;
+        }
+        else
+            System.out.println("The type of the message is incorrect.");
+    }
+    
+    public void dispatchMessages() throws IOException{
+        while (true){
+            System.out.println("Started listening");
+            inputClient = new ObjectInputStream(clientSocket.getInputStream());
+            Message message;
+            try {
+                message = (Message) inputClient.readObject();
+                message.notifyListeners();
+            } catch (ClassNotFoundException e) {
+                System.out.println("The casting of the message was not good");
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+            
         }
     }
 }
-

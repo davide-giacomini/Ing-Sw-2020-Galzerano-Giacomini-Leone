@@ -2,10 +2,7 @@ package Model.Gods;
 
 import Model.Board;
 import Enumerations.Direction;
-import Model.Exceptions.InvalidDirectionException;
-import Model.Exceptions.NotReachableLevelException;
-import Model.Exceptions.SlotOccupiedException;
-import Model.Exceptions.WrongBuildOrMoveException;
+import Model.Exceptions.*;
 import Model.Player;
 import Model.Slot;
 import Model.Worker;
@@ -28,53 +25,62 @@ public class Artemis extends God {
     }
 
     /**
-     * This method check the numberOfMovements of the actual turn: if it's zero, it just calls the standard move of a
+     * This method checks the numberOfMovements of the actual turn: if it's zero, it just calls the standard move of a
      * worker and save the chosen direction; if it's one, it control if the chosen direction is opposed to the first,
      * then it calls the standard move of a worker.
      * @param direction where the worker wants to move to.
      * @param worker the {@link Player}'s {@link Worker} to be moved.
      * @return true if the winning condition has been verified, false otherwise
-     * @throws SlotOccupiedException if the worker try to move in an occupied slot
-     * @throws NotReachableLevelException if the worker try to move in an unreachable slot
      * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
-     * @throws InvalidDirectionException if there are some troubles of I/O.
-     * @throws WrongBuildOrMoveException if the worker has already build in this turn.
+     * @throws InvalidMoveException if the move is invalid.
      */
     @Override
-    public boolean move(Direction direction, Worker worker) throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
+    public boolean move(Direction direction, Worker worker)
+            throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
         int numberOfMovements = player.getTurn().getNumberOfMovements();
 
         if (numberOfMovements == 1 && player.getTurn().getNumberOfBuildings() == 1) {
-            throw new WrongBuildOrMoveException();
+            throw new InvalidMoveException("Order of movements incorrect");
         }
 
         if (numberOfMovements == 0) {
             firstDirection = direction;
-            return worker.move(direction);
+            try {
+                return worker.move(direction);
+            } catch (SlotOccupiedException e) {
+                throw new InvalidMoveException("Slot occupied");
+            }
         }
         else {
             if (checkOppositeDirection(firstDirection, direction)) {
-                throw new WrongBuildOrMoveException();
+                throw new InvalidMoveException("You cannot move back to your first slot");
             }
-            return worker.move(direction);
+            try {
+                return worker.move(direction);
+            } catch (SlotOccupiedException e) {
+                throw new InvalidMoveException("Slot occupied");
+            }
         }
     }
 
     /**
      * This method calls the standard build of a worker:
-     * Athena doesn't modify the building rules.
+     * Artemis doesn't modify the building rules.
      * @param direction specifies the slot where to build
      * @param worker one of the player's workers
      * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
-     * @throws SlotOccupiedException if the worker try to build in an occupied slot
-     * @throws InvalidDirectionException if there are some troubles of I/O.
-     * @throws WrongBuildOrMoveException if the worker try to build but he still hasn't moved.
+     * @throws InvalidBuildException if building is not permitted.
      */
     @Override
-    public void build(Direction direction, Worker worker) throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
-        if (player.getTurn().getNumberOfMovements() == 0) throw new WrongBuildOrMoveException();
-
-        worker.build(direction);
+    public void build(Direction direction, Worker worker)
+            throws IndexOutOfBoundsException, InvalidBuildException {
+        if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
+    
+        try {
+            worker.build(direction);
+        } catch (SlotOccupiedException e) {
+            throw new InvalidBuildException("Slot occupied");
+        }
     }
 
     /**

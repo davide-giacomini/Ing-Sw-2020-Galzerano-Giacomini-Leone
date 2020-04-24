@@ -24,7 +24,8 @@ public class ApolloTest {
     private Worker secondWorker;
 
     @Before
-    public void setUp() throws WrongBuildOrMoveException, InvalidDirectionException, GodNotSetException {
+    public void setUp()
+            throws Exception {
         board = Board.getBoard();
         slotM = board.getSlot(2,2);
         slot2 = board.getSlot(3,3);
@@ -54,7 +55,7 @@ public class ApolloTest {
 
 
     @Test
-    public void turn_CorrectInput_CorrectOutput_withoutSpecialMove()  throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException{
+    public void turn_CorrectInput_CorrectOutput_withoutSpecialMove()  throws Exception{
         assertEquals(player.getGod().getName(), "Apollo");
         assertTrue (player.getGod().checkIfCanMove(workerM));
         turn.executeMove(Direction.RIGHT);
@@ -70,7 +71,7 @@ public class ApolloTest {
     }
 
     @Test
-    public void turn_CorrectInput_CorrectOutput_withSpecialMove()  throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException{
+    public void turn_CorrectInput_CorrectOutput_withSpecialMove()  throws Exception{
 
         assertTrue (player.getGod().checkIfCanMove(workerM));
         turn.executeMove(Direction.RIGHTDOWN);
@@ -85,35 +86,35 @@ public class ApolloTest {
 
     }
 
-    @Test (expected = SlotOccupiedException.class)
-    public void move_SlotOccupiedException()  throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+    @Test (expected = InvalidMoveException.class)
+    public void move_SlotOccupiedException()  throws Exception {
         board.getSlot(1,1).setLevel(Level.DOME);
         turn.executeMove(Direction.LEFTUP);
 
     }
 
         @Test
-    public void checkIfCanMove_withCannotMoveUp() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException,NoAvailableBuildingsException {
+    public void checkIfCanMove_withCannotMoveUp() throws Exception{
         player.setCannotMoveUp(true);
         secondWorker.setSlot(board.getSlot(2,1));
         assertTrue(player.getGod().checkIfCanMove(workerM));
     }
 
     @Test
-    public void checkIfCanMoveInNormalCondition_withCannotMoveUp() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException,NoAvailableBuildingsException {
+    public void checkIfCanMoveInNormalCondition_withCannotMoveUp() throws Exception {
         player.setCannotMoveUp(true);
         assertTrue(player.getGod().checkIfCanMove(workerM));
     }
 
     @Test
-    public void checkIfCanMove() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException,NoAvailableBuildingsException {
+    public void checkIfCanMove() throws Exception {
         secondWorker.setSlot(board.getSlot(2,1));
         assertTrue(player.getGod().checkIfCanMove(workerM));
 
     }
 
     @Test
-    public void move_IndexOutOfBoundsException() throws SlotOccupiedException, InvalidDirectionException, NotReachableLevelException, NoAvailableMovementsException, WrongBuildOrMoveException, NoAvailableBuildingsException {
+    public void move_IndexOutOfBoundsException() throws Exception {
         workerM.setSlot(board.getSlot(4,4));
         board.getSlot(3,3).setLevel(Level.DOME);
         board.getSlot(3,4).setLevel(Level.DOME);

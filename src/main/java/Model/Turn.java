@@ -70,14 +70,14 @@ public class Turn {
     /**
      * This method set the worker that will be used during the turn.
      * @param workerGender the gender of the chosen worker
-     * @throws WrongBuildOrMoveException if the player has already chosen its worker and he cannot change
+     * @throws InvalidMoveException if the player has already chosen its worker and he cannot change
      * it during the turn.
      */
-    public void setWorkerGender(Gender workerGender) throws WrongBuildOrMoveException{
+    public void setWorkerGender(Gender workerGender) throws InvalidMoveException {
         if (!alreadySetWorker)
             this.alreadySetWorker = true;
         else if (!canUseBothWorkers)
-            throw new WrongBuildOrMoveException();
+            throw new InvalidMoveException("You cannot choose an other worker in the middle of the turn");
         this.workerGender = workerGender;
     }
 
@@ -88,29 +88,25 @@ public class Turn {
     /**
      * This method set if the player wants to build a dome instead of the rules' level.
      * @param wantsToBuildDome true if he wants to build a dome, false otherwise
-     * @throws WrongBuildOrMoveException if the player wants to build a dome but he isn't allowed to.
+     * @throws InvalidBuildException if the player wants to build a dome but he isn't allowed to.
      */
-    public void setWantsToBuildDome(boolean wantsToBuildDome) throws WrongBuildOrMoveException {
+    public void setWantsToBuildDome(boolean wantsToBuildDome) throws InvalidBuildException {
         if (!canAlwaysBuildDome && wantsToBuildDome)
-            throw new WrongBuildOrMoveException();
+            throw new InvalidBuildException("You cannot build multiple times");
         this.wantsToBuildDome = wantsToBuildDome;
     }
 
     /**
      * This method implements a {@link Player}'s move
      * @param direction where the player's {@link Worker} is going to move
-     * @throws IndexOutOfBoundsException if the destination {@link Slot} doesn't exist in the {@link Board}.
-     * @throws NotReachableLevelException if the level of the destination has at least 2 blocks more than the current.
-     * @throws SlotOccupiedException if the destination {@link Slot} is occupied
-     * @throws InvalidDirectionException if the switch-case of getNearbySlot of {@link Board} entered the default case. It
-     * shouldn't happen.
-     * @throws NoAvailableMovementsException if the worker has been already moved enough times.
-     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
+     * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
+     * @throws InvalidDirectionException if there are some troubles of I/O.
+     * @throws InvalidMoveException if the move is invalid.
      */
     public void executeMove(Direction direction)
-            throws IndexOutOfBoundsException, NotReachableLevelException, SlotOccupiedException, InvalidDirectionException, NoAvailableMovementsException, WrongBuildOrMoveException {
+            throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
         
-        if (numberOfMovements == MAX_MOVEMENTS) throw new NoAvailableMovementsException();
+        if (numberOfMovements == MAX_MOVEMENTS) throw new InvalidMoveException("Max number of movements reached");
         
         // player.move returns a boolean, but the method can throw all the exceptions above.
         // Hence, numberOfMovements has to be incremented only after the method.
@@ -122,15 +118,13 @@ public class Turn {
     /**
      * This method builds a construction on the {@link Slot} adjacent to the {@link Worker}, in the direction chosen.
      * @param direction specifies the slot where to build
-     * @throws IndexOutOfBoundsException if the {@link Slot} where to build is outside the {@link Board}
-     * @throws SlotOccupiedException if the slot where to build is occupied by a dome or another worker
-     * @throws InvalidDirectionException if the switch-else of getNearbySlot enters the default case. It shouldn't happen.
-     * @throws NoAvailableBuildingsException if the worker has already built enough times.
-     * @throws WrongBuildOrMoveException if the order of the moves is not ok.
+     * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
+     * @throws InvalidDirectionException if there are some troubles of I/O.
+     * @throws InvalidBuildException if building is not permitted.
      */
     public void executeBuild(Direction direction)
-            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, NoAvailableBuildingsException, WrongBuildOrMoveException {
-        if (numberOfBuildings == MAX_BUILDINGS) throw new NoAvailableBuildingsException();
+            throws IndexOutOfBoundsException, InvalidDirectionException, InvalidBuildException {
+        if (numberOfBuildings == MAX_BUILDINGS) throw new InvalidBuildException("Max number of buildings reached");
         
         player.build(direction, player.getWorker(workerGender));
         numberOfBuildings++;

@@ -2,10 +2,7 @@ package Model.Gods;
 
 import Model.Board;
 import Enumerations.Direction;
-import Model.Exceptions.InvalidDirectionException;
-import Model.Exceptions.NotReachableLevelException;
-import Model.Exceptions.SlotOccupiedException;
-import Model.Exceptions.WrongBuildOrMoveException;
+import Model.Exceptions.*;
 import Model.Player;
 import Model.Slot;
 import Model.Worker;
@@ -25,10 +22,20 @@ public class Minotaur extends God {
         canAlwaysBuildDome = false;
         canUseBothWorkers = false;
     }
-    
+
+    /**
+     * This method allows a movement not only if the chosen slot is free but also if in
+     * the chosen slot there is an enemy worker and behind him/her the slot is free
+     * @param direction where the worker wants to move to.
+     * @param worker the {@link Player}'s {@link Worker} to be moved.
+     * @return true if the winning condition has been verified, false otherwise
+     * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
+     * @throws InvalidDirectionException if there are some troubles of I/O.
+     * @throws InvalidMoveException if the move is not permitted.
+     */
     @Override
     public boolean move(Direction direction, Worker worker)
-            throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException {
+            throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
 
         int previousLevel = worker.getSlot().getLevel().ordinal();
         try {
@@ -41,7 +48,7 @@ public class Minotaur extends God {
                 slotNearOpponentSlot = Board.getNearbySlot(direction, opponentSLot);
             } catch (IndexOutOfBoundsException er){
                 // this exception advises the caller that the slot is occupied and the opponent worker cannot move.
-                throw new SlotOccupiedException();
+                throw new InvalidMoveException("Slot occupied");
             }
             // the worker set in the destination slot
             Worker opponentWorker = opponentSLot.getWorker();
@@ -54,24 +61,48 @@ public class Minotaur extends God {
             }
             // if there is a dome or a player's worker, the slot is occupied for Apollo too
             else
-                throw new SlotOccupiedException();
+                throw new InvalidMoveException("Slot occupied");
         }
     }
-    
+
+    /**
+     * This method calls the standard build of a worker:
+     * Minotaur doesn't modify the building rules.
+     * @param direction specifies the slot where to build
+     * @param worker one of the player's workers
+     * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
+     * @throws InvalidBuildException if the build is not permitted.
+     */
     @Override
     public void build(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
+            throws IndexOutOfBoundsException,InvalidBuildException  {
         
-        if (player.getTurn().getNumberOfMovements() == 0) throw new WrongBuildOrMoveException();
-        
-        worker.build(direction);
+        if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements not correct");
+
+        try {
+            worker.build(direction);
+        } catch (SlotOccupiedException e) {
+            throw new InvalidBuildException("Slot occupied");
+        }
     }
-    
+
+
+    /**
+     * It does nothing.
+     */
     @Override
     public void resetParameters() {
         // nothing is necessary
     }
-    
+
+    /**
+     * this methods does what checkIfCanMoveInNormalCondition does together with another verification,
+     * it checks the availability of a slot by checking the slot behind the one where the move wants to go
+     * if it is occupied by an enemy worker
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @return true if the worker can move, false otherwise
+     * @throws InvalidDirectionException if there are some I/O troubles.
+     */
     @Override
     protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
         for (Direction direction : Direction.values()) {
@@ -99,12 +130,25 @@ public class Minotaur extends God {
     
         return false;
     }
-    
+
+    /**
+     * This method directly calls the God's method checkIfCanBuildInNormalConditions,
+     * as in this case there is nothing else to control.
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @return true if the worker can build, false otherwise.
+     * @throws InvalidDirectionException if there are some I/O troubles.
+     */
     @Override
     protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
         return checkIfCanBuildInNormalConditions(worker);
     }
-    
+
+    /**
+     * This method checks if the worker is paralyzed or not.
+     * @param worker the worker chosen to be checked.
+     * @return true if the worker can go on, false otherwise.
+     * @throws InvalidDirectionException if there are some I/O troubles.
+     */
     @Override
     public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
         int numberOfMovements = player.getTurn().getNumberOfMovements();
@@ -117,7 +161,11 @@ public class Minotaur extends God {
         
         return false;
     }
-    
+
+    /**
+     * This method checks if the player has completed a turn or if he still have to do some actions.
+     * @return true if he can end his turn, false otherwise.
+     */
     @Override
     public boolean validateEndTurn() {
         int numberOfMovements = player.getTurn().getNumberOfMovements();

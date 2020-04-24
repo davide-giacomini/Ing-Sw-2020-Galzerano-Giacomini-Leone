@@ -43,7 +43,8 @@ public class TurnTest {
     }
     
     @Test
-    public void deleteWorkersIfParalyzed_BothWorkersParalyzed_WorkersDeleted () throws InvalidDirectionException, GodNotSetException {
+    public void deleteWorkersIfParalyzed_BothWorkersParalyzed_WorkersDeleted ()
+            throws Exception {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         
         turn = new Turn(player);    // the constructor calls implicitly deleteWorkersIfParalyzed
@@ -53,7 +54,8 @@ public class TurnTest {
         assertNull(player.getWorker(Gender.FEMALE));
     }
     @Test
-    public void deleteWorkersIfParalyzed_MaleWorkerParalyzed_WorkersNotDeleted () throws InvalidDirectionException, GodNotSetException {
+    public void deleteWorkersIfParalyzed_MaleWorkerParalyzed_WorkersNotDeleted ()
+            throws Exception {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         // I am going to free the female worker (this is Prometheus, he can build)
         slots[3][3].setLevel(Level.LEVEL2);
@@ -64,7 +66,8 @@ public class TurnTest {
         assertEquals(player.getWorker(Gender.MALE), player.getWorker(Gender.MALE));
     }
     @Test
-    public void deleteWorkersIfParalyzed_FemaleWorkerParalyzed_WorkersNotDeleted () throws InvalidDirectionException, GodNotSetException {
+    public void deleteWorkersIfParalyzed_FemaleWorkerParalyzed_WorkersNotDeleted ()
+            throws Exception {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         // I am going to free the female worker (this is Prometheus, he can build)
         slots[0][0].setLevel(Level.GROUND);
@@ -75,7 +78,8 @@ public class TurnTest {
         assertEquals(player.getWorker(Gender.MALE), player.getWorker(Gender.MALE));
     }
     @Test
-    public void deleteWorkersIfParalyzed_FemaleWorkerParalyzed_MaleWorkerNull_WorkersDeleted () throws Exception {
+    public void deleteWorkersIfParalyzed_FemaleWorkerParalyzed_MaleWorkerNull_WorkersDeleted ()
+            throws Exception {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         player.deleteWorker(player.getWorker(Gender.MALE));
         
@@ -96,7 +100,8 @@ public class TurnTest {
         assertNull(player.getWorker(Gender.MALE));
         assertNull(player.getWorker(Gender.FEMALE));
     }
-    private void setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(Player player, Worker maleWorker, Worker femaleWorker) throws InvalidDirectionException, GodNotSetException {
+    private void setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(Player player, Worker maleWorker, Worker femaleWorker)
+            throws Exception {
         god = new Prometheus(player, "Prometheus");   // Prometheus has normal conditions checking
 
         // I am going to paralyze the workers.
@@ -116,7 +121,7 @@ public class TurnTest {
         slots[0][1].setLevel(Level.DOME);
     }
     
-    @Test (expected = WrongBuildOrMoveException.class)
+    @Test (expected = InvalidMoveException.class)
     public void setWorkerGender_SetWorkerTwoTimes_CannotUseBothWorkers_ThrowsWrongBuildOrMoveException() throws Exception {
         player = new Player("test", Color.BLACK);
         god = new Apollo(player, "Apollo test");
@@ -152,7 +157,7 @@ public class TurnTest {
         turn.setWantsToBuildDome(true);
         assertTrue(turn.wantsToBuildDome());
     }
-    @Test (expected = WrongBuildOrMoveException.class)
+    @Test (expected = InvalidBuildException.class)
     public void setWantsToBuildDome_GodIsNotAtlas_ThrowsWrongBuildOrMoveException () throws Exception {
         player = new Player("test", Color.BLACK);
         god = new Prometheus(player, "atlas test");
@@ -162,7 +167,7 @@ public class TurnTest {
         turn.setWantsToBuildDome(true);
     }
     
-    @Test (expected = NoAvailableMovementsException.class)
+    @Test (expected = InvalidMoveException.class)
     public void executeMove_ThirdLevelReached_PlayerIsWinning_ThenTryToMoveAnotherTime_ThrowsNoAvailableMovementsException() throws Exception{
         player = new Player("test", Color.BLACK);
         god = new Prometheus(player, "atlas test");
@@ -200,7 +205,7 @@ public class TurnTest {
         assertFalse(player.isWinning());
     }
     
-    @Test (expected = NoAvailableBuildingsException.class)
+    @Test (expected = InvalidBuildException.class)
     public void executeBuild_BuildTwoTimes_ThrowsNoAvailableBuildingsException () throws Exception{
         player = new Player("test", Color.BLACK);
         god = new Athena(player, "atlas test");

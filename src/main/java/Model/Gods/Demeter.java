@@ -2,10 +2,7 @@ package Model.Gods;
 
 import Model.Board;
 import Enumerations.Direction;
-import Model.Exceptions.InvalidDirectionException;
-import Model.Exceptions.NotReachableLevelException;
-import Model.Exceptions.SlotOccupiedException;
-import Model.Exceptions.WrongBuildOrMoveException;
+import Model.Exceptions.*;
 import Model.Player;
 import Model.Slot;
 import Model.Worker;
@@ -26,37 +23,80 @@ public class Demeter extends God {
         canAlwaysBuildDome = false;
         canUseBothWorkers = false;;
     }
-    
+
+    /**
+     * This method calls the standard move of a worker:
+     * Demeter doesn't modify the moving rules.
+     * @param direction where the worker wants to move to.
+     * @param worker the {@link Player}'s {@link Worker} to be moved.
+     * @return true if the winning condition has been verified, false otherwise
+     * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
+     * @throws InvalidMoveException if the move is invalid.
+     */
     @Override
-    public boolean move(Direction direction, Worker worker)  throws SlotOccupiedException, NotReachableLevelException, IndexOutOfBoundsException, InvalidDirectionException, WrongBuildOrMoveException {
-        return worker.move(direction);
+    public boolean move(Direction direction, Worker worker)
+            throws IndexOutOfBoundsException, InvalidMoveException {
+        try {
+            return worker.move(direction);
+        } catch (SlotOccupiedException e) {
+            throw new InvalidMoveException("Slot occupied");
+        }
     }
-    
+
+    /**
+     * This method allows a second build only if the new slot where to build differs from the old one
+     * @param direction specifies the slot where to build
+     * @param worker one of the player's workers
+     * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
+     * @throws InvalidDirectionException if there are problems with I/O
+     * @throws InvalidBuildException if building is not permitted.
+     */
     @Override
     public void build(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException {
+            throws IndexOutOfBoundsException, InvalidBuildException, InvalidDirectionException {
     
-        if (player.getTurn().getNumberOfMovements() == 0) throw new WrongBuildOrMoveException();
+        if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
     
         if (player.getTurn().getNumberOfBuildings() == 0)
             previousSlot = Board.getNearbySlot(direction, worker.getSlot());
         else if (Board.getNearbySlot(direction, worker.getSlot()).equals(previousSlot))
-            throw new WrongBuildOrMoveException();
-        
-        worker.build(direction);
+            throw new InvalidBuildException("You are trying to build on the same slot as the previous one");
+    
+        try {
+            worker.build(direction);
+        } catch (SlotOccupiedException e) {
+            throw new InvalidBuildException("Slot occupied");
+        }
     
     }
-    
+
+    /**
+     * It does nothing.
+     */
     @Override
     public void resetParameters() {
         previousSlot = null;
     }
-    
+
+    /**
+     * This method directly calls the God's method checkIfCanMoveInNormalConditions,
+     * as in this case there is nothing else to control.
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @return true if the worker can move, false otherwise
+     * @throws InvalidDirectionException if there are some I/O troubles.
+     */
     @Override
     protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
         return checkIfCanMoveInNormalConditions(worker);
     }
-    
+
+    /**
+     * This method directly calls the God's method checkIfCanBuildInNormalConditions or
+     * does a special check for the second build
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @return true if the worker can build, false otherwise.
+     * @throws InvalidDirectionException if there are some I/O troubles.
+     */
     @Override
     protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
         int numberOfBuildings = player.getTurn().getNumberOfBuildings();
@@ -81,7 +121,13 @@ public class Demeter extends God {
         
         return false;
     }
-    
+
+    /**
+     * This method checks if the worker is paralyzed or not.
+     * @param worker the worker chosen to be checked.
+     * @return true if the worker can go on, false otherwise.
+     * @throws InvalidDirectionException if there are some I/O troubles.
+     */
     @Override
     public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
         int numberOfMovements = player.getTurn().getNumberOfMovements();
@@ -96,7 +142,11 @@ public class Demeter extends God {
         
         return false;
     }
-    
+
+    /**
+     * This method checks if the player has completed a turn or if he still have to do some actions.
+     * @return true if he can end his turn, false otherwise.
+     */
     @Override
     public boolean validateEndTurn() {
         int numberOfMovements = player.getTurn().getNumberOfMovements();

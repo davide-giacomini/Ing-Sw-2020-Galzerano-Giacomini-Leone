@@ -1,5 +1,5 @@
 package Network.Message;
 
 public interface MessageListener {
-    void update();
+    void update(Message message);
 }
