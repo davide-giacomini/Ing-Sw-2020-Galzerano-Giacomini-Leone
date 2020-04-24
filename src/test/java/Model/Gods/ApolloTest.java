@@ -124,6 +124,19 @@ public class ApolloTest {
 
     }
 
+    @Test (expected = InvalidBuildException.class)
+    public void build_InvalidBuildException()  throws Exception{
 
+        assertTrue(player.getGod().checkIfCanBuild(workerM));
+        turn.executeBuild(Direction.LEFT);
+    }
+
+    @Test (expected = InvalidBuildException.class)
+    public void build_SlotOccupiedException()  throws Exception {
+        board.getSlot(1,1).setLevel(Level.DOME);
+        turn.executeMove(Direction.LEFT);
+        turn.executeBuild(Direction.UP);
+
+    }
 
 }
