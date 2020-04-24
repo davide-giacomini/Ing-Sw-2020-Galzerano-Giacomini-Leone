@@ -1,13 +1,15 @@
 package Model;
 
 import Enumerations.Level;
+import Network.Server.Observable;
+import Network.Server.VirtualView;
 
 /**
  * This class represent a slot of the board.
  * The slot can't be instanced by anyone. It is thought to be instanced only one time by the {@link Board}, therefore
  * it's got a protected constructor.
  */
-public class Slot {
+public class Slot extends Observable {
     private final int column;
     private final int row;
     private Worker worker;
@@ -67,5 +69,4 @@ public class Slot {
     public String toString() {
         return "Row: " + row + "\nColumn: " + column;
     }
-
 }

@@ -1,12 +1,10 @@
 package Network.Server;
 
 import Enumerations.Color;
+import Model.SlotListener;
 import Network.Message.Message;
-import Network.Message.MessageListener;
 
-import java.awt.*;
-
-public class VirtualView implements MessageListener {
+public class VirtualView implements ServerListener, SlotListener {
     private final String username;
     private final Enumerations.Color color;
     
@@ -26,8 +24,11 @@ public class VirtualView implements MessageListener {
     @Override
     public void update(Message message) {
         switch (message.getMessageType()){
-            case FIRST_GAMER:
-                //TODO chiama il metodo del controller che setta il challenger a this.username
         }
+    }
+    
+    @Override
+    public void update() {
+        //TODO implementare l'update a seconda di cosa serve. Nel caso cambiare la signature di update per passare i parametri che si vogliono.
     }
 }

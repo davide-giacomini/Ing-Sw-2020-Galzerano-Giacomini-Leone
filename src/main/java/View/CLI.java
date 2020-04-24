@@ -374,7 +374,12 @@ public class CLI extends View {
     public void theLoserIs(String usernameLoser ){
         out.println("\n\n" + usernameLoser + " you lost. Your adventure ends here \n ");
     }
-
+    
+    @Override
+    public ViewDatabase getViewDatabase() {
+        return viewDatabase;
+    }
+    
     public boolean askIfAtlasWantsToBuildDome(){
         String Dome = null;
         if (viewDatabase.getMyGod()== GodName.ATLAS) {

@@ -1,5 +1,6 @@
 package View;
 
+import Enumerations.Color;
 import Enumerations.GodName;
 import Model.Board;
 
@@ -13,6 +14,7 @@ public class ViewDatabase {
     public GodName myGod;
     public int numberOfPlayers ;
     public Board boadView ;
+    public Color myColor;
 
 
     public void setMyUsername(String myUsername) {
@@ -22,7 +24,11 @@ public class ViewDatabase {
     public String getMyUsername() {
         return myUsername;
     }
-
+    
+    public void setMyColor(Color myColor) {
+        this.myColor = myColor;
+    }
+    
     public int getMyIndex() {
         return myIndex;
     }

@@ -1,16 +1,21 @@
 package Network.Server;
 
 
+import Controller.GameController;
+import Enumerations.Color;
+import Network.Client.Client;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Server {
+public class Server extends Observable {
     public final static int SOCKET_PORT = 7777;
-    private static int numberOfThread = 0;
-    private static ArrayList<ClientHandler> players = new ArrayList<>();
+    private ArrayList<ClientHandler> players = new ArrayList<>();
+    private HashMap<String, Color> playerUsernameColorHashMap = new HashMap<>();
     private static Server server;
     private int maxNumberOfPlayers;
     
@@ -36,11 +41,10 @@ public class Server {
             } catch (IOException e) {
                 System.out.println("connection dropped");
             }
-            numberOfThread++;
         }
     }
     
-    public ArrayList<ClientHandler> getPlayers(){
+    public ArrayList<ClientHandler> getNumberOfPlayers(){
         return players; //TODO rendere safe questa chiamata
     }
     
@@ -48,12 +52,21 @@ public class Server {
         return maxNumberOfPlayers;
     }
     
-    public void addClient(ClientHandler clientHandler){
+    public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
+        this.maxNumberOfPlayers = maxNumberOfPlayers;
+    }
+    
+    public void addPlayer(ClientHandler clientHandler){
         players.add(clientHandler);
     }
     
+    public void addPlayerUsernameColorHashMap(String username, Color color){
+        playerUsernameColorHashMap.put(username, color);
+    }
+    
     public void initGame(){
-        //TODO istanzia tutto
+        
+       new GameController(maxNumberOfPlayers, playerUsernameColorHashMap);
     }
     
 }

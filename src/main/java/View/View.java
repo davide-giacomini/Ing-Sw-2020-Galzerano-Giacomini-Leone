@@ -47,4 +47,6 @@ public abstract class View {
     public abstract void theWinnerIs(String usernameWinner );
 
     public abstract void theLoserIs(String usernameLoser );
+    
+    public abstract ViewDatabase getViewDatabase();
 }
