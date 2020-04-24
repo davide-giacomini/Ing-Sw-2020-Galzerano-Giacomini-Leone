@@ -1,27 +1,29 @@
 package Network.Message;
 
-import Controller.GameController;
+import Enumerations.Color;
+import Enumerations.MessageType;
 
-public class RequestConnection implements MessageVC {
-
+public class RequestConnection extends Message {
     private String username;
-    private String color;
+    private Enumerations.Color color;
 
-    public RequestConnection(String username, String color){
-        this.username=username;
-        this.color=color;
+    public RequestConnection(){
+        super(MessageType.REQUEST_CONNECTION);
     }
 
     public String getUsername(){
         return username;
     }
 
-    public String getColor(){
+    public Color getColor(){
         return color;
     }
-
-    @Override
-    public void accept(GameController controller) {
-
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public void setColor(Enumerations.Color color) {
+        this.color = color;
     }
 }

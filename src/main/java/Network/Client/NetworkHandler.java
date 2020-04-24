@@ -1,109 +1,101 @@
 package Network.Client;
 
-import Network.Message.*;
-import View.View;
+import Enumerations.Color;
+import Network.Message.ErrorMessages.ConnectionFailed;
+import Network.Message.RequestNumberOfPlayers;
+import Network.Message.Message;
+import Network.Message.RequestConnection;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
 
-public class NetworkHandler implements Runnable, Serializable {
-    private String ipServer;
-    private int port;
-    private String username;
-    private String color;
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
-    private View view;
-    private Thread listener;
-
-
-
-    NetworkHandler(String ipServer, int port, String username, String color, View view){
-        this.ipServer = ipServer;
-        this.port = port;
-        this.username = username;
-        this.color = color;
-        this.view = view;
+public class NetworkHandler implements Runnable{
+    private final Client client;
+    private Socket serverSocket;
+    private boolean firstConnection;
+    ObjectInputStream inputServer;
+    ObjectOutputStream outputServer;
+    
+    public NetworkHandler(Client client, Socket serverSocket){
+        this.client = client;
+        firstConnection = true;
+        this.serverSocket = serverSocket;
     }
-
-    /**
-     * This method creates the ClientSocket and sends a RequestConnection message to start the connection with the server.
-     * Then it starts the thread which will be waiting for server messages.
-     */
-    public void openConnection() {
-        Socket server;
-        try {
-            server = new Socket(ipServer, port);
-            out = new ObjectOutputStream(server.getOutputStream());
-            in = new ObjectInputStream(server.getInputStream());
-            sendMessage(new RequestConnection(getUsername(),getColor()));
-
-            listener = new Thread(this);
-            listener.start();
-
-        } catch (IOException e) {
-            System.out.println("server unreachable");
-        }
-    }
-
-    /**
-     * This method send a message to the server
-     * @param message the message you want to send to the server
-     * @throws IOException if there are some I/O problems
-     */
-    private void sendMessage(MessageVC message) throws IOException {
-        if (out != null) {
-            out.writeObject(message);
-            out.reset();
-        }
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    /**
-     * The networkHandler keeps waiting for messages from the server.
-     * They do different things if they come from the model or from the controller.
-     */
+    
+    
     @Override
-    public synchronized void run() {
-
+    public void run() {
         try {
-            while (!Thread.currentThread().isInterrupted()) {
-                System.out.println("Ci seiii");
-                MessageContainer message = (MessageContainer) in.readObject();
-                if (message.getType() == MessageContainer.MV_EVENT) {
-                    //do something
+            if (firstConnection)
+                handleFirstConnection();
+            dispatchMessages();
+        }
+        catch (IOException e){
+            System.out.println("Connection dropped.");
+        }
+        catch (ClassNotFoundException e){
+            System.out.println("Error in casting from abstract Message to one of its subclasses.");
+        }
+    }
+    
+    public void handleFirstConnection() throws IOException, ClassNotFoundException {
+        String username = client.getView().askUsername();
+        Color color = client.getView().askColorWorkers();
+    
+        outputServer = new ObjectOutputStream(serverSocket.getOutputStream());
+    
+        RequestConnection requestConnection = new RequestConnection();
+        requestConnection.setColor(color);
+        requestConnection.setUsername(username);
+        outputServer.writeObject(requestConnection);
+        firstConnection = false;
+    }
+    
+    public void dispatchMessages() throws IOException, ClassNotFoundException {
+        while (true){
+            System.out.println("Started listening");
+            inputServer = new ObjectInputStream(serverSocket.getInputStream());
+            Message message = (Message) inputServer.readObject();
+            
+            try {
+                switch (message.getMessageType()){
+                    case CONNECTION_FAILED:
+                        handleConnectionFailed((ConnectionFailed) message);
+                        firstConnection = true;
+                    case REQUEST_NUMBER_OF_PLAYERS:
+                        handleRequestNumberOfPlayers();
                 }
-                else if (message.getType() == MessageContainer.CV_EVENT) {
-                    MessageCV messageCV = (MessageCV) message.getContent();
-                    messageCV.accept(this);
-                }
-                }
-            } catch (IOException e) {
-                view.print("Server has dropped the connection");
-            } catch (ClassNotFoundException e) {
-                //what to do?
+            }
+            catch (IOException e){
+                e.printStackTrace();
             }
         }
-
-    public void print(String text) {
-        view.print(text);
+    }
+    
+    private void handleConnectionFailed(ConnectionFailed connectionFailed) throws IOException, ClassNotFoundException {
+        if (connectionFailed.getErrorMessage().equals("Somebody else has already taken this username.")
+                || connectionFailed.getErrorMessage().equals("Somebody else has already taken this color.")){
+            client.getView().print(connectionFailed.getErrorMessage());
+            handleFirstConnection();
+        }
+        else if (connectionFailed.getErrorMessage().equals("The game is already started.")){
+            try {
+                serverSocket.close();
+            }
+            catch (IOException e){
+                System.out.println("Unable to close server socket");
+            }
+        }
+    }
+    
+    private void handleRequestNumberOfPlayers() throws IOException {
+        System.out.println("Entrato in handleRequestNumberOfPlayers");
+        int numberOfPlayers = client.getView().askNumberOfPlayers();
+        RequestNumberOfPlayers requestNumberOfPlayers = new RequestNumberOfPlayers();
+        requestNumberOfPlayers.setNumberOfPlayers(numberOfPlayers);
+        outputServer.writeObject(requestNumberOfPlayers);
     }
 }

@@ -411,5 +411,16 @@ public class CLI extends View {
         System.out.println(text);
     }
 
+    @Override
+    public int askNumberOfPlayers() {
+        int num = 0;
+
+        out.println("How many players do you want in the game?");
+        if (in.hasNextLine())
+           num = in.nextInt();
+
+        return num;
+    }
+
 
 }
