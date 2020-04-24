@@ -6,8 +6,8 @@ import Network.Message.Message;
 public class ConnectionFailed extends Message {
     String errorMessage;
     
-    public ConnectionFailed(){
-        super(MessageType.CONNECTION_FAILED);
+    public ConnectionFailed(MessageType messageType) {
+        super(messageType);
     }
     
     public void setErrorMessage(String errorMessage) {

@@ -1,5 +1,6 @@
 package Model.Gods;
 
+import Enumerations.Color;
 import Model.Board;
 import Enumerations.Direction;
 import Enumerations.Gender;
@@ -28,7 +29,7 @@ public class PanTest {
     @Before
     public void setUp () throws Exception{
         board = Board.getBoard();
-        player = new Player("Monica", Color.YELLOW);
+        player = new Player("Monica", Enumerations.Color.YELLOW);
         player.setGod(new Pan(player, "Pan"));
         worker = player.getWorker(Gender.MALE);
         worker.setSlot(board.getSlot(3,3));

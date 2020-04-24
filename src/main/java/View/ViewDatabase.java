@@ -10,11 +10,11 @@ interact with the user
 public class ViewDatabase {
 
     public String myUsername;
+    public Color myColor;
     public int myIndex;
     public GodName myGod;
     public int numberOfPlayers ;
     public Board boadView ;
-    public Color myColor;
 
 
     public void setMyUsername(String myUsername) {

@@ -1,5 +1,6 @@
 package Model;
 
+import Enumerations.Color;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Enumerations.Level;

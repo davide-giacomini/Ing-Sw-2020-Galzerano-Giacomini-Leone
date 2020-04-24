@@ -1,5 +1,6 @@
 package Model.Gods;
 
+import Enumerations.Color;
 import Model.Board;
 import Enumerations.Direction;
 import Enumerations.Gender;

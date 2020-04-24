@@ -1,6 +1,7 @@
 package Network.Client;
 
 import Enumerations.Color;
+import Enumerations.MessageType;
 import Network.Message.ConnectionAccepted;
 import Network.Message.ErrorMessages.ConnectionFailed;
 import Network.Message.RequestNumberOfPlayers;
@@ -48,7 +49,7 @@ public class NetworkHandler implements Runnable{
         String username = client.getView().askUsername();
         Color color = client.getView().askColorWorkers();
         
-        RequestConnection requestConnection = new RequestConnection();
+        RequestConnection requestConnection = new RequestConnection(MessageType.REQUEST_CONNECTION);
         requestConnection.setColor(color);
         requestConnection.setUsername(username);
         outputServer.writeObject(requestConnection);
@@ -110,7 +111,7 @@ public class NetworkHandler implements Runnable{
         int numberOfPlayers = 0;
         while (numberOfPlayers<2 || numberOfPlayers>3)
             numberOfPlayers = client.getView().askNumberOfPlayers();
-        RequestNumberOfPlayers requestNumberOfPlayers = new RequestNumberOfPlayers();
+        RequestNumberOfPlayers requestNumberOfPlayers = new RequestNumberOfPlayers(MessageType.REQUEST_NUMBER_OF_PLAYERS);
         requestNumberOfPlayers.setNumberOfPlayers(numberOfPlayers);
         outputServer.writeObject(requestNumberOfPlayers);
     }

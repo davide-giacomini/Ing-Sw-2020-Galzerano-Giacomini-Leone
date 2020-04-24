@@ -1,5 +1,6 @@
 package Model;
 
+import Enumerations.Color;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Model.Exceptions.*;
@@ -130,8 +131,8 @@ public class Player {
      * @param worker player's worker
      * @param slot slot chosen to put on the worker
      */
-    public void putWorkerOnSlot(Worker worker, Slot slot) {
-        worker.setSlot(slot);
+    public boolean putWorkerOnSlot(Worker worker, Slot slot) {
+        return worker.setSlot(slot);
     }
     
     /**

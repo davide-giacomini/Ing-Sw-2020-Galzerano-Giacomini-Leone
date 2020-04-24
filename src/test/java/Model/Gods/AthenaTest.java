@@ -1,6 +1,7 @@
 package Model.Gods;
 
 import Model.*;
+import Enumerations.Color;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Model.Exceptions.*;

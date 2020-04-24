@@ -8,7 +8,7 @@ public class ConnectionAccepted extends Message{
     private Color color;
     
     public ConnectionAccepted(MessageType messageType) {
-        super(MessageType.CONNECTION_ACCEPTED);
+        super(messageType);
     }
     
     public String getUserName() {

@@ -1,5 +1,6 @@
 package Model.Gods;
 
+import Enumerations.Color;
 import Model.*;
 import Enumerations.Direction;
 import Enumerations.Gender;
@@ -30,7 +31,7 @@ public class MinotaurTest {
         slotF = board.getSlot(0,0);
         slot2 = board.getSlot(3,3);
         player = new Player("Arianna", Color.BLUE);
-        secondPlayer = new Player("David", Color.BLACK);
+        secondPlayer = new Player("David", Color.WHITE);
 
         workerM = player.getWorker(Gender.MALE);
         workerF = player.getWorker(Gender.FEMALE);

@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import Enumerations.Color;
 import Enumerations.Gender;
 import Enumerations.Level;
 
