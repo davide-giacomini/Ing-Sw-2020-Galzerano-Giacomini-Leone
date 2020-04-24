@@ -1,5 +1,6 @@
 package Model;
 
+import Enumerations.Color;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Enumerations.Level;
@@ -19,7 +20,7 @@ public class PlayerTest {
 
     @Before
     public void setUp()  {
-        player = new Player ("Arianna", Color.BLACK);
+        player = new Player ("Arianna", Color.BLUE);
 
     }
 
@@ -33,8 +34,8 @@ public class PlayerTest {
         assertFalse(player.isLoosing());
         assertFalse(player.isWinning());
         assertEquals(player.getWorkersNumber(), 2);
-        assertEquals(player.getWorker(Gender.MALE).getColor(), Color.BLACK);
-        assertEquals(player.getWorker(Gender.FEMALE).getColor(), Color.BLACK);
+        assertEquals(player.getWorker(Gender.MALE).getColor(), Color.BLUE);
+        assertEquals(player.getWorker(Gender.FEMALE).getColor(), Color.BLUE);
     }
 
     @Test

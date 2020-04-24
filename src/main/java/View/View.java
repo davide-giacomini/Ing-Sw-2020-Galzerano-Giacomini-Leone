@@ -38,7 +38,7 @@ public abstract class View {
 
     public abstract ArrayList<GodName> challengerWillChooseThreeGods();
 
-    public abstract ArrayList<GodName> chooseYourGod(ArrayList<GodName> godsChosen);
+    public abstract GodName chooseYourGod(ArrayList<GodName> godsChosen);
 
     public abstract int[] askWhereToMoveWorkers();
 
@@ -47,6 +47,8 @@ public abstract class View {
     public abstract void theWinnerIs(String usernameWinner );
 
     public abstract void theLoserIs(String usernameLoser );
+
+    public abstract ArrayList<Enum> askAction();
     
     public abstract ViewDatabase getViewDatabase();
 }

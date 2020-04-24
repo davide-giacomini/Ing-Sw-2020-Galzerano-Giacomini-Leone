@@ -1,6 +1,7 @@
 package Model.Gods;
 
 import Model.*;
+import Enumerations.Color;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Enumerations.Level;
@@ -32,7 +33,7 @@ public class ApolloTest {
         slotF = board.getSlot(0,0);
 
         player = new Player("Arianna", Color.BLUE);
-        secondPlayer = new Player("Monichella", Color.BLACK);
+        secondPlayer = new Player("Monichella", Color.WHITE);
 
         workerM = player.getWorker(Gender.MALE);
         workerF = player.getWorker(Gender.FEMALE);
