@@ -9,6 +9,7 @@ interact with the user
 public class ViewDatabase {
 
     public String myUsername;
+    public String myColor;
     public int myIndex;
     public GodName myGod;
     public int numberOfPlayers ;

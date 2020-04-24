@@ -1,14 +1,13 @@
 package View;
 
 import Controller.GameController;
-import Enumerations.Color;
-import Enumerations.Gender;
-import Enumerations.GodName;
+import Enumerations.*;
 import Network.Client.Client;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class CLI extends View {
@@ -23,15 +22,19 @@ public class CLI extends View {
         CLI c = new CLI(null);
         ArrayList<GodName> gods = null;
         boolean t ;
+        ArrayList<Enum> arr = new ArrayList<Enum>();
+        arr = c.askAction();
+       System.out.println(arr);
+       /* c.viewDatabase.setNumberOfPlayers(3);
         gods = c.challengerWillChooseThreeGods();
-
         for (GodName g: gods){
             System.out.println( g) ;
         }
-        c.viewDatabase.setMyGod(GodName.ATLAS);
-        t = c.askIfAtlasWantsToBuildDome();
+        c.viewDatabase.setMyGod(GodName.ATLAS);*/
 
-        c.viewDatabase.numberOfPlayers = 3;
+       // t = c.askIfAtlasWantsToBuildDome();
+
+
     }
 /*
         System.out.println (AnsiCode.ANSI_DOME + AnsiCode.ANSI_LEVEL2 + AnsiCode.ANSI_LEVEL3);
@@ -235,16 +238,15 @@ public class CLI extends View {
      * @return an array of two int indicating one the row and one the column
      */
     public int[] askWhereToPositionWorkers() {
-        int[] newRowAndColumn = new int[4];
+        int[] newRowAndColumn = new int[2];
 
-            out.println("Choose where to  Initially position your workers : \n ");
-            for (int i = 0; i<2; i++) {
-                out.println("Worker "+ i);
+            out.println("Choose where to  Initially position your worker : \n ");
+                out.println("Worker ");
                 out.println("Insert Row and press" + AnsiCode.ANSI_ENTER_KEY + ": \n ");
                 newRowAndColumn[0] = in.nextInt();
                 out.println("Insert Column and press" + AnsiCode.ANSI_ENTER_KEY + ": \n ");
                 newRowAndColumn[1] = in.nextInt();
-            }
+
         return newRowAndColumn;
     }
 
@@ -281,7 +283,7 @@ public class CLI extends View {
 
 
         do {
-            out.println("Choose which worker you wanna use? Male or Female? \n ");
+            out.println("Choose which god you want to add in the list : you can choose" + viewDatabase.getNumberOfPlayers() + "\n ");
 
             if (in.hasNextLine()){
                 god = in.nextLine();
@@ -304,9 +306,9 @@ public class CLI extends View {
 
     }
 
-    public ArrayList<GodName> chooseYourGod(ArrayList<GodName> godsChosen){
+    public GodName chooseYourGod(ArrayList<GodName> godsChosen){
         String god = null;
-        GodName godName ;
+        GodName godName = null;
 
         out.println("These are the available gods : \n");
         for (GodName g: godsChosen){
@@ -324,15 +326,24 @@ public class CLI extends View {
                     out.println("God not available or wrong!\n");
                 }else{
                     viewDatabase.setMyGod(godName);
-                    godsChosen.remove(godName);
                 }
             }else
                 out.println("God not inserted! \n");
 
         }while (god == null);
 
-        return godsChosen;
+        return godName;
 
+    }
+
+    @Override
+    public int[] askWhereToMoveWorkers() {
+        return new int[0];
+    }
+
+    @Override
+    public int[] askWhereToBuildWorkers() {
+        return new int[0];
     }
 
 
@@ -342,7 +353,7 @@ public class CLI extends View {
     }
 
 
-    public int[] askWhereToMoveWorkers() {
+    /*public int[] askWhereToMoveWorkers() {
         int[] newRowAndColumn = new int[2];
 
         out.println("Choose where to  move your worker : \n ");
@@ -365,7 +376,7 @@ public class CLI extends View {
         newRowAndColumn[1] = in.nextInt();
 
         return newRowAndColumn;
-    }
+    }*/
 
     public void theWinnerIs(String usernameWinner ){
         out.println("\n\n THE WINNER IS : "+ usernameWinner);
@@ -375,7 +386,7 @@ public class CLI extends View {
         out.println("\n\n" + usernameLoser + " you lost. Your adventure ends here \n ");
     }
 
-    public boolean askIfAtlasWantsToBuildDome(){
+   /* public boolean askIfAtlasWantsToBuildDome(){
         String Dome = null;
         if (viewDatabase.getMyGod()== GodName.ATLAS) {
             out.println("Do you want to build a Dome? Yes/No");
@@ -397,7 +408,7 @@ public class CLI extends View {
             } while (Dome == null);
         }
         return false;
-    }
+    }*/
     /**
      * This method resets the color to the default one when called
      * @param o is the out console where I apply the reset
@@ -415,12 +426,51 @@ public class CLI extends View {
     public int askNumberOfPlayers() {
         int num = 0;
 
-        out.println("How many players do you want in the game?");
+        out.println("How many players do you want in the game? Insert a number between 2 and 3");
         if (in.hasNextLine())
            num = in.nextInt();
 
         return num;
     }
 
+
+    public ArrayList<Enum> askAction(){
+        out.println("Here are the possible actions:  move direction  /  build direction  /  buildDome direction / end / \n");
+        out.println("the available directions are : "+ Arrays.toString(Direction.values())+ "\n");
+
+
+        String line = null;
+        String[] stringParts = null;
+        Action actionInserted = null;
+        Direction directionInserted= null;
+        ArrayList<Enum> ActionAndDirection = new ArrayList<Enum>();
+        do {
+            out.println("Insert action :");
+
+            if (in.hasNextLine()) {
+                line = in.nextLine();
+                stringParts = line.split(" ");
+                actionInserted = Action.getActionByName(stringParts[0]);
+                if (stringParts.length>1)
+                directionInserted = Direction.getDirectionByName(stringParts[1]);
+
+                if(actionInserted == Action.WRONGACTION)
+                    line = null;
+                else if (!actionInserted.equals(Action.END) && (directionInserted == Direction.WRONGDIRECTION || directionInserted == null))
+                    line = null;
+                else if (line.equals(""))
+                    line = null;
+                else if (actionInserted.equals(Action.END) && stringParts.length >1)
+                    line = null;
+                else{
+                    ActionAndDirection.add(actionInserted);
+                    ActionAndDirection.add(directionInserted);
+                }
+            }
+
+        } while (line == null);
+
+        return ActionAndDirection;
+    }
 
 }

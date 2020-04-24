@@ -104,7 +104,7 @@ public class ClientHandler implements Runnable{
     
     public void dispatchMessages() throws IOException{
         while (true){
-            System.out.println("Started listening");
+            //System.out.println("Started listening");
             Message message;
             try {
                 message = (Message) inputClient.readObject();
