@@ -1,5 +1,6 @@
 package Model;
 
+import Enumerations.Color;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Enumerations.Level;
@@ -21,7 +22,7 @@ public class TurnTest {
     
     @Before
     public void setUp() throws Exception {
-        player = new Player("1", Color.BLACK);
+        player = new Player("1", Color.BLUE);
         for (int i=0; i<Board.ROWSNUMBER; i++) {
             for (int j=0; j<Board.COLUMNSNUMBER; j++) {
                 slots[i][j] = Board.getBoard().getSlot(i,j);
@@ -123,7 +124,7 @@ public class TurnTest {
     
     @Test (expected = InvalidMoveException.class)
     public void setWorkerGender_SetWorkerTwoTimes_CannotUseBothWorkers_ThrowsWrongBuildOrMoveException() throws Exception {
-        player = new Player("test", Color.BLACK);
+        player = new Player("test", Color.BLUE);
         god = new Apollo(player, "Apollo test");
         turn = new Turn(player);
         
@@ -136,7 +137,7 @@ public class TurnTest {
     }
     @Test
     public void setWorkerGender_SetWorkerTwoTimes_CanUseBothWorkers_NormallyChangesWorkerGender() throws Exception {
-        player = new Player("test", Color.BLACK);
+        player = new Player("test", Color.BLUE);
         god = new Apollo(player, "Prometheus test");
         turn = new Turn(player);
         
@@ -150,7 +151,7 @@ public class TurnTest {
     
     @Test
     public void setWantsToBuildDome_GodIsAtlas_WantsToBuildDomeSetTrue () throws Exception {
-        player = new Player("test", Color.BLACK);
+        player = new Player("test", Color.BLUE);
         god = new Atlas(player, "atlas test");
         turn = new Turn(player);
         
@@ -159,7 +160,7 @@ public class TurnTest {
     }
     @Test (expected = InvalidBuildException.class)
     public void setWantsToBuildDome_GodIsNotAtlas_ThrowsWrongBuildOrMoveException () throws Exception {
-        player = new Player("test", Color.BLACK);
+        player = new Player("test", Color.BLUE);
         god = new Prometheus(player, "atlas test");
         turn = new Turn(player);
         
@@ -169,7 +170,7 @@ public class TurnTest {
     
     @Test (expected = InvalidMoveException.class)
     public void executeMove_ThirdLevelReached_PlayerIsWinning_ThenTryToMoveAnotherTime_ThrowsNoAvailableMovementsException() throws Exception{
-        player = new Player("test", Color.BLACK);
+        player = new Player("test", Color.BLUE);
         god = new Prometheus(player, "atlas test");
         turn = new Turn(player);
         turn.setWorkerGender(Gender.MALE);
@@ -190,7 +191,7 @@ public class TurnTest {
     }
     @Test
     public void executeMove_ThirdLevelNotReached_PlayerIsNotWinning() throws Exception{
-        player = new Player("test", Color.BLACK);
+        player = new Player("test", Color.BLUE);
         god = new Prometheus(player, "atlas test");
         turn = new Turn(player);
         
@@ -207,7 +208,7 @@ public class TurnTest {
     
     @Test (expected = InvalidBuildException.class)
     public void executeBuild_BuildTwoTimes_ThrowsNoAvailableBuildingsException () throws Exception{
-        player = new Player("test", Color.BLACK);
+        player = new Player("test", Color.BLUE);
         god = new Athena(player, "atlas test");
         turn = new Turn(player);
         
@@ -226,7 +227,7 @@ public class TurnTest {
     
     @Test (expected = GodNotSetException.class)
     public void TurnConstructor_PlayerWithoutGod_ThrowsGodNotSet () throws Exception{
-        new Turn(new Player("test", Color.BLACK));
+        new Turn(new Player("test", Color.BLUE));
     }
 
 

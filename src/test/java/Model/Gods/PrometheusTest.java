@@ -1,6 +1,7 @@
 package Model.Gods;
 
 import Model.Board;
+import Enumerations.Color;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Enumerations.Level;
@@ -94,7 +95,7 @@ public class PrometheusTest {
     public void setUp() throws Exception {
         // this is a setting of the case one
         
-        player = new Player("player", Color.BLACK);
+        player = new Player("player", Color.WHITE);
         opponentPlayer = new Player("opponent player", Color.BLUE);
         prometheus = new Prometheus(player, "Prometheus");
         turn = new Turn(player);

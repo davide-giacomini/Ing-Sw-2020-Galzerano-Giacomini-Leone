@@ -1,5 +1,6 @@
 package Model;
 
+import Enumerations.Color;
 import Enumerations.Direction;
 import Enumerations.Gender;
 import Enumerations.Level;
@@ -31,10 +32,13 @@ public class Worker {
      *
      * @param slot slot where {@link Worker} is going to be placed
      */
-    public void setSlot(Slot slot) {
+    public boolean setSlot(Slot slot) {
         this.slot = slot;
-        if (slot!=null)
+        if (slot!=null && !slot.isOccupied()) {
             this.slot.setWorker(this);
+            return true;
+        }
+        else return false;
     }
 
     public Slot getSlot() {

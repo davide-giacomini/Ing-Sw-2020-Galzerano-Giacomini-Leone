@@ -1,5 +1,6 @@
 package Model;
 
+import Enumerations.Color;
 import Model.Exceptions.GameAlreadyStartedException;
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +18,7 @@ public class GameTest {
     @Before
     public void setUp() {
         game = new Game();
-        player = new Player("Ari", Color.RED);
+        player = new Player("Ari", Enumerations.Color.RED);
     }
 
     @After
@@ -27,7 +28,6 @@ public class GameTest {
 
     @Test
     public void checkInitialParameters(){
-        assertFalse(game.isGameEnded());
         assertFalse(game.isGameStarted());
         assertEquals(game.getNumberOfPlayers(), 0);
     }
@@ -42,7 +42,6 @@ public class GameTest {
     @Test (expected = GameAlreadyStartedException.class)
     public void addPlayer_gameAlreadyStarted() throws GameAlreadyStartedException {
         game.setStart();
-        assertFalse(game.isGameEnded());
         assertTrue(game.isGameStarted());
         game.addPlayer(player);
 
@@ -63,14 +62,11 @@ public class GameTest {
     @Test
     public void setStart(){
         game.setStart();
-        assertFalse(game.isGameEnded());
         assertTrue(game.isGameStarted());
     }
 
     @Test
     public void setEnd(){
-        game.setEnd();
-        assertTrue(game.isGameEnded());
         assertFalse(game.isGameStarted());
     }
 
