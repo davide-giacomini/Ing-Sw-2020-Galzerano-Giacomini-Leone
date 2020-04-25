@@ -11,7 +11,7 @@ import java.util.*;
 public class CLI extends View {
 
     private ViewDatabase viewDatabase;
-
+    private PrintSupport printSupport;
     private Scanner in;
     private PrintStream out;
 
@@ -83,6 +83,7 @@ public class CLI extends View {
         this.in = new Scanner(System.in);
         this.out = new PrintStream(System.out);
         viewDatabase = new ViewDatabase();
+        printSupport = new PrintSupport();
     }
 
 
@@ -279,17 +280,15 @@ public class CLI extends View {
 
         out.println("#6 Hephaestus – Your builders can build twice on the same space. They may not use this ability to place a dome though.\n");
 
-        out.println("#7 Hermes – If your builders don’t change their level they may move as many spaces as they want (including staying on their current space). You can then build based on the position of either of your builders.\n");
+        out.println("#7 Minotaur – You may move your builder onto a space occupied by an opponent’s builder if the next space in the same direction is unoccupied. You will push the other player’s builder into the next space in the same direction.\n");
 
-        out.println("#8 Minotaur – You may move your builder onto a space occupied by an opponent’s builder if the next space in the same direction is unoccupied. You will push the other player’s builder into the next space in the same direction.\n");
+        out.println("#8 Pan – If one of your builders moves down two spaces in one movement you will automatically win the game.\n");
 
-        out.println("#9 Pan – If one of your builders moves down two spaces in one movement you will automatically win the game.\n");
-
-        out.println("#10 Prometheus – If you don’t move up a level during your turn you may build before and after you move.\n");
+        out.println("#9 Prometheus – If you don’t move up a level during your turn you may build before and after you move.\n");
 
 
         do {
-            out.println("Choose which god you want to add in the list : you can choose" + viewDatabase.getNumberOfPlayers() );
+            out.println("Choose which god you want to add in the list : you can choose " + viewDatabase.getNumberOfPlayers() );
 
             if (in.hasNextLine()){
                 god = in.nextLine();
@@ -513,6 +512,17 @@ public class CLI extends View {
         } while (line == null);
 
         return ActionAndDirection;
+    }
+
+    public void showPublicInformation(){
+        ArrayList<String> usernames = new ArrayList<String>(getViewDatabase().getNumberOfPlayers());
+         ArrayList<Color> colors = new ArrayList<Color>(getViewDatabase().getNumberOfPlayers());
+         ArrayList <GodName> gods = new ArrayList<GodName>(getViewDatabase().getNumberOfPlayers());
+
+        usernames = viewDatabase.getUsernames();
+        colors = viewDatabase.getColors();
+        gods = viewDatabase.getGods();
+       printSupport.printUsersAndColorsAndGods(usernames, colors, gods, viewDatabase.getNumberOfPlayers(), out);
     }
 
 }

@@ -6,6 +6,7 @@ import Enumerations.MessageType;
 public class ConnectionAccepted extends Message{
     private String userName;
     private Color color;
+    private int numberOfPlayers;
     
     public ConnectionAccepted(MessageType messageType) {
         super(messageType);
@@ -25,5 +26,13 @@ public class ConnectionAccepted extends Message{
     
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 }

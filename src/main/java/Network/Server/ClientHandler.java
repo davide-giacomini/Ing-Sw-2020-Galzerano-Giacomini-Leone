@@ -1,15 +1,15 @@
 package Network.Server;
 
 import Enumerations.Color;
+import Enumerations.GodName;
 import Enumerations.MessageType;
-import Network.Message.ConnectionAccepted;
+import Model.Gods.God;
+import Network.Message.*;
 import Network.Message.ErrorMessages.ConnectionFailed;
-import Network.Message.RequestNumberOfPlayers;
-import Network.Message.Message;
-import Network.Message.RequestConnection;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ClientHandler implements Runnable{
     private Socket clientSocket;
@@ -55,6 +55,9 @@ public class ClientHandler implements Runnable{
                         break;
                     case REQUEST_NUMBER_OF_PLAYERS:
                         handleRequestNumberOfPlayers((RequestNumberOfPlayers) message);
+                        break;
+                    case LIST_OF_GODS:
+                        handleListOfGods((ListOfGods) message);
                         break;
                     default:
                         server.notifyMessageListeners(message);
@@ -106,7 +109,7 @@ public class ClientHandler implements Runnable{
         }
         
         // the virtual view is added and it is added to the message listeners.
-        virtualView = new VirtualView(username, color);
+        virtualView = new VirtualView(username, color, this);
         server.addMessageListener(virtualView);
         // if the player is the first, he will decide the number of players
         if (server.getNumberOfPlayers().size()==0)
@@ -118,6 +121,7 @@ public class ClientHandler implements Runnable{
             ConnectionAccepted connectionAccepted = new ConnectionAccepted(MessageType.CONNECTION_ACCEPTED);
             connectionAccepted.setUserName(username);
             connectionAccepted.setColor(color);
+            connectionAccepted.setNumberOfPlayers(server.getMaxNumberOfPlayers());
             outputClient.writeObject(connectionAccepted);
             server.initGame();
             return;
@@ -128,6 +132,7 @@ public class ClientHandler implements Runnable{
         ConnectionAccepted connectionAccepted = new ConnectionAccepted(MessageType.CONNECTION_ACCEPTED);
         connectionAccepted.setUserName(username);
         connectionAccepted.setColor(color);
+        connectionAccepted.setNumberOfPlayers(server.getMaxNumberOfPlayers());
         outputClient.writeObject(connectionAccepted);
     }
     
@@ -135,4 +140,39 @@ public class ClientHandler implements Runnable{
         server.setMaxNumberOfPlayers(message.getNumberOfPlayers());
         //TODO rendere questo settaggio safe
     }
+
+    /**
+     * This method sends a message to the client.
+     * @param message the message that must be sent.
+     * @throws IOException if there are some IO troubles.
+     */
+    private void send(Message message) throws IOException {
+        outputClient.writeObject(message);
+        outputClient.flush();
+        outputClient.reset();
+    }
+
+    public void manageChallenger() throws IOException {
+        YouAreTheRandomPlayer message = new YouAreTheRandomPlayer(MessageType.RANDOM_PLAYER);
+        send(message);
+    }
+
+    public void handleListOfGods(ListOfGods message) throws IOException {
+        ArrayList<GodName> godsAvailable = message.getGodsAvailable();
+        GodName chosenGod = message.getChosenGod();
+        if (godsAvailable != null) {
+            virtualView.receiveListOfGods(godsAvailable);
+        }
+        else if (chosenGod != null) {
+            virtualView.receiveChosenGod(chosenGod);
+        }
+    }
+
+    public void manageGodsList(ArrayList<GodName> gods) throws IOException {
+        ListOfGods message = new ListOfGods(MessageType.LIST_OF_GODS);
+        message.setGodsAvailable(gods);
+        send(message);
+    }
+
+
 }

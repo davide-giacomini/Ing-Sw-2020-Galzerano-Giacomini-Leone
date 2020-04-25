@@ -7,8 +7,8 @@ import Model.Game;
 import Model.Gods.*;
 import Model.Player;
 import Model.Worker;
+import Network.Server.VirtualView;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,8 @@ import java.util.Random;
 public class GameController {
     private int numberOfPlayers;
     private static Game game;
-    int indexOfCurrentPlayer;
+    private ArrayList<VirtualView> views;
+    private int indexOfCurrentPlayer;
 
     /**
      * This is the constructor of the GameController which creates the game and set the random player who will
@@ -28,6 +29,7 @@ public class GameController {
      */
     public GameController(int numberOfPlayers, HashMap<String,Color> map){
         this.numberOfPlayers = numberOfPlayers;
+        this.views = new ArrayList<>(numberOfPlayers);
         game = new Game(numberOfPlayers);
         for(Map.Entry<String,Color> entry : map.entrySet()) {
             String username = entry.getKey();
@@ -52,27 +54,41 @@ public class GameController {
         return randomPlayer;
     }
 
+    public void tellChallenger() throws IOException {
+         orderViews();
+         int index = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
+         views.get(index).sendChallenger();
+    }
+
     /**
      * Update the model with the gods that will be used in the game.
      * @param gods list of chosen gods.
      */
-    public void setGods(ArrayList<GodName> gods) {
+    public void setGods(ArrayList<GodName> gods) throws IOException {
         game.setGods(gods);
+        game.putRandomAtLastPosition();
+        orderViews();
+        views.get(indexOfCurrentPlayer).sendGodsList(game.getGods());
     }
 
     /**
      * This method sets the god that has been chosen by a player in his class.
      * It also delete this god from the list of available gods.
-     * @param numPlayer number of the Player who has chosen the god
      * @param god the chosen god
      * @throws IOException if the god is not one of the enumeration.
      */
-    public void setGod(int numPlayer, GodName god) throws IOException {
-        game.getPlayer(numPlayer).setGod(chooseGod(god, game.getPlayer(numPlayer)));
-        for (int i=0; i<numberOfPlayers; i++) {
+    public void setGod(GodName god) throws IOException {
+        Game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, Game.getPlayer(indexOfCurrentPlayer)));
+        /*for (int i=0; i<numberOfPlayers; i++) {
             if (game.getGods().get(i).equals(god))
                 game.getGods().remove(i);
-        }
+        } */
+        game.getGods().remove(god);
+        incrementIndex();
+        if (indexOfCurrentPlayer == 0)
+            startGame();
+        else
+            views.get(indexOfCurrentPlayer).sendGodsList(game.getGods());
     }
 
     /**
@@ -105,8 +121,8 @@ public class GameController {
      * @param column column of the selected slot
      */
     public void setWorker(int numPlayer, Gender workerGender, int row, int column) {
-        Worker chosenWorker = game.getPlayer(numPlayer).getWorker(workerGender);
-        game.getPlayer(numPlayer).putWorkerOnSlot(chosenWorker, game.getBoard().getSlot(row,column));
+        Worker chosenWorker = Game.getPlayer(numPlayer).getWorker(workerGender);
+        Game.getPlayer(numPlayer).putWorkerOnSlot(chosenWorker, game.getBoard().getSlot(row,column));
     }
 
     /**
@@ -115,20 +131,43 @@ public class GameController {
      */
     public void newRoundOrder() {
         game.createNewPlayersList();
+        orderViews();
     }
 
     public void startGame() {
         newRoundOrder();
-        indexOfCurrentPlayer = 0;
-        for (int i=0; i<numberOfPlayers; i++) {
-            //chiedi di settare il worker e settalo
-        }
+        // view.sendSetWorker
     }
 
     public void run() {
         // setta la divinità e currentPlayer++;
         // quando currentPlayer == numberOfPlayer fai startGame() che manda il turno di settaggio
         // ora che è tutto settato inizia il gioco vero
+    }
+
+    public void setView(VirtualView view) {
+        this.views.add(view);
+    }
+
+    public void orderViews() {
+        VirtualView temp;
+        for(int i=0; i<numberOfPlayers; i++) {
+            if (!Game.getPlayer(i).getUsername().equals(views.get(i).getUsername()))
+                for(int j=0; j<numberOfPlayers; j++) {
+                    if (views.get(j).getUsername().equals(Game.getPlayer(i).getUsername())) {
+                        temp = views.get(i);
+                        views.set(i, views.get(j));
+                        views.set(j, temp);
+                    }
+                }
+        }
+    }
+
+    private void incrementIndex() {
+        if (indexOfCurrentPlayer<numberOfPlayers-1)
+            indexOfCurrentPlayer++;
+        else
+            indexOfCurrentPlayer=0;
     }
 
     // Start the game calling setStart of Game.

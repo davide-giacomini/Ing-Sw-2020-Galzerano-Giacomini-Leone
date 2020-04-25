@@ -136,5 +136,13 @@ public class Game {
     public void createNewPlayersList() {
         players = randomOrder();
     }
+
+    public Player getPlayer (String username) {
+        for(int i=0; i<numberOfPlayers; i++) {
+            if (username.equals(players.get(i).getUsername()))
+                return players.get(i);
+        }
+        return null;
+    }
 }
 
