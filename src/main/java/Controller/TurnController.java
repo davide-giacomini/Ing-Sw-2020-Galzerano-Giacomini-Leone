@@ -1,7 +1,18 @@
 package Controller;
 
+import Model.Player;
+import Network.Server.VirtualView;
+
 public class TurnController {
-    
+
+    private VirtualView virtualView;
+    private Player player;
+
+    public TurnController(VirtualView virtualView, Player player) {
+        this.virtualView = virtualView;
+        this.player = player;
+    }
+
     // Ad ogni inizio turno il Turn controlla in automatico se uno dei due giocatori non si può più muovere.
     // Nel caso entrambi i giocatori non si possano muovere, il giocatore perde e i suoi worker vengono rimossi.
     // Ora inizia il Controller.
