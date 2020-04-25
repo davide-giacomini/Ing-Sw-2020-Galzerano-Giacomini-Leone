@@ -1,13 +1,12 @@
 package Model;
 
-import Enumerations.Gender;
 import Enumerations.GodName;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * This class has to be completed yet.
+ * This class contains all the elements of a game.
  */
 public class Game {
     private Board board;
@@ -17,14 +16,6 @@ public class Game {
     private ArrayList<GodName> gods;
     private static ArrayList<Player> players ;
 
-    public static final Random rand = new Random();
-
-    public Game() {
-        //this.players = new Player[3];
-        this.start = false;
-        numberOfPlayers = 0;
-        players = new ArrayList<>();
-    }
 
     public Game(int numberOfPlayers) {
         this.start = true;
@@ -32,11 +23,6 @@ public class Game {
         players = new ArrayList<>(numberOfPlayers);
         board = Board.getBoard();
     }
-
-    //when a player is added it goes at the end of the arraylist
-    /*public void addPlayer (String username, Color c, int i) {
-        players.set(i, new Player(username, c));
-    }*/
 
     public void addPlayer(Player player) {
         players.add(player);
@@ -49,15 +35,6 @@ public class Game {
     public void setGods(ArrayList<GodName> gods) {
         this.gods = gods;
     }
-
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
-    }
-
-    /*public Slot getSlot(int row, int column) {
-        return Board.getBoard().getSlot(row, column);
-    }*/
-
 
     public Player getRandomPlayer() {
         return randomPlayer;
@@ -137,6 +114,11 @@ public class Game {
         players = randomOrder();
     }
 
+    /**
+     * This method returns the player who has a specific username.
+     * @param username the username that you want to found the correspondent player.
+     * @return the player instance.
+     */
     public Player getPlayer (String username) {
         for(int i=0; i<numberOfPlayers; i++) {
             if (username.equals(players.get(i).getUsername()))

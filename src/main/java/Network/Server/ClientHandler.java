@@ -175,6 +175,11 @@ public class ClientHandler implements Runnable{
         send(message);
     }
 
+    /**
+     * This method receive a list of available gods and calls the view to set this into the model.
+     * @param message contains list of available gods.
+     * @throws IOException if there are some IO troubles.
+     */
     private void handleListOfGods(ListOfGods message) throws IOException {
         ArrayList<GodName> godsAvailable = message.getGodsAvailable();
         GodName chosenGod = message.getChosenGod();
@@ -186,12 +191,24 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    /**
+     * This method sends a message to the client with the list of available gods he can choose from.
+     * @param gods list of available gods.
+     * @throws IOException if there are some IO troubles.
+     */
     void manageGodsList(ArrayList<GodName> gods) throws IOException {
         ListOfGods message = new ListOfGods(MessageType.LIST_OF_GODS);
         message.setGodsAvailable(gods);
         send(message);
     }
 
+    /**
+     * This method sends a message to the client with all the information about the players of the current game.
+     * @param usernames the username of each client
+     * @param colors the color of each client
+     * @param godNames the god chose from each client
+     * @throws IOException if there are some IO troubles.
+     */
     void managePublicInformation(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> godNames) throws IOException {
         PublicInformation message = new PublicInformation(MessageType.PUBLIC_INFORMATION);
         message.setUsernames(usernames);
@@ -200,7 +217,10 @@ public class ClientHandler implements Runnable{
         send(message);
     }
 
-    //TODO ask david if clone is usable to send the changed slot
+    /**
+     * This method sends a message to the client with an update of the model (a modified slot).
+     * @param slot the modified slot.
+     */
     void manageUpdateSlot(Slot slot) {
         try {
             Slot updatedSlot = new Slot(slot.getRow(), slot.getColumn());
@@ -214,11 +234,11 @@ public class ClientHandler implements Runnable{
             e.printStackTrace();
         }
         //TODO there has been and error message
-
-
-
     }
 
+    /**
+     * This method sends a message to the client to ask the initial position of his workers.
+     */
     void manageSetWorkers() {
         try {
             SetWorkers message = new SetWorkers(MessageType.SET_WORKERS);
@@ -228,7 +248,12 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    void handleSetWorkers(SetWorkers message ){
+    /**
+     * This method receives a list of coordinates (row1, column1, row2, column2) and calls the view to set the player's workers
+     * into these posiions and update the model.
+     * @param message contains the coordinates.
+     */
+    void handleSetWorkers(SetWorkers message){
         virtualView.receiveSetWorkers(message.getRowsAndColumns());
     }
 

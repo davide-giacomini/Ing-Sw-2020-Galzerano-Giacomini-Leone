@@ -12,6 +12,10 @@ import Network.Message.YouAreTheRandomPlayer;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class implements a virtualView, which basically represents the connection between the network and the controller.
+ * There is one for each player.
+ */
 public class VirtualView implements ServerListener, SlotListener {
     private GameController controller;
     private ClientHandler clientHandler;
@@ -43,10 +47,9 @@ public class VirtualView implements ServerListener, SlotListener {
     }
     
     @Override
-    public void update(Slot slot)  {
+    public void update(Slot slot) {
         clientHandler.manageUpdateSlot(slot);
         //TODO implementare l'update a seconda di cosa serve. Nel caso cambiare la signature di update per passare i parametri che si vogliono.
-
     }
 
     /**
@@ -104,14 +107,19 @@ public class VirtualView implements ServerListener, SlotListener {
         clientHandler.managePublicInformation(usernames, colors, godNames);
     }
 
+    /**
+     * This method send the request of the initial position of the workers.
+     */
     public void sendSetWorkers()  {
         clientHandler.manageSetWorkers();
     }
 
+    /**
+     * This method receive a list of coordinates (row1,column1,row2,column2) and calls the controller.
+     * @param RowsAndColumns the list of coordinates.
+     */
     public void receiveSetWorkers(int[] RowsAndColumns) {
-
             controller.setWorkers(RowsAndColumns);
-
     }
 
 }

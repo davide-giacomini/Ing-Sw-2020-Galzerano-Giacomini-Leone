@@ -1,8 +1,8 @@
 package Model;
 
-import java.io.IOException;
-
+/**
+ * Observer inferface of the Pattern observer.
+ */
 public interface SlotListener {
-
-    void update(Slot slot) ;
+    void update(Slot slot);
 }
