@@ -1,6 +1,7 @@
 package View;
 
 import Enumerations.Color;
+import Enumerations.Gender;
 import Enumerations.GodName;
 import Network.Client.Client;
 import Network.Message.ErrorMessages.ConnectionFailed;
@@ -32,7 +33,7 @@ public abstract class View {
     public abstract String askServerIpAddress();
 
 
-    public abstract String askWhichWorkerToUse ();
+    public abstract Gender askWhichWorkerToUse ();
 
     public abstract int[] askWhereToPositionWorkers();
 

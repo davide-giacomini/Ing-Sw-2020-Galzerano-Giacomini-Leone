@@ -1,7 +1,12 @@
 package Enumerations;
 
+/**Enumeration for the type of available actions**/
 public enum Action {
-    MOVE, BUILD, BUILDDOME, END, WRONGACTION;
+    MOVE,
+    BUILD,
+    BUILDDOME,
+    END,
+    WRONGACTION;
 
     /**
      * method used to convert strings into enum

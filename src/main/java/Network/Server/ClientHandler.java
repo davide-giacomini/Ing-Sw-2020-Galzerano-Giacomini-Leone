@@ -45,7 +45,7 @@ public class ClientHandler implements Runnable{
     
     public void dispatchMessages() {
         while (isConnected){
-            System.out.println("Started listening");
+            System.out.println("Started listening 1");
             Message message;
             try {
                 message = (Message) inputClient.readObject();
@@ -64,6 +64,7 @@ public class ClientHandler implements Runnable{
             }
             catch (IOException e){
                 e.printStackTrace();
+
             }
         }
     }
@@ -83,7 +84,7 @@ public class ClientHandler implements Runnable{
         
         for (ClientHandler clientHandler: server.getNumberOfPlayers()){
             if (server.getNumberOfPlayers().size()==server.getMaxNumberOfPlayers()){
-                ConnectionFailed connectionFailed = new ConnectionFailed();
+                ConnectionFailed connectionFailed = new ConnectionFailed(MessageType.CONNECTION_FAILED);
                 connectionFailed.setErrorMessage("The game is already started.");
                 outputClient.writeObject(connectionFailed);
                 isConnected=false;
@@ -91,13 +92,13 @@ public class ClientHandler implements Runnable{
                 return;
             }
             else if (clientHandler.getVirtualView().getUsername().equals(username)){
-                ConnectionFailed connectionFailed = new ConnectionFailed();
+                ConnectionFailed connectionFailed = new ConnectionFailed(MessageType.CONNECTION_FAILED);
                 connectionFailed.setErrorMessage("Somebody else has already taken this username.");
                 outputClient.writeObject(connectionFailed);
                 return;
             }
             else if (clientHandler.getVirtualView().getColor().equals(color)){
-                ConnectionFailed connectionFailed = new ConnectionFailed();
+                ConnectionFailed connectionFailed = new ConnectionFailed(MessageType.CONNECTION_FAILED);
                 connectionFailed.setErrorMessage("Somebody else has already taken this color.");
                 outputClient.writeObject(connectionFailed);
                 return;
@@ -109,7 +110,7 @@ public class ClientHandler implements Runnable{
         server.addMessageListener(virtualView);
         // if the player is the first, he will decide the number of players
         if (server.getNumberOfPlayers().size()==0)
-            outputClient.writeObject(new RequestNumberOfPlayers());
+            outputClient.writeObject(new RequestNumberOfPlayers(MessageType.REQUEST_NUMBER_OF_PLAYERS));
             // if the number of players is reached, the game is initialized.
         else if (server.getNumberOfPlayers().size() == server.getMaxNumberOfPlayers()-1) {
             server.addPlayer(this);

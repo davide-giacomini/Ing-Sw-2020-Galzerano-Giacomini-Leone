@@ -4,11 +4,9 @@ import Controller.GameController;
 import Enumerations.*;
 import Network.Client.Client;
 
+import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 public class CLI extends View {
 
@@ -25,6 +23,7 @@ public class CLI extends View {
         ArrayList<Enum> arr = new ArrayList<Enum>();
         arr = c.askAction();
        System.out.println(arr);
+
        /* c.viewDatabase.setNumberOfPlayers(3);
         gods = c.challengerWillChooseThreeGods();
         for (GodName g: gods){
@@ -78,7 +77,7 @@ public class CLI extends View {
 
     }*/
 
-    //costruttore
+    //Constructor
     public CLI(Client client) {
         super(client);
         this.in = new Scanner(System.in);
@@ -116,7 +115,7 @@ public class CLI extends View {
 
         do {
 
-            out.println("\n\n Insert your Username and press " + AnsiCode.ANSI_ENTER_KEY + " : \n");
+            out.println("\n\n Insert your Username and press " + AnsiCode.ANSI_ENTER_KEY + " : ");
 
 
             if (in.hasNextLine()){
@@ -151,7 +150,7 @@ public class CLI extends View {
         out.println(AnsiCode.ANSI_PURPLE + AnsiCode.ANSI_WORKER + " This is purple" + AnsiCode.ANSI_RESET);
 
         do {
-            out.println("Insert the color you prefer : \n ");
+            out.println("Insert the color you prefer :  ");
 
             if (in.hasNextLine()) {
                 color = in.nextLine();
@@ -178,7 +177,7 @@ public class CLI extends View {
 
         do {
 
-            out.println("\n\n Insert address and press " + AnsiCode.ANSI_ENTER_KEY + " : \n");
+            out.println("\n\n Insert address and press " + AnsiCode.ANSI_ENTER_KEY + " : ");
 
 
             if (in.hasNextLine()){
@@ -208,14 +207,17 @@ public class CLI extends View {
 
     }*/
 
-
+    /**
+     * This method asks the user which of the worker he/she wants to use
+     * @return the gender of the worker the user wants to use
+     */
     @Override
-    public String askWhichWorkerToUse() {
+    public Gender askWhichWorkerToUse() {
         String worker = null;
         Gender workerGender = null;
 
         do {
-        out.println("Choose which worker you wanna use? Male or Female? \n ");
+        out.println("Choose which worker you wanna use? Male or Female?  ");
 
         if (in.hasNextLine()){
             worker = in.nextLine();
@@ -229,7 +231,7 @@ public class CLI extends View {
 
         }while (worker== null);
 
-        return worker;
+        return workerGender;
     }
 
 
@@ -240,7 +242,7 @@ public class CLI extends View {
     public int[] askWhereToPositionWorkers() {
         int[] newRowAndColumn = new int[2];
 
-            out.println("Choose where to  Initially position your worker : \n ");
+            out.println("Choose where to  Initially position your worker :  ");
                 out.println("Worker ");
                 out.println("Insert Row and press" + AnsiCode.ANSI_ENTER_KEY + ": \n ");
                 newRowAndColumn[0] = in.nextInt();
@@ -250,6 +252,10 @@ public class CLI extends View {
         return newRowAndColumn;
     }
 
+    /**
+     * This method asks only one of the users ( the challenger) which gods will be used during the game
+     * @return an Arraylist with the names of the 2 or 3 gods that have been chosen
+     */
     @Override
     public ArrayList<GodName> challengerWillChooseThreeGods() {
         ArrayList<GodName> godsChosen = new ArrayList<>();
@@ -283,7 +289,7 @@ public class CLI extends View {
 
 
         do {
-            out.println("Choose which god you want to add in the list : you can choose" + viewDatabase.getNumberOfPlayers() + "\n ");
+            out.println("Choose which god you want to add in the list : you can choose" + viewDatabase.getNumberOfPlayers() );
 
             if (in.hasNextLine()){
                 god = in.nextLine();
@@ -306,6 +312,12 @@ public class CLI extends View {
 
     }
 
+    /**
+     * This method makes the user choose his/her god between the ones already chosen by the challenger
+     * @param godsChosen is the array of the available gods (chosen by the challenger)
+     * @return
+     */
+    @Override
     public GodName chooseYourGod(ArrayList<GodName> godsChosen){
         String god = null;
         GodName godName = null;
@@ -378,10 +390,17 @@ public class CLI extends View {
         return newRowAndColumn;
     }*/
 
+    /**
+     * This method tells the username of the winner
+     * @param usernameWinner is the username of the winner
+     */
     public void theWinnerIs(String usernameWinner ){
         out.println("\n\n THE WINNER IS : "+ usernameWinner);
     }
-
+    /**
+     * This method tells the username of the winner
+     * @param usernameLoser is the username of the winner
+     */
     public void theLoserIs(String usernameLoser ){
         out.println("\n\n" + usernameLoser + " you lost. Your adventure ends here \n ");
     }
@@ -391,7 +410,7 @@ public class CLI extends View {
         return viewDatabase;
     }
     
-    public boolean askIfAtlasWantsToBuildDome(){
+    /*public boolean askIfAtlasWantsToBuildDome(){
         String Dome = null;
         if (viewDatabase.getMyGod()== GodName.ATLAS) {
             out.println("Do you want to build a Dome? Yes/No");
@@ -413,7 +432,8 @@ public class CLI extends View {
             } while (Dome == null);
         }
         return false;
-    }
+    }*/
+
     /**
      * This method resets the color to the default one when called
      * @param o is the out console where I apply the reset
@@ -427,21 +447,38 @@ public class CLI extends View {
         System.out.println(text);
     }
 
+    /**
+     * This method is used to ask the numbers of players of the game
+     * @return int to indicate the number chosen
+     */
     @Override
     public int askNumberOfPlayers() {
         int num = 0;
 
         out.println("How many players do you want in the game? Insert a number between 2 and 3");
-        if (in.hasNextLine())
-           num = in.nextInt();
+        //do {
+            if (in.hasNextLine()) {
+                //try {
+                    num = in.nextInt();
+                //}catch(InputMismatchException e ){
+                   //out.println("Insert a number");
+                  // num = 0;
+                //}
+            }
+
+
+        //}while(num == 0);
 
         return num;
     }
 
-
+    /**
+     * This is the basic method to ask what the user wants to do in its turn.
+     * @return an arraylist which contains as first parameter the enum Action and as second the enum Direction
+     */
     public ArrayList<Enum> askAction(){
-        out.println("Here are the possible actions:  move direction  /  build direction  /  buildDome direction / end / \n");
-        out.println("the available directions are : "+ Arrays.toString(Direction.values())+ "\n");
+        out.println("Here are the possible actions:  move direction  /  build direction  /  buildDome direction / end / ");
+        out.println("The available directions are : "+ Arrays.toString(Direction.values())+ "\n");
 
 
         String line = null;

@@ -1,6 +1,7 @@
 package Network.Client;
 
 import Enumerations.Color;
+import Enumerations.MessageType;
 import Network.Message.ConnectionAccepted;
 import Network.Message.ErrorMessages.ConnectionFailed;
 import Network.Message.RequestNumberOfPlayers;
@@ -8,6 +9,7 @@ import Network.Message.Message;
 import Network.Message.RequestConnection;
 
 import java.awt.*;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -48,7 +50,7 @@ public class NetworkHandler implements Runnable{
         String username = client.getView().askUsername();
         Color color = client.getView().askColorWorkers();
         
-        RequestConnection requestConnection = new RequestConnection();
+        RequestConnection requestConnection = new RequestConnection(MessageType.REQUEST_CONNECTION);
         requestConnection.setColor(color);
         requestConnection.setUsername(username);
         outputServer.writeObject(requestConnection);
@@ -57,7 +59,7 @@ public class NetworkHandler implements Runnable{
     
     public void dispatchMessages() {
         while (isConnected){
-            System.out.println("Started listening");
+            System.out.println("Started listening 2");
             Message message;
             
             try {
@@ -79,6 +81,7 @@ public class NetworkHandler implements Runnable{
             }
             catch (IOException e){
                 e.printStackTrace();
+                isConnected = false;
             }
             catch (ClassNotFoundException e){
                 System.out.println("Error in casting from abstract Message to one of its subclasses.");
@@ -110,7 +113,7 @@ public class NetworkHandler implements Runnable{
         int numberOfPlayers = 0;
         while (numberOfPlayers<2 || numberOfPlayers>3)
             numberOfPlayers = client.getView().askNumberOfPlayers();
-        RequestNumberOfPlayers requestNumberOfPlayers = new RequestNumberOfPlayers();
+        RequestNumberOfPlayers requestNumberOfPlayers = new RequestNumberOfPlayers(MessageType.REQUEST_NUMBER_OF_PLAYERS);
         requestNumberOfPlayers.setNumberOfPlayers(numberOfPlayers);
         outputServer.writeObject(requestNumberOfPlayers);
     }

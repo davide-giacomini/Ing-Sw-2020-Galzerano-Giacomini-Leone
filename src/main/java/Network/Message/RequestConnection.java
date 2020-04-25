@@ -6,11 +6,11 @@ import Enumerations.MessageType;
 public class RequestConnection extends Message {
     private String username;
     private Enumerations.Color color;
-
-    public RequestConnection(){
-        super(MessageType.REQUEST_CONNECTION);
+    
+    public RequestConnection(MessageType messageType) {
+        super(messageType);
     }
-
+    
     public String getUsername(){
         return username;
     }
