@@ -36,7 +36,7 @@ public class AthenaTest {
         otherAthenaWorker.setSlot(board.getSlot(0,0));
         secondPlayer = new Player("Arianna", Color.BLUE);
         thirdPlayer = new Player("Davide", Color.GREEN);
-        game = new Game();
+        game = new Game(3);
         game.addPlayer(athenaPlayer);
         game.addPlayer(secondPlayer);
         game.addPlayer(thirdPlayer);

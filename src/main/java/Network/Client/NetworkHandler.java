@@ -107,12 +107,18 @@ public class NetworkHandler implements Runnable{
         }
     }
 
+    /**
+     * This methods calls the view to ask for the gods that must be used in the game and send a message
+     * to the server with this information.
+     * @throws IOException if there are some IO troubles.
+     */
     private void handleRandomPlayer() throws IOException {
         ArrayList<GodName> gods = client.getView().challengerWillChooseThreeGods();
         ListOfGods message = new ListOfGods(MessageType.LIST_OF_GODS);
         message.setGodsAvailable(gods);
         send(message);
     }
+
 
     private void handleConnectionFailed(ConnectionFailed connectionFailed) throws IOException, ClassNotFoundException {
         if (connectionFailed.getErrorMessage().equals("Somebody else has already taken this username.")
@@ -150,12 +156,21 @@ public class NetworkHandler implements Runnable{
         client.getView().getViewDatabase().setMyColor(color);
     }
 
+    /**
+     * This method sends a message to the server.
+     * @param message the message that has to be sent.
+     * @throws IOException if there are some IO troubles.
+     */
     private void send(Message message) throws IOException {
         outputServer.writeObject(message);
-        /*outputServer.flush();
-        outputServer.reset();*/
     }
 
+    /**
+     * This method calls the view to ask for the god that the player has been chosed and send a message
+     * to the server with this information.
+     * @param message contains the list of available gods.
+     * @throws IOException if there are some IO troubles.
+     */
     public void handleListOfGods(ListOfGods message) throws IOException {
        GodName chosenGod = client.getView().chooseYourGod(message.getGodsAvailable());
        ListOfGods mess = new ListOfGods(MessageType.LIST_OF_GODS);
@@ -163,7 +178,12 @@ public class NetworkHandler implements Runnable{
        send(mess);
     }
 
-    public void handlePublicInformation(PublicInformation message ) throws IOException{
+    /**
+     * This method calls the view to set all the informations about the players into the ViewDatabase and to
+     * print this in the screen.
+     * @param message contains all these informations.
+     */
+    public void handlePublicInformation(PublicInformation message) {
 
         client.getView().getViewDatabase().setUsernames(message.getUsernames());
         client.getView().getViewDatabase().setColors(message.getColors());
@@ -172,22 +192,34 @@ public class NetworkHandler implements Runnable{
         client.getView().showPublicInformation();
     }
 
+    /**
+     * This method calls the view to set the number of players into the viewDatabase.
+     * @param message contains the number of players.
+     */
     public void handleNumberOfPlayers(NumberOfPlayers message) {
         client.getView().getViewDatabase().setNumberOfPlayers(message.getNumberOfPlayers());
     }
 
+    /**
+     * This method calls the view to update a modified slot and to print the updated board into the screen.
+     * @param message contains the modified slot.
+     */
     public void handleUpdatedSlot(UpdatedSlot message){
         client.getView().getViewDatabase().getBoardView().setSlot(message.getUpdatedSlot());
         client.getView().showCurrentBoard();
     }
 
+    /**
+     * This methods calls the view to ask for the initial position of the workers.
+     * @param message doesn't contain anything.
+     * @throws IOException if there are some IO troubles.
+     */
     public void handleSetWorkers(SetWorkers message) throws IOException {
-        int[] rowsAndColumns = new int[4];
+        int[] rowsAndColumns;
         rowsAndColumns = client.getView().askWhereToPositionWorkers();
 
         SetWorkers mess = new SetWorkers(MessageType.SET_WORKERS);
         mess.setRowsAndColumns(rowsAndColumns);
         send(mess);
-
     }
 }

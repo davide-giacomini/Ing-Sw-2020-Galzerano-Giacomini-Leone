@@ -6,6 +6,10 @@ import Enumerations.MessageType;
 
 import java.util.ArrayList;
 
+/**
+ * This message contains all the informations about the players of the game: their usernames, their colors and the gods they had chosen.
+ * It is a S->C message.
+ */
 public class PublicInformation extends Message{
 
     private static final long serialVersionUID = 2261428338933766010L;

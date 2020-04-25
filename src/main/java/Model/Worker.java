@@ -6,7 +6,6 @@ import Enumerations.Gender;
 import Enumerations.Level;
 import Model.Exceptions.*;
 
-import java.awt.*;
 
 public class Worker {
     /**

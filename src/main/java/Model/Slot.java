@@ -14,11 +14,10 @@ import java.io.Serializable;
  * it's got a protected constructor.
  */
 public class Slot extends Observable implements Serializable {
+    private static final long serialVersionUID = -7636829625663848955L;
     private final int column;
     private final int row;
     private transient Worker worker;
-
-
     private Color workerColor;
     private Level level;
     private boolean isOccupied;

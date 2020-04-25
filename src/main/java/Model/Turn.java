@@ -6,10 +6,8 @@ import Model.Exceptions.*;
 import Model.Gods.God;
 
 /**
- * This class implements a default turn, which is shared by Gods as Apollo, Athena,
- * Atlas, Minotaur, Pan and Prometheus, as their effects don't change which are the actions
- * that can be done in a turn as others do.
- *
+ * This class implements all the element of a turn game.
+ * His main method are executeMove and executeBuild which update the model the correspondent action.
  */
 public class Turn {
     private final int MIN_MOVEMENTS;

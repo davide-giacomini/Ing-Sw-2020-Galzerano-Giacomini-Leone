@@ -17,7 +17,7 @@ public class GameTest {
 
     @Before
     public void setUp() {
-        game = new Game();
+        game = new Game(3);
         player = new Player("Ari", Enumerations.Color.RED);
     }
 

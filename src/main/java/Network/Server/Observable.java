@@ -7,6 +7,9 @@ import Network.Message.Message;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Observable interface of pattern observer.
+ */
 public abstract class Observable {
     private ArrayList<ServerListener> messageListeners = new ArrayList<>();
     private ArrayList<SlotListener> slotListeners = new ArrayList<>();
