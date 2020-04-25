@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class Server extends Observable {
     public final static int SOCKET_PORT = 7777;
-    private ArrayList<ClientHandler> players = new ArrayList<>();
+    private ArrayList<ClientHandler> connections = new ArrayList<>();
     private HashMap<String, Color> playerUsernameColorHashMap = new HashMap<>();
     private static Server server;
     private int maxNumberOfPlayers;
@@ -45,7 +45,7 @@ public class Server extends Observable {
     }
     
     public ArrayList<ClientHandler> getNumberOfPlayers(){
-        return players; //TODO rendere safe questa chiamata
+        return connections; //TODO rendere safe questa chiamata
     }
     
     public int getMaxNumberOfPlayers() {
@@ -57,16 +57,20 @@ public class Server extends Observable {
     }
     
     public void addPlayer(ClientHandler clientHandler){
-        players.add(clientHandler);
+        connections.add(clientHandler);
     }
     
     public void addPlayerUsernameColorHashMap(String username, Color color){
         playerUsernameColorHashMap.put(username, color);
     }
     
-    public void initGame(){
-        
-       new GameController(maxNumberOfPlayers, playerUsernameColorHashMap);
+    public void initGame() throws IOException {
+       GameController controller = new GameController(maxNumberOfPlayers, playerUsernameColorHashMap);
+       for (int i=0; i<maxNumberOfPlayers; i++) {
+           connections.get(i).getVirtualView().setController(controller);
+           controller.setView(connections.get(i).getVirtualView());
+       }
+       controller.tellChallenger();
     }
     
 }

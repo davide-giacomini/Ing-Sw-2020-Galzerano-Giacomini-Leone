@@ -1,17 +1,17 @@
 package Network.Client;
 
 import Enumerations.Color;
-import Network.Message.ConnectionAccepted;
+import Enumerations.GodName;
+import Enumerations.MessageType;
+import Network.Message.*;
 import Network.Message.ErrorMessages.ConnectionFailed;
-import Network.Message.RequestNumberOfPlayers;
-import Network.Message.Message;
-import Network.Message.RequestConnection;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class NetworkHandler implements Runnable{
     private final Client client;
@@ -48,7 +48,7 @@ public class NetworkHandler implements Runnable{
         String username = client.getView().askUsername();
         Color color = client.getView().askColorWorkers();
         
-        RequestConnection requestConnection = new RequestConnection();
+        RequestConnection requestConnection = new RequestConnection(MessageType.REQUEST_CONNECTION);
         requestConnection.setColor(color);
         requestConnection.setUsername(username);
         outputServer.writeObject(requestConnection);
@@ -75,6 +75,13 @@ public class NetworkHandler implements Runnable{
                         break;
                     case CONNECTION_ACCEPTED:
                         handleConnectionAccepted((ConnectionAccepted) message);
+                        break;
+                    case RANDOM_PLAYER:
+                        handleRandomPlayer();
+                        break;
+                    case LIST_OF_GODS:
+                        handleListOfGods((ListOfGods) message);
+                        break;
                 }
             }
             catch (IOException e){
@@ -86,7 +93,14 @@ public class NetworkHandler implements Runnable{
             }
         }
     }
-    
+
+    private void handleRandomPlayer() throws IOException {
+        ArrayList<GodName> gods = client.getView().challengerWillChooseThreeGods();
+        ListOfGods message = new ListOfGods(MessageType.LIST_OF_GODS);
+        message.setGodsAvailable(gods);
+        send(message);
+    }
+
     private void handleConnectionFailed(ConnectionFailed connectionFailed) throws IOException, ClassNotFoundException {
         if (connectionFailed.getErrorMessage().equals("Somebody else has already taken this username.")
                 || connectionFailed.getErrorMessage().equals("Somebody else has already taken this color.")){
@@ -110,7 +124,7 @@ public class NetworkHandler implements Runnable{
         int numberOfPlayers = 0;
         while (numberOfPlayers<2 || numberOfPlayers>3)
             numberOfPlayers = client.getView().askNumberOfPlayers();
-        RequestNumberOfPlayers requestNumberOfPlayers = new RequestNumberOfPlayers();
+        RequestNumberOfPlayers requestNumberOfPlayers = new RequestNumberOfPlayers(MessageType.REQUEST_NUMBER_OF_PLAYERS);
         requestNumberOfPlayers.setNumberOfPlayers(numberOfPlayers);
         outputServer.writeObject(requestNumberOfPlayers);
     }
@@ -118,8 +132,23 @@ public class NetworkHandler implements Runnable{
     public void handleConnectionAccepted(ConnectionAccepted message){
         String username = message.getUserName();
         Color color = message.getColor();
+        int numberOfPlayers = message.getNumberOfPlayers();
         
         client.getView().getViewDatabase().setMyUsername(username);
         client.getView().getViewDatabase().setMyColor(color);
+        client.getView().getViewDatabase().setNumberOfPlayers(numberOfPlayers);
+    }
+
+    private void send(Message message) throws IOException {
+        outputServer.writeObject(message);
+        outputServer.flush();
+        outputServer.reset();
+    }
+
+    public void handleListOfGods(ListOfGods message) throws IOException {
+       GodName chosenGod = client.getView().chooseYourGod(message.getGodsAvailable());
+       ListOfGods mess = new ListOfGods(MessageType.LIST_OF_GODS);
+       mess.setChosenGod(chosenGod);
+       send(mess);
     }
 }
