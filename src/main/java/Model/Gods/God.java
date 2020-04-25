@@ -127,7 +127,7 @@ public abstract class God {
                 worker.checkDirection(direction);
                 Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                 // else, check if the worker can move to the destinationSlot
-                if (!destinationSlot.isOccupied()){
+                if (!destinationSlot.getIsOccupied()){
                     // if the player can move up and the destinationSlot hasn't got too many levels, the player can move.
                     if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal()+1)
                         return true;
@@ -161,7 +161,7 @@ public abstract class God {
                 worker.checkDirection(direction);
                 Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                 // else, check if the worker can build on the destinationSlot
-                if (!destinationSlot.isOccupied())  return true;
+                if (!destinationSlot.getIsOccupied())  return true;
             }
             catch (IndexOutOfBoundsException e) {
                 // just let the for continue

@@ -1,5 +1,8 @@
 package Model;
 
+import java.io.IOException;
+
 public interface SlotListener {
-    void update();
+
+    void update(Slot slot) ;
 }

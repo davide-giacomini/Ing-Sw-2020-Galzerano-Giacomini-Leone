@@ -16,12 +16,15 @@ public class ViewDatabase {
     public int myIndex;
     public GodName myGod;
     public int numberOfPlayers ;
-    public Board boadView ;
+    public BoardView boardView ;
 
     public ArrayList<String> usernames = new ArrayList<String>();
     public ArrayList<Color> colors = new ArrayList<Color>();
     public ArrayList <GodName> gods = new ArrayList<GodName>();
 
+    ViewDatabase(){
+        this.boardView = new BoardView();
+    }
 
 
 
@@ -65,12 +68,12 @@ public class ViewDatabase {
         return numberOfPlayers;
     }
 
-    public Board getBoadView() {
-        return boadView;
+    public BoardView getBoardView() {
+        return boardView;
     }
 
-    public void setBoadView(Board boadView) {
-        this.boadView = boadView;
+    public void setBoardView(BoardView boardView) {
+        this.boardView = boardView;
     }
 
     public void setUsernames(ArrayList<String> usernames) {

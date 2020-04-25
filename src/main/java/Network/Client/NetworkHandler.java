@@ -86,6 +86,14 @@ public class NetworkHandler implements Runnable{
                         break;
                     case NUMBER_PLAYERS:
                         handleNumberOfPlayers((NumberOfPlayers) message);
+                        break;
+                    case UPDATE_SLOT:
+                        handleUpdatedSlot((UpdatedSlot) message);
+                        break;
+                    case SET_WORKERS:
+                        handleSetWorkers((SetWorkers) message);
+                        break;
+
                 }
             }
             catch (IOException e){
@@ -144,8 +152,8 @@ public class NetworkHandler implements Runnable{
 
     private void send(Message message) throws IOException {
         outputServer.writeObject(message);
-        outputServer.flush();
-        outputServer.reset();
+        /*outputServer.flush();
+        outputServer.reset();*/
     }
 
     public void handleListOfGods(ListOfGods message) throws IOException {
@@ -166,5 +174,20 @@ public class NetworkHandler implements Runnable{
 
     public void handleNumberOfPlayers(NumberOfPlayers message) {
         client.getView().getViewDatabase().setNumberOfPlayers(message.getNumberOfPlayers());
+    }
+
+    public void handleUpdatedSlot(UpdatedSlot message){
+        client.getView().getViewDatabase().getBoardView().setSlot(message.getUpdatedSlot());
+        client.getView().showCurrentBoard();
+    }
+
+    public void handleSetWorkers(SetWorkers message) throws IOException {
+        int[] rowsAndColumns = new int[4];
+        rowsAndColumns = client.getView().askWhereToPositionWorkers();
+
+        SetWorkers mess = new SetWorkers(MessageType.SET_WORKERS);
+        mess.setRowsAndColumns(rowsAndColumns);
+        send(mess);
+
     }
 }

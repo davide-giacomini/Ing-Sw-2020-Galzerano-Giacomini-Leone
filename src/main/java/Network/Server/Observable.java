@@ -4,6 +4,7 @@ import Model.Slot;
 import Model.SlotListener;
 import Network.Message.Message;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class Observable {
@@ -16,9 +17,9 @@ public abstract class Observable {
         }
     }
     
-    public void notifySlotListeners() {
+    public void notifySlotListeners(Slot slot) {
         for (SlotListener slotListener : slotListeners) {
-            slotListener.update();
+            slotListener.update(slot);
         }
     }
     
@@ -28,5 +29,9 @@ public abstract class Observable {
     
     public void addSlotListener(SlotListener slotListener){
         slotListeners.add(slotListener);
+    }
+
+    public void removeSlotListener(SlotListener slotListener){
+        slotListeners.remove(slotListener);
     }
 }

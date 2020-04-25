@@ -4,6 +4,7 @@ import Controller.GameController;
 import Enumerations.Color;
 import Enumerations.GodName;
 import Enumerations.MessageType;
+import Model.Slot;
 import Model.SlotListener;
 import Network.Message.Message;
 import Network.Message.YouAreTheRandomPlayer;
@@ -42,8 +43,10 @@ public class VirtualView implements ServerListener, SlotListener {
     }
     
     @Override
-    public void update() {
+    public void update(Slot slot)  {
+        clientHandler.manageUpdateSlot(slot);
         //TODO implementare l'update a seconda di cosa serve. Nel caso cambiare la signature di update per passare i parametri che si vogliono.
+
     }
 
     /**
@@ -99,6 +102,16 @@ public class VirtualView implements ServerListener, SlotListener {
      */
     public void sendPublicInformation(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> godNames) throws IOException {
         clientHandler.managePublicInformation(usernames, colors, godNames);
+    }
+
+    public void sendSetWorkers()  {
+        clientHandler.manageSetWorkers();
+    }
+
+    public void receiveSetWorkers(int[] RowsAndColumns) {
+
+            controller.setWorkers(RowsAndColumns);
+
     }
 
 }

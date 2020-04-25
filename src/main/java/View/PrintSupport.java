@@ -21,8 +21,6 @@ public class PrintSupport {
     private static final String WITH_LEV3_PART_SLOT = "|   " + AnsiCode.ANSI_LEVEL3 + "   |";
     private static final String WITH_DOME_PART_SLOT = "|   " + AnsiCode.ANSI_DOME + "   |";
 
-    private String WITH_WORKER_PART_SLOT = "|___" + AnsiCode.ANSI_WORKER + "____|";
-
     private static final String[] EMPTY_PARTS = new String[5];
 
 
@@ -36,6 +34,7 @@ public class PrintSupport {
         EMPTY_PARTS[3]= MIDDLE_FREE_PART_SLOT;
         EMPTY_PARTS[4]= LOWER_FREE_PART_SLOT;
     }
+
     /**This method prints an empty board */
     public void PrintEmptyBoard(PrintStream out){
         for (int i = 0 ; i<5; i++){
@@ -50,7 +49,7 @@ public class PrintSupport {
 
     }
 
-    public String[][][] buildCurrBoard (Board board){
+    public String[][][] buildCurrBoard (BoardView board){
         for (int j = 0 ; j<5; j++){
             for (int k = 0; k<5 ; k++){
                 BOARD_PARTS[j][k] = buildOneByOneSlot(board.getSlot(j, k));
@@ -65,9 +64,9 @@ public class PrintSupport {
         Worker worker = slot.getWorker();
          String[] SLOT_PARTS = new String[5];
 
-        if ( worker != null) {
-            String color = AnsiCode.getAnsiByName(worker.getColor().toString());
-            WITH_WORKER_PART_SLOT = "|___" + color+ AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "____|";
+        if ( slot.getIsOccupied() ) {
+            String color = AnsiCode.getAnsiByName(slot.getWorkerColor().toString());
+            String WITH_WORKER_PART_SLOT = "|___" + color + AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "____|";
 
             switch (level){
                 case 0 :

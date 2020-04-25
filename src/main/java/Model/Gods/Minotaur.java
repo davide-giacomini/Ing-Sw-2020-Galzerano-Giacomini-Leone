@@ -54,7 +54,7 @@ public class Minotaur extends God {
             Worker opponentWorker = opponentSLot.getWorker();
         
             // if the slot next to the opponent worker is free and the destination slot is actually occupied by an opponent worker
-            if (opponentWorker!=null && opponentWorker.getColor()!=worker.getColor() && !slotNearOpponentSlot.isOccupied()) {
+            if (opponentWorker!=null && opponentWorker.getColor()!=worker.getColor() && !slotNearOpponentSlot.getIsOccupied()) {
                 // manually move player's worker in the destination slot
                 opponentWorker.updatePosition(slotNearOpponentSlot);
                 return worker.updatePosition(opponentSLot);
@@ -112,7 +112,7 @@ public class Minotaur extends God {
                 Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                 Slot slotNearOpponentSlot = Board.getBoard().getNearbySlot(direction, destinationSlot);
                 // else, check if the worker can move to the destinationSlot
-                if (!destinationSlot.isOccupied()){
+                if (!destinationSlot.getIsOccupied()){
                     // if the player can move up and the destinationSlot hasn't got too many levels, the player can move.
                     if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal()+1)
                         return true;
@@ -120,7 +120,7 @@ public class Minotaur extends God {
                     else if (player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal())
                         return true;
                 }
-                else if (slotNearOpponentSlot!=null && !slotNearOpponentSlot.isOccupied() && destinationSlot.getWorker()!=null && destinationSlot.getWorker().getColor()!=worker.getColor())
+                else if (slotNearOpponentSlot!=null && !slotNearOpponentSlot.getIsOccupied() && destinationSlot.getWorker()!=null && destinationSlot.getWorker().getColor()!=worker.getColor())
                     return true;
             }
             catch (IndexOutOfBoundsException e){

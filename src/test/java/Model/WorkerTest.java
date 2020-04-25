@@ -57,8 +57,8 @@ public class WorkerTest {
             assertFalse(result);
             assertNull(board.getSlot(3, 3).getWorker());
             assertEquals(workerMale, board.getSlot(4, 2).getWorker());
-            assertFalse(board.getSlot(3, 3).isOccupied());
-            assertTrue(board.getSlot(4, 2).isOccupied());
+            assertFalse(board.getSlot(3, 3).getIsOccupied());
+            assertTrue(board.getSlot(4, 2).getIsOccupied());
 
     }
 

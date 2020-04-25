@@ -4,6 +4,7 @@ import Enumerations.Color;
 import Enumerations.GodName;
 import Enumerations.MessageType;
 import Model.Gods.God;
+import Model.Slot;
 import Network.Message.*;
 import Network.Message.ErrorMessages.ConnectionFailed;
 
@@ -59,6 +60,9 @@ public class ClientHandler implements Runnable{
                     case LIST_OF_GODS:
                         handleListOfGods((ListOfGods) message);
                         break;
+                    case SET_WORKERS:
+                        handleSetWorkers((SetWorkers) message);
+                        break;
                     default:
                         server.notifyMessageListeners(message);
                 }
@@ -111,6 +115,7 @@ public class ClientHandler implements Runnable{
         // the virtual view is added and it is added to the message listeners.
         virtualView = new VirtualView(username, color, this);
         server.addMessageListener(virtualView);
+
         // if the player is the first, he will decide the number of players
         if (server.getNumberOfPlayers().size()==0)
             outputClient.writeObject(new RequestNumberOfPlayers(MessageType.REQUEST_NUMBER_OF_PLAYERS));
@@ -146,8 +151,8 @@ public class ClientHandler implements Runnable{
      */
     private void send(Message message) throws IOException {
         outputClient.writeObject(message);
-        outputClient.flush();
-        outputClient.reset();
+        /*outputClient.flush();
+        outputClient.reset();*/
     }
 
     /**
@@ -193,6 +198,38 @@ public class ClientHandler implements Runnable{
         message.setColors(colors);
         message.setGodNames(godNames);
         send(message);
+    }
+
+    //TODO ask david if clone is usable to send the changed slot
+    void manageUpdateSlot(Slot slot) {
+        try {
+            Slot updatedSlot = new Slot(slot.getRow(), slot.getColumn());
+            updatedSlot.setLevel(slot.getLevel()) ;
+            updatedSlot.setOccupied(slot.getIsOccupied()) ;
+            updatedSlot.setWorkerColor(slot.getWorkerColor());
+            UpdatedSlot message = new UpdatedSlot(MessageType.UPDATE_SLOT);
+            message.setUpdatedSlot(updatedSlot);
+            send(message);
+        }catch( IOException e ) {
+            e.printStackTrace();
+        }
+        //TODO there has been and error message
+
+
+
+    }
+
+    void manageSetWorkers() {
+        try {
+            SetWorkers message = new SetWorkers(MessageType.SET_WORKERS);
+            send(message);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    void handleSetWorkers(SetWorkers message ){
+        virtualView.receiveSetWorkers(message.getRowsAndColumns());
     }
 
 }

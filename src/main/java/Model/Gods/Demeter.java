@@ -110,7 +110,7 @@ public class Demeter extends God {
                     worker.checkDirection(direction);
                     Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                     // else, check if the worker can build on the destinationSlot
-                    if (!destinationSlot.equals(previousSlot) && !destinationSlot.isOccupied())
+                    if (!destinationSlot.equals(previousSlot) && !destinationSlot.getIsOccupied())
                         return true;
                 }
                 catch (IndexOutOfBoundsException e) {

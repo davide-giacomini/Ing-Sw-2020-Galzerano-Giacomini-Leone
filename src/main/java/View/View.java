@@ -54,4 +54,6 @@ public abstract class View {
     public abstract ViewDatabase getViewDatabase();
 
     public abstract void showPublicInformation();
+
+    public abstract void showCurrentBoard();
 }

@@ -15,7 +15,7 @@ public class Game {
     private boolean start;
     private Player randomPlayer;
     private ArrayList<GodName> gods;
-    private static ArrayList<Player> players;
+    private static ArrayList<Player> players ;
 
     public static final Random rand = new Random();
 

@@ -34,7 +34,7 @@ public class Worker {
      */
     public boolean setSlot(Slot slot) {
         this.slot = slot;
-        if (slot!=null && !slot.isOccupied()) {
+        if (slot!=null && !slot.getIsOccupied()) {
             this.slot.setWorker(this);
             return true;
         }
@@ -87,7 +87,7 @@ public class Worker {
         catch (InvalidDirectionException e){
             throw new InvalidMoveException("Invalid direction of the getNearBySlot.");
         }
-        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
+        if (destinationSlot.getIsOccupied()) throw new SlotOccupiedException();
         if (destinationSlot.getLevel().ordinal() - slot.getLevel().ordinal()>1)
             throw new InvalidMoveException("Level unreachable");
         
@@ -113,7 +113,7 @@ public class Worker {
         catch (InvalidDirectionException e){
             throw new InvalidBuildException("Invalid direction for the destination slot");
         }
-        if(destinationSlot.isOccupied()) throw new SlotOccupiedException();
+        if(destinationSlot.getIsOccupied()) throw new SlotOccupiedException();
         Level levelToUpdate;
         levelToUpdate = destinationSlot.getLevel();
         switch (levelToUpdate) {
@@ -131,7 +131,7 @@ public class Worker {
         checkDirection(direction);
 
         Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
-        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
+        if (destinationSlot.getIsOccupied()) throw new SlotOccupiedException();
         destinationSlot.setLevel(Level.DOME);
     }
 

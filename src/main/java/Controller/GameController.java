@@ -6,8 +6,10 @@ import Enumerations.GodName;
 import Model.Game;
 import Model.Gods.*;
 import Model.Player;
+import Model.Slot;
 import Model.Worker;
 import Network.Server.VirtualView;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -118,14 +120,21 @@ public class GameController {
 
     /**
      * This method set a worker into a slot, checking if it's already occupied.
-     * @param numPlayer number of the Player who has chosen the god
-     * @param workerGender gender of the selected worker
-     * @param row row of the selected slot
-     * @param column column of the selected slot
      */
-    public void setWorker(int numPlayer, Gender workerGender, int row, int column) {
-        Worker chosenWorker = Game.getPlayer(numPlayer).getWorker(workerGender);
-        Game.getPlayer(numPlayer).putWorkerOnSlot(chosenWorker, game.getBoard().getSlot(row,column));
+    public void setWorkers( int[] RowsAndColumns) {
+
+        Worker chosenWorkerMale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);
+        Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(RowsAndColumns[0],RowsAndColumns[1]));
+
+        Worker chosenWorkerFemale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
+        Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(RowsAndColumns[2],RowsAndColumns[3]));
+
+        incrementIndex();
+        if(indexOfCurrentPlayer == 0){}
+            //TODO start start the game
+        else{
+            views.get(indexOfCurrentPlayer).sendSetWorkers();
+        }
     }
 
     /**
@@ -154,7 +163,9 @@ public class GameController {
         for (VirtualView view : views) {
             view.sendPublicInformation(usernames, colors, godNames);
         }
-        // view.sendSetWorker
+
+        views.get(indexOfCurrentPlayer).sendSetWorkers();
+
     }
 
     /**
@@ -163,6 +174,13 @@ public class GameController {
      */
     public void setView(VirtualView view) {
         this.views.add(view);
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                game.getBoard().getSlot(i, j).addSlotListener(view);
+            }
+        }
+
     }
 
     /**

@@ -48,13 +48,13 @@ public class SlotTest {
 
     @Test
     public void isOccupied(){
-        assertFalse(slot.isOccupied());
+        assertFalse(slot.getIsOccupied());
         slot.setLevel(Level.DOME);
-        assertTrue(slot.isOccupied());
+        assertTrue(slot.getIsOccupied());
         slot.setLevel(Level.GROUND);
         Worker w = new Worker(Color.BLUE, Gender.MALE);
         slot.setWorker(w);
-        assertTrue(slot.isOccupied());
+        assertTrue(slot.getIsOccupied());
     }
 
     @Test

@@ -26,9 +26,7 @@ public class CLI extends View {
 
        /* c.viewDatabase.setNumberOfPlayers(3);
         gods = c.challengerWillChooseThreeGods();
-        for (GodName g: gods){
-            System.out.println( g) ;
-        }
+
         c.viewDatabase.setMyGod(GodName.ATLAS);*/
 
        // t = c.askIfAtlasWantsToBuildDome();
@@ -241,14 +239,20 @@ public class CLI extends View {
      * @return an array of two int indicating one the row and one the column
      */
     public int[] askWhereToPositionWorkers() {
-        int[] newRowAndColumn = new int[2];
+        int[] newRowAndColumn = new int[4];
 
-            out.println("Choose where to  Initially position your worker :  ");
-                out.println("Worker ");
+                out.println("Choose where to  Initially position your workers :  ");
+                out.println("Worker MALE");
                 out.println("Insert Row and press" + AnsiCode.ANSI_ENTER_KEY + ": \n ");
                 newRowAndColumn[0] = in.nextInt();
                 out.println("Insert Column and press" + AnsiCode.ANSI_ENTER_KEY + ": \n ");
                 newRowAndColumn[1] = in.nextInt();
+                out.println("Worker FEMALE");
+                out.println("Insert Row and press" + AnsiCode.ANSI_ENTER_KEY + ": \n ");
+                newRowAndColumn[2] = in.nextInt();
+                out.println("Insert Column and press" + AnsiCode.ANSI_ENTER_KEY + ": \n ");
+                newRowAndColumn[3] = in.nextInt();
+
 
         return newRowAndColumn;
     }
@@ -333,8 +337,9 @@ public class CLI extends View {
                 god = in.nextLine();
                 godName = GodName.getGodsNameByName(god);
 
-                if(godName == GodName.WRONGGODNAME || !godsChosen.contains(godName)) {
+                if(godName == GodName.WRONGGODNAME || !godsChosen.contains(godName) || god.equals("")) {
                     out.println("God not available or wrong!\n");
+                    god = null;
                 }else{
                     viewDatabase.setMyGod(godName);
                 }
@@ -523,6 +528,10 @@ public class CLI extends View {
         colors = viewDatabase.getColors();
         gods = viewDatabase.getGods();
        printSupport.printUsersAndColorsAndGods(usernames, colors, gods, viewDatabase.getNumberOfPlayers(), out);
+    }
+
+    public void showCurrentBoard(){
+        printSupport.printCurrBoard(printSupport.buildCurrBoard(viewDatabase.getBoardView()), out);
     }
 
 }
