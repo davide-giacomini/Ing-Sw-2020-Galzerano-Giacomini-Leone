@@ -4,6 +4,7 @@ import Enumerations.Color;
 import Enumerations.MessageType;
 
 public class RequestConnection extends Message {
+    private static final long serialVersionUID = -8037367122696029080L;
     private String username;
     private Enumerations.Color color;
     

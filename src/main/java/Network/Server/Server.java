@@ -70,7 +70,7 @@ public class Server extends Observable {
            connections.get(i).getVirtualView().setController(controller);
            controller.setView(connections.get(i).getVirtualView());
        }
-       controller.tellChallenger();
+       controller.startController();
     }
     
 }

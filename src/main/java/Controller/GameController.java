@@ -54,9 +54,16 @@ public class GameController {
         return randomPlayer;
     }
 
-    public void tellChallenger() throws IOException {
+    /**
+     * This method is the first method which is launched by the server.
+     * @throws IOException if there are some IO troubles.
+     */
+    public void startController() throws IOException {
          orderViews();
          int index = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
+        for (VirtualView view : views) {
+            view.sendNumberOfPlayers(numberOfPlayers);
+        }
          views.get(index).sendChallenger();
     }
 
@@ -79,10 +86,6 @@ public class GameController {
      */
     public void setGod(GodName god) throws IOException {
         Game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, Game.getPlayer(indexOfCurrentPlayer)));
-        /*for (int i=0; i<numberOfPlayers; i++) {
-            if (game.getGods().get(i).equals(god))
-                game.getGods().remove(i);
-        } */
         game.getGods().remove(god);
         incrementIndex();
         if (indexOfCurrentPlayer == 0)
@@ -134,21 +137,38 @@ public class GameController {
         orderViews();
     }
 
+    /**
+     * This method creates the order of the round for the whole game and then it sends all the public information
+     * to all the players.
+     */
     public void startGame() {
         newRoundOrder();
+        ArrayList<String> usernames = new ArrayList<>(numberOfPlayers);
+        ArrayList<Color> colors = new ArrayList<>(numberOfPlayers);
+        ArrayList<GodName> godNames = new ArrayList<>(numberOfPlayers);
+        for (Player player : game.getPlayers() ) {
+            usernames.add(player.getUsername());
+            colors.add(player.getColor());
+            godNames.add(player.getGodName());
+        }
+        for (VirtualView view : views) {
+            view.sendPublicInformation(usernames, colors, godNames);
+        }
         // view.sendSetWorker
     }
 
-    public void run() {
-        // setta la divinità e currentPlayer++;
-        // quando currentPlayer == numberOfPlayer fai startGame() che manda il turno di settaggio
-        // ora che è tutto settato inizia il gioco vero
-    }
-
+    /**
+     * Add a view to the ArrayList views.
+     * @param view the view that has to be added.
+     */
     public void setView(VirtualView view) {
         this.views.add(view);
     }
 
+    /**
+     * This method order the ArrayList of Virtual Views the same as the players in the Game class.
+     * This is because the indexOfCurrentPlayer must refers to the player and to the VirtualView at the same time.
+     */
     public void orderViews() {
         VirtualView temp;
         for(int i=0; i<numberOfPlayers; i++) {
@@ -163,6 +183,10 @@ public class GameController {
         }
     }
 
+    /**
+     * This method increments the index of the current player. If it is equal to the number of player,
+     * a new round is starting.
+     */
     private void incrementIndex() {
         if (indexOfCurrentPlayer<numberOfPlayers-1)
             indexOfCurrentPlayer++;

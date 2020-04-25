@@ -1,5 +1,6 @@
 package Model;
 
+import Enumerations.Color;
 import Enumerations.Level;
 import Network.Server.Observable;
 import Network.Server.VirtualView;
@@ -13,6 +14,7 @@ public class Slot extends Observable {
     private final int column;
     private final int row;
     private Worker worker;
+    private Color workerColor;
     private Level level;
     
     /**
@@ -48,6 +50,11 @@ public class Slot extends Observable {
      */
     void setWorker(Worker worker) {
         this.worker = worker;
+        this.workerColor = worker.getColor();
+    }
+
+    public Color getWorkerColor() {
+        return workerColor;
     }
 
     public Level getLevel() {

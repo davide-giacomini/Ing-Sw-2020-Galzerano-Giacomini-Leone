@@ -4,10 +4,10 @@ import Enumerations.Color;
 import Enumerations.MessageType;
 
 public class ConnectionAccepted extends Message{
+    private static final long serialVersionUID = -7614194884802773262L;
     private String userName;
     private Color color;
-    private int numberOfPlayers;
-    
+
     public ConnectionAccepted(MessageType messageType) {
         super(messageType);
     }
@@ -23,16 +23,9 @@ public class ConnectionAccepted extends Message{
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    
+
     public void setColor(Color color) {
         this.color = color;
     }
 
-    public int getNumberOfPlayers() {
-        return numberOfPlayers;
-    }
-
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-    }
 }

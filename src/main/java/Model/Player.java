@@ -3,6 +3,7 @@ package Model;
 import Enumerations.Color;
 import Enumerations.Direction;
 import Enumerations.Gender;
+import Enumerations.GodName;
 import Model.Exceptions.*;
 import Model.Gods.God;
 
@@ -20,17 +21,19 @@ public class Player {
     public final int WORKERS_NUMBER = 2;
     private String username;
     private Worker[] workers;
+    private Color color;
     private boolean isWinning;
     private boolean isLoosing;
     private boolean cannotMoveUp;
     private boolean canBuildDome;
     private God god;
+    private GodName godName;
     private Turn turn;
 
 
     public Player(String username, Color workersColor) {
         this.username = username;
-
+        this.color = workersColor;
         workers = new Worker[WORKERS_NUMBER];
         workers[Worker.MALE] = new Worker(workersColor, Gender.MALE);
         workers[Worker.FEMALE] = new Worker(workersColor, Gender.FEMALE);
@@ -59,7 +62,23 @@ public class Player {
             }
         }
     }
-    
+
+    public GodName getGodName() {
+        return godName;
+    }
+
+    public void setGodName(GodName godName) {
+        this.godName = godName;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public void setWinning(boolean winning) {
         isWinning = winning;
     }
@@ -78,6 +97,7 @@ public class Player {
 
     public void setGod(God god) {
         this.god = god;
+        this.godName = GodName.getGodsNameByName(god.getName());
         this.canBuildDome = god.canAlwaysBuildDome();
     }
 

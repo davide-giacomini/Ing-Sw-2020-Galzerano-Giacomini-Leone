@@ -6,8 +6,6 @@ import Enumerations.MessageType;
 import Network.Message.*;
 import Network.Message.ErrorMessages.ConnectionFailed;
 
-import java.awt.*;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,8 +16,8 @@ public class NetworkHandler implements Runnable{
     private final Client client;
     private Socket serverSocket;
     private boolean firstConnection;
-    ObjectInputStream inputServer;
-    ObjectOutputStream outputServer;
+    private ObjectInputStream inputServer;
+    private ObjectOutputStream outputServer;
     private boolean isConnected;
     
     public NetworkHandler(Client client, Socket serverSocket){
@@ -83,6 +81,8 @@ public class NetworkHandler implements Runnable{
                     case LIST_OF_GODS:
                         handleListOfGods((ListOfGods) message);
                         break;
+                    case NUMBER_PLAYERS:
+                        handleNumberOfPlayers((NumberOfPlayers) message);
                 }
             }
             catch (IOException e){
@@ -134,11 +134,9 @@ public class NetworkHandler implements Runnable{
     public void handleConnectionAccepted(ConnectionAccepted message){
         String username = message.getUserName();
         Color color = message.getColor();
-        int numberOfPlayers = message.getNumberOfPlayers();
-        
+
         client.getView().getViewDatabase().setMyUsername(username);
         client.getView().getViewDatabase().setMyColor(color);
-        client.getView().getViewDatabase().setNumberOfPlayers(numberOfPlayers);
     }
 
     private void send(Message message) throws IOException {
@@ -152,5 +150,9 @@ public class NetworkHandler implements Runnable{
        ListOfGods mess = new ListOfGods(MessageType.LIST_OF_GODS);
        mess.setChosenGod(chosenGod);
        send(mess);
+    }
+
+    public void handleNumberOfPlayers(NumberOfPlayers message) {
+        client.getView().getViewDatabase().setNumberOfPlayers(message.getNumberOfPlayers());
     }
 }

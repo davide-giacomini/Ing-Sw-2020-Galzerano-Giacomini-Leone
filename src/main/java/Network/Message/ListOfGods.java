@@ -6,6 +6,7 @@ import Enumerations.MessageType;
 import java.util.ArrayList;
 
 public class ListOfGods extends Message {
+    private static final long serialVersionUID = 5244974574544564271L;
     private ArrayList<GodName> godsAvailable;
     private GodName chosenGod;
 

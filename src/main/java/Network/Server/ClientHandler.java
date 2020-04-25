@@ -14,9 +14,9 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable{
     private Socket clientSocket;
     private Server server;
-    VirtualView virtualView;
-    ObjectInputStream inputClient;
-    ObjectOutputStream outputClient;
+    private VirtualView virtualView;
+    private ObjectInputStream inputClient;
+    private ObjectOutputStream outputClient;
     private boolean isConnected;
     
     public ClientHandler(Socket clientSocket, Server server){
@@ -121,7 +121,6 @@ public class ClientHandler implements Runnable{
             ConnectionAccepted connectionAccepted = new ConnectionAccepted(MessageType.CONNECTION_ACCEPTED);
             connectionAccepted.setUserName(username);
             connectionAccepted.setColor(color);
-            connectionAccepted.setNumberOfPlayers(server.getMaxNumberOfPlayers());
             outputClient.writeObject(connectionAccepted);
             server.initGame();
             return;
@@ -132,7 +131,6 @@ public class ClientHandler implements Runnable{
         ConnectionAccepted connectionAccepted = new ConnectionAccepted(MessageType.CONNECTION_ACCEPTED);
         connectionAccepted.setUserName(username);
         connectionAccepted.setColor(color);
-        connectionAccepted.setNumberOfPlayers(server.getMaxNumberOfPlayers());
         outputClient.writeObject(connectionAccepted);
     }
     
@@ -152,12 +150,27 @@ public class ClientHandler implements Runnable{
         outputClient.reset();
     }
 
-    public void manageChallenger() throws IOException {
+    /**
+     * This method send a message to the client with the number of players
+     * @param numberOfPlayers parameter that must be sent.
+     * @throws IOException if there are some IO troubles.
+     */
+    void manageNumberOfPlayers(int numberOfPlayers) throws IOException {
+        NumberOfPlayers message = new NumberOfPlayers(MessageType.NUMBER_PLAYERS);
+        message.setNumberOfPlayers(numberOfPlayers);
+        send(message);
+    }
+
+    /**
+     * This method send a message to the client to tell him that he is the Challenger.
+     * @throws IOException if there are some IO troubles.
+     */
+    void manageChallenger() throws IOException {
         YouAreTheRandomPlayer message = new YouAreTheRandomPlayer(MessageType.RANDOM_PLAYER);
         send(message);
     }
 
-    public void handleListOfGods(ListOfGods message) throws IOException {
+    private void handleListOfGods(ListOfGods message) throws IOException {
         ArrayList<GodName> godsAvailable = message.getGodsAvailable();
         GodName chosenGod = message.getChosenGod();
         if (godsAvailable != null) {
@@ -168,11 +181,18 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    public void manageGodsList(ArrayList<GodName> gods) throws IOException {
+    void manageGodsList(ArrayList<GodName> gods) throws IOException {
         ListOfGods message = new ListOfGods(MessageType.LIST_OF_GODS);
         message.setGodsAvailable(gods);
         send(message);
     }
 
+    void managePublicInformation(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> godNames) throws IOException {
+        PublicInformation message = new PublicInformation(MessageType.PUBLIC_INFORMATION);
+        message.setUsernames(usernames);
+        message.setColors(colors);
+        message.setGodNames(godNames);
+        send(message);
+    }
 
 }
