@@ -1,10 +1,13 @@
 package View;
 
+import Enumerations.Color;
+import Enumerations.GodName;
 import Model.Board;
 import Model.Slot;
 import Model.Worker;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 public class PrintSupport {
 
@@ -184,6 +187,12 @@ public class PrintSupport {
     static void clearConsole(PrintStream out) {
         out.print(AnsiCode.ANSI_CLEARCONSOLE);
         out.flush();
+    }
+
+    public void printUsersAndColorsAndGods(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> gods, int numOfPlayers, PrintStream out){
+        for (int i = 0 ; i < numOfPlayers; i++ ){
+            out.println( "Name : " + usernames.get(i)+ "; Color : "+ colors.get(i) + "; God : "+ gods.get(i));
+        }
     }
 
 }

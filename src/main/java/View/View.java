@@ -52,4 +52,6 @@ public abstract class View {
     public abstract ArrayList<Enum> askAction();
     
     public abstract ViewDatabase getViewDatabase();
+
+    public abstract void showPublicInformation();
 }

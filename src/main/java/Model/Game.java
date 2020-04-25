@@ -124,7 +124,7 @@ public class Game {
         for (int i=0; i<numberOfPlayers; i++) {
             Random rnd = new Random();
             int n = rnd.nextInt(players.size());
-            newArray.set(i, players.get(n));
+            newArray.add(players.get(n));
             players.remove(n);
         }
         return newArray;

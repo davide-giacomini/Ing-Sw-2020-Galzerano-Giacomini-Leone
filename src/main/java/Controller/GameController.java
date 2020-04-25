@@ -141,7 +141,7 @@ public class GameController {
      * This method creates the order of the round for the whole game and then it sends all the public information
      * to all the players.
      */
-    public void startGame() {
+    public void startGame() throws IOException {
         newRoundOrder();
         ArrayList<String> usernames = new ArrayList<>(numberOfPlayers);
         ArrayList<Color> colors = new ArrayList<>(numberOfPlayers);

@@ -81,6 +81,9 @@ public class NetworkHandler implements Runnable{
                     case LIST_OF_GODS:
                         handleListOfGods((ListOfGods) message);
                         break;
+                    case PUBLIC_INFORMATION:
+                        handlePublicInformation ((PublicInformation) message);
+                        break;
                     case NUMBER_PLAYERS:
                         handleNumberOfPlayers((NumberOfPlayers) message);
                 }
@@ -150,6 +153,15 @@ public class NetworkHandler implements Runnable{
        ListOfGods mess = new ListOfGods(MessageType.LIST_OF_GODS);
        mess.setChosenGod(chosenGod);
        send(mess);
+    }
+
+    public void handlePublicInformation(PublicInformation message ) throws IOException{
+
+        client.getView().getViewDatabase().setUsernames(message.getUsernames());
+        client.getView().getViewDatabase().setColors(message.getColors());
+        client.getView().getViewDatabase().setGods(message.getGodNames());
+
+        client.getView().showPublicInformation();
     }
 
     public void handleNumberOfPlayers(NumberOfPlayers message) {
