@@ -96,10 +96,9 @@ public class Apollo extends God {
      * it checks the availability of a slot by checking if it's free or if there is an enemy worker on it
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
      * @return true if the worker can move, false otherwise
-     * @throws InvalidDirectionException if there are some I/O troubles.
      */
     @Override
-    protected boolean checkIfCanMove(Worker worker) throws InvalidDirectionException {
+    protected boolean checkIfCanMove(Worker worker) {
         for (Direction direction : Direction.values()) {
             try {
 
@@ -123,9 +122,10 @@ public class Apollo extends God {
             }
             catch (IndexOutOfBoundsException e){
                 // just let the "for" continue
+            } catch (InvalidDirectionException e) {
+                return false;
             }
         }
-
         return false;
     }
 
@@ -134,10 +134,9 @@ public class Apollo extends God {
      * as in this case there is nothing else to control.
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
      * @return true if the worker can build, false otherwise.
-     * @throws InvalidDirectionException if there are some I/O troubles.
      */
     @Override
-    protected boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException {
+    protected boolean checkIfCanBuild(Worker worker) {
         return checkIfCanBuildInNormalConditions(worker);
     }
 
@@ -145,10 +144,9 @@ public class Apollo extends God {
      * This method checks if the worker is paralyzed or not.
      * @param worker the worker chosen to be checked.
      * @return true if the worker can go on, false otherwise.
-     * @throws InvalidDirectionException if there are some I/O troubles.
      */
     @Override
-    public boolean checkIfCanGoOn(Worker worker) throws InvalidDirectionException {
+    public boolean checkIfCanGoOn(Worker worker) {
         int numberOfMovements = player.getTurn().getNumberOfMovements();
         int numberOfBuildings = player.getTurn().getNumberOfBuildings();
 

@@ -23,13 +23,11 @@ public class Turn {
     private boolean alreadySetWorker;
     private boolean canAlwaysBuildDome;
     
-    public Turn(Player player) throws InvalidDirectionException, GodNotSetException {
+    public Turn(Player player) throws InvalidDirectionException {
         this.numberOfMovements = 0;
         this.numberOfBuildings = 0;
         this.player = player;
         player.setTurn(this);
-        if (player.getGod() == null)
-            throw new GodNotSetException();
         player.getGod().resetParameters();
         MIN_MOVEMENTS = player.getGod().getMIN_MOVEMENTS();
         MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();
@@ -40,8 +38,9 @@ public class Turn {
         this.canAlwaysBuildDome = player.getGod().canAlwaysBuildDome();
         this.alreadySetWorker = false;
         deleteWorkersIfParalyzed();
+
     }
-    
+
     /**
      * This function has to be used for now because there isn't the god that let the player change his
      * worker DURING the turn. Hence, it shouldn't be used to set canUseBothWorkers run-time.
@@ -52,15 +51,15 @@ public class Turn {
     public void setCanUseBothWorkers(boolean canUseBothWorkers){
         this.canUseBothWorkers = canUseBothWorkers;
     }
-    
+
     public Gender getWorkerGender () {
         return workerGender;
     }
-    
+
     public int getNumberOfMovements() {
         return numberOfMovements;
     }
-    
+
     public int getNumberOfBuildings() {
         return numberOfBuildings;
     }
@@ -90,7 +89,7 @@ public class Turn {
      */
     public void setWantsToBuildDome(boolean wantsToBuildDome) throws InvalidBuildException {
         if (!canAlwaysBuildDome && wantsToBuildDome)
-            throw new InvalidBuildException("You cannot build multiple times");
+            throw new InvalidBuildException("You cannot build a dome");
         this.wantsToBuildDome = wantsToBuildDome;
     }
 
@@ -103,16 +102,20 @@ public class Turn {
      */
     public void executeMove(Direction direction)
             throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
-        
+
         if (numberOfMovements == MAX_MOVEMENTS) throw new InvalidMoveException("Max number of movements reached");
-        
+
         // player.move returns a boolean, but the method can throw all the exceptions above.
         // Hence, numberOfMovements has to be incremented only after the method.
+        if(!player.getGod().checkIfCanGoOn(player.getWorker(workerGender))) {
+            player.setLoosing(true);
+            return;
+        }
         boolean thirdLevelReached = player.move(direction, player.getWorker(workerGender));
         numberOfMovements++;
         player.setWinning(thirdLevelReached);
     }
-    
+
     /**
      * This method builds a construction on the {@link Slot} adjacent to the {@link Worker}, in the direction chosen.
      * @param direction specifies the slot where to build
@@ -123,20 +126,24 @@ public class Turn {
     public void executeBuild(Direction direction)
             throws IndexOutOfBoundsException, InvalidDirectionException, InvalidBuildException {
         if (numberOfBuildings == MAX_BUILDINGS) throw new InvalidBuildException("Max number of buildings reached");
-        
+
+        if(!player.getGod().checkIfCanGoOn(player.getWorker(workerGender))) {
+            player.setLoosing(true);
+            return;
+        }
         player.build(direction, player.getWorker(workerGender));
         numberOfBuildings++;
     }
-    
+
     /**
      * This method check if both the player's workers are paralyzed in every conditions.
      * In that case, the player loses the game.
      */
-    private void deleteWorkersIfParalyzed() throws InvalidDirectionException {
+    private void deleteWorkersIfParalyzed() {
         Worker maleWorker = player.getWorker(Gender.MALE);
         Worker femaleWorker = player.getWorker(Gender.FEMALE);
         God playerGod = player.getGod();
-        
+
         if (femaleWorker!=null && maleWorker!=null) {
             if (femaleWorker.getSlot() != null && maleWorker.getSlot() != null && !playerGod.checkIfCanGoOn(femaleWorker) && !playerGod.checkIfCanGoOn(maleWorker)
                     || femaleWorker.getSlot() == null && maleWorker.getSlot()!=null && !playerGod.checkIfCanGoOn(maleWorker)
@@ -152,6 +159,14 @@ public class Turn {
             if (maleWorker.getSlot()!=null && !playerGod.checkIfCanGoOn(maleWorker))
                 player.setLoosing(true);
         }
+    }
+
+    /**
+     * This method checks if a player is allowed to end his turn.
+     * @return true if the turn can be ended, false otherwise.
+     */
+    public boolean validateEndTurn() {
+        return player.getGod().validateEndTurn();
     }
 
 }

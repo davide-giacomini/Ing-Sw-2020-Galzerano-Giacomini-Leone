@@ -1,16 +1,143 @@
 package Controller;
 
+import Enumerations.Action;
+import Enumerations.Direction;
+import Enumerations.Gender;
+import Model.Exceptions.GodNotSetException;
+import Model.Exceptions.InvalidBuildException;
+import Model.Exceptions.InvalidDirectionException;
+import Model.Exceptions.InvalidMoveException;
+import Model.Game;
 import Model.Player;
+import Model.Turn;
 import Network.Server.VirtualView;
 
-public class TurnController {
+import java.util.ArrayList;
 
-    private VirtualView virtualView;
+class TurnController {
+
+    private GameController controller;
+    private ArrayList<VirtualView> views;
+    private Game game;
+    private int indexOfCurrentPlayer;
+    private Turn turn;
     private Player player;
+    private Gender workerGender;
 
-    public TurnController(VirtualView virtualView, Player player) {
-        this.virtualView = virtualView;
-        this.player = player;
+    //TODO ma l'eccezione GodNotSet serve? Io la leverei
+    //TODO io catcherei anche l'invalidDirection perchè mi pare inutile
+    TurnController(ArrayList<VirtualView> views, Game game, int indexOfCurrentPlayer, GameController controller) throws InvalidDirectionException {
+        this.views = views;
+        this.game = game;
+        this.indexOfCurrentPlayer = indexOfCurrentPlayer;
+        this.player = Game.getPlayer(indexOfCurrentPlayer);
+        this.turn = new Turn(player);
+        this.controller = controller;
+    }
+
+    void startTurn() throws InvalidDirectionException, GodNotSetException {
+        if (player.isLoosing())
+            removeLosingPlayer();
+        views.get(indexOfCurrentPlayer).sendWhichWorker();
+    }
+
+    void setWorkerGender(int[] position) {
+        int row = position[0];
+        int column = position[1];
+        if (game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
+            //hai selezionato una casella dove non è presente il tuo worker
+            //views.get(indexOfCurrentPlayer).sendError()
+            views.get(indexOfCurrentPlayer).sendWhichWorker();
+        }
+        try {
+            workerGender = game.getBoard().getSlot(row,column).getWorker().getGender();
+            if (!player.getGod().checkIfCanGoOn(player.getWorker(workerGender))) {
+                if (workerGender == Gender.MALE)
+                    workerGender = Gender.FEMALE;
+                if (workerGender == Gender.FEMALE)
+                    workerGender = Gender.MALE;
+                //views.get(indexOfCurrentPlayer).sendAdvice()
+            }
+            turn.setWorkerGender(workerGender);
+        } catch (InvalidMoveException e) {
+            //views.get(indexOfCurrentPlayer).sendError()
+        }
+        views.get(indexOfCurrentPlayer).sendWhichAction();
+    }
+
+    void executeAction(Action action, Direction direction) throws InvalidDirectionException, GodNotSetException {
+        switch (action) {
+            case MOVE:
+                if (player.isLoosing()) {
+                    removeLosingPlayer();
+                    break;
+                }
+                try {
+                    turn.executeMove(direction);
+                } catch (InvalidDirectionException e) {
+                    // views.get(indexOfCurrentPlayer).sendError();
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                } catch (InvalidMoveException e) {
+                    // views.get(indexOfCurrentPlayer).sendError();
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                }
+            case BUILD:
+                if (player.isLoosing()) {
+                    removeLosingPlayer();
+                    break;
+                }
+                try {
+                    turn.executeBuild(direction);
+                } catch (InvalidDirectionException e) {
+                    // views.get(indexOfCurrentPlayer).sendError();
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                } catch (InvalidBuildException e) {
+                    // views.get(indexOfCurrentPlayer).sendError();
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                }
+            case BUILDDOME:
+                if (player.isLoosing()) {
+                    removeLosingPlayer();
+                    break;
+                }
+                try {
+                    turn.setWantsToBuildDome(true);
+                    turn.executeBuild(direction);
+                    } catch (InvalidDirectionException e) {
+                        // views.get(indexOfCurrentPlayer).sendError();
+                        views.get(indexOfCurrentPlayer).sendWhichAction();
+                     } catch (InvalidBuildException e) {
+                        // views.get(indexOfCurrentPlayer).sendError();
+                        views.get(indexOfCurrentPlayer).sendWhichAction();
+                    }
+            case END:
+                if (!turn.validateEndTurn()) {
+                    // views.get(indexOfCurrentPlayer).sendError();
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                }
+                controller.turn();
+        }
+    }
+
+    /**
+     * This method deletes a losing player from the game and notifies all the players.
+     * If the players were just two, it also declares the winner and ends the game.
+     */
+    private void removeLosingPlayer() throws InvalidDirectionException, GodNotSetException {
+        for(VirtualView view : views) {
+            view.sendLosingPlayer(player.getUsername());
+        }
+        views.remove(views.get(indexOfCurrentPlayer));
+        game.getPlayers().remove(Game.getPlayer(indexOfCurrentPlayer));
+        //TODO chiudere tutto il suo processo
+        if (Game.getNumberOfPlayers() == 2) {
+            //views.get(0).sendYouAreTheWinner()
+            //TODO chiudere tutto il gioco
+        }
+        else {
+            Game.setNumberOfPlayers(2);
+            controller.turn();
+        }
     }
 
     // Ad ogni inizio turno il Turn controlla in automatico se uno dei due giocatori non si può più muovere.

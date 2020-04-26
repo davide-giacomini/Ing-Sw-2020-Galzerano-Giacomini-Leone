@@ -3,13 +3,14 @@ package Controller;
 import Enumerations.Color;
 import Enumerations.Gender;
 import Enumerations.GodName;
+import Model.Exceptions.GodNotSetException;
+import Model.Exceptions.InvalidDirectionException;
+import Model.Exceptions.SlotOccupiedException;
 import Model.Game;
 import Model.Gods.*;
 import Model.Player;
-import Model.Slot;
 import Model.Worker;
 import Network.Server.VirtualView;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,28 +18,38 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * This class represents the controller of the game. It creates the instance of the game with all its elements
+ * and contains all the methods used to update the model.
+ */
 public class GameController {
     private int numberOfPlayers;
     private static Game game;
     private ArrayList<VirtualView> views;
     private int indexOfCurrentPlayer;
+    TurnController turn;
 
     /**
      * This is the constructor of the GameController which creates the game and set the random player who will
      * choose the gods that can be used in this game.
      * @param numberOfPlayers the number of player of the game which is chosen by the first player who connect.
-     * @param map usernames and colors of each player.
+     * @param mapUserColor usernames and colors of each player.
      */
-    public GameController(int numberOfPlayers, HashMap<String,Color> map){
+    public GameController(int numberOfPlayers, HashMap<String,Color> mapUserColor, HashMap<String, VirtualView> mapUserVirtualView){
         this.numberOfPlayers = numberOfPlayers;
         this.views = new ArrayList<>(numberOfPlayers);
         game = new Game(numberOfPlayers);
-        for(Map.Entry<String,Color> entry : map.entrySet()) {
+        for(Map.Entry<String,Color> entry : mapUserColor.entrySet()) {
             String username = entry.getKey();
             Color color = entry.getValue();
             game.addPlayer(new Player(username, color));
+
+            VirtualView virtualView = mapUserVirtualView.get(username);
+            setView(virtualView);
+            virtualView.setController(this);
         }
         game.setRandomPlayer(chooseRandomPlayer());
+        startController();
     }
 
     /**
@@ -58,9 +69,8 @@ public class GameController {
 
     /**
      * This method is the first method which is launched by the server.
-     * @throws IOException if there are some IO troubles.
      */
-    public void startController() throws IOException {
+    public void startController() {
          orderViews();
          int index = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
         for (VirtualView view : views) {
@@ -121,19 +131,36 @@ public class GameController {
     /**
      * This method set a worker into a slot, checking if it's already occupied.
      */
-    public void setWorkers( int[] RowsAndColumns) {
-
-        Worker chosenWorkerMale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);
-        Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(RowsAndColumns[0],RowsAndColumns[1]));
-
-        Worker chosenWorkerFemale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
-        Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(RowsAndColumns[2],RowsAndColumns[3]));
-
-        incrementIndex();
-        if(indexOfCurrentPlayer == 0){}
-            //TODO start start the game
-        else{
-            views.get(indexOfCurrentPlayer).sendSetWorkers();
+    public void setWorkers( int[] RowsAndColumns) throws InvalidDirectionException, GodNotSetException {
+        try {
+            int row1 = RowsAndColumns[0];
+            int column1 = RowsAndColumns[1];
+            int row2 = RowsAndColumns[2];
+            int column2 = RowsAndColumns[3];
+            if (row1 > 4 || row2 > 4 || column1 > 4 || column2 > 4)
+                throw new IndexOutOfBoundsException();
+            boolean result;
+            Worker chosenWorkerMale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);
+            result = Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
+            if (!result) {
+                throw new SlotOccupiedException();
+            }
+            Worker chosenWorkerFemale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
+            result = Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
+            if (!result) {
+                throw new SlotOccupiedException();
+            }
+            incrementIndex();
+            if(indexOfCurrentPlayer == 0) {
+                firstTurn();
+            }
+            else {
+                views.get(indexOfCurrentPlayer).sendSetWorkers();
+            }
+        }catch (IndexOutOfBoundsException e) {
+            // views.get(indexOfCurrentPlayer).sendError()
+        }catch (SlotOccupiedException e) {
+            // views.get(indexOfCurrentPlayer).sendError()
         }
     }
 
@@ -172,7 +199,7 @@ public class GameController {
      * Add a view to the ArrayList views.
      * @param view the view that has to be added.
      */
-    public void setView(VirtualView view) {
+    private void setView(VirtualView view) {
         this.views.add(view);
 
         for (int i = 0; i < 5; i++) {
@@ -201,6 +228,17 @@ public class GameController {
         }
     }
 
+    public void firstTurn() throws InvalidDirectionException, GodNotSetException {
+        turn = new TurnController(views, game, indexOfCurrentPlayer, this);
+        turn.startTurn();
+    }
+
+    public void turn() throws InvalidDirectionException, GodNotSetException {
+        incrementIndex();
+        turn = new TurnController(views, game, indexOfCurrentPlayer, this);
+        turn.startTurn();
+    }
+
     /**
      * This method increments the index of the current player. If it is equal to the number of player,
      * a new round is starting.
@@ -212,17 +250,4 @@ public class GameController {
             indexOfCurrentPlayer=0;
     }
 
-    // Start the game calling setStart of Game.
-    // When the game is started, a random player is chosen as the beginner player.
-    // La scelta del giocatore è inoltrata alla view, che mostrerà a tutti i giocatori quale
-    // giocatore è stato scelto come Challenger.
-    // Nel frattempo, GameController aggiornerà il proprio Challenger e chiamerà il metodo chooseGods(), metodo che servirà per
-    // scegliere tre dei tra quelli disponibili.
-    // chooseGods() chiamerà il metodo della view che chiede al challenger di scegliere gli dei. Una volta scelti gli dei,
-    // viene notificato al GameController che gli dei sono stati scelti e quindi GameController provvederà a
-    // chiamare il metodo che si fa il giro dei giocatori e gli chiede quale dio vogliono tra quei tre.
-    // Il metodo in questione chiamerà una chooseGod(Player player) della view e
-    // La VirtualView implementerà MessageListener e non appena gli dei saranno scelti, notificherà il GameController.
-    // Il GameController viene notificato e inserisce gli dei corrispondenti nei giocatori.
-    // A questo punto GameController chiede al Challenger, tramite VirtualView, di scegliere il giocatore iniziale.
 }

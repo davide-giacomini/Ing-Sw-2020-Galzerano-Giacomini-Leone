@@ -3,7 +3,8 @@ package Network.Server;
 import Enumerations.Color;
 import Enumerations.GodName;
 import Enumerations.MessageType;
-import Model.Gods.God;
+import Model.Exceptions.GodNotSetException;
+import Model.Exceptions.InvalidDirectionException;
 import Model.Slot;
 import Network.Message.*;
 import Network.Message.ErrorMessages.ConnectionFailed;
@@ -253,7 +254,7 @@ public class ClientHandler implements Runnable{
      * into these posiions and update the model.
      * @param message contains the coordinates.
      */
-    void handleSetWorkers(SetWorkers message){
+    void handleSetWorkers(SetWorkers message) throws InvalidDirectionException, GodNotSetException {
         virtualView.receiveSetWorkers(message.getRowsAndColumns());
     }
 

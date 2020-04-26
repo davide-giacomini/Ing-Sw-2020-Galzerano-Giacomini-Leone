@@ -118,9 +118,8 @@ public abstract class God {
      *
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
      * @return true if it's possible to move in normal conditions, false otherwise.
-     * @throws InvalidDirectionException if the default case in the choice of the direction is reached.
      */
-    protected boolean checkIfCanMoveInNormalConditions(Worker worker) throws InvalidDirectionException{
+    protected boolean checkIfCanMoveInNormalConditions(Worker worker) {
         for (Direction direction : Direction.values()) {
             try {
                 // If the direction is out of the board, jump to the catch
@@ -135,15 +134,15 @@ public abstract class God {
                     else if (player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal())
                         return true;
                 }
-            }
-            catch (IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e){
                 // just let the for continue
+            } catch (InvalidDirectionException e){
+                return false;
             }
         }
-        
         return false;
     }
-    
+
     /**
      * See {@link #checkIfCanGoOn(Worker)}
      *
@@ -152,9 +151,8 @@ public abstract class God {
      *
      * @return true if it's possible to build in normal conditions, false otherwise.
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @throws InvalidDirectionException if the default case in the choice of the direction is reached.
      */
-    protected boolean checkIfCanBuildInNormalConditions(Worker worker) throws InvalidDirectionException {
+    protected boolean checkIfCanBuildInNormalConditions(Worker worker) {
         for (Direction direction: Direction.values()){
             try {
                 // If the direction is out of the board, jump to the catch
@@ -162,24 +160,23 @@ public abstract class God {
                 Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
                 // else, check if the worker can build on the destinationSlot
                 if (!destinationSlot.getIsOccupied())  return true;
-            }
-            catch (IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 // just let the for continue
+            } catch (InvalidDirectionException e) {
+                return false;
             }
         }
-        
         return false;
     }
-    
+
     /**
      * This method checks, using {@link #checkIfCanBuild(Worker)}, {@link #checkIfCanMove(Worker)},
      * {@link #checkIfCanBuildInNormalConditions(Worker)} and {@link #checkIfCanMoveInNormalConditions(Worker)}, can
      * understand if the worker chosen can go on or they are eliminated.
      * @param worker the worker chosen to be checked.
      * @return true if the worker can go on, false otherwise.
-     * @throws InvalidDirectionException if the default case in the choice of the direction is reached.
      */
-    public abstract boolean checkIfCanGoOn (Worker worker) throws InvalidDirectionException;
+    public abstract boolean checkIfCanGoOn (Worker worker);
     
     /**
      * This method control if the player can end his turn. If the player is winning, it returns true.

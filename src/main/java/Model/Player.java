@@ -101,7 +101,7 @@ public class Player {
         this.canBuildDome = god.canAlwaysBuildDome();
     }
 
-    public boolean CanBuildDome() {
+    public boolean canBuildDome() {
         return canBuildDome;
     }
 
@@ -150,6 +150,7 @@ public class Player {
      * Put the worker on a slot of the board.
      * @param worker player's worker
      * @param slot slot chosen to put on the worker
+     * @return false if the slot was already occupied, true otherwise
      */
     public boolean putWorkerOnSlot(Worker worker, Slot slot) {
         return worker.setSlot(slot);

@@ -4,6 +4,8 @@ import Controller.GameController;
 import Enumerations.Color;
 import Enumerations.GodName;
 import Enumerations.MessageType;
+import Model.Exceptions.GodNotSetException;
+import Model.Exceptions.InvalidDirectionException;
 import Model.Slot;
 import Model.SlotListener;
 import Network.Message.Message;
@@ -55,7 +57,6 @@ public class VirtualView implements ServerListener, SlotListener {
     /**
      * This method go to the clientHandler to send the needed message.
      * @param numberOfPlayers the parameter that must be sent to the client.
-     * @throws IOException if there are some IO troubles.
      */
     public void sendNumberOfPlayers(int numberOfPlayers) throws IOException {
         clientHandler.manageNumberOfPlayers(numberOfPlayers);
@@ -63,7 +64,6 @@ public class VirtualView implements ServerListener, SlotListener {
 
     /**
      * This method go to the clientHandler to send if he is the Challenger or not.
-     * @throws IOException if there are some IO troubles.
      */
     public void sendChallenger() throws IOException {
         clientHandler.manageChallenger();
@@ -118,8 +118,20 @@ public class VirtualView implements ServerListener, SlotListener {
      * This method receive a list of coordinates (row1,column1,row2,column2) and calls the controller.
      * @param RowsAndColumns the list of coordinates.
      */
-    public void receiveSetWorkers(int[] RowsAndColumns) {
+    public void receiveSetWorkers(int[] RowsAndColumns) throws InvalidDirectionException, GodNotSetException {
             controller.setWorkers(RowsAndColumns);
+    }
+
+    public void sendLosingPlayer(String username) {
+        //clientHandler.manageSendLosingPlayer(username)
+    }
+
+    public void sendWhichWorker() {
+        //clientHandler.manageSendWhichWorker()
+    }
+
+    public void sendWhichAction() {
+        //clientHandler.manageSendWhichAction()
     }
 
 }
