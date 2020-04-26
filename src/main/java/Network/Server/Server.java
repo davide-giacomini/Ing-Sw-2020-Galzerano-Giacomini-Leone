@@ -3,14 +3,12 @@ package Network.Server;
 
 import Controller.GameController;
 import Enumerations.Color;
-import Network.Client.Client;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -22,11 +20,12 @@ public class Server extends Observable {
      */
     public final static int SOCKET_PORT = 7777;
     private ArrayList<ClientHandler> connections = new ArrayList<>();
-    private HashMap<String, Color> playerUsernameColorHashMap = new HashMap<>();
-    private HashMap<String, VirtualView> playerUsernameVirtualViewHashMap = new HashMap<>();  //TODO da riempire in client handler
+    private HashMap<String, Color> mapUsernameColor = new HashMap<>();
+    private HashMap<String, VirtualView> mapUsernameVirtualView = new HashMap<>();
     private static Server server;
     private int maxNumberOfPlayers;
-    public ReentrantLock firstConnectionLock;
+    private ReentrantLock firstConnectionLock;
+    private boolean numberOfPlayersRequestSent = false;
     
     /**
      * This method creates a connection to be caught by clients. As the server catches a connection, it
@@ -77,18 +76,30 @@ public class Server extends Observable {
     }
     
     public void addPlayerUsernameColorHashMap(String username, Color color){
-        playerUsernameColorHashMap.put(username, color);
+        mapUsernameColor.put(username, color);
     }
     
     public void addPlayerUsernameVirtualViewHashMap(String username, VirtualView virtualView){
-        playerUsernameVirtualViewHashMap.put(username, virtualView);
+        mapUsernameVirtualView.put(username, virtualView);
+    }
+    
+    public ReentrantLock getFirstConnectionLock() {
+        return firstConnectionLock;
+    }
+    
+    public void setNumberOfPlayersRequestSent(boolean numberOfPlayersRequestSent) {
+        this.numberOfPlayersRequestSent = numberOfPlayersRequestSent;
+    }
+    
+    public boolean isNumberOfPlayersRequestSent() {
+        return numberOfPlayersRequestSent;
     }
     
     /**
      * This methods makes the game start, instantiating the controller and setting it into the virtualView.
      */
     public void initGame() {
-        new GameController(maxNumberOfPlayers, playerUsernameColorHashMap, playerUsernameVirtualViewHashMap);
+        new GameController(maxNumberOfPlayers, mapUsernameColor, mapUsernameVirtualView);
     }
     
 }

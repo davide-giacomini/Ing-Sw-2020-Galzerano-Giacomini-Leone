@@ -77,7 +77,7 @@ public class GameController {
      * Update the model with the gods that will be used in the game.
      * @param gods list of chosen gods.
      */
-    public void setGods(ArrayList<GodName> gods) throws IOException {
+    public void setGods(ArrayList<GodName> gods) {
         game.setGods(gods);
         game.putRandomAtLastPosition();
         orderViews();
