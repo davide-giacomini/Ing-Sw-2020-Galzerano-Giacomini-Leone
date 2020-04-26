@@ -4,6 +4,7 @@ import Enumerations.Color;
 import Enumerations.MessageType;
 import Network.Message.*;
 import Network.Message.ErrorMessages.ConnectionFailed;
+import View.AnsiCode;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -22,6 +22,8 @@ public abstract class View {
 
     public void startConnection(){}
 
+    public abstract void printSantorini();
+
     public abstract String askUsername();
 
     public abstract Color askColorWorkers();
@@ -33,7 +35,7 @@ public abstract class View {
     public abstract String askServerIpAddress();
 
 
-    public abstract Gender askWhichWorkerToUse ();
+    public abstract int[] askWhichWorkerToUse ();
 
     public abstract int[] askWhereToPositionWorkers();
 

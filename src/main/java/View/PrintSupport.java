@@ -27,6 +27,7 @@ public class PrintSupport {
     private String[][][] BOARD_PARTS = new String[5][5][5];
 
 
+
     public PrintSupport() {
         EMPTY_PARTS[0]= UPPER_PART_SLOT;
         EMPTY_PARTS[1]= MIDDLE_FREE_PART_SLOT;
@@ -49,6 +50,11 @@ public class PrintSupport {
 
     }
 
+    /**
+     * This method is used to build the entire Board graphically
+     * @param board is the current board received from the ViewDatabase
+     * @return the graphic representation of the entire board
+     */
     public String[][][] buildCurrBoard (BoardView board){
         for (int j = 0 ; j<5; j++){
             for (int k = 0; k<5 ; k++){
@@ -58,7 +64,11 @@ public class PrintSupport {
         return BOARD_PARTS;
     }
 
-
+    /**
+     * This method is used to create graphically the slot
+     * @param slot is the slot received by the BoardView
+     * @return String[] that graphically represents the slot
+     */
     public String[] buildOneByOneSlot(Slot slot){
         int level = slot.getLevel().ordinal();
         Worker worker = slot.getWorker();
@@ -159,10 +169,14 @@ public class PrintSupport {
         }
     }
 
-
+    /**
+     * This method prints the board created graphically by buildCurrBoard method
+     * @param finishedBoard is the graphical representation of the board
+     * @param out is the Stream where to print it
+     */
     public void printCurrBoard (String[][][] finishedBoard, PrintStream out){
-        int count = 0;
-        out.println("    0         1         2         3         4");
+        int count = 1;
+        out.println("    1         2         3         4         5");
         for (int i = 0 ; i<5; i++){
             for (int j = 0 ; j<5; j++){
                 for (int k = 0; k<5 ; k++){
@@ -171,7 +185,7 @@ public class PrintSupport {
 
                     if (j == 2 && k==4) {
                         out.print(" "+count);
-                        count++;
+                    count ++;
                     }
                 }
                 out.print("\n");
@@ -188,6 +202,14 @@ public class PrintSupport {
         out.flush();
     }
 
+    /**
+     * This method prints information
+     * @param usernames list of usernames in the game
+     * @param colors list of colors in the game
+     * @param gods list of gods in the game
+     * @param numOfPlayers in the game
+     * @param out Stream where to print
+     */
     public void printUsersAndColorsAndGods(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> gods, int numOfPlayers, PrintStream out){
         for (int i = 0 ; i < numOfPlayers; i++ ){
             out.println( "Name : " + usernames.get(i)+ "; Color : "+ colors.get(i) + "; God : "+ gods.get(i));
