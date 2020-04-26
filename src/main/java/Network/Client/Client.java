@@ -1,6 +1,6 @@
 package Network.Client;
 
-import Network.Server.Server;
+import Network.Server.*;
 import View.View;
 import View.CLI;
 
@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * This class instantiates a thread for each client and handles the choice of the graphical interface and the
+ * {@link Server} the user wants to connect to.
+ */
 public class Client implements Runnable {
     private View view;
     
@@ -16,6 +20,11 @@ public class Client implements Runnable {
         client.run();
     }
     
+    /**
+     * This method asks the user what graphical interface they desire and which {@link Server} they want to connect to.
+     * If everything goes well, a new thread is instantiated: the {@link NetworkHandler}. It will handle the
+     * connection with the server.
+     */
     @Override
     public void run() {
         //initial request of choice between GUI or CLI
@@ -35,10 +44,10 @@ public class Client implements Runnable {
         try {
             serverSocket = new Socket(serverIpAddress, Server.SOCKET_PORT);
         } catch (IOException e) {
-            System.out.println("server unreachable");
+            System.out.println("Server unreachable.");
             return;
         }
-        System.out.println("Connected");
+        System.out.println("Connected to the address " + serverSocket.getInetAddress());
     
         NetworkHandler networkHandler = new NetworkHandler(this, serverSocket);
         Thread thread = new Thread(networkHandler);

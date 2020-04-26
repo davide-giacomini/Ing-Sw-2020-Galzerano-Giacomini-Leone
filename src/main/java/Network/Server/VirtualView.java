@@ -9,7 +9,6 @@ import Model.Exceptions.InvalidDirectionException;
 import Model.Slot;
 import Model.SlotListener;
 import Network.Message.Message;
-import Network.Message.YouAreTheRandomPlayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class VirtualView implements ServerListener, SlotListener {
     
     @Override
     public void update(Slot slot) {
-        clientHandler.manageUpdateSlot(slot);
+        clientHandler.sendUpdateSlot(slot);
         //TODO implementare l'update a seconda di cosa serve. Nel caso cambiare la signature di update per passare i parametri che si vogliono.
     }
 
@@ -58,33 +57,31 @@ public class VirtualView implements ServerListener, SlotListener {
      * This method go to the clientHandler to send the needed message.
      * @param numberOfPlayers the parameter that must be sent to the client.
      */
-    public void sendNumberOfPlayers(int numberOfPlayers) throws IOException {
-        clientHandler.manageNumberOfPlayers(numberOfPlayers);
+    public void sendNumberOfPlayers(int numberOfPlayers) {
+        clientHandler.sendNumberOfPlayers(numberOfPlayers);
     }
 
     /**
      * This method go to the clientHandler to send if he is the Challenger or not.
      */
-    public void sendChallenger() throws IOException {
-        clientHandler.manageChallenger();
+    public void sendChallenger() {
+        clientHandler.sendYouAreTheChallenger();
     }
 
     /**
      * This method receive the list of god that can be used in the game and calls the controller.
      * @param gods list of gods.
-     * @throws IOException if there are some IO troubles.
      */
-    public void receiveListOfGods(ArrayList<GodName> gods) throws IOException {
+    public void receiveListOfGods(ArrayList<GodName> gods) {
         controller.setGods(gods);
     }
 
     /**
      * This method calls the clientHandler to send the list of available gods.
      * @param gods list of gods.
-     * @throws IOException if there are some IO troubles.
      */
-    public void sendGodsList(ArrayList<GodName> gods) throws IOException {
-        clientHandler.manageGodsList(gods);
+    public void sendGodsList(ArrayList<GodName> gods) {
+        clientHandler.sendGodsList(gods);
     }
 
     /**
@@ -101,17 +98,16 @@ public class VirtualView implements ServerListener, SlotListener {
      * @param usernames list of usernames
      * @param colors list of colors
      * @param godNames list of gods
-     * @throws IOException if there are some IO troubles.
      */
-    public void sendPublicInformation(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> godNames) throws IOException {
-        clientHandler.managePublicInformation(usernames, colors, godNames);
+    public void sendPublicInformation(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> godNames) {
+        clientHandler.sendPublicInformation(usernames, colors, godNames);
     }
 
     /**
      * This method send the request of the initial position of the workers.
      */
     public void sendSetWorkers()  {
-        clientHandler.manageSetWorkers();
+        clientHandler.sendAskWorkersPosition();
     }
 
     /**

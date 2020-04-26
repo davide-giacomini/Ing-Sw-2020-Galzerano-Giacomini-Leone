@@ -3,14 +3,13 @@ package Controller;
 import Enumerations.Color;
 import Enumerations.Gender;
 import Enumerations.GodName;
-import Model.Exceptions.GodNotSetException;
-import Model.Exceptions.InvalidDirectionException;
-import Model.Exceptions.SlotOccupiedException;
 import Model.Game;
 import Model.Gods.*;
 import Model.Player;
+import Model.Slot;
 import Model.Worker;
 import Network.Server.VirtualView;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ public class GameController {
     private static Game game;
     private ArrayList<VirtualView> views;
     private int indexOfCurrentPlayer;
-    TurnController turn;
 
     /**
      * This is the constructor of the GameController which creates the game and set the random player who will
@@ -83,7 +81,7 @@ public class GameController {
      * Update the model with the gods that will be used in the game.
      * @param gods list of chosen gods.
      */
-    public void setGods(ArrayList<GodName> gods) throws IOException {
+    public void setGods(ArrayList<GodName> gods) {
         game.setGods(gods);
         game.putRandomAtLastPosition();
         orderViews();
