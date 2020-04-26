@@ -55,17 +55,15 @@ public class VirtualView implements ServerListener, SlotListener {
     /**
      * This method go to the clientHandler to send the needed message.
      * @param numberOfPlayers the parameter that must be sent to the client.
-     * @throws IOException if there are some IO troubles.
      */
-    public void sendNumberOfPlayers(int numberOfPlayers) throws IOException {
+    public void sendNumberOfPlayers(int numberOfPlayers) {
         clientHandler.manageNumberOfPlayers(numberOfPlayers);
     }
 
     /**
      * This method go to the clientHandler to send if he is the Challenger or not.
-     * @throws IOException if there are some IO troubles.
      */
-    public void sendChallenger() throws IOException {
+    public void sendChallenger() {
         clientHandler.manageChallenger();
     }
 

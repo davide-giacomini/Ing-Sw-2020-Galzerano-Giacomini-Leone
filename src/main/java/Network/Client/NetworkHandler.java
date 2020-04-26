@@ -12,6 +12,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * This class handles the transfer of messages between the client and the server.
+ */
 public class NetworkHandler implements Runnable{
     private final Client client;
     private Socket serverSocket;
@@ -20,14 +23,24 @@ public class NetworkHandler implements Runnable{
     private ObjectOutputStream outputServer;
     private boolean isConnected;
     
+    /**
+     * This constructor set up the management between the {@link Client} and the {@link Network.Server.Server}.
+     *
+     * @param client the {@link Client} to be handled.
+     * @param serverSocket the socket of the {@link Network.Server.Server} the user wants to connect to.
+     */
     public NetworkHandler(Client client, Socket serverSocket){
         this.client = client;
-        firstConnection = true;
         this.serverSocket = serverSocket;
+        firstConnection = true;
         isConnected = true;
     }
     
-    
+    /**
+     * This method instantiates the {@link ObjectInputStream} and the {@link ObjectOutputStream} with
+     * {@link java.io.InputStream} and {@link java.io.OutputStream} of the server's socket in order to
+     * handle serialization.
+     */
     @Override
     public void run() {
         try {
@@ -39,10 +52,16 @@ public class NetworkHandler implements Runnable{
             dispatchMessages();
         }
         catch (IOException e){
-            System.out.println("Connection dropped.");
+            System.out.println("Connection failed.");
         }
     }
     
+    /**
+     * This method handles the first connection with the server, asking to the user to choose their username and
+     * the color they prefer for their workers.
+     *
+     * @throws IOException if there are troubles in sending the message to the server.
+     */
     public void handleFirstConnection() throws IOException {
         String username = client.getView().askUsername();
         Color color = client.getView().askColorWorkers();
@@ -54,11 +73,14 @@ public class NetworkHandler implements Runnable{
         firstConnection = false;
     }
     
+    /**
+     * This method dispatches the messages coming from the the server and calls other methods useful to handle them.
+     */
     public void dispatchMessages() {
+        System.out.println("Started listening to the server.");
+        
         while (isConnected){
-            System.out.println("Started listening 2");
             Message message;
-            
             try {
                 message = (Message) inputServer.readObject();
                 switch (message.getMessageType()){
@@ -102,7 +124,14 @@ public class NetworkHandler implements Runnable{
             }
             catch (ClassNotFoundException e){
                 System.out.println("Error in casting from abstract Message to one of its subclasses.");
-                e.printStackTrace();
+                if (e.getMessage().toUpperCase().equals("CONNECTION RESET")) {
+                    isConnected = false;
+                    System.out.println("Client " + serverSocket.getInetAddress() + " disconnected.");
+                    //TODO pulire (se serve)
+                }
+                else {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -116,19 +145,19 @@ public class NetworkHandler implements Runnable{
         ArrayList<GodName> gods = client.getView().challengerWillChooseThreeGods();
         ListOfGods message = new ListOfGods(MessageType.LIST_OF_GODS);
         message.setGodsAvailable(gods);
-        send(message);
+        //send(message);
+        outputServer.writeObject(message);
     }
 
 
     private void handleConnectionFailed(ConnectionFailed connectionFailed) throws IOException, ClassNotFoundException {
-        if (connectionFailed.getErrorMessage().equals("Somebody else has already taken this username.")
-                || connectionFailed.getErrorMessage().equals("Somebody else has already taken this color.")){
+        if (connectionFailed.getErrorMessage().equals("Somebody else has already taken this username.")         //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
+                || connectionFailed.getErrorMessage().equals("Somebody else has already taken this color.")){   //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
             client.getView().print(connectionFailed.getErrorMessage());
             handleFirstConnection();
         }
-        else if (connectionFailed.getErrorMessage().equals("The game is already started.")){
+        else if (connectionFailed.getErrorMessage().equals("The game is already started. Try later.")){         //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
             try {
-                System.out.println("Debugging = the game is already started");
                 isConnected = false;
                 serverSocket.close();
             }
@@ -157,15 +186,6 @@ public class NetworkHandler implements Runnable{
     }
 
     /**
-     * This method sends a message to the server.
-     * @param message the message that has to be sent.
-     * @throws IOException if there are some IO troubles.
-     */
-    private void send(Message message) throws IOException {
-        outputServer.writeObject(message);
-    }
-
-    /**
      * This method calls the view to ask for the god that the player has been chosed and send a message
      * to the server with this information.
      * @param message contains the list of available gods.
@@ -173,9 +193,9 @@ public class NetworkHandler implements Runnable{
      */
     public void handleListOfGods(ListOfGods message) throws IOException {
        GodName chosenGod = client.getView().chooseYourGod(message.getGodsAvailable());
-       ListOfGods mess = new ListOfGods(MessageType.LIST_OF_GODS);
-       mess.setChosenGod(chosenGod);
-       send(mess);
+       ListOfGods newMessage = new ListOfGods(MessageType.LIST_OF_GODS);
+       newMessage.setChosenGod(chosenGod);
+       outputServer.writeObject(newMessage);
     }
 
     /**
@@ -218,8 +238,8 @@ public class NetworkHandler implements Runnable{
         int[] rowsAndColumns;
         rowsAndColumns = client.getView().askWhereToPositionWorkers();
 
-        SetWorkers mess = new SetWorkers(MessageType.SET_WORKERS);
-        mess.setRowsAndColumns(rowsAndColumns);
-        send(mess);
+        SetWorkers newMessage = new SetWorkers(MessageType.SET_WORKERS);
+        newMessage.setRowsAndColumns(rowsAndColumns);
+        outputServer.writeObject(newMessage);
     }
 }

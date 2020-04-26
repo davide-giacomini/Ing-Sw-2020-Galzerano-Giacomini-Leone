@@ -27,18 +27,23 @@ public class GameController {
      * This is the constructor of the GameController which creates the game and set the random player who will
      * choose the gods that can be used in this game.
      * @param numberOfPlayers the number of player of the game which is chosen by the first player who connect.
-     * @param map usernames and colors of each player.
+     * @param mapUserColor usernames and colors of each player.
      */
-    public GameController(int numberOfPlayers, HashMap<String,Color> map){
+    public GameController(int numberOfPlayers, HashMap<String,Color> mapUserColor, HashMap<String, VirtualView> mapUserVirtualView){
         this.numberOfPlayers = numberOfPlayers;
         this.views = new ArrayList<>(numberOfPlayers);
         game = new Game(numberOfPlayers);
-        for(Map.Entry<String,Color> entry : map.entrySet()) {
+        for(Map.Entry<String,Color> entry : mapUserColor.entrySet()) {
             String username = entry.getKey();
             Color color = entry.getValue();
             game.addPlayer(new Player(username, color));
+            
+            VirtualView virtualView = mapUserVirtualView.get(username);
+            setView(virtualView);
+            virtualView.setController(this);
         }
         game.setRandomPlayer(chooseRandomPlayer());
+        startController();
     }
 
     /**
@@ -58,9 +63,8 @@ public class GameController {
 
     /**
      * This method is the first method which is launched by the server.
-     * @throws IOException if there are some IO troubles.
      */
-    public void startController() throws IOException {
+    public void startController() {
          orderViews();
          int index = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
         for (VirtualView view : views) {
@@ -172,7 +176,7 @@ public class GameController {
      * Add a view to the ArrayList views.
      * @param view the view that has to be added.
      */
-    public void setView(VirtualView view) {
+    private void setView(VirtualView view) {
         this.views.add(view);
 
         for (int i = 0; i < 5; i++) {
