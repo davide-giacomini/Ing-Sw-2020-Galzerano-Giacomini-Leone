@@ -9,6 +9,7 @@ import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.InvalidMoveException;
 import Model.Game;
 import Model.Player;
+import Model.Slot;
 import Model.Turn;
 import Network.Server.VirtualView;
 
@@ -26,7 +27,7 @@ class TurnController {
 
     //TODO ma l'eccezione GodNotSet serve? Io la leverei
     //TODO io catcherei anche l'invalidDirection perchè mi pare inutile
-    TurnController(ArrayList<VirtualView> views, Game game, int indexOfCurrentPlayer, GameController controller) throws InvalidDirectionException {
+    TurnController(ArrayList<VirtualView> views, Game game, int indexOfCurrentPlayer, GameController controller) {
         this.views = views;
         this.game = game;
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
@@ -35,7 +36,7 @@ class TurnController {
         this.controller = controller;
     }
 
-    void startTurn() throws InvalidDirectionException, GodNotSetException {
+    void startTurn() {
         if (player.isLoosing())
             removeLosingPlayer();
         views.get(indexOfCurrentPlayer).sendWhichWorker();
@@ -123,11 +124,17 @@ class TurnController {
      * This method deletes a losing player from the game and notifies all the players.
      * If the players were just two, it also declares the winner and ends the game.
      */
-    private void removeLosingPlayer() throws InvalidDirectionException, GodNotSetException {
+    private void removeLosingPlayer() {
         for(VirtualView view : views) {
             view.sendLosingPlayer(player.getUsername());
         }
         views.remove(views.get(indexOfCurrentPlayer));
+
+        Slot slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
+        slot.setWorker(null);
+        slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
+        slot.setWorker(null);
+
         game.getPlayers().remove(Game.getPlayer(indexOfCurrentPlayer));
         //TODO chiudere tutto il suo processo
         if (Game.getNumberOfPlayers() == 2) {

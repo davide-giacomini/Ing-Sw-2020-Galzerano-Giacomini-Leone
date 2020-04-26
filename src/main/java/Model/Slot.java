@@ -56,7 +56,7 @@ public class Slot extends Observable implements Serializable {
      *
      * @param worker the worker to be put on this slot.
      */
-    void setWorker(Worker worker) {
+    public void setWorker(Worker worker) {
         this.worker = worker;
         if (worker != null){
             this.workerColor = worker.getColor();

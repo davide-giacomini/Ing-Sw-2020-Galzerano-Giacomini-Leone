@@ -77,7 +77,7 @@ public class PlayerTest {
 
         player.setGod(new Apollo(player, "Apollo"));
         assertEquals(player.getGod().getName(),"Apollo");
-        assertFalse(player.CanBuildDome());
+        assertFalse(player.canBuildDome());
 
     }
 

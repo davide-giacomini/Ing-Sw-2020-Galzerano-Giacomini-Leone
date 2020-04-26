@@ -114,7 +114,7 @@ public class VirtualView implements ServerListener, SlotListener {
      * This method receive a list of coordinates (row1,column1,row2,column2) and calls the controller.
      * @param RowsAndColumns the list of coordinates.
      */
-    public void receiveSetWorkers(int[] RowsAndColumns) throws InvalidDirectionException, GodNotSetException {
+    public void receiveSetWorkers(int[] RowsAndColumns) {
             controller.setWorkers(RowsAndColumns);
     }
 

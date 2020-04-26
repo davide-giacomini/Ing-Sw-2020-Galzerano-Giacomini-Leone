@@ -3,13 +3,12 @@ package Controller;
 import Enumerations.Color;
 import Enumerations.Gender;
 import Enumerations.GodName;
-import Model.Game;
+import Model.*;
+import Model.Exceptions.GodNotSetException;
+import Model.Exceptions.InvalidDirectionException;
+import Model.Exceptions.SlotOccupiedException;
 import Model.Gods.*;
-import Model.Player;
-import Model.Slot;
-import Model.Worker;
 import Network.Server.VirtualView;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ public class GameController {
     private static Game game;
     private ArrayList<VirtualView> views;
     private int indexOfCurrentPlayer;
+    private TurnController turn;
 
     /**
      * This is the constructor of the GameController which creates the game and set the random player who will
@@ -129,7 +129,7 @@ public class GameController {
     /**
      * This method set a worker into a slot, checking if it's already occupied.
      */
-    public void setWorkers( int[] RowsAndColumns) throws InvalidDirectionException, GodNotSetException {
+    public void setWorkers( int[] RowsAndColumns)  {
         try {
             int row1 = RowsAndColumns[0];
             int column1 = RowsAndColumns[1];
@@ -226,12 +226,12 @@ public class GameController {
         }
     }
 
-    public void firstTurn() throws InvalidDirectionException, GodNotSetException {
+    public void firstTurn() {
         turn = new TurnController(views, game, indexOfCurrentPlayer, this);
         turn.startTurn();
     }
 
-    public void turn() throws InvalidDirectionException, GodNotSetException {
+    public void turn()  {
         incrementIndex();
         turn = new TurnController(views, game, indexOfCurrentPlayer, this);
         turn.startTurn();

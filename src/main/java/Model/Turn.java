@@ -23,7 +23,7 @@ public class Turn {
     private boolean alreadySetWorker;
     private boolean canAlwaysBuildDome;
     
-    public Turn(Player player) throws InvalidDirectionException {
+    public Turn(Player player) {
         this.numberOfMovements = 0;
         this.numberOfBuildings = 0;
         this.player = player;
