@@ -18,7 +18,7 @@ public class Game {
 
 
     public Game(int numberOfPlayers) {
-        this.start = true;
+        setStart();
         Game.numberOfPlayers = numberOfPlayers;
         players = new ArrayList<>(numberOfPlayers);
         board = Board.getBoard();
@@ -88,7 +88,7 @@ public class Game {
         }
         else if (index == 1 && numberOfPlayers == 3) {
             players.set(1,players.get(2));
-            players.set(2,players.get(3));
+            players.set(2,randomPlayer);
         }
     }
 
@@ -126,5 +126,6 @@ public class Game {
         }
         return null;
     }
+
 }
 

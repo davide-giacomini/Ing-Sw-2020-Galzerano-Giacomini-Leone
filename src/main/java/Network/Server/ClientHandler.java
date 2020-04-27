@@ -350,4 +350,18 @@ public class ClientHandler implements Runnable{
     void sendAskWorkersPosition() {
         send(new AskWorkersPosition(MessageType.ASK_WORKER_POSITION));
     }
+
+    void sendError(String errorText) {
+        ErrorMessage message = new ErrorMessage(MessageType.ERROR);
+        message.setErrorText(errorText);
+        send(message);
+    }
+
+    void sendWhichWorker() {
+        send(new ChooseWorkerByPosition(MessageType.CHOOSE_WORKER));
+    }
+
+    void sendAction() {
+        send(new ChooseAction(MessageType.CHOOSE_ACTION));
+    }
 }

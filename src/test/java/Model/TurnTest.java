@@ -10,8 +10,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.*;
 
 public class TurnTest {
@@ -223,11 +221,6 @@ public class TurnTest {
         assertEquals(turn.getNumberOfBuildings(), 1);
         
         turn.executeBuild(Direction.DOWN);
-    }
-    
-    @Test (expected = GodNotSetException.class)
-    public void TurnConstructor_PlayerWithoutGod_ThrowsGodNotSet () throws Exception{
-        new Turn(new Player("test", Color.BLUE));
     }
 
 

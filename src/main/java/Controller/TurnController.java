@@ -15,7 +15,7 @@ import Network.Server.VirtualView;
 
 import java.util.ArrayList;
 
-class TurnController {
+public class TurnController {
 
     private GameController controller;
     private ArrayList<VirtualView> views;
@@ -27,7 +27,7 @@ class TurnController {
 
     //TODO ma l'eccezione GodNotSet serve? Io la leverei
     //TODO io catcherei anche l'invalidDirection perchè mi pare inutile
-    TurnController(ArrayList<VirtualView> views, Game game, int indexOfCurrentPlayer, GameController controller) {
+    public TurnController(ArrayList<VirtualView> views, Game game, int indexOfCurrentPlayer, GameController controller) {
         this.views = views;
         this.game = game;
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
@@ -42,13 +42,14 @@ class TurnController {
         views.get(indexOfCurrentPlayer).sendWhichWorker();
     }
 
-    void setWorkerGender(int[] position) {
+    public void setWorkerGender(int[] position) {
         int row = position[0];
         int column = position[1];
-        if (game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
-            //hai selezionato una casella dove non è presente il tuo worker
-            //views.get(indexOfCurrentPlayer).sendError()
+        if (game.getBoard().getSlot(row,column).getWorker() == null || game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
+            String textError = "Your worker is not there!";
+            views.get(indexOfCurrentPlayer).sendError(textError);
             views.get(indexOfCurrentPlayer).sendWhichWorker();
+            return;
         }
         try {
             workerGender = game.getBoard().getSlot(row,column).getWorker().getGender();
@@ -57,16 +58,19 @@ class TurnController {
                     workerGender = Gender.FEMALE;
                 if (workerGender == Gender.FEMALE)
                     workerGender = Gender.MALE;
-                //views.get(indexOfCurrentPlayer).sendAdvice()
+                String textError = "Your worker is blocked. You are forced to use the other one!";
+                views.get(indexOfCurrentPlayer).sendError(textError);
             }
             turn.setWorkerGender(workerGender);
         } catch (InvalidMoveException e) {
-            //views.get(indexOfCurrentPlayer).sendError()
+            String textError = e.getMessage();
+            views.get(indexOfCurrentPlayer).sendError(textError);
+            views.get(indexOfCurrentPlayer).sendWhichWorker();
         }
         views.get(indexOfCurrentPlayer).sendWhichAction();
     }
 
-    void executeAction(Action action, Direction direction) throws InvalidDirectionException, GodNotSetException {
+    public void executeAction(Action action, Direction direction) {
         switch (action) {
             case MOVE:
                 if (player.isLoosing()) {
@@ -75,12 +79,13 @@ class TurnController {
                 }
                 try {
                     turn.executeMove(direction);
-                } catch (InvalidDirectionException e) {
-                    // views.get(indexOfCurrentPlayer).sendError();
                     views.get(indexOfCurrentPlayer).sendWhichAction();
-                } catch (InvalidMoveException e) {
-                    // views.get(indexOfCurrentPlayer).sendError();
+                    break;
+                } catch (InvalidDirectionException | InvalidMoveException e) {
+                    String textError = e.getMessage();
+                    views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
+                    return;
                 }
             case BUILD:
                 if (player.isLoosing()) {
@@ -89,12 +94,13 @@ class TurnController {
                 }
                 try {
                     turn.executeBuild(direction);
-                } catch (InvalidDirectionException e) {
-                    // views.get(indexOfCurrentPlayer).sendError();
                     views.get(indexOfCurrentPlayer).sendWhichAction();
-                } catch (InvalidBuildException e) {
-                    // views.get(indexOfCurrentPlayer).sendError();
+                    break;
+                } catch (InvalidDirectionException | InvalidBuildException e) {
+                    String textError = e.getMessage();
+                    views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
+                    return;
                 }
             case BUILDDOME:
                 if (player.isLoosing()) {
@@ -104,19 +110,23 @@ class TurnController {
                 try {
                     turn.setWantsToBuildDome(true);
                     turn.executeBuild(direction);
-                    } catch (InvalidDirectionException e) {
-                        // views.get(indexOfCurrentPlayer).sendError();
-                        views.get(indexOfCurrentPlayer).sendWhichAction();
-                     } catch (InvalidBuildException e) {
-                        // views.get(indexOfCurrentPlayer).sendError();
-                        views.get(indexOfCurrentPlayer).sendWhichAction();
-                    }
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                    break;
+                    } catch (InvalidDirectionException | InvalidBuildException e) {
+                    String textError = e.getMessage();
+                    views.get(indexOfCurrentPlayer).sendError(textError);
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                    return;
+                     }
             case END:
                 if (!turn.validateEndTurn()) {
-                    // views.get(indexOfCurrentPlayer).sendError();
+                    String textError = "You cannot end your turn, you must do another action!";
+                    views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
+                    return;
                 }
                 controller.turn();
+                break;
         }
     }
 
