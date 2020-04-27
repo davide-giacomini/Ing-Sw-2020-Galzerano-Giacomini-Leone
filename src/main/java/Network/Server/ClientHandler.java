@@ -229,4 +229,10 @@ public class ClientHandler implements Runnable{
     void sendAskWorkersPosition() {
         send(new AskWorkersPosition(MessageType.SET_WORKERS));
     }
+
+    void sendError(String errorText) {
+        ErrorMessage message = new ErrorMessage(MessageType.ERROR);
+        message.setErrorText(errorText);
+        send(message);
+    }
 }

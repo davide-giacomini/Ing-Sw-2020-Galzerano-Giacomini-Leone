@@ -46,9 +46,10 @@ class TurnController {
         int row = position[0];
         int column = position[1];
         if (game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
-            //hai selezionato una casella dove non è presente il tuo worker
-            //views.get(indexOfCurrentPlayer).sendError()
+            String textError = "Your worker is not there!";
+            views.get(indexOfCurrentPlayer).sendError(textError);
             views.get(indexOfCurrentPlayer).sendWhichWorker();
+            return;
         }
         try {
             workerGender = game.getBoard().getSlot(row,column).getWorker().getGender();
@@ -57,16 +58,19 @@ class TurnController {
                     workerGender = Gender.FEMALE;
                 if (workerGender == Gender.FEMALE)
                     workerGender = Gender.MALE;
-                //views.get(indexOfCurrentPlayer).sendAdvice()
+                String textError = "Your worker is blocked. You are forced to use the other one!";
+                views.get(indexOfCurrentPlayer).sendError(textError);
             }
             turn.setWorkerGender(workerGender);
         } catch (InvalidMoveException e) {
-            //views.get(indexOfCurrentPlayer).sendError()
+            String textError = e.getMessage();
+            views.get(indexOfCurrentPlayer).sendError(textError);
+            views.get(indexOfCurrentPlayer).sendWhichWorker();
         }
         views.get(indexOfCurrentPlayer).sendWhichAction();
     }
 
-    void executeAction(Action action, Direction direction) throws InvalidDirectionException, GodNotSetException {
+    void executeAction(Action action, Direction direction) {
         switch (action) {
             case MOVE:
                 if (player.isLoosing()) {
@@ -75,12 +79,11 @@ class TurnController {
                 }
                 try {
                     turn.executeMove(direction);
-                } catch (InvalidDirectionException e) {
-                    // views.get(indexOfCurrentPlayer).sendError();
+                } catch (InvalidDirectionException | InvalidMoveException e) {
+                    String textError = e.getMessage();
+                    views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
-                } catch (InvalidMoveException e) {
-                    // views.get(indexOfCurrentPlayer).sendError();
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                    return;
                 }
             case BUILD:
                 if (player.isLoosing()) {
@@ -89,12 +92,11 @@ class TurnController {
                 }
                 try {
                     turn.executeBuild(direction);
-                } catch (InvalidDirectionException e) {
-                    // views.get(indexOfCurrentPlayer).sendError();
+                } catch (InvalidDirectionException | InvalidBuildException e) {
+                    String textError = e.getMessage();
+                    views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
-                } catch (InvalidBuildException e) {
-                    // views.get(indexOfCurrentPlayer).sendError();
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                    return;
                 }
             case BUILDDOME:
                 if (player.isLoosing()) {
@@ -104,17 +106,18 @@ class TurnController {
                 try {
                     turn.setWantsToBuildDome(true);
                     turn.executeBuild(direction);
-                    } catch (InvalidDirectionException e) {
-                        // views.get(indexOfCurrentPlayer).sendError();
-                        views.get(indexOfCurrentPlayer).sendWhichAction();
-                     } catch (InvalidBuildException e) {
-                        // views.get(indexOfCurrentPlayer).sendError();
-                        views.get(indexOfCurrentPlayer).sendWhichAction();
-                    }
+                    } catch (InvalidDirectionException | InvalidBuildException e) {
+                    String textError = e.getMessage();
+                    views.get(indexOfCurrentPlayer).sendError(textError);
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                    return;
+                     }
             case END:
                 if (!turn.validateEndTurn()) {
-                    // views.get(indexOfCurrentPlayer).sendError();
+                    String textError = "You cannot end your turn, you must do another action!";
+                    views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
+                    return;
                 }
                 controller.turn();
         }

@@ -130,4 +130,7 @@ public class VirtualView implements ServerListener, SlotListener {
         //clientHandler.manageSendWhichAction()
     }
 
+    public void sendError(String errorText) {
+        clientHandler.sendError(errorText);
+    }
 }

@@ -10,24 +10,24 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 public class PlayerTest {
     Player player;
+    Board board;
 
     @Before
     public void setUp()  {
         player = new Player ("Arianna", Color.BLUE);
-
+        board = board.getBoard();
     }
 
     @After
-    public void tearDown()  {
-        //nothing to do?
+    public void tearDown() {
+        board.clearBoard();
     }
+
 
     @Test
     public void playerSetUp() {
@@ -82,7 +82,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void setTurn() throws InvalidDirectionException, GodNotSetException {
+    public void setTurn() {
         assertEquals(player.getTurn(), null);
         player.setGod(new Apollo(player, "Apollo"));
         Turn turn = new Turn(player);
@@ -91,7 +91,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void getUsername() throws InvalidDirectionException, GodNotSetException {
+    public void getUsername() {
         assertEquals(player.getUsername(), "Arianna");
         assertNotEquals(player.getUsername(), "ARIANNA");
     }
@@ -123,11 +123,10 @@ public class PlayerTest {
 
     }
 
-
     @Test
     public void putWorkerOnSlot() {
       Board board =  Board.getBoard();
-        player.putWorkerOnSlot(player.getWorker(Gender.MALE), board.getSlot(1,1));
+        assertTrue(player.putWorkerOnSlot(player.getWorker(Gender.MALE), board.getSlot(1,1)));
         assertEquals(player.getWorker(Gender.MALE), board.getSlot(1,1).getWorker());
     }
 
@@ -158,9 +157,8 @@ public class PlayerTest {
         player.move(Direction.LEFTUP, player.getWorker(Gender.MALE));
     }
 
-    //problem with build test to solve
-   /* @Test
-    public void build() throws IndexOutOfBoundsException, GodNotSetException, NotReachableLevelException, SlotOccupiedException, InvalidDirectionException, WrongBuildOrMoveException, NoAvailableMovementsException {
+   /*@Test
+    public void build() throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException, InvalidBuildException {
         Board board = Board.getBoard();
 
         player.setGod(new Apollo(player, "Apollo"));
@@ -172,6 +170,6 @@ public class PlayerTest {
 
         player.build(Direction.LEFTUP, player.getWorker(Gender.MALE));
         assertEquals(board.getSlot(0,0).getLevel(), Level.LEVEL1);
-    }*/
+    } */
 
     }

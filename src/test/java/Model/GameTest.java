@@ -1,24 +1,27 @@
 package Model;
 
 import Enumerations.Color;
-import Model.Exceptions.GameAlreadyStartedException;
+import Enumerations.GodName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class GameTest {
     private Game game;
+    Board board;
     private Player player;
+    private int numberOfPlayers = 2;
 
     @Before
     public void setUp() {
-        game = new Game(3);
+        game = new Game(numberOfPlayers);
         player = new Player("Ari", Enumerations.Color.RED);
+        game.addPlayer(player);
+        board = board.getBoard();
     }
 
     @After
@@ -27,77 +30,34 @@ public class GameTest {
     }
 
     @Test
-    public void checkInitialParameters(){
-        assertFalse(game.isGameStarted());
-        assertEquals(game.getNumberOfPlayers(), 0);
+    public void checkNumberOfPlayers() {
+        assertEquals(Game.getNumberOfPlayers(), numberOfPlayers);
     }
 
-    @Test
-    public void addPlayer_correctAddition() throws GameAlreadyStartedException {
-        game.addPlayer(player);
-        assertEquals(game.getNumberOfPlayers(),1);
-
-    }
-
-    @Test (expected = GameAlreadyStartedException.class)
-    public void addPlayer_gameAlreadyStarted() throws GameAlreadyStartedException {
-        game.setStart();
-        assertTrue(game.isGameStarted());
-        game.addPlayer(player);
-
-    }
-
-    @Test (expected = GameAlreadyStartedException.class)
-    public void addPlayer_tooManyPlayers() throws GameAlreadyStartedException {
-        Player p2 = new Player("A", Color.BLUE);
-        Player p3 = new Player("B", Color.GREEN);
-        Player p4 = new Player("C", Color.WHITE);
-        game.addPlayer(player);
-        game.addPlayer(p2);
-        game.addPlayer(p3);
-        game.addPlayer(p4);
-
-    }
 
     @Test
     public void setStart(){
-        game.setStart();
         assertTrue(game.isGameStarted());
     }
 
-    @Test
-    public void setEnd(){
-        assertFalse(game.isGameStarted());
-    }
 
     @Test
-    public void getPlayer() throws GameAlreadyStartedException {
+    public void getPlayer() {
         game.addPlayer(player);
-        assertEquals(game.getNumberOfPlayers(),1);
-        assertEquals(game.getPlayer(0), player);
-
-    }
-
-    @Test
-    public void getPlayerNumber2() throws GameAlreadyStartedException {
-        game.addPlayer(player);
-        Player p2 = new Player("A", Color.BLUE);
-        game.addPlayer(p2);
-        assertEquals(game.getNumberOfPlayers(),2);
-        assertEquals(game.getPlayer(1), p2);
+        assertEquals(Game.getPlayer(0), player);
+        assertEquals(game.getPlayer("Ari"), player);
 
     }
 
     @Test
     public void setNumberOfPlayers(){
-        game.setNumberOfPlayers(1);
-        assertEquals(game.getNumberOfPlayers(),1);
+        Game.setNumberOfPlayers(1);
+        assertEquals(Game.getNumberOfPlayers(),1);
     }
 
     @Test
-    public void getPlayers() throws GameAlreadyStartedException{
+    public void getPlayers(){
         Player p2 = new Player("A", Color.BLUE);
-        game.addPlayer(player);
         game.addPlayer(p2);
 
         ArrayList<Player> listForCompare = new ArrayList<>();
@@ -105,8 +65,86 @@ public class GameTest {
         listForCompare.add(p2);
 
         assertEquals(game.getPlayers(), listForCompare);
-
     }
 
+    @Test
+    public void putRandomInLastPosition_WhenHeWasFirst_twoPlayers() {
+        Player p2 = new Player("Moni", Color.RED);
+        game.addPlayer(p2);
+        game.setRandomPlayer(player);
+        game.putRandomAtLastPosition();
+        assertEquals(player, Game.getPlayer(1));
+    }
+
+    @Test
+    public void putRandomInLastPosition_WhenHeWasAlreadyHere_twoPlayers() {
+        Player p2 = new Player("Moni", Color.RED);
+        game.addPlayer(p2);
+        game.setRandomPlayer(p2);
+        game.putRandomAtLastPosition();
+        assertEquals(p2, Game.getPlayer(1));
+    }
+
+    @Test
+    public void putRandomInLastPosition_WhenHeWasFirst_threePlayers() {
+        Game.setNumberOfPlayers(3);
+        Player p2 = new Player("Moni", Color.RED);
+        game.addPlayer(p2);
+        Player p3 = new Player("David", Color.CYAN);
+        game.addPlayer(p3);
+        game.setRandomPlayer(player);
+        game.putRandomAtLastPosition();
+        assertEquals(player, Game.getPlayer(2));
+    }
+
+    @Test
+    public void putRandomInLastPosition_WhenHeWasAlreadyHere_threePlayers() {
+        Game.setNumberOfPlayers(3);
+        Player p2 = new Player("Moni", Color.RED);
+        game.addPlayer(p2);
+        Player p3 = new Player("David", Color.CYAN);
+        game.addPlayer(p3);
+        int size = game.getPlayers().size();
+        game.setRandomPlayer(p3);
+        game.putRandomAtLastPosition();
+        assertEquals(p3, Game.getPlayer(2));
+    }
+
+    @Test
+    public void putRandomInLastPosition_WhenHeWasTheSecondOne_threePlayers() {
+        Game.setNumberOfPlayers(3);
+        Player p2 = new Player("Moni", Color.RED);
+        game.addPlayer(p2);
+        Player p3 = new Player("David", Color.CYAN);
+        game.addPlayer(p3);
+        game.setRandomPlayer(p2);
+        assertEquals(p2, game.getRandomPlayer());
+        game.putRandomAtLastPosition();
+        assertEquals(p2, Game.getPlayer(2));
+    }
+
+    @Test
+    public void randomOrder() {
+        Game.setNumberOfPlayers(3);
+        Player p2 = new Player("Moni", Color.RED);
+        game.addPlayer(p2);
+        Player p3 = new Player("David", Color.CYAN);
+        game.addPlayer(p3);
+        game.createNewPlayersList();
+        assertEquals(game.getPlayers().size(), 3);
+        assertSame(player, game.getPlayer("Ari"));
+        assertSame(p2, game.getPlayer("Moni"));
+        assertSame(p3, game.getPlayer("David"));
+    }
+
+    @Test
+    public void setGods() {
+        ArrayList<GodName> gods = new ArrayList<>(2);
+        gods.add(GodName.APOLLO);
+        gods.add(GodName.PAN);
+        game.setGods(gods);
+        ArrayList<GodName> newGods = game.getGods();
+        assertEquals(gods, newGods);
+    }
 
 }
