@@ -248,4 +248,7 @@ public class GameController {
             indexOfCurrentPlayer=0;
     }
 
+    public TurnController getTurn() {
+        return turn;
+    }
 }

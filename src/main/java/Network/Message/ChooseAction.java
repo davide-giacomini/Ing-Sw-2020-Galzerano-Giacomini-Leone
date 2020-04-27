@@ -42,8 +42,9 @@ public class ChooseAction extends Message {
 
     @Override
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
-
+            virtualView.receiveWhichAction(action, direction);
     }
+
 
     public Action getAction() {
         return action;

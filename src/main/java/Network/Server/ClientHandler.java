@@ -235,4 +235,8 @@ public class ClientHandler implements Runnable{
         message.setErrorText(errorText);
         send(message);
     }
+
+    void sendWhichWorker() {
+        send(new ChooseWorkerByPosition(MessageType.CHOOSE_WORKER));
+    }
 }

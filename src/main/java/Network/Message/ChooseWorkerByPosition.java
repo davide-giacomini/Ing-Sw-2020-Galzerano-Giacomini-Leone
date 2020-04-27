@@ -1,5 +1,7 @@
 package Network.Message;
 
+import Enumerations.Action;
+import Enumerations.Direction;
 import Enumerations.MessageType;
 import Network.Client.Client;
 import Network.Server.Server;
@@ -34,6 +36,8 @@ public class ChooseWorkerByPosition extends Message {
 
     @Override
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
+        virtualView.receiveWhichWorker(getCoordinates());
+    }
 
     }
 

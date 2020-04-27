@@ -15,7 +15,7 @@ import Network.Server.VirtualView;
 
 import java.util.ArrayList;
 
-class TurnController {
+public class TurnController {
 
     private GameController controller;
     private ArrayList<VirtualView> views;
@@ -27,7 +27,7 @@ class TurnController {
 
     //TODO ma l'eccezione GodNotSet serve? Io la leverei
     //TODO io catcherei anche l'invalidDirection perchè mi pare inutile
-    TurnController(ArrayList<VirtualView> views, Game game, int indexOfCurrentPlayer, GameController controller) {
+    public TurnController(ArrayList<VirtualView> views, Game game, int indexOfCurrentPlayer, GameController controller) {
         this.views = views;
         this.game = game;
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
@@ -42,10 +42,10 @@ class TurnController {
         views.get(indexOfCurrentPlayer).sendWhichWorker();
     }
 
-    void setWorkerGender(int[] position) {
+    public void setWorkerGender(int[] position) {
         int row = position[0];
         int column = position[1];
-        if (game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
+        if (game.getBoard().getSlot(row,column).getWorker() == null || game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
             String textError = "Your worker is not there!";
             views.get(indexOfCurrentPlayer).sendError(textError);
             views.get(indexOfCurrentPlayer).sendWhichWorker();
@@ -70,7 +70,7 @@ class TurnController {
         views.get(indexOfCurrentPlayer).sendWhichAction();
     }
 
-    void executeAction(Action action, Direction direction) {
+    public void executeAction(Action action, Direction direction) {
         switch (action) {
             case MOVE:
                 if (player.isLoosing()) {
