@@ -239,4 +239,8 @@ public class ClientHandler implements Runnable{
     void sendWhichWorker() {
         send(new ChooseWorkerByPosition(MessageType.CHOOSE_WORKER));
     }
+
+    void sendAction() {
+        send(new ChooseAction(MessageType.CHOOSE_ACTION));
+    }
 }

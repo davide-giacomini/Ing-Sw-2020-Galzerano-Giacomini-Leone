@@ -158,7 +158,6 @@ public class CLI extends View {
         int[] newRowAndColumn = new int[2];
 
         out.println("Insert the slot of the worker you want to use :  ");
-        out.println("Worker MALE");
         out.println("Insert Row and press" + AnsiCode.ANSI_ENTER_KEY + ":  ");
         do {
             try {

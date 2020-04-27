@@ -79,6 +79,8 @@ public class TurnController {
                 }
                 try {
                     turn.executeMove(direction);
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                    break;
                 } catch (InvalidDirectionException | InvalidMoveException e) {
                     String textError = e.getMessage();
                     views.get(indexOfCurrentPlayer).sendError(textError);
@@ -92,6 +94,8 @@ public class TurnController {
                 }
                 try {
                     turn.executeBuild(direction);
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                    break;
                 } catch (InvalidDirectionException | InvalidBuildException e) {
                     String textError = e.getMessage();
                     views.get(indexOfCurrentPlayer).sendError(textError);
@@ -106,6 +110,8 @@ public class TurnController {
                 try {
                     turn.setWantsToBuildDome(true);
                     turn.executeBuild(direction);
+                    views.get(indexOfCurrentPlayer).sendWhichAction();
+                    break;
                     } catch (InvalidDirectionException | InvalidBuildException e) {
                     String textError = e.getMessage();
                     views.get(indexOfCurrentPlayer).sendError(textError);
@@ -120,6 +126,7 @@ public class TurnController {
                     return;
                 }
                 controller.turn();
+                break;
         }
     }
 

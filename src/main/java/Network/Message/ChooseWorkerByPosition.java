@@ -36,10 +36,10 @@ public class ChooseWorkerByPosition extends Message {
 
     @Override
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
-        virtualView.receiveWhichWorker(getCoordinates());
+        virtualView.receiveWhichWorker(getRowsAndColumns());
     }
 
-    }
+
 
     public int[] getRowsAndColumns() {
         return rowsAndColumns;
