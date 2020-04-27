@@ -156,8 +156,7 @@ public class ArtemisTest {
     }
 
     @Test (expected = InvalidMoveException.class)
-    public void move_WrongBuildOrMoveException()
-            throws Exception {
+    public void move_WrongBuildOrMoveException() throws Exception {
         turn.executeMove(Direction.LEFT);
         turn.executeBuild(Direction.UP);
         assertTrue(player.getGod().validateEndTurn());

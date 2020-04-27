@@ -19,7 +19,8 @@ public abstract class Message implements Serializable {
     public MessageType getMessageType(){
         return messageType;
     }
-    
+
+
     /**
      * This method handles what to do if the message is sent client-side.
      *

@@ -1,11 +1,10 @@
 package Network.Server;
 
 import Controller.GameController;
+import Enumerations.Action;
 import Enumerations.Color;
+import Enumerations.Direction;
 import Enumerations.GodName;
-import Enumerations.MessageType;
-import Model.Exceptions.GodNotSetException;
-import Model.Exceptions.InvalidDirectionException;
 import Model.Slot;
 import Model.SlotListener;
 import Network.Message.Message;
@@ -123,11 +122,22 @@ public class VirtualView implements ServerListener, SlotListener {
     }
 
     public void sendWhichWorker() {
-        //clientHandler.manageSendWhichWorker()
+        clientHandler.sendWhichWorker();
     }
 
     public void sendWhichAction() {
         //clientHandler.manageSendWhichAction()
     }
 
+    public void sendError(String errorText) {
+        clientHandler.sendError(errorText);
+    }
+
+    public void receiveWhichWorker(int[] coordinates) {
+        controller.getTurn().setWorkerGender(coordinates);
+    }
+
+    public void receiveWhichAction(Action action, Direction direction) {
+        controller.getTurn().executeAction(action, direction);
+    }
 }

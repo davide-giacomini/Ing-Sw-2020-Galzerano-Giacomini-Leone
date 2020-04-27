@@ -135,19 +135,19 @@ public class GameController {
             int column1 = RowsAndColumns[1];
             int row2 = RowsAndColumns[2];
             int column2 = RowsAndColumns[3];
-            if (row1 > 4 || row2 > 4 || column1 > 4 || column2 > 4)
-                throw new IndexOutOfBoundsException();
-            boolean result;
+            if (row1 > 4 || row1 < 0 || row2 > 4 || row2 < 0 || column1 > 4 || column1 < 0 || column2 > 4 || column2 < 0)
+                throw new IndexOutOfBoundsException("One of the values you chose is out of range");
+
+            Slot slot1 = game.getBoard().getSlot(row1, column1);
+            Slot slot2 = game.getBoard().getSlot(row2, column2);
+            if (slot1.getIsOccupied() || slot2.getIsOccupied())
+                throw new SlotOccupiedException();
+
             Worker chosenWorkerMale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);
-            result = Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
-            if (!result) {
-                throw new SlotOccupiedException();
-            }
+            Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
             Worker chosenWorkerFemale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
-            result = Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
-            if (!result) {
-                throw new SlotOccupiedException();
-            }
+            Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
+
             incrementIndex();
             if(indexOfCurrentPlayer == 0) {
                 firstTurn();
@@ -155,10 +155,10 @@ public class GameController {
             else {
                 views.get(indexOfCurrentPlayer).sendSetWorkers();
             }
-        }catch (IndexOutOfBoundsException e) {
-            // views.get(indexOfCurrentPlayer).sendError()
-        }catch (SlotOccupiedException e) {
-            // views.get(indexOfCurrentPlayer).sendError()
+        }catch (IndexOutOfBoundsException | SlotOccupiedException e) {
+            String errorText = e.getMessage();
+            views.get(indexOfCurrentPlayer).sendError(errorText);
+            views.get(indexOfCurrentPlayer).sendSetWorkers();
         }
     }
 
@@ -175,7 +175,7 @@ public class GameController {
      * This method creates the order of the round for the whole game and then it sends all the public information
      * to all the players.
      */
-    public void startGame() throws IOException {
+    public void startGame() {
         newRoundOrder();
         ArrayList<String> usernames = new ArrayList<>(numberOfPlayers);
         ArrayList<Color> colors = new ArrayList<>(numberOfPlayers);
@@ -248,4 +248,7 @@ public class GameController {
             indexOfCurrentPlayer=0;
     }
 
+    public TurnController getTurn() {
+        return turn;
+    }
 }
