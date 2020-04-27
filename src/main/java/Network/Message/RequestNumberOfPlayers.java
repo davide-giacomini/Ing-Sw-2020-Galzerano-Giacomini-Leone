@@ -33,8 +33,8 @@ public class RequestNumberOfPlayers extends Message {
         try {
             outputServer.writeObject(requestNumberOfPlayers);
         } catch (IOException e) {
-            System.out.println("Error in the serialization of " +this.toString()+" message.");
-            e.printStackTrace();
+            client.getView().print("Error in the serialization of " +this.toString()+" message.");
+            //e.printStackTrace();
         }
         //TODO provare ad utilizzare lo stesso messaggio per tutti i messaggi che chiedono di rimandare indietro
     }
@@ -51,12 +51,7 @@ public class RequestNumberOfPlayers extends Message {
         server.setMaxNumberOfPlayers(numberOfPlayers);
     }
     
-    public int getNumberOfPlayers() {
-        return numberOfPlayers;
-    }
-    
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
-        //TODO rendere questo settaggio safe
     }
 }

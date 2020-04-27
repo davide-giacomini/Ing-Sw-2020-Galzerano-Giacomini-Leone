@@ -85,7 +85,7 @@ public class GameController {
         game.setGods(gods);
         game.putRandomAtLastPosition();
         orderViews();
-        views.get(indexOfCurrentPlayer).sendGodsList(game.getGods());
+        views.get(indexOfCurrentPlayer).sendGodsList(game.getGods());   //TODO renderlo safe
     }
 
     /**
@@ -186,7 +186,7 @@ public class GameController {
             godNames.add(player.getGodName());
         }
         for (VirtualView view : views) {
-            view.sendPublicInformation(usernames, colors, godNames);
+            view.sendPublicInformation(usernames, colors, godNames);        //TODO passare degli ArrayList seri
         }
 
         views.get(indexOfCurrentPlayer).sendSetWorkers();

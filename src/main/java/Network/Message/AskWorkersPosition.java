@@ -22,12 +22,19 @@ public class AskWorkersPosition extends Message{
         super(messageType);
     }
     
+    /**
+     * This method asks the player which position they want to put the worker on and sends it to the server creating
+     * an array with rows and columns.
+     *
+     * @param client the client to be handled.
+     * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
+     */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
         int[] rowsAndColumns;
         rowsAndColumns = client.getView().askWhereToPositionWorkers();
     
-        AskWorkersPosition newMessage = new AskWorkersPosition(MessageType.SET_WORKERS);
+        AskWorkersPosition newMessage = new AskWorkersPosition(MessageType.ASK_WORKER_POSITION);
         newMessage.setRowsAndColumns(rowsAndColumns);
         try {
             outputServer.writeObject(newMessage);
@@ -49,15 +56,9 @@ public class AskWorkersPosition extends Message{
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
         virtualView.receiveSetWorkers(rowsAndColumns);
     }
-    
-    public int[] getRowsAndColumns() {
-        return rowsAndColumns;
-        //TODO rendere questo settaggio safe
-    }
 
     public void setRowsAndColumns(int[] rowsAndColumns) {
         this.rowsAndColumns = rowsAndColumns;
-        //TODO rendere questo settaggio safe
     }
 
 }

@@ -40,10 +40,16 @@ public class VirtualView implements ServerListener, SlotListener {
     public void setController(GameController controller) {
         this.controller = controller;
     }
-
+    
+    /**
+     * //TODO completare
+     * @param message the message sent.
+     * @param virtualView the {@link VirtualView} of the message's addressee.
+     */
     @Override
-    public void update(Message message) {
+    public void update(Message message, VirtualView virtualView) {
         switch (message.getMessageType()){
+            //TODO implementare l'update a seconda di cosa serve
         }
     }
     

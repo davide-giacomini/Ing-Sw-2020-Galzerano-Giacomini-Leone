@@ -3,8 +3,7 @@ package Network.Client;
 import Enumerations.Color;
 import Enumerations.MessageType;
 import Network.Message.*;
-import Network.Message.ErrorMessages.ConnectionFailed;
-import View.AnsiCode;
+import Network.Message.ConnectionFailed;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -32,7 +31,7 @@ public class NetworkHandler implements Runnable{
         this.client = client;
         this.serverSocket = serverSocket;
         firstConnection = true;
-        isConnected = true;
+        this.isConnected = true;
     }
     
     /**
@@ -99,21 +98,19 @@ public class NetworkHandler implements Runnable{
                 }
             }
             catch (IOException e){
-                e.printStackTrace();
+                client.getView().print("We are sorry: " +
+                        "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");
                 isConnected = false;
+                //e.printStackTrace();
             }
             catch (ClassNotFoundException e){
-                System.out.println("Error in casting from abstract Message to one of its subclasses.");
-                if (e.getMessage().toUpperCase().equals("CONNECTION RESET")) {
-                    isConnected = false;
-                    System.out.println("Client " + serverSocket.getInetAddress() + " disconnected.");
-                    //TODO pulire (se serve)
-                }
-                else {
-                    e.printStackTrace();
-                }
+                client.getView().print("Error in casting during the readObject.");
+                isConnected = false;
+                //e.printStackTrace();
             }
         }
+        
+        client.getView().print("Game closed.");
     }
     
     /**
@@ -125,9 +122,10 @@ public class NetworkHandler implements Runnable{
      * @param connectionFailedMessage it's the message with its parameters.
      */
     private void handleConnectionFailed(ConnectionFailed connectionFailedMessage) {
-        if (connectionFailedMessage.getErrorMessage().equals("Somebody else has already taken this username.")         //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
-                || connectionFailedMessage.getErrorMessage().equals("Somebody else has already taken this color.")){   //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
-            client.getView().print(connectionFailedMessage.getErrorMessage());
+        connectionFailedMessage.handleClientSide(client, outputServer);
+        
+        if (connectionFailedMessage.getErrorMessage().equals("Somebody else has already taken this username. Try another.")         //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
+                || connectionFailedMessage.getErrorMessage().equals("Somebody else has already taken this color. Try another.")){   //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
             handleFirstConnection();
         }
         else if (connectionFailedMessage.getErrorMessage().equals("The game is already started. Try later.")){         //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server

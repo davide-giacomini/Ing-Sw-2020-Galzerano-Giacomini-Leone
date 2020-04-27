@@ -68,8 +68,7 @@ public class ListOfGods extends Message {
     }
     
     public ArrayList<GodName> getGodsAvailable() {
-        return godsAvailable;
-        //TODO renderlo thread safe
+        return new ArrayList<>(godsAvailable);
     }
 
     public void setGodsAvailable(ArrayList<GodName> gods) {

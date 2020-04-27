@@ -14,9 +14,9 @@ public abstract class Observable {
     private ArrayList<ServerListener> messageListeners = new ArrayList<>();
     private ArrayList<SlotListener> slotListeners = new ArrayList<>();
     
-    public void notifyMessageListeners(Message message) {
+    public void notifyMessageListeners(Message message, VirtualView virtualView) {
         for (ServerListener messageListener : messageListeners) {
-            messageListener.update(message);
+            messageListener.update(message, virtualView);
         }
     }
     

@@ -54,7 +54,7 @@ public class PublicInformation extends Message{
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {}
     
     public ArrayList<String> getUsernames() {
-        return usernames;
+        return new ArrayList<>(usernames);
     }
 
     public void setUsernames(ArrayList<String> usernames) {
@@ -62,22 +62,18 @@ public class PublicInformation extends Message{
     }
 
     public ArrayList<Color> getColors() {
-        return colors;
-        //TODO rendere thread safe
+        return new ArrayList<>(colors);
     }
 
     public void setColors(ArrayList<Color> colors) {
         this.colors = colors;
-        //TODO rendere thread safe
     }
 
     public ArrayList<GodName> getGodNames() {
-        return godNames;
-        //TODO rendere thread safe
+        return new ArrayList<>(godNames);
     }
 
     public void setGodNames(ArrayList<GodName> godNames) {
         this.godNames = godNames;
-        //TODO rendere thread safe
     }
 }

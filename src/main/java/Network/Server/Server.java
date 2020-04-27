@@ -9,7 +9,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This class instantiates a new server and wait for connections with clients.
@@ -23,9 +22,7 @@ public class Server extends Observable {
     private HashMap<String, Color> mapUsernameColor = new HashMap<>();
     private HashMap<String, VirtualView> mapUsernameVirtualView = new HashMap<>();
     private static Server server;
-    private int maxNumberOfPlayers;
-    private ReentrantLock firstConnectionLock;
-    private boolean numberOfPlayersRequestSent = false;
+    private int maxNumberOfPlayers = 0;
     
     /**
      * This method creates a connection to be caught by clients. As the server catches a connection, it
@@ -59,8 +56,15 @@ public class Server extends Observable {
         }
     }
     
-    public ArrayList<ClientHandler> getNumberOfPlayers(){
-        return connections; //TODO rendere safe questa chiamata
+    public synchronized void cleanServer(){
+        connections = new ArrayList<>();
+        mapUsernameColor = new HashMap<>();
+        mapUsernameVirtualView = new HashMap<>();
+        maxNumberOfPlayers = 0;
+    }
+    
+    public ArrayList<ClientHandler> getPlayers(){
+        return new ArrayList<>(connections);
     }
     
     public int getMaxNumberOfPlayers() {
@@ -75,30 +79,22 @@ public class Server extends Observable {
         connections.add(clientHandler);
     }
     
-    public void addPlayerUsernameColorHashMap(String username, Color color){
+    public void addUsernameAndColorToMap(String username, Color color){
         mapUsernameColor.put(username, color);
     }
     
-    public void addPlayerUsernameVirtualViewHashMap(String username, VirtualView virtualView){
+    public void addUsernameAndVirtualViewToMap(String username, VirtualView virtualView){
         mapUsernameVirtualView.put(username, virtualView);
-    }
-    
-    public ReentrantLock getFirstConnectionLock() {
-        return firstConnectionLock;
-    }
-    
-    public void setNumberOfPlayersRequestSent(boolean numberOfPlayersRequestSent) {
-        this.numberOfPlayersRequestSent = numberOfPlayersRequestSent;
-    }
-    
-    public boolean isNumberOfPlayersRequestSent() {
-        return numberOfPlayersRequestSent;
     }
     
     /**
      * This methods makes the game start, instantiating the controller and setting it into the virtualView.
+     * If {@link #cleanServer()} has been called before this method, it returns immediately.
      */
-    public void initGame() {
+    public synchronized void initGame() {
+        if (maxNumberOfPlayers==0 || mapUsernameVirtualView==null || mapUsernameColor==null)
+            return;
+        
         new GameController(maxNumberOfPlayers, mapUsernameColor, mapUsernameVirtualView);
     }
     

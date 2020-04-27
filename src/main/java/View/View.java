@@ -1,16 +1,10 @@
 package View;
 
 import Enumerations.Color;
-import Enumerations.Gender;
 import Enumerations.GodName;
 import Network.Client.Client;
-import Network.Message.ErrorMessages.ConnectionFailed;
 
-import java.awt.*;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.security.PublicKey;
-import java.util.Scanner;
 
 public abstract class View {
     public Client currentClient;
