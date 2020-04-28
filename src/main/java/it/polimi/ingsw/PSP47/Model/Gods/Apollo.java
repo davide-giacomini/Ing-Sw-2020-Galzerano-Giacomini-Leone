@@ -50,8 +50,10 @@ public class Apollo extends God {
             if (opponentWorker!=null && opponentWorker.getColor()!=worker.getColor()) {
                 // manually move player's worker in the destination slot
                 Slot opponentWorkerSlot = opponentWorker.getSlot();
-                opponentWorker.setSlot(previousSlot);
+                opponentWorkerSlot.setWorker(null);
                 worker.setSlot(opponentWorkerSlot);
+                previousSlot.setWorker(null);
+                opponentWorker.setSlot(previousSlot);
                 int nextLevel = worker.getSlot().getLevel().ordinal();
                 return nextLevel-previousLevel>0 && worker.getSlot().getLevel()==Level.LEVEL3;
             }
