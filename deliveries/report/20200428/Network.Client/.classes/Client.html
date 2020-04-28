@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Network.Client</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Client</a> ]
 </div>
 
-<h1>Coverage Summary for Class: Client (Network.Client)</h1>
+<h1>Coverage Summary for Class: Client (it.polimi.ingsw.PSP47.Network.Client)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,11 +72,11 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Network.Client;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Client;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import Network.Server.*;
-<i>4</i>&nbsp;import View.View;
-<i>5</i>&nbsp;import View.CLI;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.*;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.View.it.polimi.ingsw.PSP47.View;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.View.CLI;
 <i>6</i>&nbsp;
 <i>7</i>&nbsp;import java.io.IOException;
 <i>8</i>&nbsp;import java.net.Socket;
@@ -87,7 +87,7 @@
 <i>13</i>&nbsp; * {@link Server} the user wants to connect to.
 <i>14</i>&nbsp; */
 <b class="nc"><i>15</i>&nbsp;public class Client implements Runnable {</b>
-<i>16</i>&nbsp;    private View view;
+<i>16</i>&nbsp;    private it.polimi.ingsw.PSP47.View view;
 <i>17</i>&nbsp;    
 <i>18</i>&nbsp;    public static void main(String[] args) {
 <b class="nc"><i>19</i>&nbsp;        Client client = new Client();</b>
@@ -129,7 +129,7 @@
 <b class="nc"><i>55</i>&nbsp;        thread.start();</b>
 <i>56</i>&nbsp;    }
 <i>57</i>&nbsp;    
-<i>58</i>&nbsp;    public View getView() {
+<i>58</i>&nbsp;    public it.polimi.ingsw.PSP47.View getView() {
 <b class="nc"><i>59</i>&nbsp;        return view;</b>
 <i>60</i>&nbsp;    }
 <i>61</i>&nbsp;}

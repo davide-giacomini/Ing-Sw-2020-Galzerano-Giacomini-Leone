@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Network.Server</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Server</a> ]
 </div>
 
-<h1>Coverage Summary for Class: VirtualView (Network.Server)</h1>
+<h1>Coverage Summary for Class: VirtualView (it.polimi.ingsw.PSP47.Network.Server)</h1>
 
 <table class="coverageStats">
 
@@ -98,17 +98,17 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Network.Server;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Server;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import Controller.GameController;
-<i>4</i>&nbsp;import Enumerations.Action;
-<i>5</i>&nbsp;import Enumerations.Color;
-<i>6</i>&nbsp;import Enumerations.Direction;
-<i>7</i>&nbsp;import Enumerations.GodName;
-<i>8</i>&nbsp;import Model.Slot;
-<i>9</i>&nbsp;import Model.SlotListener;
-<i>10</i>&nbsp;import Network.Message.Message;
-<i>11</i>&nbsp;import Network.Message.OpponentPlayerDisconnection;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Controller.GameController;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Action;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Color;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Direction;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Slot;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP47.Model.SlotListener;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Message.Message;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Message.OpponentPlayerDisconnection;
 <i>12</i>&nbsp;
 <i>13</i>&nbsp;import java.io.IOException;
 <i>14</i>&nbsp;import java.util.ArrayList;
@@ -121,7 +121,7 @@
 <i>21</i>&nbsp;    private GameController controller;
 <i>22</i>&nbsp;    private ClientHandler clientHandler;
 <i>23</i>&nbsp;    private final String username;
-<i>24</i>&nbsp;    private final Enumerations.Color color;
+<i>24</i>&nbsp;    private final it.polimi.ingsw.PSP47.Enumerations.Color color;
 <i>25</i>&nbsp;    
 <b class="nc"><i>26</i>&nbsp;    public VirtualView (String username, Color color, ClientHandler clientHandler){</b>
 <b class="nc"><i>27</i>&nbsp;        this.username = username;</b>
@@ -133,7 +133,7 @@
 <b class="nc"><i>33</i>&nbsp;        return username;</b>
 <i>34</i>&nbsp;    }
 <i>35</i>&nbsp;    
-<i>36</i>&nbsp;    public Enumerations.Color getColor() {
+<i>36</i>&nbsp;    public it.polimi.ingsw.PSP47.Enumerations.Color getColor() {
 <b class="nc"><i>37</i>&nbsp;        return color;</b>
 <i>38</i>&nbsp;    }
 <i>39</i>&nbsp;
