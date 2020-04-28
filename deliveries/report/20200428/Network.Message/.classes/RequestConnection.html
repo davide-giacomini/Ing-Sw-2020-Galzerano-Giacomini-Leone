@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Network.Message</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Message</a> ]
 </div>
 
-<h1>Coverage Summary for Class: RequestConnection (Network.Message)</h1>
+<h1>Coverage Summary for Class: RequestConnection (it.polimi.ingsw.PSP47.Network.Message)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,20 +72,20 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Network.Message;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Message;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import Enumerations.Color;
-<i>4</i>&nbsp;import Enumerations.MessageType;
-<i>5</i>&nbsp;import Network.Client.Client;
-<i>6</i>&nbsp;import Network.Server.Server;
-<i>7</i>&nbsp;import Network.Server.VirtualView;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Color;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.MessageType;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.Client;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.Server;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 <i>8</i>&nbsp;
 <i>9</i>&nbsp;import java.io.ObjectOutputStream;
 <i>10</i>&nbsp;
 <i>11</i>&nbsp;public class RequestConnection extends Message {
 <i>12</i>&nbsp;    private static final long serialVersionUID = -8037367122696029080L;
 <i>13</i>&nbsp;    private String username;
-<i>14</i>&nbsp;    private Enumerations.Color color;
+<i>14</i>&nbsp;    private it.polimi.ingsw.PSP47.Enumerations.Color color;
 <i>15</i>&nbsp;    
 <i>16</i>&nbsp;    public RequestConnection(MessageType messageType) {
 <b class="nc"><i>17</i>&nbsp;        super(messageType);</b>
@@ -93,7 +93,7 @@
 <i>19</i>&nbsp;    
 <i>20</i>&nbsp;    /**
 <i>21</i>&nbsp;     * @deprecated
-<i>22</i>&nbsp;     * This method is special, is handled inside the {@link Network.Client.NetworkHandler}. It has not to be used.
+<i>22</i>&nbsp;     * This method is special, is handled inside the {@link it.polimi.ingsw.PSP47.Network.Client.NetworkHandler}. It has not to be used.
 <i>23</i>&nbsp;     *
 <i>24</i>&nbsp;     * @param client the client to be handled.
 <i>25</i>&nbsp;     * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
@@ -124,7 +124,7 @@
 <b class="nc"><i>50</i>&nbsp;        this.username = username;</b>
 <i>51</i>&nbsp;    }
 <i>52</i>&nbsp;    
-<i>53</i>&nbsp;    public void setColor(Enumerations.Color color) {
+<i>53</i>&nbsp;    public void setColor(it.polimi.ingsw.PSP47.Enumerations.Color color) {
 <b class="nc"><i>54</i>&nbsp;        this.color = color;</b>
 <i>55</i>&nbsp;    }
 <i>56</i>&nbsp;}
