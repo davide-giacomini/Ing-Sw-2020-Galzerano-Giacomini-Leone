@@ -71,7 +71,7 @@ public class PrintSupport {
         int level = slot.getLevel().ordinal();
          String[] SLOT_PARTS = new String[5];
 
-        if ( slot.getIsOccupied() ) {
+        if ( slot.isWorkerOn()) {
             String color = AnsiCode.getAnsiByName(slot.getWorkerColor().toString());
             String WITH_WORKER_LOWER_SLOT = "|___" + color + AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "____|";
             String WITH_WORKER_PART_SLOT =  "|   " + color + AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "    |";

@@ -18,8 +18,8 @@ public class Slot extends Observable implements Serializable {
     private transient Worker worker;
     private Color workerColor;
     private Level level;
-    private boolean isOccupied;
-    
+    private boolean workerOn;
+
     /**
      * Solo constructor. It is thought to be called only by {@link Board}
      * @param i slot's row
@@ -31,7 +31,7 @@ public class Slot extends Observable implements Serializable {
         this.worker = null;
         this.workerColor = null;
         level = Level.GROUND;
-        isOccupied = false;
+        workerOn = false;
 
     }
 
@@ -58,10 +58,10 @@ public class Slot extends Observable implements Serializable {
         this.worker = worker;
         if (worker != null){
             this.workerColor = worker.getColor();
-            this.isOccupied = true;
+            this.workerOn = true;
         }else{
             this.workerColor = null;
-            this.isOccupied = false;
+            this.workerOn = false;
         }
         notifySlotListeners(this);
     }
@@ -80,7 +80,7 @@ public class Slot extends Observable implements Serializable {
     }
     
     public boolean getIsOccupied() {
-        return isOccupied || level==Level.DOME;
+        return workerOn || level==Level.DOME;
     }
     
     
@@ -96,8 +96,16 @@ public class Slot extends Observable implements Serializable {
     }
 
     public void setOccupied(boolean occupied) {
-        isOccupied = occupied;
+        workerOn = occupied;
+    }
+
+    public void setWorkerOn(boolean workerOn) {
+        this.workerOn = workerOn;
     }
 
 
+
+    public boolean isWorkerOn() {
+        return workerOn;
+    }
 }
