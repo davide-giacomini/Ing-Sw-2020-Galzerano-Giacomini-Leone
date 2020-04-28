@@ -20,6 +20,7 @@ public class ClientHandler implements Runnable{
     private ObjectOutputStream outputClient;
     private boolean isConnected;
     private final static Object firstConnectionLock = new Object();
+    private Timer timer;
     
     /**
      * This constructor set up the management between the {@link Client} and the {@link Server}.
@@ -250,7 +251,7 @@ public class ClientHandler implements Runnable{
      * This method handles the disconnection of the client. If it is the first client to disconnect from the game,
      * it will make others disconnect as well. Otherwise, the method is ignored.
      */
-    private void handleDisconnection() {
+    void handleDisconnection() {
         // If the virtualView is set to null, it means that the player didn't enter the handleFirstConnection,
         // hence nothing has to be done.
         if (virtualView==null){
@@ -269,6 +270,12 @@ public class ClientHandler implements Runnable{
                 message.setUsername(virtualView.getUsername());
                 server.notifyMessageListeners(message, virtualView);
                 server.cleanServer();
+                try {
+                    clientSocket.close();
+                } catch (IOException e) {
+                    System.out.println("Unable to close the socket of the client " + clientSocket.getInetAddress() + ".");
+                    e.printStackTrace();
+                }
             }
             
             isConnected = false;
@@ -280,14 +287,18 @@ public class ClientHandler implements Runnable{
      *
      * @param message the message that must be sent.
      */
-    private void send(Message message) {
+    void send(Message message) {
         try {
             outputClient.writeObject(message);
         } catch (IOException e) {
             System.out.println("Error in the serialization of " +message.toString()+ " message.");
-            
             e.printStackTrace();
         }
+        
+        if (message.getMessageType() == MessageType.TIMER_UPDATER) return;
+        
+        timer = new Timer(this);
+        new Thread(timer).start();
     }
 
     /**

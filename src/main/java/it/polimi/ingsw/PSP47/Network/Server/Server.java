@@ -4,7 +4,7 @@ package it.polimi.ingsw.PSP47.Network.Server;
 import it.polimi.ingsw.PSP47.Controller.GameController;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Model.Board;
-import it.polimi.ingsw.PSP47.Network.Client.Client;
+import it.polimi.ingsw.PSP47.Observable;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,6 +25,8 @@ public class Server extends Observable {
     private HashMap<String, VirtualView> mapUsernameVirtualView = new HashMap<>();
     private static Server server;
     private int maxNumberOfPlayers = 0;
+    private GameController gameController;
+    
     
     /**
      * This method creates a connection to be caught by clients. As the server catches a connection, it
@@ -99,7 +101,7 @@ public class Server extends Observable {
         if (maxNumberOfPlayers==0 || mapUsernameVirtualView==null || mapUsernameColor==null)
             return;
         
-        new GameController(maxNumberOfPlayers, mapUsernameColor, mapUsernameVirtualView);
+        gameController = new GameController(maxNumberOfPlayers, mapUsernameColor, mapUsernameVirtualView);
     }
     
 }

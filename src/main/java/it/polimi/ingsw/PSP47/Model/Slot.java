@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP47.Model;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.Level;
-import it.polimi.ingsw.PSP47.Network.Server.Observable;
+import it.polimi.ingsw.PSP47.Observable;
 
 import java.io.Serializable;
 
