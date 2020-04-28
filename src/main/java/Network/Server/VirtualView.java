@@ -58,7 +58,7 @@ public class VirtualView implements ServerListener, SlotListener {
     
     @Override
     public void update(Slot slot) {
-        //clientHandler.sendUpdateSlot(slot);
+        clientHandler.sendUpdateSlot(slot);
         //TODO implementare l'update a seconda di cosa serve. Nel caso cambiare la signature di update per passare i parametri che si vogliono.
     }
 

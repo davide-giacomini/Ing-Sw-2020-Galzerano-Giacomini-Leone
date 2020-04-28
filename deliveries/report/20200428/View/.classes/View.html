@@ -1,0 +1,138 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: View</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">View</a> ]
+</div>
+
+<h1>Coverage Summary for Class: View (View)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">View</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package View;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Enumerations.Color;
+<i>4</i>&nbsp;import Enumerations.GodName;
+<i>5</i>&nbsp;import Network.Client.Client;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.ArrayList;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;public abstract class View {
+<i>10</i>&nbsp;    public Client currentClient;
+<i>11</i>&nbsp;    public final static int SOCKET_PORT = 7777;
+<i>12</i>&nbsp;
+<b class="nc"><i>13</i>&nbsp;    public View (Client client){</b>
+<b class="nc"><i>14</i>&nbsp;        currentClient = client;</b>
+<i>15</i>&nbsp;    }
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    public void startConnection(){}
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    public abstract void printSantorini();
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    public abstract String askUsername();
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    public abstract Color askColorWorkers();
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    public abstract void print(String text);
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    public abstract int askNumberOfPlayers();
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public abstract String askServerIpAddress();
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    public abstract int[] askWhichWorkerToUse ();
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    public abstract int[] askWhereToPositionWorkers();
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    public abstract ArrayList&lt;GodName&gt; challengerWillChooseThreeGods();
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    public abstract GodName chooseYourGod(ArrayList&lt;GodName&gt; godsChosen);
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    public abstract int[] askWhereToMoveWorkers();
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public abstract int[] askWhereToBuildWorkers();
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    public abstract void theWinnerIs(String usernameWinner );
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    public abstract void theLoserIs(String usernameLoser );
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    public abstract ArrayList&lt;Enum&gt; askAction();
+<i>49</i>&nbsp;    
+<i>50</i>&nbsp;    public abstract ViewDatabase getViewDatabase();
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    public abstract void showPublicInformation();
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    public abstract void showCurrentBoard();
+<i>55</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-28 13:08</div>
+</div>
+</body>
+</html>
