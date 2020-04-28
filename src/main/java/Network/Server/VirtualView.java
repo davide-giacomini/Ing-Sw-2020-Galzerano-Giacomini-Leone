@@ -8,6 +8,7 @@ import Enumerations.GodName;
 import Model.Slot;
 import Model.SlotListener;
 import Network.Message.Message;
+import Network.Message.OpponentPlayerDisconnection;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,13 +49,16 @@ public class VirtualView implements ServerListener, SlotListener {
     @Override
     public void update(Message message, VirtualView virtualView) {
         switch (message.getMessageType()){
+            case OPPONENT_PLAYER_DISCONNECTION:
+                if (!virtualView.equals(this))
+                    clientHandler.disconnectFromClient((OpponentPlayerDisconnection) message);
             //TODO implementare l'update a seconda di cosa serve
         }
     }
     
     @Override
     public void update(Slot slot) {
-        clientHandler.sendUpdateSlot(slot);
+        //clientHandler.sendUpdateSlot(slot);
         //TODO implementare l'update a seconda di cosa serve. Nel caso cambiare la signature di update per passare i parametri che si vogliono.
     }
 

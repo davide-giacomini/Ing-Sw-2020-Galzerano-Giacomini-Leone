@@ -81,7 +81,7 @@ public class ClientHandler implements Runnable{
                         }
                         break;
                     case REQUEST_DISCONNECTION:
-                        disconnectFromClient();
+                        handleDisconnection();
                         // TODO non ancora testato questo caso
                     default:
                         message.handleServerSide(server, virtualView, outputClient);
@@ -100,7 +100,7 @@ public class ClientHandler implements Runnable{
                 }
                 System.out.println("Client " + clientSocket.getInetAddress() + " disconnected.");
                 
-                disconnectFromClient();
+                handleDisconnection();
                 
                 //TODO scollegamento:
                 // scollegamento di rete: boh.
@@ -110,7 +110,7 @@ public class ClientHandler implements Runnable{
                 System.out.println("Error in the I/O of the client " + clientSocket.getInetAddress() + ":" +
                         " client " + clientSocket.getInetAddress() + " disconnected.");
                 
-                disconnectFromClient();
+                handleDisconnection();
                 
                 //TODO scollegamento:
                 // scollegamento di rete: boh.
@@ -231,11 +231,22 @@ public class ClientHandler implements Runnable{
             server.initGame();
     }
     
+    public void disconnectFromClient(OpponentPlayerDisconnection message){
+        send(message);
+        isConnected = false;
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            System.out.println("Unable to close the socket of this client: " + clientSocket.getInetAddress());
+            e.printStackTrace();
+        }
+    }
+    
     /**
-     * This method handles involuntary disconnection of the client connected to this client handler and forces
-     * the disconnection of the others clients.
+     * This method handle the disconnection of the client. If it is the first client to disconnect from the game,
+     * it will make others disconnect as well. Otherwise, the method is ignored.
      */
-    private void disconnectFromClient() {
+    private void handleDisconnection() {
         // If the virtualView is set to null, it means that the player didn't enter the handleFirstConnection,
         // hence nothing has to be done.
         if (virtualView==null){
@@ -246,34 +257,19 @@ public class ClientHandler implements Runnable{
         // This is synchronized in the case there is an attempt of connection by another client
         // during the disconnection of this client.
         synchronized (firstConnectionLock) {
-            
             // If isConnected is true, it means that this method hasn't been called by other clients. This means
             // that the client which has to advise the others is this.
             // Hence, for each client this method sends to them a message of incoming disconnection.
             if (isConnected) {
-                for (ClientHandler clientHandler: server.getPlayers()) {
-                    if (!clientHandler.equals(this)) {
-                        OpponentPlayerDisconnection message = new OpponentPlayerDisconnection(MessageType.OPPONENT_PLAYER_DISCONNECTION);
-                        message.setUsername(virtualView.getUsername());
-                        clientHandler.send(message);
-                        // This forbids the other clients to enter the if(isConnected) clause when they call this method.
-                        clientHandler.isConnected = false;
-                        try {
-                            clientHandler.clientSocket.close();
-                        } catch (IOException e) {
-                            System.out.println("Closing client socket failed.");
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                OpponentPlayerDisconnection message = new OpponentPlayerDisconnection(MessageType.OPPONENT_PLAYER_DISCONNECTION);
+                message.setUsername(virtualView.getUsername());
+                server.notifyMessageListeners(message, virtualView);
+                server.cleanServer();
             }
             
             isConnected = false;
-    
-            server.cleanServer();
         }
     }
-    //TODO rendere questo metodo più intelligente
     
     /**
      * This method serializes the messages and sends them to the client.
@@ -285,6 +281,7 @@ public class ClientHandler implements Runnable{
             outputClient.writeObject(message);
         } catch (IOException e) {
             System.out.println("Error in the serialization of " +message.toString()+ " message.");
+            
             e.printStackTrace();
         }
     }
