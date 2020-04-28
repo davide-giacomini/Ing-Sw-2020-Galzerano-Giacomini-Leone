@@ -1,0 +1,488 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ClientHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Network.Server</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ClientHandler (Network.Server)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 141)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ClientHandler$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 142)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Network.Server;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Enumerations.Color;
+<i>4</i>&nbsp;import Enumerations.GodName;
+<i>5</i>&nbsp;import Enumerations.MessageType;
+<i>6</i>&nbsp;import Model.Slot;
+<i>7</i>&nbsp;import Network.Client.Client;
+<i>8</i>&nbsp;import Network.Message.*;
+<i>9</i>&nbsp;import Network.Message.ConnectionFailed;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.io.*;
+<i>12</i>&nbsp;import java.net.Socket;
+<i>13</i>&nbsp;import java.util.ArrayList;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;public class ClientHandler implements Runnable{
+<i>16</i>&nbsp;    private Socket clientSocket;
+<i>17</i>&nbsp;    private Server server;
+<i>18</i>&nbsp;    private VirtualView virtualView;
+<i>19</i>&nbsp;    private ObjectInputStream inputClient;
+<i>20</i>&nbsp;    private ObjectOutputStream outputClient;
+<i>21</i>&nbsp;    private boolean isConnected;
+<b class="nc"><i>22</i>&nbsp;    private final static Object firstConnectionLock = new Object();</b>
+<i>23</i>&nbsp;    
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * This constructor set up the management between the {@link Client} and the {@link Server}.
+<i>26</i>&nbsp;     *
+<i>27</i>&nbsp;     * @param clientSocket the socket of the {@link Client} connected to the server.
+<i>28</i>&nbsp;     * @param server the server
+<i>29</i>&nbsp;     */
+<b class="nc"><i>30</i>&nbsp;    public ClientHandler(Socket clientSocket, Server server){</b>
+<b class="nc"><i>31</i>&nbsp;        this.clientSocket = clientSocket;</b>
+<b class="nc"><i>32</i>&nbsp;        this.server = server;</b>
+<b class="nc"><i>33</i>&nbsp;        this.isConnected = true;</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;    
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * This method instantiates the {@link ObjectInputStream} and the {@link ObjectOutputStream} with
+<i>38</i>&nbsp;     * {@link java.io.InputStream} and {@link java.io.OutputStream} of the client&#39;s socket in order to
+<i>39</i>&nbsp;     * handle serialization.
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    @Override
+<i>42</i>&nbsp;    public void run() {
+<i>43</i>&nbsp;        try {
+<b class="nc"><i>44</i>&nbsp;            inputClient = new ObjectInputStream(clientSocket.getInputStream());</b>
+<b class="nc"><i>45</i>&nbsp;            outputClient = new ObjectOutputStream(clientSocket.getOutputStream());</b>
+<i>46</i>&nbsp;            
+<b class="nc"><i>47</i>&nbsp;            dispatchMessages();</b>
+<i>48</i>&nbsp;        }
+<b class="nc"><i>49</i>&nbsp;        catch (IOException e){</b>
+<b class="nc"><i>50</i>&nbsp;            System.out.println(&quot;client &quot; + clientSocket.getInetAddress() + &quot; connection dropped.&quot;);</b>
+<b class="nc"><i>51</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>52</i>&nbsp;        }</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;    
+<i>55</i>&nbsp;    public VirtualView getVirtualView() {
+<b class="nc"><i>56</i>&nbsp;        return virtualView;</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;    
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * This method handle the messages that come from the client.
+<i>61</i>&nbsp;     * Each different message is handled by a method of this class, method which is called within this method.
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    public void dispatchMessages() {
+<b class="nc"><i>64</i>&nbsp;        System.out.println(&quot;Started listening the client at the address&quot; + clientSocket.getInetAddress());</b>
+<i>65</i>&nbsp;        
+<b class="nc"><i>66</i>&nbsp;        while (isConnected) {</b>
+<i>67</i>&nbsp;            Message message;
+<i>68</i>&nbsp;            try {
+<b class="nc"><i>69</i>&nbsp;                message = (Message) inputClient.readObject();</b>
+<b class="nc"><i>70</i>&nbsp;                switch (message.getMessageType()) {</b>
+<i>71</i>&nbsp;                    case REQUEST_CONNECTION:
+<b class="nc"><i>72</i>&nbsp;                        handleFirstConnection(message);</b>
+<b class="nc"><i>73</i>&nbsp;                        break;</b>
+<i>74</i>&nbsp;                    case REQUEST_NUMBER_OF_PLAYERS:
+<i>75</i>&nbsp;                        // This method notify all the threads which are waiting to know how many players
+<i>76</i>&nbsp;                        // can be added to the game. See handleFirstConnection for more information.
+<b class="nc"><i>77</i>&nbsp;                        synchronized (firstConnectionLock) {</b>
+<b class="nc"><i>78</i>&nbsp;                            message.handleServerSide(server, virtualView, outputClient);</b>
+<b class="nc"><i>79</i>&nbsp;                            server.notifyMessageListeners(message, virtualView);</b>
+<b class="nc"><i>80</i>&nbsp;                            firstConnectionLock.notifyAll();</b>
+<b class="nc"><i>81</i>&nbsp;                        }</b>
+<b class="nc"><i>82</i>&nbsp;                        break;</b>
+<i>83</i>&nbsp;                    case REQUEST_DISCONNECTION:
+<b class="nc"><i>84</i>&nbsp;                        handleDisconnection();</b>
+<i>85</i>&nbsp;                        // TODO non ancora testato questo caso
+<i>86</i>&nbsp;                    default:
+<b class="nc"><i>87</i>&nbsp;                        message.handleServerSide(server, virtualView, outputClient);</b>
+<b class="nc"><i>88</i>&nbsp;                        server.notifyMessageListeners(message, virtualView);</b>
+<i>89</i>&nbsp;                        break;
+<i>90</i>&nbsp;                }
+<b class="nc"><i>91</i>&nbsp;            } catch (ClassNotFoundException e) {</b>
+<b class="nc"><i>92</i>&nbsp;                System.out.println(&quot;The casting of the message of the client &quot; + clientSocket.getInetAddress() + &quot; was not good.&quot;);</b>
+<i>93</i>&nbsp;                try {
+<b class="nc"><i>94</i>&nbsp;                    clientSocket.close();</b>
+<b class="nc"><i>95</i>&nbsp;                } catch (IOException ioException) {</b>
+<b class="nc"><i>96</i>&nbsp;                    ioException.printStackTrace();</b>
+<i>97</i>&nbsp;                }
+<i>98</i>&nbsp;                finally {
+<b class="nc"><i>99</i>&nbsp;                    isConnected = false;</b>
+<b class="nc"><i>100</i>&nbsp;                }</b>
+<b class="nc"><i>101</i>&nbsp;                System.out.println(&quot;Client &quot; + clientSocket.getInetAddress() + &quot; disconnected.&quot;);</b>
+<i>102</i>&nbsp;                
+<b class="nc"><i>103</i>&nbsp;                handleDisconnection();</b>
+<i>104</i>&nbsp;                
+<i>105</i>&nbsp;                //TODO scollegamento:
+<i>106</i>&nbsp;                // scollegamento di rete: boh.
+<i>107</i>&nbsp;                
+<i>108</i>&nbsp;                //e.printStackTrace();
+<b class="nc"><i>109</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>110</i>&nbsp;                System.out.println(&quot;Error in the I/O of the client &quot; + clientSocket.getInetAddress() + &quot;:&quot; +</b>
+<b class="nc"><i>111</i>&nbsp;                        &quot; client &quot; + clientSocket.getInetAddress() + &quot; disconnected.&quot;);</b>
+<i>112</i>&nbsp;                
+<b class="nc"><i>113</i>&nbsp;                handleDisconnection();</b>
+<i>114</i>&nbsp;                
+<i>115</i>&nbsp;                //TODO scollegamento:
+<i>116</i>&nbsp;                // scollegamento di rete: boh.
+<i>117</i>&nbsp;                
+<i>118</i>&nbsp;                //e.printStackTrace();
+<b class="nc"><i>119</i>&nbsp;            }</b>
+<i>120</i>&nbsp;        }
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;    
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * It handles the first connection.
+<i>125</i>&nbsp;     * If the connection went well, the client is added and his {@link VirtualView} is instantiated.
+<i>126</i>&nbsp;     * If not, an error message is sent.
+<i>127</i>&nbsp;     *
+<i>128</i>&nbsp;     * @throws IOException if there are troubles in sending the message to the client.
+<i>129</i>&nbsp;     */
+<i>130</i>&nbsp;    private void handleFirstConnection(Message message) throws IOException {
+<b class="nc"><i>131</i>&nbsp;        System.out.println(&quot;Handle first connection with the client at the address &quot; + clientSocket.getInetAddress());</b>
+<i>132</i>&nbsp;        
+<i>133</i>&nbsp;        // Variables to be used in this method.
+<b class="nc"><i>134</i>&nbsp;        RequestConnection requestConnection = (RequestConnection) message;</b>
+<b class="nc"><i>135</i>&nbsp;        String username = requestConnection.getUsername();</b>
+<b class="nc"><i>136</i>&nbsp;        Color color = requestConnection.getColor();</b>
+<i>137</i>&nbsp;        ArrayList&lt;ClientHandler&gt; players;
+<i>138</i>&nbsp;        int maxNumberOfPlayers;
+<i>139</i>&nbsp;        
+<i>140</i>&nbsp;        // The players in the server and the parameters of the virtual view mustn&#39;t be modified while an other client
+<i>141</i>&nbsp;        // gets them. Hence, the getter and setter methods are inside a synchronized block.
+<b class="nc"><i>142</i>&nbsp;        synchronized (firstConnectionLock){</b>
+<i>143</i>&nbsp;            // Getter methods inside the synchronized block. The setter methods are below
+<b class="nc"><i>144</i>&nbsp;            players = server.getPlayers();</b>
+<b class="nc"><i>145</i>&nbsp;            maxNumberOfPlayers = server.getMaxNumberOfPlayers();</b>
+<i>146</i>&nbsp;            
+<i>147</i>&nbsp;            // When the first player sets the maxNumberOfPlayers, they are outside this method, because the request
+<i>148</i>&nbsp;            // is consumed in the client through the socket connection. Hence, their clientHandler could have already
+<i>149</i>&nbsp;            // added to the players of the server (because the addPlayer is called inside this synchronized block).
+<i>150</i>&nbsp;            // Hence, for the thread that owns the lock now, the number of players could result more than zero
+<i>151</i>&nbsp;            // (because the addPlayer is called inside this synchronized block), but the maxNumberOfPlayers could
+<i>152</i>&nbsp;            // be zero, because the setting is done outside this method in the client.
+<i>153</i>&nbsp;            // A client cannot proceed neither be added in the players of the server until the first player doesn&#39;t
+<i>154</i>&nbsp;            // decide which is the maxNumberOfPlayers of the game.
+<i>155</i>&nbsp;            // In the case that the first player has already been added but they didn&#39;t choose the maxNumberOfPlayers,
+<i>156</i>&nbsp;            // the current thread has to wait. In this case, an advice is sent to the client.
+<b class="nc"><i>157</i>&nbsp;            if (players.size()!=0 &amp;&amp; maxNumberOfPlayers==0) {</b>
+<b class="nc"><i>158</i>&nbsp;                outputClient.writeObject(new WaitChooseNumberPlayers(MessageType.WAIT_CHOOSE_NUMBER_PLAYERS));</b>
+<b class="nc"><i>159</i>&nbsp;                while (server.getMaxNumberOfPlayers()==0) {</b>
+<i>160</i>&nbsp;                    try {
+<b class="nc"><i>161</i>&nbsp;                        firstConnectionLock.wait();</b>
+<b class="nc"><i>162</i>&nbsp;                    } catch (InterruptedException e) {</b>
+<b class="nc"><i>163</i>&nbsp;                        e.printStackTrace();</b>
+<b class="nc"><i>164</i>&nbsp;                    }</b>
+<i>165</i>&nbsp;                }
+<i>166</i>&nbsp;            }
+<i>167</i>&nbsp;            
+<i>168</i>&nbsp;            // After the wait, the players inside the server and the maxNumberOfPlayers may be modified.
+<i>169</i>&nbsp;            // An other call has to be done.
+<i>170</i>&nbsp;            // Getter methods inside the synchronized block. The setter methods are below
+<b class="nc"><i>171</i>&nbsp;            players = server.getPlayers();</b>
+<b class="nc"><i>172</i>&nbsp;            maxNumberOfPlayers = server.getMaxNumberOfPlayers();</b>
+<i>173</i>&nbsp;        
+<i>174</i>&nbsp;            // If the game is already full of players
+<b class="nc"><i>175</i>&nbsp;            if (players.size()!=0 &amp;&amp; players.size() == maxNumberOfPlayers) {</b>
+<b class="nc"><i>176</i>&nbsp;                ConnectionFailed connectionFailed = new ConnectionFailed(MessageType.CONNECTION_FAILED);</b>
+<i>177</i>&nbsp;                //WARNING: the following message MUST be equal to the one checked in handleConnectionFailed in the network handler
+<b class="nc"><i>178</i>&nbsp;                connectionFailed.setErrorMessage(&quot;The game is already started. Try later.&quot;);</b>
+<b class="nc"><i>179</i>&nbsp;                outputClient.writeObject(connectionFailed);</b>
+<b class="nc"><i>180</i>&nbsp;                clientSocket.close();</b>
+<b class="nc"><i>181</i>&nbsp;                isConnected = false;</b>
+<b class="nc"><i>182</i>&nbsp;                return;</b>
+<i>183</i>&nbsp;            }
+<i>184</i>&nbsp;            // It checks if this client decided an univocal name and color for the game
+<b class="nc"><i>185</i>&nbsp;            for (ClientHandler clientHandler : players) {</b>
+<i>186</i>&nbsp;                // Getter methods of the virtual view inside the synchronized block. There is the constructor below
+<b class="nc"><i>187</i>&nbsp;                if (clientHandler.getVirtualView().getUsername().equals(username)) {</b>
+<b class="nc"><i>188</i>&nbsp;                    ConnectionFailed connectionFailed = new ConnectionFailed(MessageType.CONNECTION_FAILED);</b>
+<i>189</i>&nbsp;                    //WARNING: the following message MUST be equal to the one checked in handleConnectionFailed in the network handler
+<b class="nc"><i>190</i>&nbsp;                    connectionFailed.setErrorMessage(&quot;Somebody else has already taken this username.&quot;);</b>
+<b class="nc"><i>191</i>&nbsp;                    outputClient.writeObject(connectionFailed);</b>
+<b class="nc"><i>192</i>&nbsp;                    return;</b>
+<b class="nc"><i>193</i>&nbsp;                } else if (clientHandler.getVirtualView().getColor().equals(color)) {</b>
+<b class="nc"><i>194</i>&nbsp;                    ConnectionFailed connectionFailed = new ConnectionFailed(MessageType.CONNECTION_FAILED);</b>
+<i>195</i>&nbsp;                    //WARNING: the following message MUST be equal to the one checked in handleConnectionFailed in the network handler
+<b class="nc"><i>196</i>&nbsp;                    connectionFailed.setErrorMessage(&quot;Somebody else has already taken this color.&quot;);</b>
+<b class="nc"><i>197</i>&nbsp;                    outputClient.writeObject(connectionFailed);</b>
+<b class="nc"><i>198</i>&nbsp;                    return;</b>
+<i>199</i>&nbsp;                }
+<b class="nc"><i>200</i>&nbsp;            }</b>
+<i>201</i>&nbsp;    
+<i>202</i>&nbsp;            // the virtual view is added and it is added to the message listeners.
+<i>203</i>&nbsp;            // Constructor of the virtual view inside the synchronized block. There are the getter methods above.
+<b class="nc"><i>204</i>&nbsp;            virtualView = new VirtualView(username, color, this);</b>
+<b class="nc"><i>205</i>&nbsp;            server.addMessageListener(virtualView);</b>
+<i>206</i>&nbsp;    
+<i>207</i>&nbsp;            // if the player is the first, he will decide the number of players
+<b class="nc"><i>208</i>&nbsp;            if (players.size() == 0)</b>
+<b class="nc"><i>209</i>&nbsp;                outputClient.writeObject(new RequestNumberOfPlayers(MessageType.REQUEST_NUMBER_OF_PLAYERS));</b>
+<i>210</i>&nbsp;    
+<i>211</i>&nbsp;            // the player is added to the list of players of the server
+<i>212</i>&nbsp;            // Setter methods of the players field of the server inside the synchronized block. There are the getter methods above.
+<b class="nc"><i>213</i>&nbsp;            server.addPlayer(this);</b>
+<b class="nc"><i>214</i>&nbsp;            server.addUsernameAndColorToMap(username, color);</b>
+<b class="nc"><i>215</i>&nbsp;            server.addUsernameAndVirtualViewToMap(username, virtualView);</b>
+<i>216</i>&nbsp;            
+<i>217</i>&nbsp;            // The players size and the maxNumberOfPlayers is called after the modifies and before exiting the
+<i>218</i>&nbsp;            // synchronized block to control if the game can be initialized.
+<b class="nc"><i>219</i>&nbsp;            players = server.getPlayers();</b>
+<b class="nc"><i>220</i>&nbsp;            maxNumberOfPlayers = server.getMaxNumberOfPlayers();</b>
+<b class="nc"><i>221</i>&nbsp;        }</b>
+<i>222</i>&nbsp;        
+<i>223</i>&nbsp;        // The client is advised of the successful connection.
+<b class="nc"><i>224</i>&nbsp;        ConnectionAccepted connectionAccepted = new ConnectionAccepted(MessageType.CONNECTION_ACCEPTED);</b>
+<b class="nc"><i>225</i>&nbsp;        connectionAccepted.setUsername(username);</b>
+<b class="nc"><i>226</i>&nbsp;        connectionAccepted.setColor(color);</b>
+<b class="nc"><i>227</i>&nbsp;        outputClient.writeObject(connectionAccepted);</b>
+<i>228</i>&nbsp;        
+<i>229</i>&nbsp;        // If the number of players is reached, the game is initialized.
+<b class="nc"><i>230</i>&nbsp;        if (players.size() == maxNumberOfPlayers)</b>
+<b class="nc"><i>231</i>&nbsp;            server.initGame();</b>
+<i>232</i>&nbsp;    }
+<i>233</i>&nbsp;    
+<i>234</i>&nbsp;    public void disconnectFromClient(OpponentPlayerDisconnection message){
+<b class="nc"><i>235</i>&nbsp;        send(message);</b>
+<b class="nc"><i>236</i>&nbsp;        isConnected = false;</b>
+<i>237</i>&nbsp;        try {
+<b class="nc"><i>238</i>&nbsp;            clientSocket.close();</b>
+<b class="nc"><i>239</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>240</i>&nbsp;            System.out.println(&quot;Unable to close the socket of this client: &quot; + clientSocket.getInetAddress());</b>
+<b class="nc"><i>241</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>242</i>&nbsp;        }</b>
+<i>243</i>&nbsp;    }
+<i>244</i>&nbsp;    
+<i>245</i>&nbsp;    /**
+<i>246</i>&nbsp;     * This method handle the disconnection of the client. If it is the first client to disconnect from the game,
+<i>247</i>&nbsp;     * it will make others disconnect as well. Otherwise, the method is ignored.
+<i>248</i>&nbsp;     */
+<i>249</i>&nbsp;    private void handleDisconnection() {
+<i>250</i>&nbsp;        // If the virtualView is set to null, it means that the player didn&#39;t enter the handleFirstConnection,
+<i>251</i>&nbsp;        // hence nothing has to be done.
+<b class="nc"><i>252</i>&nbsp;        if (virtualView==null){</b>
+<b class="nc"><i>253</i>&nbsp;            isConnected = false;</b>
+<i>254</i>&nbsp;            return;
+<i>255</i>&nbsp;        }
+<i>256</i>&nbsp;        
+<i>257</i>&nbsp;        // This is synchronized in the case there is an attempt of connection by another client
+<i>258</i>&nbsp;        // during the disconnection of this client.
+<b class="nc"><i>259</i>&nbsp;        synchronized (firstConnectionLock) {</b>
+<i>260</i>&nbsp;            // If isConnected is true, it means that this method hasn&#39;t been called by other clients. This means
+<i>261</i>&nbsp;            // that the client which has to advise the others is this.
+<i>262</i>&nbsp;            // Hence, for each client this method sends to them a message of incoming disconnection.
+<b class="nc"><i>263</i>&nbsp;            if (isConnected) {</b>
+<b class="nc"><i>264</i>&nbsp;                OpponentPlayerDisconnection message = new OpponentPlayerDisconnection(MessageType.OPPONENT_PLAYER_DISCONNECTION);</b>
+<b class="nc"><i>265</i>&nbsp;                message.setUsername(virtualView.getUsername());</b>
+<b class="nc"><i>266</i>&nbsp;                server.notifyMessageListeners(message, virtualView);</b>
+<b class="nc"><i>267</i>&nbsp;                server.cleanServer();</b>
+<i>268</i>&nbsp;            }
+<i>269</i>&nbsp;            
+<b class="nc"><i>270</i>&nbsp;            isConnected = false;</b>
+<b class="nc"><i>271</i>&nbsp;        }</b>
+<i>272</i>&nbsp;    }
+<i>273</i>&nbsp;    
+<i>274</i>&nbsp;    /**
+<i>275</i>&nbsp;     * This method serializes the messages and sends them to the client.
+<i>276</i>&nbsp;     *
+<i>277</i>&nbsp;     * @param message the message that must be sent.
+<i>278</i>&nbsp;     */
+<i>279</i>&nbsp;    private void send(Message message) {
+<i>280</i>&nbsp;        try {
+<b class="nc"><i>281</i>&nbsp;            outputClient.writeObject(message);</b>
+<b class="nc"><i>282</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>283</i>&nbsp;            System.out.println(&quot;Error in the serialization of &quot; +message.toString()+ &quot; message.&quot;);</b>
+<i>284</i>&nbsp;            
+<b class="nc"><i>285</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>286</i>&nbsp;        }</b>
+<i>287</i>&nbsp;    }
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;    /**
+<i>290</i>&nbsp;     * This method sends a message to the client with the number of players
+<i>291</i>&nbsp;     *
+<i>292</i>&nbsp;     * @param numberOfPlayers parameter that must be sent.
+<i>293</i>&nbsp;     */
+<i>294</i>&nbsp;    void sendNumberOfPlayers(int numberOfPlayers) {
+<b class="nc"><i>295</i>&nbsp;        NumberOfPlayers message = new NumberOfPlayers(MessageType.NUMBER_PLAYERS);</b>
+<b class="nc"><i>296</i>&nbsp;        message.setNumberOfPlayers(numberOfPlayers);</b>
+<b class="nc"><i>297</i>&nbsp;        send(message);</b>
+<i>298</i>&nbsp;    }
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;    /**
+<i>301</i>&nbsp;     * This method send a message to the client to tell him that he is the Challenger.
+<i>302</i>&nbsp;     */
+<i>303</i>&nbsp;    void sendYouAreTheChallenger()  {
+<b class="nc"><i>304</i>&nbsp;        send(new YouAreTheChallenger(MessageType.RANDOM_PLAYER));</b>
+<i>305</i>&nbsp;    }
+<i>306</i>&nbsp;
+<i>307</i>&nbsp;    /**
+<i>308</i>&nbsp;     * This method sends a message to the client with the list of available gods he can choose from.
+<i>309</i>&nbsp;     *
+<i>310</i>&nbsp;     * @param gods list of available gods.
+<i>311</i>&nbsp;     */
+<i>312</i>&nbsp;    void sendGodsList(ArrayList&lt;GodName&gt; gods) {
+<b class="nc"><i>313</i>&nbsp;        ListOfGods message = new ListOfGods(MessageType.LIST_OF_GODS);</b>
+<b class="nc"><i>314</i>&nbsp;        message.setGodsAvailable(gods);</b>
+<b class="nc"><i>315</i>&nbsp;        send(message);</b>
+<i>316</i>&nbsp;    }
+<i>317</i>&nbsp;
+<i>318</i>&nbsp;    /**
+<i>319</i>&nbsp;     * This method sends a message to the client with all the information about the players of the current game.
+<i>320</i>&nbsp;     *
+<i>321</i>&nbsp;     * @param usernames the username of each client
+<i>322</i>&nbsp;     * @param colors the color of each client
+<i>323</i>&nbsp;     * @param godNames the god chose from each client
+<i>324</i>&nbsp;     */
+<i>325</i>&nbsp;    void sendPublicInformation(ArrayList&lt;String&gt; usernames, ArrayList&lt;Color&gt; colors, ArrayList&lt;GodName&gt; godNames)  {
+<b class="nc"><i>326</i>&nbsp;        PublicInformation message = new PublicInformation(MessageType.PUBLIC_INFORMATION);</b>
+<b class="nc"><i>327</i>&nbsp;        message.setUsernames(usernames);</b>
+<b class="nc"><i>328</i>&nbsp;        message.setColors(colors);</b>
+<b class="nc"><i>329</i>&nbsp;        message.setGodNames(godNames);</b>
+<b class="nc"><i>330</i>&nbsp;        send(message);</b>
+<i>331</i>&nbsp;    }
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;    /**
+<i>334</i>&nbsp;     * This method sends a message to the client with an update of the model (a modified slot).
+<i>335</i>&nbsp;     *
+<i>336</i>&nbsp;     * @param updatedSlot the modified slot.
+<i>337</i>&nbsp;     */
+<i>338</i>&nbsp;    void sendUpdateSlot(Slot updatedSlot) {
+<b class="nc"><i>339</i>&nbsp;        Slot newSlot = new Slot(updatedSlot.getRow(), updatedSlot.getColumn());</b>
+<b class="nc"><i>340</i>&nbsp;        newSlot.setWorker(updatedSlot.getWorker()) ;</b>
+<b class="nc"><i>341</i>&nbsp;        newSlot.setWorkerColor(updatedSlot.getWorkerColor());</b>
+<b class="nc"><i>342</i>&nbsp;        newSlot.setLevel(updatedSlot.getLevel());</b>
+<b class="nc"><i>343</i>&nbsp;        newSlot.setOccupied(updatedSlot.getIsOccupied());</b>
+<b class="nc"><i>344</i>&nbsp;        UpdatedSlot message = new UpdatedSlot(MessageType.UPDATE_SLOT);</b>
+<b class="nc"><i>345</i>&nbsp;        message.setUpdatedSlot(newSlot);</b>
+<b class="nc"><i>346</i>&nbsp;        send(message);</b>
+<i>347</i>&nbsp;    }
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;    /**
+<i>350</i>&nbsp;     * This method sends a message to the client to ask the initial position of his workers.
+<i>351</i>&nbsp;     */
+<i>352</i>&nbsp;    void sendAskWorkersPosition() {
+<b class="nc"><i>353</i>&nbsp;        send(new AskWorkersPosition(MessageType.ASK_WORKER_POSITION));</b>
+<i>354</i>&nbsp;    }
+<i>355</i>&nbsp;
+<i>356</i>&nbsp;    /**
+<i>357</i>&nbsp;     * This method sends a message to the client to warn him that he did something wrong.
+<i>358</i>&nbsp;     * @param errorText the errorString that explain what he did wrong.
+<i>359</i>&nbsp;     */
+<i>360</i>&nbsp;    void sendError(String errorText) {
+<b class="nc"><i>361</i>&nbsp;        ErrorMessage message = new ErrorMessage(MessageType.ERROR);</b>
+<b class="nc"><i>362</i>&nbsp;        message.setErrorText(errorText);</b>
+<b class="nc"><i>363</i>&nbsp;        send(message);</b>
+<i>364</i>&nbsp;    }
+<i>365</i>&nbsp;
+<i>366</i>&nbsp;    /**
+<i>367</i>&nbsp;     * This method sends a message to the client to ask which worker he wants to use, asking the slot he is on.
+<i>368</i>&nbsp;     */
+<i>369</i>&nbsp;    void sendWhichWorker() {
+<b class="nc"><i>370</i>&nbsp;        send(new ChooseWorkerByPosition(MessageType.CHOOSE_WORKER));</b>
+<i>371</i>&nbsp;    }
+<i>372</i>&nbsp;
+<i>373</i>&nbsp;    /**
+<i>374</i>&nbsp;     * This method sends a message to the client to ask which action he wants to do next.
+<i>375</i>&nbsp;     */
+<i>376</i>&nbsp;    void sendAction() {
+<b class="nc"><i>377</i>&nbsp;        send(new ChooseAction(MessageType.CHOOSE_ACTION));</b>
+<i>378</i>&nbsp;    }
+<i>379</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-28 13:08</div>
+</div>
+</body>
+</html>

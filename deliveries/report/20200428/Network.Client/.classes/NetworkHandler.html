@@ -1,0 +1,250 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NetworkHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Network.Client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NetworkHandler (Network.Client)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NetworkHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 53)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">NetworkHandler$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 54)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Network.Client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Enumerations.Color;
+<i>4</i>&nbsp;import Enumerations.MessageType;
+<i>5</i>&nbsp;import Network.Message.*;
+<i>6</i>&nbsp;import Network.Message.ConnectionFailed;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.io.IOException;
+<i>9</i>&nbsp;import java.io.ObjectInputStream;
+<i>10</i>&nbsp;import java.io.ObjectOutputStream;
+<i>11</i>&nbsp;import java.net.Socket;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * This class handles the transfer of messages between the client and the server.
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;public class NetworkHandler implements Runnable{
+<i>17</i>&nbsp;    private final Client client;
+<i>18</i>&nbsp;    private Socket serverSocket;
+<i>19</i>&nbsp;    private boolean firstConnection;
+<i>20</i>&nbsp;    private ObjectInputStream inputServer;
+<i>21</i>&nbsp;    private ObjectOutputStream outputServer;
+<i>22</i>&nbsp;    private boolean isConnected;
+<i>23</i>&nbsp;    
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * This constructor set up the management between the {@link Client} and the {@link Network.Server.Server}.
+<i>26</i>&nbsp;     *
+<i>27</i>&nbsp;     * @param client the {@link Client} to be handled.
+<i>28</i>&nbsp;     * @param serverSocket the socket of the {@link Network.Server.Server} the user wants to connect to.
+<i>29</i>&nbsp;     */
+<b class="nc"><i>30</i>&nbsp;    public NetworkHandler(Client client, Socket serverSocket){</b>
+<b class="nc"><i>31</i>&nbsp;        this.client = client;</b>
+<b class="nc"><i>32</i>&nbsp;        this.serverSocket = serverSocket;</b>
+<b class="nc"><i>33</i>&nbsp;        firstConnection = true;</b>
+<b class="nc"><i>34</i>&nbsp;        this.isConnected = true;</b>
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;    
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * This method instantiates the {@link ObjectInputStream} and the {@link ObjectOutputStream} with
+<i>39</i>&nbsp;     * {@link java.io.InputStream} and {@link java.io.OutputStream} of the server&#39;s socket in order to
+<i>40</i>&nbsp;     * handle serialization.
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    @Override
+<i>43</i>&nbsp;    public void run() {
+<i>44</i>&nbsp;        try {
+<b class="nc"><i>45</i>&nbsp;            outputServer = new ObjectOutputStream(serverSocket.getOutputStream());</b>
+<b class="nc"><i>46</i>&nbsp;            inputServer = new ObjectInputStream(serverSocket.getInputStream());</b>
+<i>47</i>&nbsp;            
+<b class="nc"><i>48</i>&nbsp;            if (firstConnection)</b>
+<b class="nc"><i>49</i>&nbsp;                handleFirstConnection();</b>
+<b class="nc"><i>50</i>&nbsp;            dispatchMessages();</b>
+<i>51</i>&nbsp;        }
+<b class="nc"><i>52</i>&nbsp;        catch (IOException e){</b>
+<b class="nc"><i>53</i>&nbsp;            System.out.println(&quot;Connection failed.&quot;);</b>
+<b class="nc"><i>54</i>&nbsp;        }</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;    
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * This method handles the first connection with the server, asking to the user to choose their username and
+<i>59</i>&nbsp;     * the color they prefer for their workers.
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    public void handleFirstConnection() {
+<b class="nc"><i>62</i>&nbsp;        String username = client.getView().askUsername();</b>
+<b class="nc"><i>63</i>&nbsp;        Color color = client.getView().askColorWorkers();</b>
+<i>64</i>&nbsp;        
+<b class="nc"><i>65</i>&nbsp;        RequestConnection requestConnection = new RequestConnection(MessageType.REQUEST_CONNECTION);</b>
+<b class="nc"><i>66</i>&nbsp;        requestConnection.setColor(color);</b>
+<b class="nc"><i>67</i>&nbsp;        requestConnection.setUsername(username);</b>
+<i>68</i>&nbsp;        try {
+<b class="nc"><i>69</i>&nbsp;            outputServer.writeObject(requestConnection);</b>
+<b class="nc"><i>70</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>71</i>&nbsp;            System.out.println(&quot;Error in the serialization of &quot; + requestConnection.toString() + &quot; message.&quot;);</b>
+<b class="nc"><i>72</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>73</i>&nbsp;        }</b>
+<b class="nc"><i>74</i>&nbsp;        firstConnection = false;</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;    
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * This method dispatches the messages coming from the the server and calls other methods useful to handle them.
+<i>79</i>&nbsp;     */
+<i>80</i>&nbsp;    public void dispatchMessages() {
+<b class="nc"><i>81</i>&nbsp;        System.out.println(&quot;Started listening to the server.&quot;);</b>
+<i>82</i>&nbsp;        
+<b class="nc"><i>83</i>&nbsp;        while (isConnected){</b>
+<i>84</i>&nbsp;            Message message;
+<i>85</i>&nbsp;            try {
+<b class="nc"><i>86</i>&nbsp;                message = (Message) inputServer.readObject();</b>
+<b class="nc"><i>87</i>&nbsp;                switch (message.getMessageType()){</b>
+<i>88</i>&nbsp;                    case REQUEST_CONNECTION:
+<b class="nc"><i>89</i>&nbsp;                        handleFirstConnection();</b>
+<b class="nc"><i>90</i>&nbsp;                        break;</b>
+<i>91</i>&nbsp;                    case CONNECTION_FAILED:
+<b class="nc"><i>92</i>&nbsp;                        handleConnectionFailed((ConnectionFailed) message);</b>
+<b class="nc"><i>93</i>&nbsp;                        firstConnection = true;</b>
+<b class="nc"><i>94</i>&nbsp;                        break;</b>
+<i>95</i>&nbsp;                    default:
+<b class="nc"><i>96</i>&nbsp;                        message.handleClientSide(client, outputServer);</b>
+<i>97</i>&nbsp;                        break;
+<i>98</i>&nbsp;                }
+<i>99</i>&nbsp;            }
+<b class="nc"><i>100</i>&nbsp;            catch (IOException e){</b>
+<b class="nc"><i>101</i>&nbsp;                client.getView().print(&quot;We are sorry: &quot; +</b>
+<b class="nc"><i>102</i>&nbsp;                        &quot;the server  at the address &quot; + serverSocket.getInetAddress() + &quot; disconnected.&quot;);</b>
+<b class="nc"><i>103</i>&nbsp;                isConnected = false;</b>
+<i>104</i>&nbsp;                //e.printStackTrace();
+<i>105</i>&nbsp;            }
+<b class="nc"><i>106</i>&nbsp;            catch (ClassNotFoundException e){</b>
+<b class="nc"><i>107</i>&nbsp;                client.getView().print(&quot;Error in casting during the readObject.&quot;);</b>
+<b class="nc"><i>108</i>&nbsp;                isConnected = false;</b>
+<i>109</i>&nbsp;                //e.printStackTrace();
+<b class="nc"><i>110</i>&nbsp;            }</b>
+<i>111</i>&nbsp;        }
+<i>112</i>&nbsp;        
+<b class="nc"><i>113</i>&nbsp;        client.getView().print(&quot;Game closed.&quot;);</b>
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;    
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * Here a failure in the connection is analyzed.
+<i>118</i>&nbsp;     * If the user wrote the wrong username or the wrong color, this method proceeds for a reconnection, calling back
+<i>119</i>&nbsp;     * the {@link #handleFirstConnection()}.
+<i>120</i>&nbsp;     * Otherwise, if the game is already started, the connection closes.
+<i>121</i>&nbsp;     *
+<i>122</i>&nbsp;     * @param connectionFailedMessage it&#39;s the message with its parameters.
+<i>123</i>&nbsp;     */
+<i>124</i>&nbsp;    private void handleConnectionFailed(ConnectionFailed connectionFailedMessage) {
+<b class="nc"><i>125</i>&nbsp;        connectionFailedMessage.handleClientSide(client, outputServer);</b>
+<i>126</i>&nbsp;        
+<b class="nc"><i>127</i>&nbsp;        if (connectionFailedMessage.getErrorMessage().equals(&quot;Somebody else has already taken this username. Try another.&quot;)         //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server</b>
+<b class="nc"><i>128</i>&nbsp;                || connectionFailedMessage.getErrorMessage().equals(&quot;Somebody else has already taken this color. Try another.&quot;)){   //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server</b>
+<b class="nc"><i>129</i>&nbsp;            handleFirstConnection();</b>
+<i>130</i>&nbsp;        }
+<b class="nc"><i>131</i>&nbsp;        else if (connectionFailedMessage.getErrorMessage().equals(&quot;The game is already started. Try later.&quot;)){         //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server</b>
+<i>132</i>&nbsp;            try {
+<b class="nc"><i>133</i>&nbsp;                isConnected = false;</b>
+<b class="nc"><i>134</i>&nbsp;                serverSocket.close();</b>
+<i>135</i>&nbsp;            }
+<b class="nc"><i>136</i>&nbsp;            catch (IOException e){</b>
+<b class="nc"><i>137</i>&nbsp;                System.out.println(&quot;Unable to close server socket&quot;);</b>
+<b class="nc"><i>138</i>&nbsp;            }</b>
+<i>139</i>&nbsp;        }
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-28 13:08</div>
+</div>
+</body>
+</html>
