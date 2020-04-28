@@ -3,6 +3,7 @@ package Network.Server;
 
 import Controller.GameController;
 import Enumerations.Color;
+import Model.Board;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -49,7 +50,7 @@ public class Server extends Observable {
                 ClientHandler clientHandler = new ClientHandler(clientSocket, server);
                 Thread thread = new Thread(clientHandler, "server_" + clientSocket.getInetAddress());
                 thread.start();
-                System.out.println("I've received a request");
+                System.out.println("Socket from the client " + clientSocket.getInetAddress() + " connected.");
             } catch (IOException e) {
                 System.out.println("connection dropped");
             }
@@ -57,6 +58,7 @@ public class Server extends Observable {
     }
     
     public synchronized void cleanServer(){
+        Board.getBoard().clearBoard();
         connections = new ArrayList<>();
         mapUsernameColor = new HashMap<>();
         mapUsernameVirtualView = new HashMap<>();

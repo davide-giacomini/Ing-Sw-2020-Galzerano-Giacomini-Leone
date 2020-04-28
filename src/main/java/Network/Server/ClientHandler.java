@@ -10,7 +10,6 @@ import Network.Message.ConnectionFailed;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 public class ClientHandler implements Runnable{
@@ -21,7 +20,6 @@ public class ClientHandler implements Runnable{
     private ObjectOutputStream outputClient;
     private boolean isConnected;
     private final static Object firstConnectionLock = new Object();
-    private boolean opponentDisconnected;
     
     /**
      * This constructor set up the management between the {@link Client} and the {@link Server}.
@@ -33,7 +31,6 @@ public class ClientHandler implements Runnable{
         this.clientSocket = clientSocket;
         this.server = server;
         this.isConnected = true;
-        this.opponentDisconnected = false;
     }
     
     /**
@@ -83,6 +80,9 @@ public class ClientHandler implements Runnable{
                             firstConnectionLock.notifyAll();
                         }
                         break;
+                    case REQUEST_DISCONNECTION:
+                        disconnectFromClient();
+                        // TODO non ancora testato questo caso
                     default:
                         message.handleServerSide(server, virtualView, outputClient);
                         server.notifyMessageListeners(message, virtualView);
@@ -100,21 +100,19 @@ public class ClientHandler implements Runnable{
                 }
                 System.out.println("Client " + clientSocket.getInetAddress() + " disconnected.");
                 
-                handleInvoluntaryDisconnection();
+                disconnectFromClient();
                 
                 //TODO scollegamento:
-                // scollegamento volontario: lo decide il controller (mi arriverà un messaggio)
                 // scollegamento di rete: boh.
                 
                 //e.printStackTrace();
             } catch (IOException e) {
                 System.out.println("Error in the I/O of the client " + clientSocket.getInetAddress() + ":" +
-                        "client " + clientSocket.getInetAddress() + " disconnected.");
+                        " client " + clientSocket.getInetAddress() + " disconnected.");
                 
-                handleInvoluntaryDisconnection();
+                disconnectFromClient();
                 
                 //TODO scollegamento:
-                // scollegamento volontario: lo decide il controller (mi arriverà un messaggio)
                 // scollegamento di rete: boh.
                 
                 //e.printStackTrace();
@@ -237,7 +235,7 @@ public class ClientHandler implements Runnable{
      * This method handles involuntary disconnection of the client connected to this client handler and forces
      * the disconnection of the others clients.
      */
-    private void handleInvoluntaryDisconnection () {
+    private void disconnectFromClient() {
         // If the virtualView is set to null, it means that the player didn't enter the handleFirstConnection,
         // hence nothing has to be done.
         if (virtualView==null){
@@ -249,7 +247,8 @@ public class ClientHandler implements Runnable{
         // during the disconnection of this client.
         synchronized (firstConnectionLock) {
             
-            // If this boolean is true, it means that this method hasn't been called by other clients.
+            // If isConnected is true, it means that this method hasn't been called by other clients. This means
+            // that the client which has to advise the others is this.
             // Hence, for each client this method sends to them a message of incoming disconnection.
             if (isConnected) {
                 for (ClientHandler clientHandler: server.getPlayers()) {
@@ -274,7 +273,8 @@ public class ClientHandler implements Runnable{
             server.cleanServer();
         }
     }
-
+    //TODO rendere questo metodo più intelligente
+    
     /**
      * This method serializes the messages and sends them to the client.
      *

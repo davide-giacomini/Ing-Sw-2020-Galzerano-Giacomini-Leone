@@ -8,28 +8,24 @@ import Network.Server.VirtualView;
 import java.io.ObjectOutputStream;
 
 /**
- * This message has the username of the player who disconnected.
- * It's used to advise the other players.
+ * This message is sent to the server when a client wants to disconnect.
  */
-public class OpponentPlayerDisconnection extends Message{
-    private static final long serialVersionUID = -6561561295860715699L;
-    private String username;
+public class RequestDisconnection extends Message {
+    private static final long serialVersionUID = 8209837022517336261L;
     
-    public OpponentPlayerDisconnection(MessageType messageType) {
+    public RequestDisconnection(MessageType messageType) {
         super(messageType);
     }
     
     /**
-     * This client is told that an opponent player disconnected.
-     * The game ends.
+     * @deprecated
+     * This method is special, is handled inside the {@link Network.Client.NetworkHandler}. It has not to be used.
      *
      * @param client the client to be handled.
      * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
      */
     @Override
-    public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        client.getView().print("We are sorry: "+username+" has just disconnected.\nThe game is going to end.");
-    }
+    public void handleClientSide(Client client, ObjectOutputStream outputServer) {}
     
     /**
      * @deprecated
@@ -40,11 +36,5 @@ public class OpponentPlayerDisconnection extends Message{
      * @param outputClient the {@link ObjectOutputStream} of the client. It can be used to send other messages.
      */
     @Override
-    public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
-    
-    }
-    
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {}
 }

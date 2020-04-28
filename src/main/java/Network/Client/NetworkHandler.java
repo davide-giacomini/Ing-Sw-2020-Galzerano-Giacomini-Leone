@@ -114,7 +114,7 @@ public class NetworkHandler implements Runnable{
     }
     
     /**
-     * Here a failure in the connection is analized.
+     * Here a failure in the connection is analyzed.
      * If the user wrote the wrong username or the wrong color, this method proceeds for a reconnection, calling back
      * the {@link #handleFirstConnection()}.
      * Otherwise, if the game is already started, the connection closes.
