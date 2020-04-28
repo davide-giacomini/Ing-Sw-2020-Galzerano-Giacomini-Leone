@@ -19,6 +19,12 @@ public class ChooseWorkerByPosition extends Message {
         super(messageType);
     }
 
+    /**
+     * This method print to the client the request about which worker he wants to use and send to the server
+     * a message with the row and column the chosen worker is on.
+     * @param client the client to be handled.
+     * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
+     */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
         int[] rowsAndColumns;
@@ -34,12 +40,16 @@ public class ChooseWorkerByPosition extends Message {
         }
     }
 
+    /**
+     * This method sends to the virtual view the content of the message.
+     * @param server the server, which has got the parameters in common with all the clients.
+     * @param virtualView the {@link VirtualView} of the client connected.
+     * @param outputClient the {@link ObjectOutputStream} of the client. It can be used to send other messages.
+     */
     @Override
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
         virtualView.receiveWhichWorker(getRowsAndColumns());
     }
-
-
 
     public int[] getRowsAndColumns() {
         return rowsAndColumns;

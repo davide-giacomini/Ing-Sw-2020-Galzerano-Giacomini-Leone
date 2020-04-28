@@ -23,6 +23,12 @@ public class ChooseAction extends Message {
         super(messageType);
     }
 
+    /**
+     * This method print to the client the request about what action he wants to do next and send to the server
+     * a message with the type of action he chose and the relative direction.
+     * @param client the client to be handled.
+     * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
+     */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
         client.getView().showCurrentBoard();
@@ -41,15 +47,17 @@ public class ChooseAction extends Message {
         }
     }
 
+    /**
+     * This method sends to the virtual view the content of the message.
+     * @param server the server, which has got the parameters in common with all the clients.
+     * @param virtualView the {@link VirtualView} of the client connected.
+     * @param outputClient the {@link ObjectOutputStream} of the client. It can be used to send other messages.
+     */
     @Override
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
             virtualView.receiveWhichAction(action, direction);
     }
 
-
-    public Action getAction() {
-        return action;
-    }
 
     public Direction getDirection() {
         return direction;

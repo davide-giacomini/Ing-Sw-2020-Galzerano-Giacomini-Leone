@@ -10,7 +10,6 @@ import Network.Message.ConnectionFailed;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 public class ClientHandler implements Runnable{
@@ -356,16 +355,26 @@ public class ClientHandler implements Runnable{
         send(new AskWorkersPosition(MessageType.ASK_WORKER_POSITION));
     }
 
+    /**
+     * This method sends a message to the client to warn him that he did something wrong.
+     * @param errorText the errorString that explain what he did wrong.
+     */
     void sendError(String errorText) {
         ErrorMessage message = new ErrorMessage(MessageType.ERROR);
         message.setErrorText(errorText);
         send(message);
     }
 
+    /**
+     * This method sends a message to the client to ask which worker he wants to use, asking the slot he is on.
+     */
     void sendWhichWorker() {
         send(new ChooseWorkerByPosition(MessageType.CHOOSE_WORKER));
     }
 
+    /**
+     * This method sends a message to the client to ask which action he wants to do next.
+     */
     void sendAction() {
         send(new ChooseAction(MessageType.CHOOSE_ACTION));
     }

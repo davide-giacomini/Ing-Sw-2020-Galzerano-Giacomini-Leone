@@ -123,26 +123,48 @@ public class VirtualView implements ServerListener, SlotListener {
             controller.setWorkers(RowsAndColumns);
     }
 
+
     public void sendLosingPlayer(String username) {
         //clientHandler.manageSendLosingPlayer(username)
     }
 
+    /**
+     * This method send the request of the choice about which worker use in a turn.
+     */
     public void sendWhichWorker() {
         clientHandler.sendWhichWorker();
     }
 
+    /**
+     * This method send the request of the choice about what to do next:
+     * A player can move, build, build a dome or end his turn.
+     */
     public void sendWhichAction() {
         clientHandler.sendAction();
     }
 
+    /**
+     * This method send an error to the client.
+     * It contains an errorString which will be printed to inform him about what he did wrong.
+     * @param errorText the errorString that must be sent to the client.
+     */
     public void sendError(String errorText) {
         clientHandler.sendError(errorText);
     }
 
+    /**
+     * This method receives the coordinates about the worker that has been chosen and send them to the controller.
+     * @param coordinates row and column where the chosen worker is on.
+     */
     public void receiveWhichWorker(int[] coordinates) {
         controller.getTurn().setWorkerGender(coordinates);
     }
 
+    /**
+     * This method receives the action chosen by the player during his turn.
+     * @param action the type of action he chose.
+     * @param direction the chosen direction.
+     */
     public void receiveWhichAction(Action action, Direction direction) {
         controller.getTurn().executeAction(action, direction);
     }
