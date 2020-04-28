@@ -31,7 +31,7 @@ public class ChooseAction extends Message {
      */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        client.getView().showCurrentBoard();
+
         ArrayList<Enum> ActionAndDirection;
         ActionAndDirection = client.getView().askAction();
 
