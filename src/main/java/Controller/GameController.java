@@ -4,8 +4,6 @@ import Enumerations.Color;
 import Enumerations.Gender;
 import Enumerations.GodName;
 import Model.*;
-import Model.Exceptions.GodNotSetException;
-import Model.Exceptions.InvalidDirectionException;
 import Model.Exceptions.SlotOccupiedException;
 import Model.Gods.*;
 import Network.Server.VirtualView;
@@ -66,7 +64,7 @@ public class GameController {
     }
 
     /**
-     * This method is the first method which is launched by the server.
+     * This method is the first method which is launched in the constructor to make start the game.
      */
     public void startController() {
          orderViews();
@@ -85,7 +83,8 @@ public class GameController {
         game.setGods(gods);
         game.putRandomAtLastPosition();
         orderViews();
-        views.get(indexOfCurrentPlayer).sendGodsList(game.getGods());   //TODO renderlo safe
+        ArrayList<GodName> godsList = new ArrayList<>(gods);
+        views.get(indexOfCurrentPlayer).sendGodsList(godsList);
     }
 
     /**
@@ -95,13 +94,22 @@ public class GameController {
      * @throws IOException if the god is not one of the enumeration.
      */
     public void setGod(GodName god) throws IOException {
+        if (!game.getGods().contains(god)) {
+            String textError = "You cannot choose this god, it's not available in this game";
+            views.get(indexOfCurrentPlayer).sendError(textError);
+            ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
+            views.get(indexOfCurrentPlayer).sendGodsList(godsList);
+            return;
+        }
         Game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, Game.getPlayer(indexOfCurrentPlayer)));
         game.getGods().remove(god);
         incrementIndex();
         if (indexOfCurrentPlayer == 0)
             startGame();
-        else
-            views.get(indexOfCurrentPlayer).sendGodsList(game.getGods());
+        else {
+            ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
+            views.get(indexOfCurrentPlayer).sendGodsList(godsList);
+        }
     }
 
     /**
@@ -190,7 +198,6 @@ public class GameController {
         }
 
         views.get(indexOfCurrentPlayer).sendSetWorkers();
-
     }
 
     /**

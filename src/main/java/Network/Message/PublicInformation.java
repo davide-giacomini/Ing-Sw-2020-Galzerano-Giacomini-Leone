@@ -52,25 +52,13 @@ public class PublicInformation extends Message{
      */
     @Override
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {}
-    
-    public ArrayList<String> getUsernames() {
-        return new ArrayList<>(usernames);
-    }
 
     public void setUsernames(ArrayList<String> usernames) {
         this.usernames = usernames;
     }
 
-    public ArrayList<Color> getColors() {
-        return new ArrayList<>(colors);
-    }
-
     public void setColors(ArrayList<Color> colors) {
         this.colors = colors;
-    }
-
-    public ArrayList<GodName> getGodNames() {
-        return new ArrayList<>(godNames);
     }
 
     public void setGodNames(ArrayList<GodName> godNames) {

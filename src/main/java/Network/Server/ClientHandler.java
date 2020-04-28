@@ -336,8 +336,13 @@ public class ClientHandler implements Runnable{
      * @param updatedSlot the modified slot.
      */
     void sendUpdateSlot(Slot updatedSlot) {
+        Slot newSlot = new Slot(updatedSlot.getRow(), updatedSlot.getColumn());
+        newSlot.setWorker(updatedSlot.getWorker()) ;
+        newSlot.setWorkerColor(updatedSlot.getWorkerColor());
+        newSlot.setLevel(updatedSlot.getLevel());
+        newSlot.setOccupied(updatedSlot.getIsOccupied());
         UpdatedSlot message = new UpdatedSlot(MessageType.UPDATE_SLOT);
-        message.setUpdatedSlot(updatedSlot);
+        message.setUpdatedSlot(newSlot);
         send(message);
     }
 
@@ -348,16 +353,26 @@ public class ClientHandler implements Runnable{
         send(new AskWorkersPosition(MessageType.ASK_WORKER_POSITION));
     }
 
+    /**
+     * This method sends a message to the client to warn him that he did something wrong.
+     * @param errorText the errorString that explain what he did wrong.
+     */
     void sendError(String errorText) {
         ErrorMessage message = new ErrorMessage(MessageType.ERROR);
         message.setErrorText(errorText);
         send(message);
     }
 
+    /**
+     * This method sends a message to the client to ask which worker he wants to use, asking the slot he is on.
+     */
     void sendWhichWorker() {
         send(new ChooseWorkerByPosition(MessageType.CHOOSE_WORKER));
     }
 
+    /**
+     * This method sends a message to the client to ask which action he wants to do next.
+     */
     void sendAction() {
         send(new ChooseAction(MessageType.CHOOSE_ACTION));
     }
