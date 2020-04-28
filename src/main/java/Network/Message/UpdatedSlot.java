@@ -30,7 +30,7 @@ public class UpdatedSlot extends Message{
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
         client.getView().getViewDatabase().getBoardView().setSlot(updatedSlot);
-        client.getView().showCurrentBoard();
+
     }
     
     /**

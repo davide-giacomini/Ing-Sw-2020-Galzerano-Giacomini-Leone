@@ -22,7 +22,7 @@ public class ClientHandler implements Runnable{
     private boolean isConnected;
     private final static Object firstConnectionLock = new Object();
     private boolean opponentDisconnected;
-    
+
     /**
      * This constructor set up the management between the {@link Client} and the {@link Server}.
      *
@@ -339,8 +339,13 @@ public class ClientHandler implements Runnable{
      * @param updatedSlot the modified slot.
      */
     void sendUpdateSlot(Slot updatedSlot) {
+        Slot newSlot = new Slot(updatedSlot.getRow(), updatedSlot.getColumn());
+        newSlot.setWorker(updatedSlot.getWorker()) ;
+        newSlot.setWorkerColor(updatedSlot.getWorkerColor());
+        newSlot.setLevel(updatedSlot.getLevel());
+        newSlot.setOccupied(updatedSlot.getIsOccupied());
         UpdatedSlot message = new UpdatedSlot(MessageType.UPDATE_SLOT);
-        message.setUpdatedSlot(updatedSlot);
+        message.setUpdatedSlot(newSlot);
         send(message);
     }
 
