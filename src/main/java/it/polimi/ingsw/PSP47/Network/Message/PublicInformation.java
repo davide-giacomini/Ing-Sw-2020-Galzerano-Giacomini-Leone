@@ -35,9 +35,9 @@ public class PublicInformation extends Message{
      */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        client.getView().getViewDatabase().setUsernames(usernames);
-        client.getView().getViewDatabase().setColors(colors);
-        client.getView().getViewDatabase().setGods(godNames);
+        client.getView().getGameView().setUsernames(usernames);
+        client.getView().getGameView().setColors(colors);
+        client.getView().getGameView().setGods(godNames);
     
         client.getView().showPublicInformation();
     }

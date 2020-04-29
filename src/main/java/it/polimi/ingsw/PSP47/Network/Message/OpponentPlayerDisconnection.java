@@ -28,7 +28,7 @@ public class OpponentPlayerDisconnection extends Message{
      */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        client.getView().print("We are sorry: "+username+" has just disconnected.\nThe game is going to end.");
+        client.getView().showMessage("We are sorry: "+username+" has just disconnected.\nThe game is going to end.");
     }
     
     /**

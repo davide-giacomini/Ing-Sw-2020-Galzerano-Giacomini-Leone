@@ -27,7 +27,7 @@ public class NumberOfPlayers extends Message {
      */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        client.getView().getViewDatabase().setNumberOfPlayers(numberOfPlayers);
+        client.getView().getGameView().setNumberOfPlayers(numberOfPlayers);
     }
     
     /**

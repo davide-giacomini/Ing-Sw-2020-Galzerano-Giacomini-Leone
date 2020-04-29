@@ -98,19 +98,19 @@ public class NetworkHandler implements Runnable{
                 }
             }
             catch (IOException e){
-                client.getView().print("We are sorry: " +
+                client.getView().showMessage("We are sorry: " +
                         "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");
                 isConnected = false;
                 //e.printStackTrace();
             }
             catch (ClassNotFoundException e){
-                client.getView().print("Error in casting during the readObject.");
+                client.getView().showMessage("Error in casting during the readObject.");
                 isConnected = false;
                 //e.printStackTrace();
             }
         }
         
-        client.getView().print("Game closed.");
+        client.getView().showMessage("Game closed.");
     }
     
     /**

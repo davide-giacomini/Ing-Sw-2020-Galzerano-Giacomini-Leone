@@ -22,7 +22,7 @@ public class ErrorMessage extends Message {
      */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        client.getView().print(getErrorText());
+        client.getView().showMessage(getErrorText());
     }
 
     /**

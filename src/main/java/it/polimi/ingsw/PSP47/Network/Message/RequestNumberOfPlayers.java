@@ -33,7 +33,7 @@ public class RequestNumberOfPlayers extends Message {
         try {
             outputServer.writeObject(requestNumberOfPlayers);
         } catch (IOException e) {
-            client.getView().print("Error in the serialization of " +this.toString()+" message.");
+            client.getView().showMessage("Error in the serialization of " +this.toString()+" message.");
             //e.printStackTrace();
         }
         //TODO provare ad utilizzare lo stesso messaggio per tutti i messaggi che chiedono di rimandare indietro

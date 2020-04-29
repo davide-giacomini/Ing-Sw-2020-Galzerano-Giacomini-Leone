@@ -8,7 +8,7 @@ import java.util.*;
 
 public class CLI extends View {
 
-    private ViewDatabase viewDatabase;
+
     private PrintSupport printSupport;
     private Scanner in;
     private PrintStream out;
@@ -29,21 +29,19 @@ public class CLI extends View {
        // t = c.askIfAtlasWantsToBuildDome();
     }
 
-    //Constructor
     public CLI(Client client) {
         super(client);
         this.in = new Scanner(System.in);
         this.out = new PrintStream(System.out);
-        viewDatabase = new ViewDatabase();
+        gameView = new GameView();
         printSupport = new PrintSupport();
     }
-
 
 
     /**
      * This method is used to print the initial Santorini Logo
      */
-    public void printSantorini() {
+    public void showTitle() {
         String santoriniName = "     ____       ____   ____    __      ____    ____    ____        __         \n" +
                                "    |____|     |      |    |  |  | |    ||    |    |  |    |  ||  |  | |  ||  \n" +
                                "    |_°°_|     |____  |____|  |  | |    ||    |    |  |____|  ||  |  | |  ||  \n" +
@@ -276,7 +274,7 @@ public class CLI extends View {
 
 
         do {
-            out.println("Choose which god you want to add in the list : you can choose " + viewDatabase.getNumberOfPlayers() );
+            out.println("Choose which god you want to add in the list : you can choose " + gameView.getNumberOfPlayers() );
 
             if (in.hasNextLine()){
                 god = in.nextLine();
@@ -293,9 +291,10 @@ public class CLI extends View {
 
             i++;
 
-        }while (i < viewDatabase.getNumberOfPlayers());
+        }while (i < gameView.getNumberOfPlayers());
 
         return godsChosen;
+
 
     }
 
@@ -325,7 +324,7 @@ public class CLI extends View {
                     out.println(AnsiCode.ANSI_RED + "God not available or wrong!\n"+ AnsiCode.ANSI_RESET);
                     god = null;
                 }else{
-                    viewDatabase.setMyGod(godName);
+                    gameView.setMyGod(godName);
                 }
             }else
                 out.println(AnsiCode.ANSI_RED + "God not inserted! \n"+ AnsiCode.ANSI_RESET);
@@ -336,19 +335,9 @@ public class CLI extends View {
 
     }
 
-    @Override
-    public int[] askWhereToMoveWorkers() {
-        return new int[0];
-    }
-
-    @Override
-    public int[] askWhereToBuildWorkers() {
-        return new int[0];
-    }
-
 
     public void tellYourTurnIndex(int Index){
-        viewDatabase.setMyIndex(Index);
+        gameView.setMyIndex(Index);
         out.println("You're the "+ Index + " player in the game. \n");
     }
 
@@ -361,6 +350,7 @@ public class CLI extends View {
     public void theWinnerIs(String usernameWinner ){
         out.println("\n\n THE WINNER IS : "+ usernameWinner);
     }
+
     /**
      * This method tells the username of the winner
      * @param usernameLoser is the username of the winner
@@ -371,10 +361,9 @@ public class CLI extends View {
     }
     
     @Override
-    public ViewDatabase getViewDatabase() {
-        return viewDatabase;
+    public GameView getGameView() {
+        return gameView;
     }
-
 
     /**
      * This method resets the color to the default one when called
@@ -386,7 +375,7 @@ public class CLI extends View {
     }
 
     @Override
-    public void print(String text) {
+    public void showMessage(String text) {
         System.out.println(AnsiCode.ANSI_RED +text + AnsiCode.ANSI_RESET);
     }
 
@@ -467,10 +456,10 @@ public class CLI extends View {
          ArrayList<Color> colors ;
          ArrayList <GodName> gods ;
 
-        usernames = viewDatabase.getUsernames();
-        colors = viewDatabase.getColors();
-        gods = viewDatabase.getGods();
-       printSupport.printUsersAndColorsAndGods(usernames, colors, gods, viewDatabase.getNumberOfPlayers(), out);
+        usernames = gameView.getUsernames();
+        colors = gameView.getColors();
+        gods = gameView.getGods();
+       printSupport.printUsersAndColorsAndGods(usernames, colors, gods, gameView.getNumberOfPlayers(), out);
     }
 
     /**
@@ -478,7 +467,7 @@ public class CLI extends View {
      */
     @Override
     public void showCurrentBoard(){
-        printSupport.printCurrBoard(printSupport.buildCurrBoard(viewDatabase.getBoardView()), out);
+        printSupport.printCurrBoard(printSupport.buildCurrBoard(gameView.getBoardView()), out);
     }
 
 }
