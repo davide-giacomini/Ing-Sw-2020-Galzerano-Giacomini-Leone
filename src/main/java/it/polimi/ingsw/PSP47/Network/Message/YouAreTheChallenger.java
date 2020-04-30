@@ -35,8 +35,7 @@ public class YouAreTheChallenger extends Message{
         try {
             outputServer.writeObject(message);
         } catch (IOException e) {
-            client.getView().print("Error in the serialization of " +this.toString()+" message.");
-            //e.printStackTrace();
+            client.getView().showMessage("Error in the serialization of " +this.toString()+" message.");
         }
     }
     

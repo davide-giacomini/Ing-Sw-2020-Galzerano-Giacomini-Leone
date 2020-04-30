@@ -23,7 +23,7 @@ public class WaitChooseNumberPlayers extends Message {
      */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        client.getView().print("Please wait. The first player is choosing the number of players right now.");
+        client.getView().showMessage("Please wait. The first player is choosing the number of players right now.");
         //TODO Arianna: se ti serve cambiare questo metodo cambialo pure.
     }
     

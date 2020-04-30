@@ -191,6 +191,7 @@ public class PrintSupport {
             }
         }
         out.print("\n");
+        clearConsole(out);
     }
 
     /**
@@ -199,6 +200,7 @@ public class PrintSupport {
     static void clearConsole(PrintStream out) {
         out.print(AnsiCode.ANSI_CLEARCONSOLE);
         out.flush();
+
     }
 
     /**

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /*This class stores in the client some basic information of the model that the view needs in order to
 interact with the user
  */
-public class ViewDatabase {
+public class GameView {
 
     public String myUsername;
     public Color myColor;
@@ -21,7 +21,7 @@ public class ViewDatabase {
     public ArrayList<Color> colors = new ArrayList<Color>();
     public ArrayList <GodName> gods = new ArrayList<GodName>();
 
-    ViewDatabase(){
+    GameView(){
         this.boardView = new BoardView();
     }
 

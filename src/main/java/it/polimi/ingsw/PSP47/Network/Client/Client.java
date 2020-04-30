@@ -34,7 +34,7 @@ public class Client implements Runnable {
         
         if ("CLI".equals(viewChoice.toUpperCase())) {
             view = new CLI(this);
-            view.printSantorini();
+            view.showTitle();
         } else if ("GUI".equals(viewChoice.toUpperCase())) {
             //TODO istanzia la gui come view
         }

@@ -41,8 +41,8 @@ public class ConnectionAccepted extends Message{
      */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        client.getView().getViewDatabase().setMyUsername(username);
-        client.getView().getViewDatabase().setMyColor(color);
+        client.getView().getGameView().setMyUsername(username);
+        client.getView().getGameView().setMyColor(color);
     }
     
     /**

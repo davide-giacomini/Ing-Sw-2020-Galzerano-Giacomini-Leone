@@ -22,7 +22,7 @@ public class ConnectionFailed extends Message {
      */
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer){
-        client.getView().print(errorMessage);
+        client.getView().showMessage(errorMessage);
     }
     
     /**
