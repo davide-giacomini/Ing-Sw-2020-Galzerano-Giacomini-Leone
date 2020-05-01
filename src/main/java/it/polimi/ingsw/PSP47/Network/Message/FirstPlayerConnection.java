@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 
 import java.io.Serializable;
 
-public class FirstPlayerConnection implements Serializable {
+public class FirstPlayerConnection extends Message implements Serializable {
     private static final long serialVersionUID = 7416497312772957279L;
     private final MessageType messageType = MessageType.FIRST_PLAYER_CONNECTION;
     private final String username;
