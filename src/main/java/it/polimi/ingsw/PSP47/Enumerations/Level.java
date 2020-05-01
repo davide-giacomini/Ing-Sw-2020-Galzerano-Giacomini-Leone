@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP47.Enumerations;
 
-public enum Level {
+import java.io.Serializable;
+
+public enum Level implements Serializable {
     
     GROUND (0),
     LEVEL1 (1),

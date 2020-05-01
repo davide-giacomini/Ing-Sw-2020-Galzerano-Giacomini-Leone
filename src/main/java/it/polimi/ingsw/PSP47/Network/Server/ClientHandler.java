@@ -84,6 +84,8 @@ public class ClientHandler implements Runnable{
                     case REQUEST_DISCONNECTION:
                         handleDisconnection();
                         // TODO non ancora testato questo caso
+                    case FIRST_PLAYER_CONNECTION:
+                        //TODO controlla che i parametri siano corretti
                     default:
                         message.handleServerSide(server, virtualView, outputClient);
                         server.notifyMessageListeners(message, virtualView);

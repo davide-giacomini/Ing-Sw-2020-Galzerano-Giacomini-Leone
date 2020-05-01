@@ -6,6 +6,8 @@ import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.*;
 import it.polimi.ingsw.PSP47.Model.Exceptions.SlotOccupiedException;
 import it.polimi.ingsw.PSP47.Model.Gods.*;
+import it.polimi.ingsw.PSP47.Network.Message.Message;
+import it.polimi.ingsw.PSP47.Network.Server.ServerListener;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 
 import java.io.IOException;
@@ -18,7 +20,7 @@ import java.util.Random;
  * This class represents the controller of the game. It creates the instance of the game with all its elements
  * and contains all the methods used to update the model.
  */
-public class GameController {
+public class GameController implements ServerListener {
     private int numberOfPlayers;
     private static Game game;
     private ArrayList<VirtualView> views;
@@ -257,5 +259,10 @@ public class GameController {
 
     public TurnController getTurn() {
         return turn;
+    }
+    
+    @Override
+    public void update(Message message, VirtualView virtualView) {
+        //TODO questo lo gestisce Monica a seconda del messaggio
     }
 }

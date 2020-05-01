@@ -45,8 +45,6 @@ public class NetworkHandler implements Runnable{
             outputServer = new ObjectOutputStream(serverSocket.getOutputStream());
             inputServer = new ObjectInputStream(serverSocket.getInputStream());
             
-            if (firstConnection)
-                handleFirstConnection();
             dispatchMessages();
         }
         catch (IOException e){
