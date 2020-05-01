@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP47.Enumerations;
 
-public enum Color {
+import java.io.Serializable;
+
+public enum Color implements Serializable {
 
     RED(0),
     GREEN(1),

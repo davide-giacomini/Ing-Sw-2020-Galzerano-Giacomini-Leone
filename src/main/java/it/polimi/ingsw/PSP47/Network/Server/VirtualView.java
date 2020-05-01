@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * This class implements a virtualView, which basically represents the connection between the network and the controller.
  * There is one for each player.
  */
-public class VirtualView implements ServerListener, SlotListener {
+public class VirtualView implements SlotListener {
     private GameController controller;
     private ClientHandler clientHandler;
     private final String username;
@@ -39,21 +39,6 @@ public class VirtualView implements ServerListener, SlotListener {
 
     public void setController(GameController controller) {
         this.controller = controller;
-    }
-    
-    /**
-     * //TODO completare
-     * @param message the message sent.
-     * @param virtualView the {@link VirtualView} of the message's addressee.
-     */
-    @Override
-    public void update(Message message, VirtualView virtualView) {
-        switch (message.getMessageType()){
-            case OPPONENT_PLAYER_DISCONNECTION:
-                if (!virtualView.equals(this))
-                    clientHandler.disconnectFromClient((OpponentPlayerDisconnection) message);
-            //TODO implementare l'update a seconda di cosa serve
-        }
     }
     
     @Override

@@ -4,13 +4,16 @@ package it.polimi.ingsw.PSP47.Network.Server;
 import it.polimi.ingsw.PSP47.Controller.GameController;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Model.Board;
+import it.polimi.ingsw.PSP47.Network.Message.FirstPlayerConnection;
 import it.polimi.ingsw.PSP47.Observable;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class instantiates a new server and wait for connections with clients.
@@ -20,12 +23,14 @@ public class Server extends Observable {
      * The socket's port to connect to from the client.
      */
     public final static int SOCKET_PORT = 7777;
-    private ArrayList<ClientHandler> connections = new ArrayList<>();
+    private static ArrayList<ClientHandler> connections = new ArrayList<>();
     private HashMap<String, Color> mapUsernameColor = new HashMap<>();
     private HashMap<String, VirtualView> mapUsernameVirtualView = new HashMap<>();
     private static Server server;
     private int maxNumberOfPlayers = 0;
     private GameController gameController;
+    private static AtomicBoolean firstPlayerConnected = new AtomicBoolean(false);
+    private static AtomicBoolean gameParametersChosen = new AtomicBoolean(false);
     
     
     /**
@@ -50,6 +55,13 @@ public class Server extends Observable {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
+                if (!firstPlayerConnected.get()){
+                    firstPlayerConnected.set(true);
+                    handleFirstPlayerConnection(clientSocket);
+                }
+                else if (!gameParametersChosen.get()){
+                
+                }
                 ClientHandler clientHandler = new ClientHandler(clientSocket, server);
                 Thread thread = new Thread(clientHandler, "server_" + clientSocket.getInetAddress());
                 thread.start();
@@ -58,6 +70,29 @@ public class Server extends Observable {
                 System.out.println("connection dropped");
             }
         }
+    }
+    
+    private static void handleFirstPlayerConnection(Socket clientSocket){
+        ObjectOutputStream objectOutputStream = null;
+        
+        try {
+            objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+        } catch (IOException e) {
+            firstPlayerConnected.set(false);
+            e.printStackTrace();
+        }
+    
+        try {
+            assert objectOutputStream != null;
+            objectOutputStream.writeObject(new FirstPlayerConnection(null, null, null));
+        } catch (IOException e) {
+            firstPlayerConnected.set(false);
+            e.printStackTrace();
+        }
+    
+        ClientHandler clientHandler = new ClientHandler(clientSocket, server);
+        Thread thread = new Thread(clientHandler, "server_" + clientSocket.getInetAddress());
+        thread.start();
     }
     
     public synchronized void cleanServer(){
