@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public abstract class Message implements Serializable {
     private static final long serialVersionUID = -609055340671121579L;
-    private MessageType messageType;
+    protected MessageType messageType;
     
     public MessageType getMessageType(){
         return messageType;

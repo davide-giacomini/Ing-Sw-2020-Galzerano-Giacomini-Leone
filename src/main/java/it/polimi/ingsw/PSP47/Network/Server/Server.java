@@ -4,7 +4,9 @@ package it.polimi.ingsw.PSP47.Network.Server;
 import it.polimi.ingsw.PSP47.Controller.GameController;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Model.Board;
+import it.polimi.ingsw.PSP47.Network.Message.FirstConnection;
 import it.polimi.ingsw.PSP47.Network.Message.FirstPlayerConnection;
+import it.polimi.ingsw.PSP47.Network.Message.WaitConnectionOpponentPlayer;
 import it.polimi.ingsw.PSP47.Observable;
 
 import java.io.IOException;
@@ -13,12 +15,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This class instantiates a new server and wait for connections with clients.
  */
-public class Server extends Observable {
+public class Server extends Observable implements SetUpGameListener{
     /**
      * The socket's port to connect to from the client.
      */
@@ -31,7 +35,24 @@ public class Server extends Observable {
     private GameController gameController;
     private static AtomicBoolean firstPlayerConnected = new AtomicBoolean(false);
     private static AtomicBoolean gameParametersChosen = new AtomicBoolean(false);
+    private static LinkedList<Socket> clientSockets = new LinkedList<>();
+    private static AtomicBoolean connectionSettingFree = new AtomicBoolean(false);
+    private static final ReentrantLock firstConnectionLock = new ReentrantLock();
+    private static AtomicBoolean gameStarted = new AtomicBoolean(false);
     
+    public static void setFirstPlayerConnected(AtomicBoolean firstPlayerConnected) {
+        Server.firstPlayerConnected = firstPlayerConnected;
+    }
+    
+    public static void setGameParametersChosen(AtomicBoolean gameParametersChosen) {
+        Server.gameParametersChosen = gameParametersChosen;
+
+        Socket proxClientSocket;
+        if ((proxClientSocket = clientSockets.poll()) != null)
+            createSetUpGame(proxClientSocket, false);
+        else
+            connectionSettingFree.set(true);
+    }
     
     /**
      * This method creates a connection to be caught by clients. As the server catches a connection, it
@@ -47,7 +68,7 @@ public class Server extends Observable {
         try {
             serverSocket = new ServerSocket(SOCKET_PORT);
         } catch (IOException e) {
-            System.out.println("cannot open server socket");
+            System.out.println("Cannot open server socket.");
             System.exit(1);
             return;
         }
@@ -55,44 +76,33 @@ public class Server extends Observable {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                if (!firstPlayerConnected.get()){
-                    firstPlayerConnected.set(true);
-                    handleFirstPlayerConnection(clientSocket);
-                }
-                else if (!gameParametersChosen.get()){
                 
+                synchronized (firstConnectionLock) {
+                    if (gameStarted.get()){
+                        //TODO manda un messaggio in cui dici che il gioco è partito e arrivederci
+                        clientSocket.close();
+                        continue;
+                    }
+                    
+                    clientSockets.add(clientSocket);
+                    
+                    // If the first player hasn't connected yet, you are the first.
+                    if (!firstPlayerConnected.get()) {
+                        firstPlayerConnected.set(true);
+                        createSetUpGame(clientSockets.poll(), true);
+                    }
+                    // If the first player isn't connected and the connection setting isn't free, wait.
+                    else if (!gameParametersChosen.get() || !connectionSettingFree.get()) {
+                        new ObjectOutputStream(clientSocket.getOutputStream()).writeObject(new WaitConnectionOpponentPlayer());
+                    } else {
+                        createSetUpGame(clientSockets.poll(), false);
+                    }
                 }
-                ClientHandler clientHandler = new ClientHandler(clientSocket, server);
-                Thread thread = new Thread(clientHandler, "server_" + clientSocket.getInetAddress());
-                thread.start();
-                System.out.println("Socket from the client " + clientSocket.getInetAddress() + " connected.");
+                
             } catch (IOException e) {
                 System.out.println("connection dropped");
             }
         }
-    }
-    
-    private static void handleFirstPlayerConnection(Socket clientSocket){
-        ObjectOutputStream objectOutputStream = null;
-        
-        try {
-            objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-        } catch (IOException e) {
-            firstPlayerConnected.set(false);
-            e.printStackTrace();
-        }
-    
-        try {
-            assert objectOutputStream != null;
-            objectOutputStream.writeObject(new FirstPlayerConnection(null, null, null));
-        } catch (IOException e) {
-            firstPlayerConnected.set(false);
-            e.printStackTrace();
-        }
-    
-        ClientHandler clientHandler = new ClientHandler(clientSocket, server);
-        Thread thread = new Thread(clientHandler, "server_" + clientSocket.getInetAddress());
-        thread.start();
     }
     
     public synchronized void cleanServer(){
@@ -132,12 +142,63 @@ public class Server extends Observable {
      * This methods makes the game start, instantiating the controller and setting it into the virtualView.
      * If {@link #cleanServer()} has been called before this method, it returns immediately.
      */
-    public synchronized void initGame() {
-        if (maxNumberOfPlayers==0 || mapUsernameVirtualView==null || mapUsernameColor==null)
-            return;
-        
-        gameController = new GameController(maxNumberOfPlayers, mapUsernameColor, mapUsernameVirtualView);
+    public void initGame() {
+        //gameController = new GameController(maxNumberOfPlayers, mapUsernameColor, mapUsernameVirtualView);
+        gameStarted.set(true);
+        System.out.println("Gioco iniziato.");
     }
     
+    @Override
+    public void setFirstPlayerParameters(FirstPlayerConnection message, Socket clientSocket) {
+        synchronized (firstConnectionLock) {
+            System.out.println("Setting up parameters of the first client: address" + clientSocket.getInetAddress() + ".");
+    
+            // Variables to be used in this method.
+            String username = message.getUsername();
+            Color color = message.getColor();
+            int numberPlayers = message.getNumberPlayers();
+    
+            mapUsernameColor.put(username, color);
+            maxNumberOfPlayers = numberPlayers;
+            Server.setGameParametersChosen(new AtomicBoolean(true));
+            createClientHandler(clientSocket);
+        }
+    }
+    
+    @Override
+    public void setFirstConnectionParameters(FirstConnection message, Socket clientSocket) {
+        synchronized (firstConnectionLock) {
+            System.out.println("Setting up parameters the client" + clientSocket.getInetAddress() + ".");
+        
+            String username = message.getUsername();
+            Color color = message.getColor();
+    
+            mapUsernameColor.put(username, color);
+            createClientHandler(clientSocket);
+            
+            if (connections.size() == maxNumberOfPlayers){
+                initGame();
+                return;
+            }
+    
+            if (clientSockets.getFirst()==null)
+                connectionSettingFree.set(true);
+            else
+                connectionSettingFree.set(false);
+        }
+    }
+    
+    private void createClientHandler(Socket clientSocket){
+        ClientHandler clientHandler = new ClientHandler(clientSocket, server);
+        connections.add(clientHandler);
+        new Thread(clientHandler, "server_" + clientSocket.getInetAddress()).start();
+        System.out.println("Socket from the client " + clientSocket.getInetAddress() + " successfully connected.");
+    }
+    
+    private static void createSetUpGame(Socket clientSocket, boolean isTheFirstPlayer){
+        SetUpGame setUpGame = new SetUpGame(clientSocket, isTheFirstPlayer);
+        setUpGame.addSetUpGameListener(server);
+        new Thread(setUpGame).start();
+    }
 }
 
