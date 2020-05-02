@@ -15,9 +15,7 @@ public class TimerUpdater extends Message{
     private boolean expired = false;
     private int secondsWaited;
 
-    public TimerUpdater(boolean expired, int secondsWaited) {
-        this.expired = expired;
-        this.secondsWaited = secondsWaited;
+    public TimerUpdater() {
         this.messageType=MessageType.TIMER_UPDATER;
     }
 

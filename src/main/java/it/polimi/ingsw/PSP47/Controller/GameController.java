@@ -9,6 +9,9 @@ import it.polimi.ingsw.PSP47.Model.Gods.*;
 import it.polimi.ingsw.PSP47.Network.Message.Message;
 import it.polimi.ingsw.PSP47.Network.Server.ServerListener;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
+import it.polimi.ingsw.PSP47.Network.Server.VirtualViewListener;
+import it.polimi.ingsw.PSP47.Visitor.ControllerVisitor;
+import it.polimi.ingsw.PSP47.Visitor.Visitable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,12 +23,13 @@ import java.util.Random;
  * This class represents the controller of the game. It creates the instance of the game with all its elements
  * and contains all the methods used to update the model.
  */
-public class GameController implements ServerListener {
+public class GameController implements VirtualViewListener {
     private int numberOfPlayers;
     private static Game game;
     private ArrayList<VirtualView> views;
     private int indexOfCurrentPlayer;
     private TurnController turn;
+    private ControllerVisitor controllerVisitor;
 
     /**
      * This is the constructor of the GameController which creates the game and set the random player who will
@@ -37,6 +41,7 @@ public class GameController implements ServerListener {
         this.numberOfPlayers = numberOfPlayers;
         this.views = new ArrayList<>(numberOfPlayers);
         game = new Game(numberOfPlayers);
+        controllerVisitor = new ControllerVisitor(this);
         for(Map.Entry<String,Color> entry : mapUserColor.entrySet()) {
             String username = entry.getKey();
             Color color = entry.getValue();
@@ -44,7 +49,7 @@ public class GameController implements ServerListener {
 
             VirtualView virtualView = mapUserVirtualView.get(username);
             setView(virtualView);
-            virtualView.setController(this);
+            virtualView.addVirtualViewListener(this);
         }
         game.setRandomPlayer(chooseRandomPlayer());
         startController();
@@ -93,9 +98,8 @@ public class GameController implements ServerListener {
      * This method sets the god that has been chosen by a player in his class.
      * It also delete this god from the list of available gods.
      * @param god the chosen god
-     * @throws IOException if the god is not one of the enumeration.
      */
-    public void setGod(GodName god) throws IOException {
+    public void setGod(GodName god) {
         if (!game.getGods().contains(god)) {
             String textError = "You cannot choose this god, it's not available in this game";
             views.get(indexOfCurrentPlayer).sendError(textError);
@@ -103,7 +107,13 @@ public class GameController implements ServerListener {
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
             return;
         }
-        Game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, Game.getPlayer(indexOfCurrentPlayer)));
+        try {
+            Game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, Game.getPlayer(indexOfCurrentPlayer)));
+        } catch (IOException e) {
+            views.get(indexOfCurrentPlayer).sendError("Try again, there were some troubles in the conversion.");
+            ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
+            views.get(indexOfCurrentPlayer).sendGodsList(godsList);
+        }
         game.getGods().remove(god);
         incrementIndex();
         if (indexOfCurrentPlayer == 0)
@@ -260,9 +270,9 @@ public class GameController implements ServerListener {
     public TurnController getTurn() {
         return turn;
     }
-    
+
     @Override
-    public void update(Message message, VirtualView virtualView) {
-        //TODO questo lo gestisce Monica a seconda del messaggio
+    public void update(Visitable visitableObject) {
+        visitableObject.accept(controllerVisitor);
     }
 }

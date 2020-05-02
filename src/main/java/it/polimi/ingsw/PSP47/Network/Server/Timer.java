@@ -24,7 +24,7 @@ public class Timer implements Runnable {
             secondsWaited+=10;
     
             if (secondsWaited<=MAX_MILLISECONDS_PER_PLAYER) {
-                TimerUpdater message = new TimerUpdater(MessageType.TIMER_UPDATER);
+                TimerUpdater message = new TimerUpdater();
                 message.setSecondsWaited(secondsWaited);
                 clientHandler.send(message);
             }
@@ -35,7 +35,7 @@ public class Timer implements Runnable {
     
     void notifyTimeIsExpired(){
         timeExpired = true;
-        TimerUpdater message = new TimerUpdater(MessageType.TIMER_UPDATER);
+        TimerUpdater message = new TimerUpdater();
         message.setExpired();
         clientHandler.handleDisconnection();
     }

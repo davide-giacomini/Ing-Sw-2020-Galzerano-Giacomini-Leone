@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP47.Visitor;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 
 public class VisitableGod implements Visitable {
-    GodName godName;
+    private GodName godName;
 
     @Override
     public void accept(Visitor visitor) {

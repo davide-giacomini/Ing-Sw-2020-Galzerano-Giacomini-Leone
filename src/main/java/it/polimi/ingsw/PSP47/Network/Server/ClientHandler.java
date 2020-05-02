@@ -7,6 +7,9 @@ import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Message.*;
 import it.polimi.ingsw.PSP47.Network.Message.ConnectionFailed;
+import it.polimi.ingsw.PSP47.Visitor.Visitable;
+import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
+import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
 
 import java.io.*;
 import java.net.Socket;
@@ -76,7 +79,7 @@ public class ClientHandler implements Runnable{
                         // This method notify all the threads which are waiting to know how many players
                         // can be added to the game. See handleFirstConnection for more information.
                         synchronized (firstConnectionLock) {
-                            message.handleServerSide(server, virtualView, outputClient);
+                            //message.handleServerSide(server, virtualView, outputClient);
                             server.notifyMessageListeners(message, virtualView);
                             firstConnectionLock.notifyAll();
                         }
@@ -87,8 +90,8 @@ public class ClientHandler implements Runnable{
                     case FIRST_PLAYER_CONNECTION:
                         //TODO controlla che i parametri siano corretti
                     default:
-                        message.handleServerSide(server, virtualView, outputClient);
-                        server.notifyMessageListeners(message, virtualView);
+                        Visitable visitableObject = message.getContent();
+                        virtualView.notifyVirtualViewListener(visitableObject);
                         break;
                 }
             } catch (ClassNotFoundException e) {
@@ -158,7 +161,7 @@ public class ClientHandler implements Runnable{
             // In the case that the first player has already been added but they didn't choose the maxNumberOfPlayers,
             // the current thread has to wait. In this case, an advice is sent to the client.
             if (players.size()!=0 && maxNumberOfPlayers==0) {
-                outputClient.writeObject(new WaitChooseNumberPlayers(MessageType.WAIT_CHOOSE_NUMBER_PLAYERS));
+                outputClient.writeObject(new WaitChooseNumberPlayers());
                 while (server.getMaxNumberOfPlayers()==0) {
                     try {
                         firstConnectionLock.wait();
@@ -176,9 +179,8 @@ public class ClientHandler implements Runnable{
         
             // If the game is already full of players
             if (players.size()!=0 && players.size() == maxNumberOfPlayers) {
-                ConnectionFailed connectionFailed = new ConnectionFailed(MessageType.CONNECTION_FAILED);
+                ConnectionFailed connectionFailed = new ConnectionFailed("The game is already started. Try later.");
                 //WARNING: the following message MUST be equal to the one checked in handleConnectionFailed in the network handler
-                connectionFailed.setErrorMessage("The game is already started. Try later.");
                 outputClient.writeObject(connectionFailed);
                 clientSocket.close();
                 isConnected = false;
@@ -188,15 +190,13 @@ public class ClientHandler implements Runnable{
             for (ClientHandler clientHandler : players) {
                 // Getter methods of the virtual view inside the synchronized block. There is the constructor below
                 if (clientHandler.getVirtualView().getUsername().equals(username)) {
-                    ConnectionFailed connectionFailed = new ConnectionFailed(MessageType.CONNECTION_FAILED);
+                    ConnectionFailed connectionFailed = new ConnectionFailed("Somebody else has already taken this username.");
                     //WARNING: the following message MUST be equal to the one checked in handleConnectionFailed in the network handler
-                    connectionFailed.setErrorMessage("Somebody else has already taken this username.");
                     outputClient.writeObject(connectionFailed);
                     return;
                 } else if (clientHandler.getVirtualView().getColor().equals(color)) {
-                    ConnectionFailed connectionFailed = new ConnectionFailed(MessageType.CONNECTION_FAILED);
+                    ConnectionFailed connectionFailed = new ConnectionFailed("Somebody else has already taken this color.");
                     //WARNING: the following message MUST be equal to the one checked in handleConnectionFailed in the network handler
-                    connectionFailed.setErrorMessage("Somebody else has already taken this color.");
                     outputClient.writeObject(connectionFailed);
                     return;
                 }
@@ -205,11 +205,11 @@ public class ClientHandler implements Runnable{
             // the virtual view is added and it is added to the message listeners.
             // Constructor of the virtual view inside the synchronized block. There are the getter methods above.
             virtualView = new VirtualView(username, color, this);
-            server.addMessageListener(virtualView);
+            //server.addMessageListener(virtualView);
     
             // if the player is the first, he will decide the number of players
             if (players.size() == 0)
-                outputClient.writeObject(new RequestNumberOfPlayers(MessageType.REQUEST_NUMBER_OF_PLAYERS));
+                outputClient.writeObject(new RequestNumberOfPlayers(0));
     
             // the player is added to the list of players of the server
             // Setter methods of the players field of the server inside the synchronized block. There are the getter methods above.
@@ -224,9 +224,10 @@ public class ClientHandler implements Runnable{
         }
         
         // The client is advised of the successful connection.
-        ConnectionAccepted connectionAccepted = new ConnectionAccepted(MessageType.CONNECTION_ACCEPTED);
-        connectionAccepted.setUsername(username);
-        connectionAccepted.setColor(color);
+        VisitableInformation usernameAndColor = new VisitableInformation();
+        usernameAndColor.setUsername(username);
+        usernameAndColor.setColor(color);
+        ConnectionAccepted connectionAccepted = new ConnectionAccepted(usernameAndColor);
         outputClient.writeObject(connectionAccepted);
         
         // If the number of players is reached, the game is initialized.
@@ -268,7 +269,7 @@ public class ClientHandler implements Runnable{
             // that the client which has to advise the others is this.
             // Hence, for each client this method sends to them a message of incoming disconnection.
             if (isConnected) {
-                OpponentPlayerDisconnection message = new OpponentPlayerDisconnection(MessageType.OPPONENT_PLAYER_DISCONNECTION);
+                OpponentPlayerDisconnection message = new OpponentPlayerDisconnection("Someone has disconnected");
                 message.setUsername(virtualView.getUsername());
                 server.notifyMessageListeners(message, virtualView);
                 server.cleanServer();
@@ -309,8 +310,7 @@ public class ClientHandler implements Runnable{
      * @param numberOfPlayers parameter that must be sent.
      */
     void sendNumberOfPlayers(int numberOfPlayers) {
-        NumberOfPlayers message = new NumberOfPlayers(MessageType.NUMBER_PLAYERS);
-        message.setNumberOfPlayers(numberOfPlayers);
+        NumberOfPlayers message = new NumberOfPlayers(numberOfPlayers);
         send(message);
     }
 
@@ -318,7 +318,7 @@ public class ClientHandler implements Runnable{
      * This method send a message to the client to tell him that he is the Challenger.
      */
     void sendYouAreTheChallenger()  {
-        send(new YouAreTheChallenger(MessageType.RANDOM_PLAYER));
+        send(new YouAreTheChallenger());
     }
 
     /**
@@ -327,8 +327,9 @@ public class ClientHandler implements Runnable{
      * @param gods list of available gods.
      */
     void sendGodsList(ArrayList<GodName> gods) {
-        ListOfGods message = new ListOfGods(MessageType.LIST_OF_GODS);
-        message.setGodsAvailable(gods);
+        VisitableListOfGods listOfGods = new VisitableListOfGods();
+        listOfGods.setGodNames(gods);
+        ListOfGods message = new ListOfGods(listOfGods);
         send(message);
     }
 
@@ -340,10 +341,7 @@ public class ClientHandler implements Runnable{
      * @param godNames the god chose from each client
      */
     void sendPublicInformation(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> godNames)  {
-        PublicInformation message = new PublicInformation(MessageType.PUBLIC_INFORMATION);
-        message.setUsernames(usernames);
-        message.setColors(colors);
-        message.setGodNames(godNames);
+        PublicInformation message = new PublicInformation(usernames,colors,godNames);
         send(message);
     }
 
@@ -358,8 +356,7 @@ public class ClientHandler implements Runnable{
         newSlot.setWorkerColor(updatedSlot.getWorkerColor());
         newSlot.setLevel(updatedSlot.getLevel());
         newSlot.setWorkerOn(updatedSlot.isWorkerOnSlot());
-        UpdatedSlot message = new UpdatedSlot(MessageType.UPDATE_SLOT);
-        message.setUpdatedSlot(newSlot);
+        UpdatedSlot message = new UpdatedSlot(newSlot);
         send(message);
     }
 
@@ -367,7 +364,7 @@ public class ClientHandler implements Runnable{
      * This method sends a message to the client to ask the initial position of his workers.
      */
     void sendAskWorkersPosition() {
-        send(new AskWorkersPosition(MessageType.ASK_WORKER_POSITION));
+        send(new AskWorkersPosition(null));
     }
 
     /**
@@ -375,8 +372,7 @@ public class ClientHandler implements Runnable{
      * @param errorText the errorString that explain what he did wrong.
      */
     void sendError(String errorText) {
-        ErrorMessage message = new ErrorMessage(MessageType.ERROR);
-        message.setErrorText(errorText);
+        ErrorMessage message = new ErrorMessage(errorText);
         send(message);
     }
 
@@ -384,13 +380,13 @@ public class ClientHandler implements Runnable{
      * This method sends a message to the client to ask which worker he wants to use, asking the slot he is on.
      */
     void sendWhichWorker() {
-        send(new ChooseWorkerByPosition(MessageType.CHOOSE_WORKER));
+        send(new ChooseWorkerByPosition(null));
     }
 
     /**
      * This method sends a message to the client to ask which action he wants to do next.
      */
     void sendAction() {
-        send(new ChooseAction(MessageType.CHOOSE_ACTION));
+        send(new ChooseAction(null));
     }
 }
