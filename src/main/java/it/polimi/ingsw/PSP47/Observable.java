@@ -8,6 +8,8 @@ import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualViewListener;
 import it.polimi.ingsw.PSP47.View.ViewObserver;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
+import it.polimi.ingsw.PSP47.View.ViewListener;
+import it.polimi.ingsw.PSP47.Visitor.Visitable;
 
 import java.util.ArrayList;
 
@@ -17,9 +19,10 @@ import java.util.ArrayList;
 public abstract class Observable {
     private ArrayList<ServerListener> messageListeners = new ArrayList<>();
     private ArrayList<SlotListener> slotListeners = new ArrayList<>();
+    private ViewListener viewListener;
     private ViewObserver viewObserver;
     private VirtualViewListener virtualViewListener;
-    
+
     public void notifyMessageListeners(Message message, VirtualView virtualView) {
         for (ServerListener messageListener : messageListeners) {
             messageListener.update(message, virtualView);
@@ -32,14 +35,15 @@ public abstract class Observable {
         }
     }
 
-    public void notifyViewObserver(int[] rowsAndColumns){
-        viewObserver.update(rowsAndColumns);
+    public void notifyViewListener(Visitable visitableObject){
+        viewListener.update(visitableObject);
     }
+
 
     public void notifyVirtualViewListener(Visitable visitableObject) {
         virtualViewListener.update(visitableObject);
     }
-    
+
     public void addMessageListener(ServerListener listener){
         messageListeners.add(listener);
     }
@@ -48,8 +52,8 @@ public abstract class Observable {
         slotListeners.add(slotListener);
     }
 
-    public void addViewObserver(ViewObserver viewObserver){
-        this.viewObserver = viewObserver;
+    public void addViewListener(ViewListener viewListener){
+        this.viewListener = viewListener;
     }
 
     public void addVirtualViewListener(VirtualViewListener virtualViewListener) {

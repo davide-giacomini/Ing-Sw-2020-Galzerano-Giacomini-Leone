@@ -5,20 +5,22 @@ import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
+import it.polimi.ingsw.PSP47.Visitor.VisitableInt;
 
+import javax.swing.plaf.ViewportUI;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class RequestNumberOfPlayers extends Message {
     private static final long serialVersionUID = -2808360409198774148L;
-    private int numberOfPlayers;
+    private VisitableInt numberOfPlayers;
 
-    public RequestNumberOfPlayers(int numberOfPlayers) {
+    public RequestNumberOfPlayers(VisitableInt numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
         this.messageType=MessageType.REQUEST_NUMBER_OF_PLAYERS;
     }
-    
-    /*
+
+   /*
      * The client is asked the number of players they want in the game, then a message with that number is sent to
      * the server.
      *
@@ -52,13 +54,17 @@ public class RequestNumberOfPlayers extends Message {
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
         server.setMaxNumberOfPlayers(numberOfPlayers);
     }*/
-    
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-    }
 
     @Override
     public Visitable getContent() {
-        return null;
+        return numberOfPlayers;
+    }
+
+    public VisitableInt getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public void setNumberOfPlayers(VisitableInt numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 }

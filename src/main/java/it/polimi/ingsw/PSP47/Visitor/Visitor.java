@@ -14,5 +14,7 @@ public interface Visitor {
 
     void visit(VisitableString string);
 
+    void visit(VisitableInt number);
+
     void visit(VisitableInitialPositions visitableInitialPositions);
 }

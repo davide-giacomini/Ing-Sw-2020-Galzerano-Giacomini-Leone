@@ -138,8 +138,9 @@ public class ClientHandler implements Runnable{
         
         // Variables to be used in this method.
         RequestConnection requestConnection = (RequestConnection) message;
-        String username = requestConnection.getUsername();
-        Color color = requestConnection.getColor();
+        VisitableInformation visitableInformation = (VisitableInformation)requestConnection.getContent();
+        String username = visitableInformation.getUsername();
+        Color color = visitableInformation.getColor();
         ArrayList<ClientHandler> players;
         int maxNumberOfPlayers;
         
@@ -209,7 +210,7 @@ public class ClientHandler implements Runnable{
     
             // if the player is the first, he will decide the number of players
             if (players.size() == 0)
-                outputClient.writeObject(new RequestNumberOfPlayers(0));
+                outputClient.writeObject(new RequestNumberOfPlayers(null));
     
             // the player is added to the list of players of the server
             // Setter methods of the players field of the server inside the synchronized block. There are the getter methods above.

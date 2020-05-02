@@ -6,22 +6,21 @@ import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
+import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
 
 import java.io.ObjectOutputStream;
 
 public class RequestConnection extends Message {
     private static final long serialVersionUID = -8037367122696029080L;
-    private String username;
-    private it.polimi.ingsw.PSP47.Enumerations.Color color;
 
+    private VisitableInformation usernameAndColor;
 
-    public RequestConnection(String username, Color color) {
-        this.username = username;
-        this.color = color;
+    public RequestConnection(VisitableInformation usernameAndColor) {
+        this.usernameAndColor = usernameAndColor;
         this.messageType=MessageType.REQUEST_CONNECTION;
     }
 
-    /*
+/*
      * @deprecated
      * This method is special, is handled inside the {@link it.polimi.ingsw.PSP47.Network.Client.NetworkHandler}. It has not to be used.
      *
@@ -43,24 +42,9 @@ public class RequestConnection extends Message {
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {}
      */
 
-    public String getUsername(){
-        return username;
-    }
-
-    public Color getColor(){
-        return color;
-    }
-    
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    
-    public void setColor(it.polimi.ingsw.PSP47.Enumerations.Color color) {
-        this.color = color;
-    }
 
     @Override
     public Visitable getContent() {
-        return null;
+        return usernameAndColor;
     }
 }

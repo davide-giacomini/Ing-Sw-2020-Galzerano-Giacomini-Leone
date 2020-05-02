@@ -16,6 +16,8 @@ import java.io.ObjectOutputStream;
 public class UpdatedSlot extends Message{
     private static final long serialVersionUID = 709094366320013507L;
 
+
+
     private Slot updatedSlot ;
 
     public UpdatedSlot(Slot updatedSlot) {
@@ -52,7 +54,9 @@ public class UpdatedSlot extends Message{
         this.updatedSlot = updatedSlot;
     }
 
-
+    public Slot getUpdatedSlot() {
+        return updatedSlot;
+    }
     @Override
     public Visitable getContent() {
         return null;

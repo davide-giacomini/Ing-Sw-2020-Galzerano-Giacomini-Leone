@@ -55,6 +55,11 @@ public class ControllerVisitor implements Visitor {
     }
 
     @Override
+    public void visit(VisitableInt number) {
+
+    }
+
+    @Override
     public void visit(VisitableInitialPositions visitableInitialPositions) {
         int[] coordinates = visitableInitialPositions.getRowsAndColumns();
         controller.setWorkers(coordinates);

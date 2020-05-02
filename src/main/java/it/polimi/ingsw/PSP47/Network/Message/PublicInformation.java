@@ -73,4 +73,16 @@ public class PublicInformation extends Message{
     public Visitable getContent() {
         return null;
     }
+
+    public ArrayList<String> getUsernames() {
+        return usernames;
+    }
+
+    public ArrayList<Color> getColors() {
+        return colors;
+    }
+
+    public ArrayList<GodName> getGodNames() {
+        return godNames;
+    }
 }
