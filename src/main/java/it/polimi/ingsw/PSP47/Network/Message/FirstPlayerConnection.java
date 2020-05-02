@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP47.Network.Message;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.MessageType;
+import it.polimi.ingsw.PSP47.Visitor.Visitable;
 
 import java.io.Serializable;
 
@@ -21,7 +22,8 @@ public class FirstPlayerConnection extends Message implements Serializable {
     public MessageType getMessageType() {
         return messageType;
     }
-    
+
+
     public String getUsername() {
         return username;
     }
@@ -32,5 +34,10 @@ public class FirstPlayerConnection extends Message implements Serializable {
     
     public int getPlayersNumber() {
         return playersNumber;
+    }
+
+    @Override
+    public Visitable getContent() {
+        return null;
     }
 }

@@ -5,6 +5,8 @@ import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
+import it.polimi.ingsw.PSP47.Visitor.Visitable;
+import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -17,20 +19,25 @@ import java.util.ArrayList;
  */
 public class ListOfGods extends Message {
     private static final long serialVersionUID = 5244974574544564271L;
-    private ArrayList<GodName> godsAvailable;
-    private GodName chosenGod;
+    private VisitableListOfGods listOfGods;
 
-    public ListOfGods(MessageType messageType) {
-        super(messageType);
+    public ListOfGods(VisitableListOfGods listOfGods) {
+        this.listOfGods=listOfGods;
+        this.messageType=MessageType.LIST_OF_GODS;
+    }
+
+    @Override
+    public Visitable getContent() {
+        return listOfGods;
     }
     
-    /**
+    /*
      * This method calls the view to ask for the god that the player has been chosed and send a message
      * to the server with this information.
      *
      * @param client the client to be handled.
      * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
-     */
+
     @Override
     public void handleClientSide(Client client, ObjectOutputStream outputServer) {
         GodName chosenGod = client.getView().chooseYourGod(godsAvailable);
@@ -50,7 +57,7 @@ public class ListOfGods extends Message {
      * @param server the server, which has got the parameters in common with all the clients.
      * @param virtualView the {@link VirtualView} of the client connected.
      * @param outputClient the {@link ObjectOutputStream} of the client. It can be used to send other messages.
-     */
+
     @Override
     public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
         if (godsAvailable != null) {
@@ -65,21 +72,7 @@ public class ListOfGods extends Message {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
     
-    public ArrayList<GodName> getGodsAvailable() {
-        return new ArrayList<>(godsAvailable);
-    }
 
-    public void setGodsAvailable(ArrayList<GodName> gods) {
-        this.godsAvailable = gods;
-    }
-
-    public GodName getChosenGod() {
-        return chosenGod;
-    }
-
-    public void setChosenGod(GodName chosenGod) {
-        this.chosenGod = chosenGod;
-    }
 }

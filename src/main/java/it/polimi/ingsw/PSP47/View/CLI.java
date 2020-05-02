@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP47.View;
 
 import it.polimi.ingsw.PSP47.Enumerations.*;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
+import it.polimi.ingsw.PSP47.Visitor.*;
 
 import java.io.PrintStream;
 import java.util.*;
@@ -35,6 +36,7 @@ public class CLI extends View {
         this.out = new PrintStream(System.out);
         gameView = new GameView();
         printSupport = new PrintSupport();
+
     }
 
 
@@ -55,6 +57,20 @@ public class CLI extends View {
         out.println( AnsiCode.ANSI_BLUE + santoriniName + AnsiCode.ANSI_RESET);
         out.println(AnsiCode.ANSI_CYAN + intro + AnsiCode.ANSI_RESET);
     }
+
+    public void askFirstConnection(){
+
+        String username = askUsername();
+        Color color= askColorWorkers();
+
+
+        VisitableInformation visitableInformation = new VisitableInformation();
+        visitableInformation.setUsername(username);
+        visitableInformation.setColor(color);
+        notifyViewListener(visitableInformation);
+
+    }
+
 
     /**
      * This method asks for the username
@@ -78,8 +94,8 @@ public class CLI extends View {
             }}
         }while (username== null);
 
-        return username;
 
+        return username;
     }
 
     /**
@@ -152,7 +168,7 @@ public class CLI extends View {
      * @return the gender of the worker the user wants to use
      */
     @Override
-    public int[] askWhichWorkerToUse() {
+    public void askWhichWorkerToUse() {
         int[] newRowAndColumn = new int[2];
 
         out.println("Insert the slot of the worker you want to use :  ");
@@ -178,7 +194,12 @@ public class CLI extends View {
 
         }while (newRowAndColumn[1] == 9000);
 
-        return newRowAndColumn;
+        VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
+        visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);
+        notifyViewListener(visitableRowsAndColumns);
+
+        /*no more return*/
+
     }
 
 
@@ -186,7 +207,7 @@ public class CLI extends View {
      * This method asks the user where he/she wants to put the worker
      * @return an array of two int indicating one the row and one the column
      */
-    public int[] askWhereToPositionWorkers() {
+    public void askWhereToPositionWorkers() {
         int[] newRowAndColumn = new int[4];
 
                 out.println("Choose where to  Initially position your workers :  ");
@@ -236,7 +257,11 @@ public class CLI extends View {
 
                 }while (newRowAndColumn[3] == 9000);
 
-        return newRowAndColumn;
+        VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
+        visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);
+        notifyViewListener(visitableRowsAndColumns);
+
+
     }
 
     /**
@@ -244,7 +269,7 @@ public class CLI extends View {
      * @return an Arraylist with the names of the 2 or 3 gods that have been chosen
      */
     @Override
-    public ArrayList<GodName> challengerWillChooseThreeGods() {
+    public void challengerWillChooseThreeGods() {
         ArrayList<GodName> godsChosen = new ArrayList<>();
         String god ;
         GodName godName ;
@@ -293,7 +318,9 @@ public class CLI extends View {
 
         }while (i < gameView.getNumberOfPlayers());
 
-        return godsChosen;
+        VisitableListOfGods visitableGods = new VisitableListOfGods();
+        visitableGods.setGodNames(godsChosen);
+        notifyViewListener(visitableGods);
 
 
     }
@@ -304,7 +331,7 @@ public class CLI extends View {
      * @return the God chosen by the client
      */
     @Override
-    public GodName chooseYourGod(ArrayList<GodName> godsChosen){
+    public void chooseYourGod(ArrayList<GodName> godsChosen){
         String god = null;
         GodName godName = null;
 
@@ -331,8 +358,9 @@ public class CLI extends View {
 
         }while (god == null);
 
-        return godName;
-
+        VisitableGod visitableGodChosen = new VisitableGod();
+        visitableGodChosen.setGodName(godName);
+        notifyViewListener(visitableGodChosen);
     }
 
 
@@ -384,7 +412,7 @@ public class CLI extends View {
      * @return int to indicate the number chosen
      */
     @Override
-    public int askNumberOfPlayers() {
+    public void askNumberOfPlayers() {
         int num ;
 
         out.println("How many players do you want in the game? Insert a number between 2 and 3");
@@ -396,11 +424,13 @@ public class CLI extends View {
                     num = 0;
                 }
 
-            }while (num == 0);
+            }while (num == 0 || num < 2 || num > 3);
 
-        //}while(num == 0);
+        VisitableInt visitableNumber = new VisitableInt(num);
+        notifyViewListener(visitableNumber);
 
-        return num;
+
+
     }
 
     /**
@@ -408,14 +438,14 @@ public class CLI extends View {
      * @return an arraylist which contains as first parameter the enum Action and as second the enum Direction
      */
     @Override
-    public ArrayList<Enum> askAction(){
+    public void askAction(){
         out.println("Here are the possible actions:  move direction  /  build direction  /  buildDome direction / end / ");
         out.println("The available directions are : "+ Arrays.toString(Direction.values())+ "\n");
 
 
         String line = null;
         String[] stringParts ;
-        Action actionInserted ;
+        Action actionInserted =null ;
         Direction directionInserted= null;
         ArrayList<Enum> ActionAndDirection = new ArrayList<>();
         do {
@@ -444,7 +474,10 @@ public class CLI extends View {
 
         } while (line == null);
 
-        return ActionAndDirection;
+        VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();
+        visitableActionAndDirection.setAction(actionInserted);
+        visitableActionAndDirection.setDirection(directionInserted);
+        notifyViewListener(visitableActionAndDirection);
     }
 
     /**
