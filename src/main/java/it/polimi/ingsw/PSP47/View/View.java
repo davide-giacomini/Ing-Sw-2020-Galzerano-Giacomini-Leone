@@ -3,10 +3,11 @@ package it.polimi.ingsw.PSP47.View;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
+import it.polimi.ingsw.PSP47.Observable;
 
 import java.util.ArrayList;
 
-public abstract class View {
+public abstract class View extends Observable {
     public Client currentClient;
     public GameView gameView;
 
@@ -106,5 +107,7 @@ public abstract class View {
      * @param usernameLoser is the username of the winner
      */
     public abstract void theLoserIs(String usernameLoser );
+
+
 
 }

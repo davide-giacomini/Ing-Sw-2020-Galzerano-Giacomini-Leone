@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Network.Message.*;
 import it.polimi.ingsw.PSP47.Network.Message.ConnectionFailed;
+import it.polimi.ingsw.PSP47.View.ViewObserver;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,7 +14,7 @@ import java.net.Socket;
 /**
  * This class handles the transfer of messages between the client and the server.
  */
-public class NetworkHandler implements Runnable{
+public class NetworkHandler implements Runnable, ViewObserver {
     private final Client client;
     private Socket serverSocket;
     private boolean firstConnection;
@@ -90,6 +91,11 @@ public class NetworkHandler implements Runnable{
                         handleConnectionFailed((ConnectionFailed) message);
                         firstConnection = true;
                         break;
+                    case ASK_WORKER_POSITION:
+                        int[] rowsAndColumns;
+                        client.getView().askWhereToPositionWorkers();
+
+
                     default:
                         message.handleClientSide(client, outputServer);
                         break;
@@ -136,4 +142,17 @@ public class NetworkHandler implements Runnable{
             }
         }
     }
+
+    @Override
+    public void update (int[] rowsAndColumns){
+        AskWorkersPosition newMessage = new AskWorkersPosition(rowsAndColumns);
+        try {
+            outputServer.writeObject(newMessage);
+        } catch (IOException e) {
+            System.out.println("Error in the serialization of " +this.toString()+" message.");
+            e.printStackTrace();
+        }
+    }
+
+
 }

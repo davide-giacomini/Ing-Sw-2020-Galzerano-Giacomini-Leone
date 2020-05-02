@@ -35,6 +35,7 @@ public class CLI extends View {
         this.out = new PrintStream(System.out);
         gameView = new GameView();
         printSupport = new PrintSupport();
+
     }
 
 
@@ -178,6 +179,10 @@ public class CLI extends View {
 
         }while (newRowAndColumn[1] == 9000);
 
+        //VisitablePosition vp = new VisitablePosition(int[0], int[1]);
+        //notifyViewObserver(vp);
+
+        /*no more return*/
         return newRowAndColumn;
     }
 
