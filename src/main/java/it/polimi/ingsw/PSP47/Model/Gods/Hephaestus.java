@@ -87,7 +87,7 @@ public class Hephaestus extends God {
      * @return true if the worker can move, false otherwise
      */
     @Override
-    protected boolean checkIfCanMove(Worker worker) {
+    public boolean checkIfCanMove(Worker worker) {
         return checkIfCanMoveInNormalConditions(worker);
     }
 
@@ -98,7 +98,7 @@ public class Hephaestus extends God {
      * @return true if the worker can build, false otherwise.
      */
     @Override
-    protected boolean checkIfCanBuild(Worker worker) {
+    public boolean checkIfCanBuild(Worker worker) {
         int numberOfBuildings = player.getTurn().getNumberOfBuildings();
 
         if (numberOfBuildings==0)

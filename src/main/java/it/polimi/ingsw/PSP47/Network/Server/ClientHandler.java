@@ -194,7 +194,13 @@ public class ClientHandler extends Observable implements Runnable{
         
         endConnection();
     }
-    
+
+    /**
+     * This method creates the virtual view of the player who is connected through a specific instance of the clientHandler.
+     * @param username of the player
+     * @param color of the player
+     * @return the instance of the virtual view
+     */
     VirtualView createVirtualView(String username, Color color){
         return (this.virtualView = new VirtualView(username, color, this));
     }

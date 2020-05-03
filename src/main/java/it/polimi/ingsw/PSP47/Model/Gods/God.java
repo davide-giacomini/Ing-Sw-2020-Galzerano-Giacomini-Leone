@@ -100,7 +100,7 @@ public abstract class God {
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
      * @throws InvalidDirectionException if the default case in the choice of the direction is reached.
      */
-    protected abstract boolean checkIfCanMove(Worker worker) throws InvalidDirectionException;
+    public abstract boolean checkIfCanMove(Worker worker);
     
     /**
      * See {@link #checkIfCanGoOn(Worker)}
@@ -108,7 +108,7 @@ public abstract class God {
      * @return true if it's possible to build, false otherwise.
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
      */
-    protected abstract boolean checkIfCanBuild(Worker worker) throws InvalidDirectionException;
+    public abstract boolean checkIfCanBuild(Worker worker);
     
     /**
      * See {@link #checkIfCanGoOn(Worker)}

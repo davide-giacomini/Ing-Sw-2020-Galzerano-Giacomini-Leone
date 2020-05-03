@@ -40,6 +40,7 @@ public class TurnController {
         if (player.isLoosing())
             removeLosingPlayer();
         views.get(indexOfCurrentPlayer).sendWhichWorker();
+        controller.sendAnAdvice();
     }
 
     /**
@@ -52,7 +53,7 @@ public class TurnController {
         int row = position[0];
         int column = position[1];
         if (game.getBoard().getSlot(row,column).getWorker() == null || game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
-            String textError = "Your worker is not there!";
+            String textError = "Your worker is not there";
             views.get(indexOfCurrentPlayer).sendError(textError);
             views.get(indexOfCurrentPlayer).sendWhichWorker();
             return;
@@ -64,7 +65,7 @@ public class TurnController {
                     workerGender = Gender.FEMALE;
                 if (workerGender == Gender.FEMALE)
                     workerGender = Gender.MALE;
-                String textError = "Your worker is blocked. You are forced to use the other one!";
+                String textError = "Your worker is blocked. You are forced to use the other one";
                 views.get(indexOfCurrentPlayer).sendError(textError);
             }
             turn.setWorkerGender(workerGender);
@@ -84,6 +85,9 @@ public class TurnController {
      * @param direction the direction chosen by the player
      */
     public void executeAction(Action action, Direction direction) {
+        if (!(player.getGod().checkIfCanMove(player.getWorker(workerGender)) || player.getGod().checkIfCanBuild(player.getWorker(workerGender)))) {
+            player.setLoosing(true);
+        }
         switch (action) {
             case MOVE:
                 if (player.isLoosing()) {
@@ -91,18 +95,16 @@ public class TurnController {
                     break;
                 }
                 try {
+                    if (turn.getNumberOfMovements() == turn.getMAX_MOVEMENTS())
+                        throw new InvalidMoveException("Max number of movements reached");
                     turn.executeMove(direction);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     break;
-                } catch (InvalidDirectionException | InvalidMoveException e) {
+                } catch (InvalidDirectionException | InvalidMoveException | IndexOutOfBoundsException e) {
                     String textError = e.getMessage();
                     views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     return;
-                } catch (IndexOutOfBoundsException e) {
-                    String textError = e.getMessage();
-                    views.get(indexOfCurrentPlayer).sendError(textError);
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
                 }
             case BUILD:
                 if (player.isLoosing()) {
@@ -110,18 +112,16 @@ public class TurnController {
                     break;
                 }
                 try {
+                    if (turn.getNumberOfBuildings() == turn.getMAX_BUILDINGS())
+                        throw new InvalidBuildException("Max number of buildings reached");
                     turn.executeBuild(direction);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     break;
-                } catch (InvalidDirectionException | InvalidBuildException e) {
+                } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
                     String textError = e.getMessage();
                     views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     return;
-                } catch (IndexOutOfBoundsException e) {
-                    String textError = e.getMessage();
-                    views.get(indexOfCurrentPlayer).sendError(textError);
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
                 }
             case BUILDDOME:
                 if (player.isLoosing()) {
@@ -129,19 +129,17 @@ public class TurnController {
                     break;
                 }
                 try {
+                    if (turn.getNumberOfBuildings() == turn.getMAX_BUILDINGS())
+                        throw new InvalidBuildException("Max number of buildings reached");
                     turn.setWantsToBuildDome(true);
                     turn.executeBuild(direction);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     break;
-                } catch (InvalidDirectionException | InvalidBuildException e) {
+                } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
                     String textError = e.getMessage();
                     views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     return;
-                } catch (IndexOutOfBoundsException e) {
-                    String textError = e.getMessage();
-                    views.get(indexOfCurrentPlayer).sendError(textError);
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
                 }
             case END:
                 if (!turn.validateEndTurn()) {

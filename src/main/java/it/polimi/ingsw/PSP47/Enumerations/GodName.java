@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP47.Enumerations;
 
-public enum GodName {
+import java.io.Serializable;
+
+public enum GodName implements Serializable {
     APOLLO ("Apollo"),
     ARTEMIS ("Arthemis"),
     ATHENA ("Athena"),
