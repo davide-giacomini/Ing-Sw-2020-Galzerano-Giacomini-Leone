@@ -153,7 +153,7 @@ public class ClientHandler extends Observable implements Runnable{
     private void endConnection(){
         isConnected = false;
         notifyDisconnection(this);
-    
+        
         try {
             outputClient.close();
         } catch (IOException e) {
@@ -182,10 +182,10 @@ public class ClientHandler extends Observable implements Runnable{
         endConnection();
     }
     
-    void notifyOpponentClientDisconnected(){
+    void notifyFirstClientDisconnected(){
         send(new ConnectionFailed("The first player disconnected and the game cannot be set.\n"+
                 "Please try another time."));
-        
+    
         endConnection();
     }
     
