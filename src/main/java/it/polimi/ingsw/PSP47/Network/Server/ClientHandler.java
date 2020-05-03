@@ -5,7 +5,6 @@ import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Message.*;
-import it.polimi.ingsw.PSP47.Observable;
 import it.polimi.ingsw.PSP47.Network.Message.ConnectionFailed;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
@@ -14,7 +13,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ClientHandler extends Observable implements Runnable{
+public class ClientHandler extends ClientHandlerObservable implements Runnable{
     private final Socket clientSocket;
     private ObjectInputStream inputClient;
     private ObjectOutputStream outputClient;
