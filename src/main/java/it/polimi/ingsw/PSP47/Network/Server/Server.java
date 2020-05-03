@@ -3,6 +3,8 @@ package it.polimi.ingsw.PSP47.Network.Server;
 
 import it.polimi.ingsw.PSP47.Controller.GameController;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
+import it.polimi.ingsw.PSP47.Model.Board;
+import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Message.FirstConnection;
 import it.polimi.ingsw.PSP47.Network.Message.RequestPlayersNumber;
 import it.polimi.ingsw.PSP47.Observable;
@@ -14,6 +16,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -40,8 +43,8 @@ public class Server extends Observable implements ClientHandlerListener {
     private volatile boolean gameStarted = false;
     private int maxPlayersNumber = -1;
     private ClientHandler firstClientHandler;
-    private ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
-    private Map<ClientHandler, PlayerParameters> connectionsAccepted = new HashMap<>();
+    private final ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+    private final Map<ClientHandler, PlayerParameters> connectionsAccepted = new HashMap<>();
     private GameController gameController;
     
     public Server() throws IOException {
@@ -91,9 +94,13 @@ public class Server extends Observable implements ClientHandlerListener {
             }
             
             if (!firstPlayerConnected) {
-                clientHandler.notifyOpponentClientDisconnected();
-                clientHandlers.remove(clientHandler);
-                notifyAll(); //TODO non so se serva
+                clientHandler.notifyFirstClientDisconnected();
+                notifyAll();
+                return;
+            }
+            if (gameStarted) {
+                clientHandler.notifyGameStartedWithoutYou();
+                notifyAll();
                 return;
             }
         }
@@ -101,7 +108,7 @@ public class Server extends Observable implements ClientHandlerListener {
         String wrongParameter;
         if ((wrongParameter = checkParameters(username, color)) != null) {
             clientHandler.askAgainParameters(wrongParameter);
-            notifyAll(); //TODO non so se serva
+            notifyAll();
             return;
         }
         
@@ -111,7 +118,7 @@ public class Server extends Observable implements ClientHandlerListener {
         if (connectionsAccepted.size() == maxPlayersNumber)
             initGame();
         
-        notifyAll(); //TODO non so se serva
+        notifyAll();
     }
     
     @Override
@@ -130,13 +137,14 @@ public class Server extends Observable implements ClientHandlerListener {
         // If the clientHandler is the first and the game is not started yet, the game is reset and others players
         // are notified. A message of the dropped connection of the first client will be sent to them.
         else if (!gameStarted && clientHandler.equals(firstClientHandler)) {
+            String username = connectionsAccepted.get(clientHandler).username;
+            connectionsAccepted.remove(clientHandler);
+            
             for (ClientHandler client : connectionsAccepted.keySet()) {
-                client.notifyOpponentClientDisconnected(connectionsAccepted.get(client).username);
+                client.notifyOpponentClientDisconnected(username);
             }
-            connectionsAccepted = new HashMap<>();
-            maxPlayersNumber = -1;
-            firstClientHandler = null;
-            firstPlayerConnected = false;
+            
+            cleanServer();
             notifyAll();
         }
         // If clientHandler is in the connections accepted, they are not the first clientHandler and the game is not
@@ -146,14 +154,27 @@ public class Server extends Observable implements ClientHandlerListener {
         }
         // If the game is started and you are among the connected players.
         else {
-            for (ClientHandler client : connectionsAccepted.keySet()) {
-                client.notifyOpponentClientDisconnected(connectionsAccepted.get(client).username);
+            String username = connectionsAccepted.get(clientHandler).username;
+            connectionsAccepted.remove(clientHandler);
+    
+            // The iteration is in this way because, otherwise, a remove inside a for loop gives troubles.
+            while (connectionsAccepted.size()!=0) {
+                Iterator<ClientHandler> iterator = connectionsAccepted.keySet().iterator();
+                ClientHandler client = iterator.next();
+                connectionsAccepted.remove(client);
+                client.notifyOpponentClientDisconnected(username);
             }
-            connectionsAccepted = new HashMap<>();
-            maxPlayersNumber = -1;
-            firstClientHandler = null;
-            firstPlayerConnected = false;
+            
+            cleanServer();
         }
+    }
+    
+    private void cleanServer(){
+        Board.getBoard().clearBoard();
+        maxPlayersNumber = -1;
+        firstClientHandler = null;
+        firstPlayerConnected = false;
+        gameStarted = false;
     }
     
     private String checkParameters(String username, Color color) {
@@ -191,8 +212,6 @@ public class Server extends Observable implements ClientHandlerListener {
         gameStarted = true;
         gameController = new GameController(maxPlayersNumber, mapUserColor, mapUserVirtualView);
         
-        for (ClientHandler clientHandler : clientHandlers) {
-            clientHandler.notifyGameStartedWithoutYou();
-        }
+        notifyAll();
     }
 }

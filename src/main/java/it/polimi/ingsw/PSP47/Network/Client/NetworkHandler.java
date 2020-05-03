@@ -92,6 +92,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     case WRONG_PARAMETERS:
                         client.getView().showMessage(((WrongParameters) message).getErrorMessage());
                         handleFirstConnection();
+                        break;
                     case ASK_WORKER_POSITION:
                         client.getView().askWhereToPositionWorkers();
                         break;

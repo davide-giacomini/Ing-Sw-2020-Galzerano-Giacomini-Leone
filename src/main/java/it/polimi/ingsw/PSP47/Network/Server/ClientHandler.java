@@ -153,7 +153,7 @@ public class ClientHandler extends Observable implements Runnable{
     private void endConnection(){
         isConnected = false;
         notifyDisconnection(this);
-    
+        
         try {
             outputClient.close();
         } catch (IOException e) {
@@ -182,10 +182,10 @@ public class ClientHandler extends Observable implements Runnable{
         endConnection();
     }
     
-    void notifyOpponentClientDisconnected(){
+    void notifyFirstClientDisconnected(){
         send(new ConnectionFailed("The first player disconnected and the game cannot be set.\n"+
                 "Please try another time."));
-        
+    
         endConnection();
     }
     
@@ -194,13 +194,7 @@ public class ClientHandler extends Observable implements Runnable{
         
         endConnection();
     }
-
-    /**
-     * This method creates the virtual view of the player who is connected through a specific instance of the clientHandler.
-     * @param username of the player
-     * @param color of the player
-     * @return the instance of the virtual view
-     */
+    
     VirtualView createVirtualView(String username, Color color){
         return (this.virtualView = new VirtualView(username, color, this));
     }
