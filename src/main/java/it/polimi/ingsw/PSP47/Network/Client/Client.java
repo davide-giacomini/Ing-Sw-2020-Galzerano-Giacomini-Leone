@@ -12,12 +12,12 @@ import java.util.Scanner;
  * This class instantiates a thread for each client and handles the choice of the graphical interface and the
  * {@link Server} the user wants to connect to.
  */
-public class Client implements Runnable {
+public class Client {
     private View view;
     
     public static void main(String[] args) {
         Client client = new Client();
-        client.run();
+        client.init();
     }
     
     /**
@@ -25,8 +25,7 @@ public class Client implements Runnable {
      * If everything goes well, a new thread is instantiated: the {@link NetworkHandler}. It will handle the
      * connection with the server.
      */
-    @Override
-    public void run() {
+    public void init() {
         //initial request of choice between GUI or CLI
         Scanner scanner = new Scanner(System.in);
         System.out.println("CLI or GUI ?");

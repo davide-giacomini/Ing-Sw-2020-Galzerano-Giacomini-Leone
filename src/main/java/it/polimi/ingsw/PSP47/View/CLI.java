@@ -257,7 +257,7 @@ public class CLI extends View {
 
                 }while (newRowAndColumn[3] == 9000);
 
-        VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
+        VisitableInitialPositions visitableRowsAndColumns = new VisitableInitialPositions();
         visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);
         notifyViewListener(visitableRowsAndColumns);
 

@@ -6,7 +6,7 @@ import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import java.util.Dictionary;
 
 public class VisitableActionAndDirection implements Visitable  {
-
+    private static final long serialVersionUID = -9154274020524036911L;
     Action action;
     Direction direction;
 
