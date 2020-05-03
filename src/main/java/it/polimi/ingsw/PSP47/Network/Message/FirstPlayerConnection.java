@@ -8,15 +8,15 @@ import java.io.Serializable;
 
 public class FirstPlayerConnection extends Message implements Serializable {
     private static final long serialVersionUID = 7416497312772957279L;
-    private final MessageType messageType = MessageType.FIRST_PLAYER_CONNECTION;
     private final String username;
     private final Color color;
-    private final Integer playersNumber;
+    private final Integer numberPlayers;
     
-    public FirstPlayerConnection(String username, Integer playersNumber, Color color){
+    public FirstPlayerConnection(String username, Integer numberPlayers, Color color){
         this.username = username;
         this.color = color;
-        this.playersNumber = playersNumber;
+        this.numberPlayers = numberPlayers;
+        messageType = MessageType.FIRST_PLAYER_CONNECTION;
     }
     
     public MessageType getMessageType() {
@@ -32,8 +32,8 @@ public class FirstPlayerConnection extends Message implements Serializable {
         return color;
     }
     
-    public int getPlayersNumber() {
-        return playersNumber;
+    public int getNumberPlayers() {
+        return numberPlayers;
     }
 
     @Override

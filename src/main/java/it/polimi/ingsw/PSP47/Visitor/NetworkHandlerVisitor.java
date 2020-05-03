@@ -3,8 +3,6 @@ package it.polimi.ingsw.PSP47.Visitor;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Message.*;
 
-import java.util.List;
-
 public class NetworkHandlerVisitor implements Visitor {
     private NetworkHandler networkHandler;
 
@@ -29,8 +27,7 @@ public class NetworkHandlerVisitor implements Visitor {
 
     @Override
     public void visit(VisitableInformation information) {
-
-        RequestConnection newMessage = new RequestConnection(information);
+        FirstConnection newMessage = new FirstConnection(information);
 
         networkHandler.send(newMessage);
     }
@@ -59,14 +56,12 @@ public class NetworkHandlerVisitor implements Visitor {
 
     @Override
     public void visit(VisitableInt number) {
-        RequestNumberOfPlayers newMessage = new RequestNumberOfPlayers(number);
-
-        networkHandler.send(newMessage);
+        networkHandler.send(new RequestPlayersNumber(number));
     }
 
     @Override
     public void visit(VisitableInitialPositions visitableInitialPositions) {
-
+        networkHandler.send(new AskWorkersPosition(visitableInitialPositions));
     }
 
 

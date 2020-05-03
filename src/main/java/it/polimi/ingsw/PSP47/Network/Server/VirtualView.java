@@ -1,17 +1,11 @@
 package it.polimi.ingsw.PSP47.Network.Server;
 
-import it.polimi.ingsw.PSP47.Controller.GameController;
-import it.polimi.ingsw.PSP47.Enumerations.Action;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Model.SlotListener;
-import it.polimi.ingsw.PSP47.Network.Message.Message;
-import it.polimi.ingsw.PSP47.Network.Message.OpponentPlayerDisconnection;
 import it.polimi.ingsw.PSP47.Observable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -87,7 +81,7 @@ public class VirtualView extends Observable implements SlotListener {
 
 
     public void sendLosingPlayer(String username) {
-        //clientHandler.manageSendLosingPlayer(username)
+//        clientHandler.manageSendLosingPlayer(username)
     }
 
     /**

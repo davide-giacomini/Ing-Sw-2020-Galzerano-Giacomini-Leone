@@ -2,39 +2,45 @@ package it.polimi.ingsw.PSP47.Network.Server;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
-import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Message.*;
+import it.polimi.ingsw.PSP47.Observable;
 import it.polimi.ingsw.PSP47.Network.Message.ConnectionFailed;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
-import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
 import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ClientHandler implements Runnable{
-    private Socket clientSocket;
-    private Server server;
-    private VirtualView virtualView;
+public class ClientHandler extends Observable implements Runnable{
+    private final Socket clientSocket;
     private ObjectInputStream inputClient;
     private ObjectOutputStream outputClient;
     private boolean isConnected;
-    private final static Object firstConnectionLock = new Object();
-    private Timer timer;
+    private boolean gameAlreadyStarted;
+    private VirtualView virtualView;
     
     /**
      * This constructor set up the management between the {@link Client} and the {@link Server}.
      *
      * @param clientSocket the socket of the {@link Client} connected to the server.
-     * @param server the server
+     * @param gameAlreadyStarted if the game is already started.
      */
-    public ClientHandler(Socket clientSocket, Server server){
+    public ClientHandler(Socket clientSocket, boolean gameAlreadyStarted){
         this.clientSocket = clientSocket;
-        this.server = server;
         this.isConnected = true;
+        this.gameAlreadyStarted = gameAlreadyStarted;
+    
+        try {
+            inputClient = new ObjectInputStream(clientSocket.getInputStream());
+            outputClient = new ObjectOutputStream(clientSocket.getOutputStream());
+        } catch (IOException e) {
+            System.out.println("Creation of the client " + clientSocket.getInetAddress() + " input and output streams failed.");
+            this.isConnected = false;
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -45,19 +51,20 @@ public class ClientHandler implements Runnable{
     @Override
     public void run() {
         try {
-            inputClient = new ObjectInputStream(clientSocket.getInputStream());
-            outputClient = new ObjectOutputStream(clientSocket.getOutputStream());
-            
-            dispatchMessages();
-        }
-        catch (IOException e){
-            System.out.println("client " + clientSocket.getInetAddress() + " connection dropped.");
+            if (gameAlreadyStarted) {
+                send(new ConnectionFailed("The game is already started.\nTry another time."));
+    
+                endConnection();
+            }
+            else
+                outputClient.writeObject(new FirstConnection(null));
+        } catch (IOException e) {
+            System.out.println("Failed to send the first connection request to the client" + clientSocket.getInetAddress() +".");
+            isConnected = false;
             e.printStackTrace();
         }
-    }
     
-    public VirtualView getVirtualView() {
-        return virtualView;
+        dispatchMessages();
     }
     
     /**
@@ -72,23 +79,12 @@ public class ClientHandler implements Runnable{
             try {
                 message = (Message) inputClient.readObject();
                 switch (message.getMessageType()) {
-                    case REQUEST_CONNECTION:
-                        handleFirstConnection(message);
+                    case FIRST_CONNECTION:
+                        notifyFirstConnection((FirstConnection) message, this);
                         break;
-                    case REQUEST_NUMBER_OF_PLAYERS:
-                        // This method notify all the threads which are waiting to know how many players
-                        // can be added to the game. See handleFirstConnection for more information.
-                        synchronized (firstConnectionLock) {
-                            //message.handleServerSide(server, virtualView, outputClient);
-                            server.notifyMessageListeners(message, virtualView);
-                            firstConnectionLock.notifyAll();
-                        }
+                    case REQUEST_PLAYERS_NUMBER:
+                        notifyPlayersNumber((RequestPlayersNumber) message);
                         break;
-                    case REQUEST_DISCONNECTION:
-                        handleDisconnection();
-                        // TODO non ancora testato questo caso
-                    case FIRST_PLAYER_CONNECTION:
-                        //TODO controlla che i parametri siano corretti
                     default:
                         Visitable visitableObject = message.getContent();
                         virtualView.notifyVirtualViewListener(visitableObject);
@@ -96,6 +92,10 @@ public class ClientHandler implements Runnable{
                 }
             } catch (ClassNotFoundException e) {
                 System.out.println("The casting of the message of the client " + clientSocket.getInetAddress() + " was not good.");
+    
+                if (isConnected)
+                    notifyDisconnection(this);
+                
                 try {
                     clientSocket.close();
                 } catch (IOException ioException) {
@@ -106,203 +106,97 @@ public class ClientHandler implements Runnable{
                 }
                 System.out.println("Client " + clientSocket.getInetAddress() + " disconnected.");
                 
-                handleDisconnection();
-                
                 //TODO scollegamento:
                 // scollegamento di rete: boh.
                 
-                //e.printStackTrace();
+                e.printStackTrace();
             } catch (IOException e) {
                 System.out.println("Error in the I/O of the client " + clientSocket.getInetAddress() + ":" +
                         " client " + clientSocket.getInetAddress() + " disconnected.");
-                
-                handleDisconnection();
+    
+                if (isConnected)
+                    notifyDisconnection(this);
+    
+                try {
+                    clientSocket.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                finally {
+                    isConnected = false;
+                }
+                System.out.println("Client " + clientSocket.getInetAddress() + " disconnected.");
                 
                 //TODO scollegamento:
                 // scollegamento di rete: boh.
                 
-                //e.printStackTrace();
+                e.printStackTrace();
             }
         }
     }
     
     /**
-     * It handles the first connection.
-     * If the connection went well, the client is added and his {@link VirtualView} is instantiated.
-     * If not, an error message is sent.
-     *
-     * @throws IOException if there are troubles in sending the message to the client.
-     */
-    private void handleFirstConnection(Message message) throws IOException {
-        System.out.println("Handle first connection with the client at the address " + clientSocket.getInetAddress());
-        
-        // Variables to be used in this method.
-        RequestConnection requestConnection = (RequestConnection) message;
-        VisitableInformation visitableInformation = (VisitableInformation)requestConnection.getContent();
-        String username = visitableInformation.getUsername();
-        Color color = visitableInformation.getColor();
-        ArrayList<ClientHandler> players;
-        int maxNumberOfPlayers;
-        
-        // The players in the server and the parameters of the virtual view mustn't be modified while an other client
-        // gets them. Hence, the getter and setter methods are inside a synchronized block.
-        synchronized (firstConnectionLock){
-            // Getter methods inside the synchronized block. The setter methods are below
-            players = server.getPlayers();
-            maxNumberOfPlayers = server.getMaxNumberOfPlayers();
-            
-            // When the first player sets the maxNumberOfPlayers, they are outside this method, because the request
-            // is consumed in the client through the socket connection. Hence, their clientHandler could have already
-            // added to the players of the server (because the addPlayer is called inside this synchronized block).
-            // Hence, for the thread that owns the lock now, the number of players could result more than zero
-            // (because the addPlayer is called inside this synchronized block), but the maxNumberOfPlayers could
-            // be zero, because the setting is done outside this method in the client.
-            // A client cannot proceed neither be added in the players of the server until the first player doesn't
-            // decide which is the maxNumberOfPlayers of the game.
-            // In the case that the first player has already been added but they didn't choose the maxNumberOfPlayers,
-            // the current thread has to wait. In this case, an advice is sent to the client.
-            if (players.size()!=0 && maxNumberOfPlayers==0) {
-                outputClient.writeObject(new WaitChooseNumberPlayers());
-                while (server.getMaxNumberOfPlayers()==0) {
-                    try {
-                        firstConnectionLock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            
-            // After the wait, the players inside the server and the maxNumberOfPlayers may be modified.
-            // An other call has to be done.
-            // Getter methods inside the synchronized block. The setter methods are below
-            players = server.getPlayers();
-            maxNumberOfPlayers = server.getMaxNumberOfPlayers();
-        
-            // If the game is already full of players
-            if (players.size()!=0 && players.size() == maxNumberOfPlayers) {
-                ConnectionFailed connectionFailed = new ConnectionFailed("The game is already started. Try later.");
-                //WARNING: the following message MUST be equal to the one checked in handleConnectionFailed in the network handler
-                outputClient.writeObject(connectionFailed);
-                clientSocket.close();
-                isConnected = false;
-                return;
-            }
-            // It checks if this client decided an univocal name and color for the game
-            for (ClientHandler clientHandler : players) {
-                // Getter methods of the virtual view inside the synchronized block. There is the constructor below
-                if (clientHandler.getVirtualView().getUsername().equals(username)) {
-                    ConnectionFailed connectionFailed = new ConnectionFailed("Somebody else has already taken this username.");
-                    //WARNING: the following message MUST be equal to the one checked in handleConnectionFailed in the network handler
-                    outputClient.writeObject(connectionFailed);
-                    return;
-                } else if (clientHandler.getVirtualView().getColor().equals(color)) {
-                    ConnectionFailed connectionFailed = new ConnectionFailed("Somebody else has already taken this color.");
-                    //WARNING: the following message MUST be equal to the one checked in handleConnectionFailed in the network handler
-                    outputClient.writeObject(connectionFailed);
-                    return;
-                }
-            }
-    
-            // the virtual view is added and it is added to the message listeners.
-            // Constructor of the virtual view inside the synchronized block. There are the getter methods above.
-            virtualView = new VirtualView(username, color, this);
-            //server.addMessageListener(virtualView);
-    
-            // if the player is the first, he will decide the number of players
-            if (players.size() == 0)
-                outputClient.writeObject(new RequestNumberOfPlayers(null));
-    
-            // the player is added to the list of players of the server
-            // Setter methods of the players field of the server inside the synchronized block. There are the getter methods above.
-            server.addPlayer(this);
-            server.addUsernameAndColorToMap(username, color);
-            server.addUsernameAndVirtualViewToMap(username, virtualView);
-            
-            // The players size and the maxNumberOfPlayers is called after the modifies and before exiting the
-            // synchronized block to control if the game can be initialized.
-            players = server.getPlayers();
-            maxNumberOfPlayers = server.getMaxNumberOfPlayers();
-        }
-        
-        // The client is advised of the successful connection.
-        VisitableInformation usernameAndColor = new VisitableInformation();
-        usernameAndColor.setUsername(username);
-        usernameAndColor.setColor(color);
-        ConnectionAccepted connectionAccepted = new ConnectionAccepted(usernameAndColor);
-        outputClient.writeObject(connectionAccepted);
-        
-        // If the number of players is reached, the game is initialized.
-        if (players.size() == maxNumberOfPlayers)
-            server.initGame();
-    }
-    
-    /**
-     * This method disconnects the server from this client telling him who disconnected first.
-     * @param message it tells this client who disconnected first.
-     */
-    public void disconnectFromClient(OpponentPlayerDisconnection message){
-        send(message);
-        isConnected = false;
-        try {
-            clientSocket.close();
-        } catch (IOException e) {
-            System.out.println("Unable to close the socket of this client: " + clientSocket.getInetAddress());
-            e.printStackTrace();
-        }
-    }
-    
-    /**
-     * This method handles the disconnection of the client. If it is the first client to disconnect from the game,
-     * it will make others disconnect as well. Otherwise, the method is ignored.
-     */
-    void handleDisconnection() {
-        // If the virtualView is set to null, it means that the player didn't enter the handleFirstConnection,
-        // hence nothing has to be done.
-        if (virtualView==null){
-            isConnected = false;
-            return;
-        }
-        
-        // This is synchronized in the case there is an attempt of connection by another client
-        // during the disconnection of this client.
-        synchronized (firstConnectionLock) {
-            // If isConnected is true, it means that this method hasn't been called by other clients. This means
-            // that the client which has to advise the others is this.
-            // Hence, for each client this method sends to them a message of incoming disconnection.
-            if (isConnected) {
-                OpponentPlayerDisconnection message = new OpponentPlayerDisconnection("Someone has disconnected");
-                message.setUsername(virtualView.getUsername());
-                server.notifyMessageListeners(message, virtualView);
-                server.cleanServer();
-                try {
-                    clientSocket.close();
-                } catch (IOException e) {
-                    System.out.println("Unable to close the socket of the client " + clientSocket.getInetAddress() + ".");
-                    e.printStackTrace();
-                }
-            }
-            
-            isConnected = false;
-        }
-    }
-    
-    /**
-     * This method serializes the messages and sends them to the client.
-     *
-     * @param message the message that must be sent.
-     */
-    void send(Message message) {
+    * This method serializes the messages and sends them to the client.
+    *
+    * @param message the message that must be sent.
+    */
+    private void send(Message message) {
         try {
             outputClient.writeObject(message);
         } catch (IOException e) {
-            System.out.println("Error in the serialization of " +message.toString()+ " message.");
+            System.out.println("Error in the serialization of " + message.toString() + " message.");
+            isConnected = false;
             e.printStackTrace();
         }
+    }
+    
+    private void endConnection(){
+        isConnected = false;
+        notifyDisconnection(this);
+    
+        try {
+            outputClient.close();
+        } catch (IOException e) {
+            System.out.println("Unable to close the socket of the client " + clientSocket.getInetAddress() + ".");
+            e.printStackTrace();
+        }
+    }
+    
+    void askMaxPlayersNumber(){
+        send(new RequestPlayersNumber(null));
+    }
+    
+    void warnFirstPlayerIsChoosing(){
+        send(new ErrorMessage("Sei stato messo in coda."));
+    }
+    
+    void askAgainParameters(String wrongParameter){
+        send(new WrongParameters("An other players chose your " + wrongParameter + ".\n" +
+                "Please try with another."));
+    }
+    
+    void notifyGameStartedWithoutYou(){
+        gameAlreadyStarted = true;
+        send(new ConnectionFailed("The game is already started.\nTry another time."));
         
-        if (message.getMessageType() == MessageType.TIMER_UPDATER) return;
+        endConnection();
+    }
+    
+    void notifyOpponentClientDisconnected(){
+        send(new ConnectionFailed("The first player disconnected and the game cannot be set.\n"+
+                "Please try another time."));
         
-        timer = new Timer(this);
-        new Thread(timer).start();
+        endConnection();
+    }
+    
+    void notifyOpponentClientDisconnected(String username){
+        send(new ConnectionFailed("The player" + username + " disconnected. Game over.\n"));
+        
+        endConnection();
+    }
+    
+    VirtualView createVirtualView(String username, Color color){
+        return (this.virtualView = new VirtualView(username, color, this));
     }
 
     /**

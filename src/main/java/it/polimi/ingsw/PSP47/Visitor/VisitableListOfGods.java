@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import java.util.ArrayList;
 
 public class VisitableListOfGods implements Visitable  {
+    private static final long serialVersionUID = 2052847251326893541L;
     ArrayList<GodName> godNames ;
     @Override
     public void accept(Visitor visitor) {

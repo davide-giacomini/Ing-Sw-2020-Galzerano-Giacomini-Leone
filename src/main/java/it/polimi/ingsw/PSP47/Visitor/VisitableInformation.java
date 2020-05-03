@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP47.Visitor;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 
 public class VisitableInformation implements Visitable  {
+    private static final long serialVersionUID = 7691614604691227681L;
     String username;
     Color color;
 
