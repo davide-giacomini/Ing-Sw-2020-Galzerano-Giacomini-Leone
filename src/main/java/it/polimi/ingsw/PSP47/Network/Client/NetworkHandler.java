@@ -14,7 +14,6 @@ import java.net.Socket;
 public class NetworkHandler implements Runnable{
     private final Client client;
     private Socket serverSocket;
-    private boolean firstConnection;
     private ObjectInputStream inputServer;
     private ObjectOutputStream outputServer;
     private boolean isConnected;
@@ -28,7 +27,6 @@ public class NetworkHandler implements Runnable{
     public NetworkHandler(Client client, Socket serverSocket){
         this.client = client;
         this.serverSocket = serverSocket;
-        firstConnection = true;
         this.isConnected = true;
     }
     
@@ -76,18 +74,22 @@ public class NetworkHandler implements Runnable{
             try {
                 message = (Message) inputServer.readObject();
                 switch (message.getMessageType()){
-                    case FIRST_PLAYER_CONNECTION:
-                        handleFirstPlayerConnection();
-                        break;
                     case FIRST_CONNECTION:
                         handleFirstConnection();
                         break;
+                    case REQUEST_PLAYERS_NUMBER:
+                        handlePlayersRequestNumber();
+                        break;
+                    case WRONG_PARAMETERS:
+                        client.getView().showMessage(((WrongParameters) message).getErrorMessage());
+                        handleFirstConnection();
+                        break;
+                    case CONNECTION_FAILED:
+                        client.getView().showMessage(((ConnectionFailed) message).getErrorMessage());
+                        isConnected = false;
+                        break;
                     case WAIT_CONNECTION_OPPONENT_PLAYER:
-                        System.out.println("Sei stato messo in coda.");
-                        //TODO scrivi al giocatore che sta aspettando le scelte del primo giocatore.
-//                    case CONNECTION_FAILED:
-//                        handleConnectionFailed((ConnectionFailed) message);
-//                        firstConnection = true;
+                        client.getView().showMessage(((WaitConnectionOpponentPlayer) message).getErrorMessage());
                         break;
                     default:
 //                        message.handleClientSide(client, outputServer);
@@ -111,19 +113,16 @@ public class NetworkHandler implements Runnable{
     }
     
     /**
-     * This method handles the first connection with the server, asking to the user to choose their username and
-     * the color they prefer for their workers.
+     * This method serializes the messages and sends them to the server.
+     *
+     * @param message the message that must be sent.
      */
-    public void handleFirstPlayerConnection() {
-        String username = client.getView().askUsername();
-        Color color = client.getView().askColorWorkers();
-        Integer numberPlayers = client.getView().askNumberOfPlayers();
-        FirstPlayerConnection message = new FirstPlayerConnection(username, numberPlayers, color);
-        
+    private void send(Message message) {
         try {
             outputServer.writeObject(message);
         } catch (IOException e) {
             System.out.println("Error in the serialization of " + message.toString() + " message.");
+            isConnected = false;
             e.printStackTrace();
         }
     }
@@ -131,39 +130,14 @@ public class NetworkHandler implements Runnable{
     private void handleFirstConnection(){
         String username = client.getView().askUsername();
         Color color = client.getView().askColorWorkers();
-        FirstConnection message = new FirstConnection(username, color);
-    
-        try {
-            outputServer.writeObject(message);
-        } catch (IOException e) {
-            System.out.println("Error in the serialization of " + message.toString() + " message.");
-            e.printStackTrace();
-        }
+        
+        send(new FirstConnection(username, color));
     }
     
-//    /**
-//     * Here a failure in the connection is analyzed.
-//     * If the user wrote the wrong username or the wrong color, this method proceeds for a reconnection, calling back
-//     * the {@link #handleFirstPlayerConnection()}.
-//     * Otherwise, if the game is already started, the connection closes.
-//     *
-//     * @param connectionFailedMessage it's the message with its parameters.
-//     */
-//    private void handleConnectionFailed(ConnectionFailed connectionFailedMessage) {
-//        connectionFailedMessage.handleClientSide(client, outputServer);
-//
-//        if (connectionFailedMessage.getErrorMessage().equals("Somebody else has already taken this username. Try another.")         //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
-//                || connectionFailedMessage.getErrorMessage().equals("Somebody else has already taken this color. Try another.")){   //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
-//            handleFirstPlayerConnection();
-//        }
-//        else if (connectionFailedMessage.getErrorMessage().equals("The game is already started. Try later.")){         //WARNING: this message MUST be equal to the one checked in handleFirstConnection in the client handler of the server
-//            try {
-//                isConnected = false;
-//                serverSocket.close();
-//            }
-//            catch (IOException e){
-//                System.out.println("Unable to close server socket");
-//            }
-//        }
+    private void handlePlayersRequestNumber(){
+        int playersNumber = client.getView().askNumberOfPlayers();
+    
+        send((new RequestPlayersNumber(playersNumber)));
     }
+}
 

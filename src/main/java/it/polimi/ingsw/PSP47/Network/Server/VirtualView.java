@@ -52,14 +52,14 @@ public class VirtualView implements SlotListener {
      * @param numberOfPlayers the parameter that must be sent to the client.
      */
     public void sendNumberOfPlayers(int numberOfPlayers) {
-        clientHandler.sendNumberOfPlayers(numberOfPlayers);
+//        clientHandler.sendNumberOfPlayers(numberOfPlayers);
     }
 
     /**
      * This method go to the clientHandler to send if he is the Challenger or not.
      */
     public void sendChallenger() {
-        clientHandler.sendYouAreTheChallenger();
+//        clientHandler.sendYouAreTheChallenger();
     }
 
     /**
@@ -75,7 +75,7 @@ public class VirtualView implements SlotListener {
      * @param gods list of gods.
      */
     public void sendGodsList(ArrayList<GodName> gods) {
-        clientHandler.sendGodsList(gods);
+//        clientHandler.sendGodsList(gods);
     }
 
     /**
@@ -94,14 +94,14 @@ public class VirtualView implements SlotListener {
      * @param godNames list of gods
      */
     public void sendPublicInformation(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> godNames) {
-        clientHandler.sendPublicInformation(usernames, colors, godNames);
+//        clientHandler.sendPublicInformation(usernames, colors, godNames);
     }
 
     /**
      * This method send the request of the initial position of the workers.
      */
     public void sendSetWorkers()  {
-        clientHandler.sendAskWorkersPosition();
+//        clientHandler.sendAskWorkersPosition();
     }
 
     /**
@@ -109,7 +109,7 @@ public class VirtualView implements SlotListener {
      * @param RowsAndColumns the list of coordinates.
      */
     public void receiveSetWorkers(int[] RowsAndColumns) {
-            controller.setWorkers(RowsAndColumns);
+//            controller.setWorkers(RowsAndColumns);
     }
 
 
@@ -121,7 +121,7 @@ public class VirtualView implements SlotListener {
      * This method send the request of the choice about which worker use in a turn.
      */
     public void sendWhichWorker() {
-        clientHandler.sendWhichWorker();
+//        clientHandler.sendWhichWorker();
     }
 
     /**
@@ -129,7 +129,7 @@ public class VirtualView implements SlotListener {
      * A player can move, build, build a dome or end his turn.
      */
     public void sendWhichAction() {
-        clientHandler.sendAction();
+//        clientHandler.sendAction();
     }
 
     /**
@@ -138,7 +138,7 @@ public class VirtualView implements SlotListener {
      * @param errorText the errorString that must be sent to the client.
      */
     public void sendError(String errorText) {
-        clientHandler.sendError(errorText);
+//        clientHandler.sendError(errorText);
     }
 
     /**

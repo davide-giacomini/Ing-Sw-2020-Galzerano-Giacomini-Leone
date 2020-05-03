@@ -1,204 +1,181 @@
 package it.polimi.ingsw.PSP47.Network.Server;
 
 
-import it.polimi.ingsw.PSP47.Controller.GameController;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Model.Board;
 import it.polimi.ingsw.PSP47.Network.Message.FirstConnection;
-import it.polimi.ingsw.PSP47.Network.Message.FirstPlayerConnection;
-import it.polimi.ingsw.PSP47.Network.Message.WaitConnectionOpponentPlayer;
+import it.polimi.ingsw.PSP47.Network.Message.RequestPlayersNumber;
 import it.polimi.ingsw.PSP47.Observable;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.Map;
 
 /**
  * This class instantiates a new server and wait for connections with clients.
  */
-public class Server extends Observable implements SetUpGameListener{
+public class Server extends Observable implements ClientHandlerListener {
+    // Class for the pair username-color of the client
+    private class PlayerParameters {
+        private final String username;
+        private final Color color;
+        
+        private PlayerParameters(String username, Color color) {
+            this.username = username;
+            this.color = color;
+        }
+    
+        public String getUsername() {
+            return username;
+        }
+    
+        public Color getColor() {
+            return color;
+        }
+    }
+    
     /**
      * The socket's port to connect to from the client.
      */
     public final static int SOCKET_PORT = 7777;
-    private static ArrayList<ClientHandler> connections = new ArrayList<>();
-    private HashMap<String, Color> mapUsernameColor = new HashMap<>();
-    private HashMap<String, VirtualView> mapUsernameVirtualView = new HashMap<>();
-    private static Server server;
-    private int maxNumberOfPlayers = 0;
-    private GameController gameController;
-    private static AtomicBoolean firstPlayerConnected = new AtomicBoolean(false);
-    private static AtomicBoolean gameParametersChosen = new AtomicBoolean(false);
-    private static LinkedList<Socket> clientSockets = new LinkedList<>();
-    private static AtomicBoolean connectionSettingFree = new AtomicBoolean(false);
-    private static final ReentrantLock firstConnectionLock = new ReentrantLock();
-    private static AtomicBoolean gameStarted = new AtomicBoolean(false);
+    private final ServerSocket serverSocket;
+    private volatile boolean firstPlayerConnected = false;
+    private volatile boolean gameStarted = false;
+    private int maxPlayersNumber = -1;
+    private ClientHandler firstClientHandler;
+    private ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+    private Map<ClientHandler, PlayerParameters> connectionsAccepted = new HashMap<>();
     
-    public static void setFirstPlayerConnected(AtomicBoolean firstPlayerConnected) {
-        Server.firstPlayerConnected = firstPlayerConnected;
+    public Server() throws IOException {
+        this.serverSocket = new ServerSocket(SOCKET_PORT);
     }
     
-    public static void setGameParametersChosen(AtomicBoolean gameParametersChosen) {
-        Server.gameParametersChosen = gameParametersChosen;
-
-        Socket proxClientSocket;
-        if ((proxClientSocket = clientSockets.poll()) != null)
-            createSetUpGame(proxClientSocket, false);
-        else
-            connectionSettingFree.set(true);
-    }
-    
-    /**
-     * This method creates a connection to be caught by clients. As the server catches a connection, it
-     * instantiates a {@link ClientHandler} as a thread. It will handle the connection between that client and the
-     * server itself.
-     *
-     * @param args they are not used.
-     */
-    public static void main(String[] args)
-    {
-        server = new Server();
-        ServerSocket serverSocket;
-        try {
-            serverSocket = new ServerSocket(SOCKET_PORT);
-        } catch (IOException e) {
-            System.out.println("Cannot open server socket.");
-            System.exit(1);
-            return;
-        }
-        
+    public void listen() {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
                 
-                synchronized (firstConnectionLock) {
-                    if (gameStarted.get()){
-                        //TODO manda un messaggio in cui dici che il gioco è partito e arrivederci
-                        clientSocket.close();
-                        continue;
-                    }
-                    
-                    clientSockets.add(clientSocket);
-                    
-                    // If the first player hasn't connected yet, you are the first.
-                    if (!firstPlayerConnected.get()) {
-                        firstPlayerConnected.set(true);
-                        createSetUpGame(clientSockets.poll(), true);
-                    }
-                    // If the first player isn't connected and the connection setting isn't free, wait.
-                    else if (!gameParametersChosen.get() || !connectionSettingFree.get()) {
-                        new ObjectOutputStream(clientSocket.getOutputStream()).writeObject(new WaitConnectionOpponentPlayer());
-                    } else {
-                        createSetUpGame(clientSockets.poll(), false);
-                    }
+                synchronized (this) {
+                    ClientHandler clientHandler = new ClientHandler(clientSocket, gameStarted);
+                    clientHandlers.add(clientHandler);
+                    clientHandler.addClientHandlerListener(this);
+                    new Thread(clientHandler).start();
                 }
                 
             } catch (IOException e) {
-                System.out.println("connection dropped");
+                System.out.println("Connection Error!");
             }
         }
     }
     
-    public synchronized void cleanServer(){
-        removeAll();
-        Board.getBoard().clearBoard();
-        connections = new ArrayList<>();
-        mapUsernameColor = new HashMap<>();
-        mapUsernameVirtualView = new HashMap<>();
-        maxNumberOfPlayers = 0;
-    }
-    
-    public ArrayList<ClientHandler> getPlayers(){
-        return new ArrayList<>(connections);
-    }
-    
-    public int getMaxNumberOfPlayers() {
-        return maxNumberOfPlayers;
-    }
-    
-    public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
-        this.maxNumberOfPlayers = maxNumberOfPlayers;
-    }
-    
-    public void addPlayer(ClientHandler clientHandler){
-        connections.add(clientHandler);
-    }
-    
-    public void addUsernameAndColorToMap(String username, Color color){
-        mapUsernameColor.put(username, color);
-    }
-    
-    public void addUsernameAndVirtualViewToMap(String username, VirtualView virtualView){
-        mapUsernameVirtualView.put(username, virtualView);
-    }
-    
-    /**
-     * This methods makes the game start, instantiating the controller and setting it into the virtualView.
-     * If {@link #cleanServer()} has been called before this method, it returns immediately.
-     */
-    public void initGame() {
-        //gameController = new GameController(maxNumberOfPlayers, mapUsernameColor, mapUsernameVirtualView);
-        gameStarted.set(true);
-        System.out.println("Gioco iniziato.");
-    }
-    
     @Override
-    public void setFirstPlayerParameters(FirstPlayerConnection message, Socket clientSocket) {
-        synchronized (firstConnectionLock) {
-            System.out.println("Setting up parameters of the first client: address" + clientSocket.getInetAddress() + ".");
-    
-            // Variables to be used in this method.
-            String username = message.getUsername();
-            Color color = message.getColor();
-            int numberPlayers = message.getNumberPlayers();
-    
-            mapUsernameColor.put(username, color);
-            maxNumberOfPlayers = numberPlayers;
-            Server.setGameParametersChosen(new AtomicBoolean(true));
-            createClientHandler(clientSocket);
-        }
-    }
-    
-    @Override
-    public void setFirstConnectionParameters(FirstConnection message, Socket clientSocket) {
-        synchronized (firstConnectionLock) {
-            System.out.println("Setting up parameters the client" + clientSocket.getInetAddress() + ".");
+    public synchronized void handleFirstConnection(FirstConnection message, ClientHandler clientHandler) {
+        String username = message.getUsername();
+        Color color = message.getColor();
         
-            String username = message.getUsername();
-            Color color = message.getColor();
-    
-            mapUsernameColor.put(username, color);
-            createClientHandler(clientSocket);
+        if (!firstPlayerConnected) {
+            firstPlayerConnected = true;
+            firstClientHandler = clientHandler;
+            connectionsAccepted.put(clientHandler, new PlayerParameters(username, color));
+            clientHandlers.remove(clientHandler);
+            clientHandler.askMaxPlayersNumber();
+            return;
+        } else if (maxPlayersNumber < 0) {
+            clientHandler.warnFirstPlayerIsChoosing();
             
-            if (connections.size() == maxNumberOfPlayers){
-                initGame();
+            while (maxPlayersNumber < 0) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            
+            if (!firstPlayerConnected) {
+                clientHandler.notifyFirstClientHandlerDropped();
+                clientHandlers.remove(clientHandler);
+                notifyAll(); //TODO non so se serva
                 return;
             }
+        }
     
-            if (clientSockets.getFirst()==null)
-                connectionSettingFree.set(true);
-            else
-                connectionSettingFree.set(false);
+        String wrongParameter;
+        if ((wrongParameter = checkParameters(username, color)) != null) {
+            clientHandler.askAgainParameters(wrongParameter);
+            notifyAll(); //TODO non so se serva
+            return;
+        }
+        
+        connectionsAccepted.put(clientHandler, new PlayerParameters(username, color));
+        clientHandlers.remove(clientHandler);
+        
+        if (connectionsAccepted.size() == maxPlayersNumber)
+            initGame();
+        
+        notifyAll(); //TODO non so se serva
+    }
+    
+    @Override
+    public synchronized void setPlayersNumber(RequestPlayersNumber message) {
+        maxPlayersNumber = message.getNumberOfPlayers();
+        
+        notifyAll();
+    }
+    
+    @Override
+    public synchronized void handleDisconnection(ClientHandler clientHandler) {
+        // If the clientHandler isn't in the game yet
+        if (!connectionsAccepted.containsKey(clientHandler)) {
+            clientHandlers.remove(clientHandler);
+        }
+        // If the clientHandler is the first and the game is not started yet, the game is reset and others players
+        // are notified. A message of the dropped connection of the first client will be sent to them.
+        else if (!gameStarted && clientHandler.equals(firstClientHandler)) {
+            connectionsAccepted = new HashMap<>();
+            maxPlayersNumber = -1;
+            firstClientHandler = null;
+            firstPlayerConnected = false;
+            notifyAll();
+        }
+        // If clientHandler is in the connections accepted, they are not the first clientHandler and the game is not
+        // started yet, this clientHandler can exit silently, without affecting other players.
+        else if (!gameStarted) {
+            connectionsAccepted.remove(clientHandler);
+        }
+        // If the game is started and you are among the connected players.
+        else {
+            connectionsAccepted = new HashMap<>();
+            maxPlayersNumber = -1;
+            firstClientHandler = null;
+            firstPlayerConnected = false;
         }
     }
     
-    private void createClientHandler(Socket clientSocket){
-        ClientHandler clientHandler = new ClientHandler(clientSocket, server);
-        connections.add(clientHandler);
-        new Thread(clientHandler, "server_" + clientSocket.getInetAddress()).start();
-        System.out.println("Socket from the client " + clientSocket.getInetAddress() + " successfully connected.");
+    private String checkParameters(String username, Color color) {
+        PlayerParameters opponentsParameters;
+    
+        for (ClientHandler clientHandler : connectionsAccepted.keySet()) {
+            opponentsParameters = connectionsAccepted.get(clientHandler);
+        
+            if (opponentsParameters.getUsername().equals(username) && opponentsParameters.getColor().equals(color))
+                return "username and color";
+            if (opponentsParameters.getUsername().equals(username))
+                return "username";
+            else if (opponentsParameters.getColor().equals(color))
+                return "color";
+        }
+        
+        return null;
     }
     
-    private static void createSetUpGame(Socket clientSocket, boolean isTheFirstPlayer){
-        SetUpGame setUpGame = new SetUpGame(clientSocket, isTheFirstPlayer);
-        setUpGame.addSetUpGameListener(server);
-        new Thread(setUpGame).start();
+    private void initGame() {
+        System.out.println("Gioco iniziato."); //TODO inizia il gioco
+        gameStarted = true;
+        
+        for (ClientHandler clientHandler : clientHandlers) {
+            clientHandler.notifyGameStartedWithoutYou();
+        }
     }
 }
-
