@@ -2,6 +2,10 @@ package it.polimi.ingsw.PSP47.Visitor;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 
+/**
+ * This class implements the Visitable interface of the Visitor pattern.
+ * It represents the username and the color chosen by a player.
+ */
 public class VisitableInformation implements Visitable  {
     private static final long serialVersionUID = 7691614604691227681L;
     String username;

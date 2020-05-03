@@ -12,8 +12,6 @@ public interface Visitor {
 
     void visit(VisitableRowsAndColumns rowsAndColumns);
 
-    void visit(VisitableString string);
-
     void visit(VisitableInt number);
 
     void visit(VisitableInitialPositions visitableInitialPositions);

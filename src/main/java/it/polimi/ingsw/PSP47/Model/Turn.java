@@ -103,8 +103,6 @@ public class Turn {
     public void executeMove(Direction direction)
             throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
 
-        if (numberOfMovements == MAX_MOVEMENTS) throw new InvalidMoveException("Max number of movements reached");
-
         // player.move returns a boolean, but the method can throw all the exceptions above.
         // Hence, numberOfMovements has to be incremented only after the method.
         boolean thirdLevelReached = player.move(direction, player.getWorker(workerGender));
@@ -121,7 +119,6 @@ public class Turn {
      */
     public void executeBuild(Direction direction)
             throws IndexOutOfBoundsException, InvalidDirectionException, InvalidBuildException {
-        if (numberOfBuildings == MAX_BUILDINGS) throw new InvalidBuildException("Max number of buildings reached");
 
         player.build(direction, player.getWorker(workerGender));
         numberOfBuildings++;
@@ -161,4 +158,11 @@ public class Turn {
         return player.getGod().validateEndTurn();
     }
 
+    public int getMAX_MOVEMENTS() {
+        return MAX_MOVEMENTS;
+    }
+
+    public int getMAX_BUILDINGS() {
+        return MAX_BUILDINGS;
+    }
 }

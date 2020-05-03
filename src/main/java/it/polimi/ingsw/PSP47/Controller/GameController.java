@@ -73,7 +73,7 @@ public class GameController implements VirtualViewListener {
     /**
      * This method is the first method which is launched in the constructor to make start the game.
      */
-    public void startController() {
+    private void startController() {
          orderViews();
          int index = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
         for (VirtualView view : views) {
@@ -92,6 +92,7 @@ public class GameController implements VirtualViewListener {
         orderViews();
         ArrayList<GodName> godsList = new ArrayList<>(gods);
         views.get(indexOfCurrentPlayer).sendGodsList(godsList);
+        sendAnAdvice();
     }
 
     /**
@@ -101,7 +102,7 @@ public class GameController implements VirtualViewListener {
      */
     public void setGod(GodName god) {
         if (!game.getGods().contains(god)) {
-            String textError = "You cannot choose this god, it's not available in this game";
+            String textError = "You cannot choose this god, it's not available";
             views.get(indexOfCurrentPlayer).sendError(textError);
             ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
@@ -121,6 +122,7 @@ public class GameController implements VirtualViewListener {
         else {
             ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
+            sendAnAdvice();
         }
     }
 
@@ -147,7 +149,8 @@ public class GameController implements VirtualViewListener {
     }
 
     /**
-     * This method set a worker into a slot, checking if it's already occupied.
+     * This method set both workers into their correspondent slots, checking if they're already occupied or
+     * if the chosen slots are out of range.
      */
     public void setWorkers( int[] RowsAndColumns)  {
         try {
@@ -174,6 +177,7 @@ public class GameController implements VirtualViewListener {
             }
             else {
                 views.get(indexOfCurrentPlayer).sendSetWorkers();
+                sendAnAdvice();
             }
         }catch (IndexOutOfBoundsException | SlotOccupiedException e) {
             String errorText = e.getMessage();
@@ -186,7 +190,7 @@ public class GameController implements VirtualViewListener {
      * This method creates a random order for the turn.
      * It must be called at the start of the game.
      */
-    public void newRoundOrder() {
+    private void newRoundOrder() {
         game.createNewPlayersList();
         orderViews();
     }
@@ -195,7 +199,7 @@ public class GameController implements VirtualViewListener {
      * This method creates the order of the round for the whole game and then it sends all the public information
      * to all the players.
      */
-    public void startGame() {
+     private void startGame() {
         newRoundOrder();
         ArrayList<String> usernames = new ArrayList<>(numberOfPlayers);
         ArrayList<Color> colors = new ArrayList<>(numberOfPlayers);
@@ -206,10 +210,11 @@ public class GameController implements VirtualViewListener {
             godNames.add(player.getGodName());
         }
         for (VirtualView view : views) {
-            view.sendPublicInformation(usernames, colors, godNames);        //TODO passare degli ArrayList seri
+            view.sendPublicInformation(usernames, colors, godNames);
         }
 
         views.get(indexOfCurrentPlayer).sendSetWorkers();
+        sendAnAdvice();
     }
 
     /**
@@ -231,7 +236,7 @@ public class GameController implements VirtualViewListener {
      * This method order the ArrayList of Virtual Views the same as the players in the Game class.
      * This is because the indexOfCurrentPlayer must refers to the player and to the VirtualView at the same time.
      */
-    public void orderViews() {
+    private void orderViews() {
         VirtualView temp;
         for(int i=0; i<numberOfPlayers; i++) {
             if (!Game.getPlayer(i).getUsername().equals(views.get(i).getUsername()))
@@ -245,11 +250,17 @@ public class GameController implements VirtualViewListener {
         }
     }
 
-    public void firstTurn() {
+    /**
+     * This method creates the first turn of the game and makes it start.
+     */
+    private void firstTurn() {
         turn = new TurnController(views, game, indexOfCurrentPlayer, this);
         turn.startTurn();
     }
 
+    /**
+     * This method create a new turn of the game and makes it start.
+     */
     public void turn()  {
         incrementIndex();
         turn = new TurnController(views, game, indexOfCurrentPlayer, this);
@@ -271,6 +282,23 @@ public class GameController implements VirtualViewListener {
         return turn;
     }
 
+    /**
+     * This method sends an advice to all the players, except for the one who is playing,
+     * to inform them about who is playing in the current turn.
+     */
+    void sendAnAdvice() {
+        for (VirtualView view : views) {
+            if (!(view.getUsername().equals(views.get(indexOfCurrentPlayer).getUsername())))
+                view.sendError("It's " + views.get(indexOfCurrentPlayer).getUsername() + "'s turn");
+        }
+    }
+
+    /**
+     * This method implements the update of the Observer Pattern.
+     * It's called every time the virtual view receives a message from the
+     * client side, so its content is notified to the controller.
+     * @param visitableObject the content of the message.
+     */
     @Override
     public void update(Visitable visitableObject) {
         visitableObject.accept(controllerVisitor);

@@ -98,7 +98,7 @@ public class Artemis extends God {
      * @return true if the worker can move, false otherwise
      */
     @Override
-    protected boolean checkIfCanMove(Worker worker) {
+    public boolean checkIfCanMove(Worker worker) {
         if (player.getTurn().getNumberOfMovements() == 0)
             return checkIfCanMoveInNormalConditions(worker);
         else {
@@ -132,7 +132,7 @@ public class Artemis extends God {
      * @return true if the worker can build, false otherwise.
      */
     @Override
-    protected boolean checkIfCanBuild(Worker worker) {
+    public boolean checkIfCanBuild(Worker worker) {
         return checkIfCanBuildInNormalConditions(worker);
     }
 
