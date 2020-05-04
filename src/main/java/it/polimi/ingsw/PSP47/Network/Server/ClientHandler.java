@@ -58,7 +58,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                     if (!clientAddress.isReachable(5000))
                         break;
     
-                    System.out.println("Ping sent.");
+                   System.out.println("Ping sent.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -230,15 +230,11 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     void sendWin(){
-        // TODO send win
-        
         notifyWin(this);
         endConnection();
     }
     
     void sendLose(){
-        //TODO send lose
-        
         notifyLose(this);
         endConnection();
     }

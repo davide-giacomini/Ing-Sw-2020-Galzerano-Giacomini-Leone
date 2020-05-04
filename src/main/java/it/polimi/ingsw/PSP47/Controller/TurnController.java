@@ -38,7 +38,7 @@ public class TurnController {
      */
     void startTurn() {
         if (player.isLoosing())
-            removeLosingPlayer();
+            controller.removeLosingPlayer();
         views.get(indexOfCurrentPlayer).sendWhichWorker();
         controller.sendAnAdvice();
     }
@@ -91,13 +91,15 @@ public class TurnController {
         switch (action) {
             case MOVE:
                 if (player.isLoosing()) {
-                    removeLosingPlayer();
+                    controller.removeLosingPlayer();
                     break;
                 }
                 try {
                     if (turn.getNumberOfMovements() == turn.getMAX_MOVEMENTS())
                         throw new InvalidMoveException("Max number of movements reached");
                     turn.executeMove(direction);
+                    if (player.isWinning())
+                       controller.endGame();
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     break;
                 } catch (InvalidDirectionException | InvalidMoveException | IndexOutOfBoundsException e) {
@@ -108,7 +110,7 @@ public class TurnController {
                 }
             case BUILD:
                 if (player.isLoosing()) {
-                    removeLosingPlayer();
+                    controller.removeLosingPlayer();
                     break;
                 }
                 try {
@@ -125,7 +127,7 @@ public class TurnController {
                 }
             case BUILDDOME:
                 if (player.isLoosing()) {
-                    removeLosingPlayer();
+                    controller.removeLosingPlayer();
                     break;
                 }
                 try {
@@ -150,33 +152,6 @@ public class TurnController {
                 }
                 controller.turn();
                 break;
-        }
-    }
-
-    /**
-     * This method deletes a losing player from the game and notifies all the players.
-     * If the players were just two, it also declares the winner and ends the game.
-     */
-    private void removeLosingPlayer() {
-        for(VirtualView view : views) {
-            view.sendLosingPlayer(player.getUsername());
-        }
-        views.remove(views.get(indexOfCurrentPlayer));
-
-        Slot slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
-        slot.setWorker(null);
-        slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
-        slot.setWorker(null);
-
-        game.getPlayers().remove(Game.getPlayer(indexOfCurrentPlayer));
-        //TODO chiudere tutto il suo processo
-        if (Game.getNumberOfPlayers() == 2) {
-            //views.get(0).sendYouAreTheWinner()
-            //TODO chiudere tutto il gioco
-        }
-        else {
-            Game.setNumberOfPlayers(2);
-            controller.turn();
         }
     }
 }

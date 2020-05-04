@@ -60,13 +60,13 @@ public class NetworkHandler implements Runnable, ViewListener {
     public void run() {
         // create a ping mechanism
         InetAddress serverAddress = serverSocket.getInetAddress();
-        new Thread(() -> {
+       /* new Thread(() -> {
             while (true){
                 try {
                     if (!serverAddress.isReachable(5000))
                         break;
                     
-                    System.out.println("Ping sent.");
+                 //   System.out.println("Ping sent.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -74,7 +74,7 @@ public class NetworkHandler implements Runnable, ViewListener {
         
             client.getView().showMessage("The server isn't reachable.\nYou disconnected.");
             endConnection();
-        }).start();
+        }).start(); */
     
         // start the game
         dispatchMessages();

@@ -173,7 +173,8 @@ public class GameController implements VirtualViewListener {
 
             incrementIndex();
             if(indexOfCurrentPlayer == 0) {
-                firstTurn();
+                turn = new TurnController(views, game, indexOfCurrentPlayer, this);
+                turn.startTurn();
             }
             else {
                 views.get(indexOfCurrentPlayer).sendSetWorkers();
@@ -251,17 +252,9 @@ public class GameController implements VirtualViewListener {
     }
 
     /**
-     * This method creates the first turn of the game and makes it start.
-     */
-    private void firstTurn() {
-        turn = new TurnController(views, game, indexOfCurrentPlayer, this);
-        turn.startTurn();
-    }
-
-    /**
      * This method create a new turn of the game and makes it start.
      */
-    public void turn()  {
+    public void turn() {
         incrementIndex();
         turn = new TurnController(views, game, indexOfCurrentPlayer, this);
         turn.startTurn();
@@ -278,6 +271,13 @@ public class GameController implements VirtualViewListener {
             indexOfCurrentPlayer=0;
     }
 
+    private void fixIndexAndStart() {
+        if (indexOfCurrentPlayer == 2)
+            indexOfCurrentPlayer = 0;
+        turn = new TurnController(views, game, indexOfCurrentPlayer, this);
+        turn.startTurn();
+    }
+
     public TurnController getTurn() {
         return turn;
     }
@@ -291,6 +291,44 @@ public class GameController implements VirtualViewListener {
             if (!(view.getUsername().equals(views.get(indexOfCurrentPlayer).getUsername())))
                 view.sendError("It's " + views.get(indexOfCurrentPlayer).getUsername() + "'s turn");
         }
+    }
+
+    /**
+     * This method deletes a losing player from the game and notifies all the players.
+     * If the players were just two, it also declares the winner and ends the game.
+     */
+    void removeLosingPlayer() {
+        for (VirtualView view : views) {
+            view.sendError("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just lost.");
+        }
+
+        views.remove(views.get(indexOfCurrentPlayer));
+
+        Slot slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
+        slot.setWorker(null);
+        slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
+        slot.setWorker(null);
+
+        game.getPlayers().remove(Game.getPlayer(indexOfCurrentPlayer));
+        views.get(indexOfCurrentPlayer).sendLosingAdvice();
+
+        if (Game.getNumberOfPlayers() == 2) {
+            endGame();
+        }
+        else {
+            Game.setNumberOfPlayers(2);
+            fixIndexAndStart();
+        }
+    }
+
+    /**
+     * This method close the game when someone has won.
+     */
+    void endGame() {
+        for (VirtualView view : views) {
+            view.sendError("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just won.");
+        }
+        views.get(indexOfCurrentPlayer).sendWinningAdvice();
     }
 
     /**
