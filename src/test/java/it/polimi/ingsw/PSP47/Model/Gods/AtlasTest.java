@@ -89,12 +89,12 @@ public class AtlasTest {
         turn.executeMove(Direction.RIGHT);
     }
 
-    @Test (expected = InvalidMoveException.class)
+    /*@Test (expected = InvalidMoveException.class)
     public void move_NoAvailableMovementsException()
             throws Exception {
         turn.executeMove(Direction.RIGHT);
         turn.executeMove(Direction.DOWN);
-    }
+    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_SlotOccupiedException()
@@ -104,13 +104,13 @@ public class AtlasTest {
         turn.executeBuild(Direction.RIGHT);
     }
 
-    @Test (expected = InvalidBuildException.class)
+    /*@Test (expected = InvalidBuildException.class)
     public void build_NoAvailableBuildingsException()
             throws Exception {
         turn.executeMove(Direction.RIGHTDOWN);
         turn.executeBuild(Direction.UP);
         turn.executeBuild(Direction.DOWN);
-    }
+    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_WrongBuildOrMoveException()

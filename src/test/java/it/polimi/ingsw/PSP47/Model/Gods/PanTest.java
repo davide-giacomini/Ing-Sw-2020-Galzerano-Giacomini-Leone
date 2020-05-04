@@ -71,12 +71,12 @@ public class PanTest {
         turn.executeMove(Direction.UP);
     }
 
-    @Test (expected = InvalidMoveException.class)
+    /*@Test (expected = InvalidMoveException.class)
     public void move_NoAvailableMovementsException()
             throws Exception{
         turn.executeMove(Direction.LEFT);
         turn.executeMove(Direction.RIGHTUP);
-    }
+    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_SlotOccupiedException()
@@ -86,13 +86,13 @@ public class PanTest {
         turn.executeBuild(Direction.UP);
     }
 
-    @Test (expected = InvalidBuildException.class)
+    /*@Test (expected = InvalidBuildException.class)
     public void build_NoAvailableBuildingsException()
             throws Exception{
         turn.executeMove(Direction.LEFT);
         turn.executeBuild(Direction.UP);
         turn.executeBuild(Direction.DOWN);
-    }
+    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_WrongBuildOrMoveException()
