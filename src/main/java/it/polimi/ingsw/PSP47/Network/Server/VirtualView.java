@@ -31,14 +31,17 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     }
 
 
+    /**
+     * This method sends a model update client side.
+     * @param slot the slot that has been updated.
+     */
     @Override
     public void update(Slot slot) {
         clientHandler.sendUpdateSlot(slot);
-        //TODO implementare l'update a seconda di cosa serve. Nel caso cambiare la signature di update per passare i parametri che si vogliono.
     }
 
     /**
-     * This method go to the clientHandler to send the needed message.
+     * This method sends the number of players of the game.
      * @param numberOfPlayers the parameter that must be sent to the client.
      */
     public void sendNumberOfPlayers(int numberOfPlayers) {
@@ -46,7 +49,7 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     }
 
     /**
-     * This method go to the clientHandler to send if he is the Challenger or not.
+     * This method sends a notify who tells who is the challenger.
      */
     public void sendChallenger() {
         clientHandler.sendYouAreTheChallenger();
@@ -62,7 +65,7 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
 
 
     /**
-     * This method send the information about all the players of the game.
+     * This method sends the information about all the players of the game.
      * @param usernames list of usernames
      * @param colors list of colors
      * @param godNames list of gods
@@ -72,26 +75,21 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     }
 
     /**
-     * This method send the request of the initial position of the workers.
+     * This method sends the request of the initial position of the workers.
      */
     public void sendSetWorkers()  {
         clientHandler.sendAskWorkersPosition();
     }
 
-
-    public void sendLosingPlayer(String username) {
-//        clientHandler.manageSendLosingPlayer(username)
-    }
-
     /**
-     * This method send the request of the choice about which worker use in a turn.
+     * This method sends the request of the choice about which worker use in a turn.
      */
     public void sendWhichWorker() {
         clientHandler.sendWhichWorker();
     }
 
     /**
-     * This method send the request of the choice about what to do next:
+     * This method sends the request of the choice about what to do next:
      * A player can move, build, build a dome or end his turn.
      */
     public void sendWhichAction() {
@@ -99,7 +97,7 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     }
 
     /**
-     * This method send an error to the client.
+     * This method sends an error to the client.
      * It contains an errorString which will be printed to inform him about what he did wrong.
      * @param errorText the errorString that must be sent to the client.
      */
@@ -107,4 +105,17 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
         clientHandler.sendError(errorText);
     }
 
+    /**
+     * This method sends the player who has lost.
+     */
+    public void sendLosingAdvice() {
+        clientHandler.sendLose();
+    }
+
+    /**
+     * This method sends the player who has win.
+     */
+    public void sendWinningAdvice() {
+        clientHandler.sendWin();
+    }
 }

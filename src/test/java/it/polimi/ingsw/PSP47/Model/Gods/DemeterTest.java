@@ -98,12 +98,12 @@ public class DemeterTest {
         turn.executeMove(Direction.DOWN);
     }
 
-    @Test (expected = InvalidMoveException.class)
+   /* @Test (expected = InvalidMoveException.class)
     public void move_NoAvailableMovementsException()
             throws Exception {
         turn.executeMove(Direction.LEFT);
         turn.executeMove(Direction.RIGHTUP);
-    }
+    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_WrongBuildOrMoveException()
