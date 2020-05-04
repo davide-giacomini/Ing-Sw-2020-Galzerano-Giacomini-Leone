@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Model.SlotListener;
-import it.polimi.ingsw.PSP47.Observable;
 
 import java.util.ArrayList;
 
@@ -12,7 +11,7 @@ import java.util.ArrayList;
  * This class implements a virtualView, which basically represents the connection between the network and the controller.
  * There is one for each player.
  */
-public class VirtualView extends Observable implements SlotListener {
+public class VirtualView extends VirtualViewObservable implements SlotListener {
     private ClientHandler clientHandler;
     private final String username;
     private final it.polimi.ingsw.PSP47.Enumerations.Color color;

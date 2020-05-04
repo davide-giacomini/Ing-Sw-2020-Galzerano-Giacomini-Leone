@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP47.Model.Board;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Message.FirstConnection;
 import it.polimi.ingsw.PSP47.Network.Message.RequestPlayersNumber;
-import it.polimi.ingsw.PSP47.Observable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInt;
 
@@ -22,7 +21,7 @@ import java.util.Map;
 /**
  * This class instantiates a new server and wait for connections with clients.
  */
-public class Server extends Observable implements ClientHandlerListener {
+public class Server implements ClientHandlerListener {
     // Class for the pair username-color of the client
     private class PlayerParameters {
         private final String username;

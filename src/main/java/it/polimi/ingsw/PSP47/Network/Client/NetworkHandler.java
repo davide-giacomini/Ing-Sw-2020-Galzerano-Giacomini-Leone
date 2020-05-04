@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP47.Network.Message.*;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Message.ConnectionFailed;
+import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.View.ViewListener;
 import it.polimi.ingsw.PSP47.Visitor.*;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * This class handles the transfer of messages between the client and the server.
  */
 public class NetworkHandler implements Runnable, ViewListener {
-    private final Client client;    //TODO passare la view al posto del client.
+    private View view;
     private Socket serverSocket;
     private ObjectInputStream inputServer;
     private ObjectOutputStream outputServer;
@@ -28,15 +29,15 @@ public class NetworkHandler implements Runnable, ViewListener {
     /**
      * This constructor set up the management between the {@link Client} and the {@link it.polimi.ingsw.PSP47.Network.Server.Server}.
      *
-     * @param client the {@link Client} to be handled.
+     * @param view the {@link View} passed by the Client.
      * @param serverSocket the socket of the {@link it.polimi.ingsw.PSP47.Network.Server.Server} the user wants to connect to.
      */
-    public NetworkHandler(Client client, Socket serverSocket){
-        this.client = client;
+    public NetworkHandler(View view, Socket serverSocket){
+        this.view = view;
         this.serverSocket = serverSocket;
         this.isConnected = true;
         this.networkHandlerVisitor= new NetworkHandlerVisitor(this);
-        client.getView().addViewListener(this);
+        view.addViewListener(this);
     }
     
     /**
@@ -87,81 +88,81 @@ public class NetworkHandler implements Runnable, ViewListener {
                         handleFirstConnection();
                         break;
                     case REQUEST_PLAYERS_NUMBER:
-                        client.getView().askNumberOfPlayers();
+                        view.askNumberOfPlayers();
                         break;
                     case WRONG_PARAMETERS:
-                        client.getView().showMessage(((WrongParameters) message).getErrorMessage());
+                        view.showMessage(((WrongParameters) message).getErrorMessage());
                         handleFirstConnection();
                         break;
                     case ASK_WORKER_POSITION:
-                        client.getView().askWhereToPositionWorkers();
+                        view.askWhereToPositionWorkers();
                         break;
                     case  CHOOSE_ACTION:
-                        client.getView().askAction();
+                        view.askAction();
                         break;
                     case CHOOSE_WORKER:
-                        client.getView().askWhichWorkerToUse();
+                        view.askWhichWorkerToUse();
                         break;
                     case CONNECTION_ACCEPTED:
                         VisitableInformation visitableConnectionAccepted = (VisitableInformation)  message.getContent();
                         String username = visitableConnectionAccepted.getUsername();
                         Color color = visitableConnectionAccepted.getColor();
 
-                        client.getView().getGameView().setMyUsername(username);
-                        client.getView().getGameView().setMyColor(color);
+                        view.getGameView().setMyUsername(username);
+                        view.getGameView().setMyColor(color);
                         break;
                     case CONNECTION_FAILED:
-                        client.getView().showMessage(((ConnectionFailed) message).getErrorMessage());
+                        view.showMessage(((ConnectionFailed) message).getErrorMessage());
                         isConnected = false;
                         break;
                     case ERROR:
                         String errorText = ((ErrorMessage) message).getErrorText();
-                        client.getView().showMessage(errorText);
+                        view.showMessage(errorText);
                         break;
                     case LIST_OF_GODS:
                         VisitableListOfGods visitableGods =(VisitableListOfGods) message.getContent();
                         ArrayList<GodName> godNames =  visitableGods.getGodNames();
-                        client.getView().chooseYourGod(godNames);
+                        view.chooseYourGod(godNames);
                         break;
                     case NUMBER_PLAYERS:
                         NumberOfPlayers messagePlayers = (NumberOfPlayers) message;
                         int number = messagePlayers.getNumberOfPlayers();
-                        client.getView().getGameView().setNumberOfPlayers(number);
+                        view.getGameView().setNumberOfPlayers(number);
                         break;
                     case PUBLIC_INFORMATION:
                         PublicInformation messageInfo = (PublicInformation) message;
 
-                        client.getView().getGameView().setUsernames(messageInfo.getUsernames());
-                        client.getView().getGameView().setColors(messageInfo.getColors());
-                        client.getView().getGameView().setGods(((PublicInformation) message).getGodNames());
+                        view.getGameView().setUsernames(messageInfo.getUsernames());
+                        view.getGameView().setColors(messageInfo.getColors());
+                        view.getGameView().setGods(((PublicInformation) message).getGodNames());
 
-                        client.getView().showPublicInformation();
+                        view.showPublicInformation();
                         break;
                     case UPDATE_SLOT:
                         UpdatedSlot messageSlot = (UpdatedSlot) message;
                         Slot slot = messageSlot.getUpdatedSlot();
-                        client.getView().getGameView().getBoardView().setSlot(slot);
-                        client.getView().showCurrentBoard();
+                        view.getGameView().getBoardView().setSlot(slot);
+                        view.showCurrentBoard();
                         break;
                     case CHALLENGER:
-                        client.getView().challengerWillChooseThreeGods();
+                        view.challengerWillChooseThreeGods();
                         break;
                 }
             }
             catch (IOException e){
-                client.getView().showMessage("We are sorry: " +
+                view.showMessage("We are sorry: " +
                         "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");
                 isConnected = false;
                 //e.printStackTrace();
             }
             catch (ClassNotFoundException e){
-                client.getView().showMessage("Error in casting during the readObject.");
+                view.showMessage("Error in casting during the readObject.");
                 isConnected = false;
                 //e.printStackTrace();
             }
         }
-        
-        client.getView().showMessage("Game closed.");
+
+        view.showMessage("Game closed.");
     }
     
     /**
@@ -185,7 +186,7 @@ public class NetworkHandler implements Runnable, ViewListener {
      * the color they prefer for their workers.
      */
     public void handleFirstConnection() {
-        client.getView().askFirstConnection();
+        view.askFirstConnection();
     }
 
     @Override

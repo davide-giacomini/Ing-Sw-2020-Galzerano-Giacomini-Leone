@@ -49,7 +49,7 @@ public class Client {
         }
         System.out.println("Connected to the address " + serverSocket.getInetAddress());
     
-        NetworkHandler networkHandler = new NetworkHandler(this, serverSocket);
+        NetworkHandler networkHandler = new NetworkHandler(view , serverSocket);
         Thread thread = new Thread(networkHandler);
         thread.start();
     }

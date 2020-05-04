@@ -3,11 +3,10 @@ package it.polimi.ingsw.PSP47.View;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
-import it.polimi.ingsw.PSP47.Observable;
 
 import java.util.ArrayList;
 
-public abstract class View extends Observable {
+public abstract class View extends ViewObservable {
     public Client currentClient;
     public GameView gameView;
 

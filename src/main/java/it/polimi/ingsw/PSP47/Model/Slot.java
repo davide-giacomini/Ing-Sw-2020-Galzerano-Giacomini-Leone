@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP47.Model;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.Level;
-import it.polimi.ingsw.PSP47.Observable;
 
 import java.io.Serializable;
 
@@ -11,7 +10,7 @@ import java.io.Serializable;
  * The slot can't be instanced by anyone. It is thought to be instanced only one time by the {@link Board}, therefore
  * it's got a protected constructor.
  */
-public class Slot extends Observable implements Serializable {
+public class Slot extends SlotObservable implements Serializable {
     private static final long serialVersionUID = -7636829625663848955L;
     private final int column;
     private final int row;
