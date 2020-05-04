@@ -36,7 +36,9 @@ public class Server implements ClientHandlerListener {
      * The socket's port to connect to from the client.
      */
     public final static int SOCKET_PORT = 7777;
+    public final static int PING_PORT = 7778;
     private final ServerSocket serverSocket;
+    private final ServerSocket pingSocket;
     private volatile boolean firstPlayerConnected = false;
     private volatile boolean gameStarted = false;
     private int maxPlayersNumber = -1;
@@ -47,15 +49,17 @@ public class Server implements ClientHandlerListener {
     
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(SOCKET_PORT);
+        this.pingSocket = new ServerSocket(PING_PORT);
     }
     
     public void listen() {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
+                Socket clientPingSocket = pingSocket.accept();
                 
                 synchronized (this) {
-                    ClientHandler clientHandler = new ClientHandler(clientSocket, gameStarted);
+                    ClientHandler clientHandler = new ClientHandler(clientSocket, gameStarted, clientPingSocket);
                     clientHandlers.add(clientHandler);
                     clientHandler.addClientHandlerListener(this);
                     new Thread(clientHandler).start();

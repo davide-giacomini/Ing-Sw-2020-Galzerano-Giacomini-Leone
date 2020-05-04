@@ -16,11 +16,13 @@ import java.util.ArrayList;
 
 public class ClientHandler extends ClientHandlerObservable implements Runnable{
     private final Socket clientSocket;
+    private final Socket clientPingSocket;
     private ObjectInputStream inputClient;
     private ObjectOutputStream outputClient;
     private boolean isConnected;
     private boolean gameAlreadyStarted;
     private VirtualView virtualView;
+    Thread pingServerHandler;
     
     /**
      * This constructor set up the management between the {@link Client} and the {@link Server}.
@@ -28,10 +30,11 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param clientSocket the socket of the {@link Client} connected to the server.
      * @param gameAlreadyStarted if the game is already started.
      */
-    public ClientHandler(Socket clientSocket, boolean gameAlreadyStarted){
+    public ClientHandler(Socket clientSocket, boolean gameAlreadyStarted, Socket clientPingSocket){
         this.clientSocket = clientSocket;
         this.isConnected = true;
         this.gameAlreadyStarted = gameAlreadyStarted;
+        this.clientPingSocket = clientPingSocket;
     
         try {
             inputClient = new ObjectInputStream(clientSocket.getInputStream());
@@ -50,24 +53,35 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      */
     @Override
     public void run() {
-        // create a ping mechanism
-        InetAddress clientAddress = clientSocket.getInetAddress();
-        new Thread(() -> {
-            while (true){
-                try {
-                    if (!clientAddress.isReachable(5000))
-                        break;
+//        InetAddress clientAddress = clientSocket.getInetAddress();
+//        new Thread(() -> {
+//            while (true){
+//                try {
+//                    if (!clientAddress.isReachable(5000))
+//                        break;
+//
+////                    System.out.println("Ping sent.");
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            System.out.println("The client isn't reachable.\nYou disconnected.");
+//            endConnection();
+//        }).start();
+        
+        pingServerHandler = new Thread(new PingServerHandler(clientPingSocket, this));
+        pingServerHandler.start();
     
-                    System.out.println("Ping sent.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        
-            System.out.println("The server isn't reachable.\nYou disconnected.");
-            endConnection();
-        }).start();
-        
+        // create a ping mechanism
+        try {
+            Process p1 = Runtime.getRuntime().exec("ping -n 1 www.google.com");
+            int returnVal = p1.waitFor();
+            boolean reachable = (returnVal==0);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    
         // start the game
         try {
             if (gameAlreadyStarted) {
@@ -173,6 +187,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     void endConnection(){
         isConnected = false;
         notifyDisconnection(this);
+        pingServerHandler.interrupt();
         
         try {
             outputClient.close();
