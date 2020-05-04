@@ -4,7 +4,6 @@ package it.polimi.ingsw.PSP47.Network.Server;
 import it.polimi.ingsw.PSP47.Controller.GameController;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Model.Board;
-import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Message.FirstConnection;
 import it.polimi.ingsw.PSP47.Network.Message.RequestPlayersNumber;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
@@ -166,6 +165,50 @@ public class Server implements ClientHandlerListener {
             
             cleanServer();
         }
+    }
+    
+    @Override
+    public synchronized void handleWinning(ClientHandler clientHandler) {
+        String username = connectionsAccepted.get(clientHandler).username;
+        connectionsAccepted.remove(clientHandler);
+
+        // The iteration is in this way because, otherwise, a remove inside a for loop gives troubles.
+        while (connectionsAccepted.size()!=0) {
+            Iterator<ClientHandler> iterator = connectionsAccepted.keySet().iterator();
+            ClientHandler client = iterator.next();
+            connectionsAccepted.remove(client);
+            client.notifyOpponentClientWon(username);
+        }
+        
+        cleanServer();
+    }
+    
+    @Override
+    public synchronized void handleLosing(ClientHandler clientHandler) {
+        String username = connectionsAccepted.get(clientHandler).username;
+        connectionsAccepted.remove(clientHandler);
+        
+        if (connectionsAccepted.size()==0) return;
+        
+        // If connections accepted is equal to two because the first player has already being disconnected.
+/*
+        if (connectionsAccepted.size()==2){
+*/
+        for (ClientHandler client : connectionsAccepted.keySet()){
+            client.notifyOpponentClientLost(username);
+        }
+        
+        /*}
+        else {
+            while (connectionsAccepted.size()!=0) {
+                Iterator<ClientHandler> iterator = connectionsAccepted.keySet().iterator();
+                ClientHandler client = iterator.next();
+                connectionsAccepted.remove(client);
+                client.notifyOpponentClientLost(username, true);
+            }
+            
+            cleanServer();
+        }*/
     }
     
     private void cleanServer(){

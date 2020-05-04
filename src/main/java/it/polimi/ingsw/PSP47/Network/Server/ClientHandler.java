@@ -10,6 +10,7 @@ import it.polimi.ingsw.PSP47.Visitor.Visitable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -49,6 +50,25 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      */
     @Override
     public void run() {
+        // create a ping mechanism
+        InetAddress clientAddress = clientSocket.getInetAddress();
+        new Thread(() -> {
+            while (true){
+                try {
+                    if (!clientAddress.isReachable(5000))
+                        break;
+    
+                    System.out.println("Ping sent.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        
+            System.out.println("The server isn't reachable.\nYou disconnected.");
+            endConnection();
+        }).start();
+        
+        // start the game
         try {
             if (gameAlreadyStarted) {
                 send(new ConnectionFailed("The game is already started.\nTry another time."));
@@ -72,7 +92,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      */
     public void dispatchMessages() {
         System.out.println("Started listening the client at the address" + clientSocket.getInetAddress());
-        
         while (isConnected) {
             Message message;
             try {
@@ -87,6 +106,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                     default:
                         Visitable visitableObject = message.getContent();
                         virtualView.notifyVirtualViewListener(visitableObject);
+                        //TODO qua viene un null ponter exception perché all'inizio la virtual view non
+                        // è ancora stata iniziata
                         break;
                 }
             } catch (ClassNotFoundException e) {
@@ -149,7 +170,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         }
     }
     
-    private void endConnection(){
+    void endConnection(){
         isConnected = false;
         notifyDisconnection(this);
         
@@ -194,8 +215,32 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         endConnection();
     }
     
+    void notifyOpponentClientWon(String username){
+        send(new OpponentWinning(username));
+        
+        endConnection();
+    }
+    
+    void notifyOpponentClientLost(String username){
+        send(new OpponentLoosing(username));
+    }
+    
     VirtualView createVirtualView(String username, Color color){
         return (this.virtualView = new VirtualView(username, color, this));
+    }
+    
+    void sendWin(){
+        // TODO send win
+        
+        notifyWin(this);
+        endConnection();
+    }
+    
+    void sendLose(){
+        //TODO send lose
+        
+        notifyLose(this);
+        endConnection();
     }
 
     /**
@@ -204,7 +249,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param numberOfPlayers parameter that must be sent.
      */
     void sendNumberOfPlayers(int numberOfPlayers) {
-        NumberOfPlayers message = new NumberOfPlayers(numberOfPlayers);
+        PlayersNumber message = new PlayersNumber(numberOfPlayers);
         send(message);
     }
 

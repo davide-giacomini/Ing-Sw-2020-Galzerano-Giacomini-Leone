@@ -11,6 +11,7 @@ import it.polimi.ingsw.PSP47.Visitor.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
  */
 public class NetworkHandler implements Runnable, ViewListener {
     private final Client client;    //TODO passare la view al posto del client.
-    private Socket serverSocket;
+    private final Socket serverSocket;
     private ObjectInputStream inputServer;
     private ObjectOutputStream outputServer;
     private boolean isConnected;
@@ -37,6 +38,17 @@ public class NetworkHandler implements Runnable, ViewListener {
         this.isConnected = true;
         this.networkHandlerVisitor= new NetworkHandlerVisitor(this);
         client.getView().addViewListener(this);
+    
+        try {
+            outputServer = new ObjectOutputStream(serverSocket.getOutputStream());
+            inputServer = new ObjectInputStream(serverSocket.getInputStream());
+        }
+        catch (IOException e){
+            System.out.println("Connection failed.");
+            this.isConnected = false;
+            e.printStackTrace();
+        }
+//        new ListenToServerPing(inputServer, this).start();
     }
     
     /**
@@ -46,30 +58,26 @@ public class NetworkHandler implements Runnable, ViewListener {
      */
     @Override
     public void run() {
-        try {
-            outputServer = new ObjectOutputStream(serverSocket.getOutputStream());
-            inputServer = new ObjectInputStream(serverSocket.getInputStream());
+        // create a ping mechanism
+        InetAddress serverAddress = serverSocket.getInetAddress();
+        new Thread(() -> {
+            while (true){
+                try {
+                    if (!serverAddress.isReachable(5000))
+                        break;
+                    
+                    System.out.println("Ping sent.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        
+            client.getView().showMessage("The server isn't reachable.\nYou disconnected.");
+            endConnection();
+        }).start();
     
-//            new Thread(() -> {
-//                try {
-//                    try {
-//                        Thread.sleep(40000);
-//                        outputServer.writeObject(new Ping());
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } catch (ClassNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//            }).start();
-            
-            dispatchMessages();
-        }
-        catch (IOException e){
-            System.out.println("Connection failed.");
-        }
+        // start the game
+        dispatchMessages();
     }
     
     /**
@@ -123,8 +131,8 @@ public class NetworkHandler implements Runnable, ViewListener {
                         ArrayList<GodName> godNames =  visitableGods.getGodNames();
                         client.getView().chooseYourGod(godNames);
                         break;
-                    case NUMBER_PLAYERS:
-                        NumberOfPlayers messagePlayers = (NumberOfPlayers) message;
+                    case PLAYERS_NUMBER:
+                        PlayersNumber messagePlayers = (PlayersNumber) message;
                         int number = messagePlayers.getNumberOfPlayers();
                         client.getView().getGameView().setNumberOfPlayers(number);
                         break;
@@ -145,6 +153,14 @@ public class NetworkHandler implements Runnable, ViewListener {
                         break;
                     case CHALLENGER:
                         client.getView().challengerWillChooseThreeGods();
+                        break;
+                    case OPPONENT_LOOSING:
+                        username = ((OpponentLoosing) message).getUsername();
+                        client.getView().showMessage("Player " + username + " lost.");
+                        break;
+                    case OPPONENT_WINNING:
+                        username = ((OpponentWinning) message).getUsername();
+                        client.getView().showMessage("Player " + username + " lost.");
                         break;
                 }
             }
@@ -174,11 +190,21 @@ public class NetworkHandler implements Runnable, ViewListener {
             outputServer.writeObject(message);
         } catch (IOException e) {
             System.out.println("Error in the serialization of " + message.toString() + " message.");
-            isConnected = false;
+            endConnection();
             e.printStackTrace();
         }
     }
     
+    void endConnection(){
+        isConnected = false;
+        
+        try {
+            outputServer.close();
+        } catch (IOException e) {
+            System.out.println("Unable to close the socket of the server " + serverSocket.getInetAddress() + ".");
+            e.printStackTrace();
+        }
+    }
     
     /**
      * This method handles the first connection with the server, asking to the user to choose their username and

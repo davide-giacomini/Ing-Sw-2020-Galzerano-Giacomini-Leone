@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.View.CLI;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -14,6 +15,7 @@ import java.util.Scanner;
  */
 public class Client {
     private View view;
+    public final static int TIME_EXPIRED_MILLIS = 20000;
     
     public static void main(String[] args) {
         Client client = new Client();
