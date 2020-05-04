@@ -29,4 +29,16 @@ public abstract class ClientHandlerObservable {
             clientHandlerListener.handleDisconnection(clientHandler);
         }
     }
+    
+    public void notifyWin(ClientHandler clientHandler) {
+        for (ClientHandlerListener clientHandlerListener : clientHandlerListeners) {
+            clientHandlerListener.handleWinning(clientHandler);
+        }
+    }
+    
+    public void notifyLose(ClientHandler clientHandler){
+        for (ClientHandlerListener clientHandlerListener : clientHandlerListeners) {
+            clientHandlerListener.handleLosing(clientHandler);
+        }
+    }
 }

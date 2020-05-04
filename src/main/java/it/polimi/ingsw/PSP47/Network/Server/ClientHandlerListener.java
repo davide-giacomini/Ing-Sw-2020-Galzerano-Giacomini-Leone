@@ -10,4 +10,8 @@ public interface ClientHandlerListener {
     void setPlayersNumber(RequestPlayersNumber message);
     
     void handleDisconnection(ClientHandler clientHandler);
+    
+    void handleWinning(ClientHandler clientHandler);
+    
+    void handleLosing(ClientHandler clientHandler);
 }
