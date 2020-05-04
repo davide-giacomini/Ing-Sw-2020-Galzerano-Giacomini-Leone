@@ -73,15 +73,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         pingServerHandler = new Thread(new PingServerHandler(clientPingSocket, this));
         pingServerHandler.start();
     
-        // create a ping mechanism
-        try {
-            Process p1 = Runtime.getRuntime().exec("ping -n 1 www.google.com");
-            int returnVal = p1.waitFor();
-            boolean reachable = (returnVal==0);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    
         // start the game
         try {
             if (gameAlreadyStarted) {
@@ -245,15 +236,11 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     void sendWin(){
-        // TODO send win
-        
         notifyWin(this);
         endConnection();
     }
     
     void sendLose(){
-        //TODO send lose
-        
         notifyLose(this);
         endConnection();
     }

@@ -166,7 +166,7 @@ public class TurnTest {
         turn.setWantsToBuildDome(true);
     }
     
-    @Test (expected = InvalidMoveException.class)
+    /*@Test (expected = InvalidMoveException.class)
     public void executeMove_ThirdLevelReached_PlayerIsWinning_ThenTryToMoveAnotherTime_ThrowsNoAvailableMovementsException() throws Exception{
         player = new Player("test", Color.BLUE);
         god = new Prometheus(player, "atlas test");
@@ -186,7 +186,7 @@ public class TurnTest {
         
         turn.executeMove(Direction.RIGHT);
         
-    }
+    }*/
     @Test
     public void executeMove_ThirdLevelNotReached_PlayerIsNotWinning() throws Exception{
         player = new Player("test", Color.BLUE);
@@ -204,7 +204,7 @@ public class TurnTest {
         assertFalse(player.isWinning());
     }
     
-    @Test (expected = InvalidBuildException.class)
+    /*@Test (expected = InvalidBuildException.class)
     public void executeBuild_BuildTwoTimes_ThrowsNoAvailableBuildingsException () throws Exception{
         player = new Player("test", Color.BLUE);
         god = new Athena(player, "atlas test");
@@ -221,7 +221,7 @@ public class TurnTest {
         assertEquals(turn.getNumberOfBuildings(), 1);
         
         turn.executeBuild(Direction.DOWN);
-    }
+    }*/
 
 
 }

@@ -61,7 +61,7 @@ public class PingServerHandler implements Runnable{
         while (isConnected && !Thread.currentThread().isInterrupted()){
             try {
                 Ping ping = (Ping) inputPing.readObject();
-                System.out.println("Ping listened.");
+//                System.out.println("Ping listened.");
                 timeMillis = 0;
             }
             catch (IOException | ClassNotFoundException e){

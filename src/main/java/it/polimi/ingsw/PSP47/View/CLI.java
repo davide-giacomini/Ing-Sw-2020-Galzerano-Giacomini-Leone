@@ -13,22 +13,7 @@ public class CLI extends View {
     private PrintSupport printSupport;
     private Scanner in;
     private PrintStream out;
-
-    public static void main(String[] args) {
-        /*CLI c = new CLI(null);
-        ArrayList<GodName> gods = null;
-        boolean t ;
-        ArrayList<Enum> arr = new ArrayList<Enum>();
-        arr = c.askAction();
-       System.out.println(arr);
-
-       /* c.viewDatabase.setNumberOfPlayers(3);
-        gods = c.challengerWillChooseThreeGods();
-
-        c.viewDatabase.setMyGod(GodName.ATLAS);*/
-
-       // t = c.askIfAtlasWantsToBuildDome();
-    }
+    
 
     public CLI(Client client) {
         super(client);

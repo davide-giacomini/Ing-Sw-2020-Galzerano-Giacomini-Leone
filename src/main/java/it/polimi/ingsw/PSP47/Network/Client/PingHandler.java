@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP47.Network.Client;
 
+import it.polimi.ingsw.PSP47.Network.Message.Ping;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,10 +34,10 @@ public class PingHandler implements Runnable{
         try {
             while (isConnected){
                 Thread.sleep(5000);
-//                outputPing.writeObject(new Ping());
-                System.out.println("Sent a ping to the server.");
+                outputPing.writeObject(new Ping());
+//                System.out.println("Sent a ping to the server.");
             }
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | IOException e) {
             isConnected = false;
             e.printStackTrace();
         }

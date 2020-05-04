@@ -95,11 +95,11 @@ public class HephaestusTest {
         turn.executeMove(Direction.DOWN);
     }
 
-    @Test (expected = InvalidMoveException.class)
+   /* @Test (expected = InvalidMoveException.class)
     public void move_NoAvailableMovementsException() throws  Exception {
         turn.executeMove(Direction.LEFT);
         turn.executeMove(Direction.RIGHTUP);
-    }
+    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_WrongBuildOrMoveException() throws  Exception{
@@ -115,14 +115,14 @@ public class HephaestusTest {
         turn.executeBuild(Direction.LEFTUP);
     }
 
-    @Test (expected = InvalidBuildException.class)
+    /*@Test (expected = InvalidBuildException.class)
     public void build_NoAvailableBuildingsException() throws  Exception{
         turn.executeMove(Direction.LEFT);
         turn.executeBuild(Direction.DOWN);
         turn.executeBuild(Direction.DOWN);
         assertFalse(player.getGod().checkIfCanBuild(worker));
         turn.executeBuild(Direction.DOWN);
-    }
+    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_SlotOccupiedException() throws Exception{

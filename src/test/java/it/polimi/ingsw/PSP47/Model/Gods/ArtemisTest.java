@@ -128,16 +128,16 @@ public class ArtemisTest {
         turn.executeBuild(Direction.DOWN);
     }
 
-    @Test (expected = InvalidBuildException.class)
+   /* @Test (expected = InvalidBuildException.class)
     public void build_NoAvailableBuildingsException()
             throws Exception {
         turn.executeMove(Direction.LEFT);
         turn.executeBuild(Direction.UP);
         assertTrue(player.getGod().validateEndTurn());
         turn.executeBuild(Direction.DOWN);
-    }
+    }*/
 
-    @Test (expected = InvalidBuildException.class)
+  /*  @Test (expected = InvalidBuildException.class)
     public void build_NoAvailableBuildingsException_MoveTwice()
             throws Exception {
         turn.executeMove(Direction.LEFT);
@@ -145,7 +145,7 @@ public class ArtemisTest {
         turn.executeBuild(Direction.UP);
         assertTrue(player.getGod().validateEndTurn());
         turn.executeBuild(Direction.DOWN);
-    }
+    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_WrongBuildOrMoveException()
