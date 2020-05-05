@@ -1,0 +1,132 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: RequestDisconnection</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Message</a> ]
+</div>
+
+<h1>Coverage Summary for Class: RequestDisconnection (it.polimi.ingsw.PSP47.Network.Message)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RequestDisconnection</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Message;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.MessageType;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.Client;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.Server;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.Visitable;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.io.ObjectOutputStream;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * This message is sent to the server when a client wants to disconnect.
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;public class RequestDisconnection extends Message {
+<i>15</i>&nbsp;    private static final long serialVersionUID = 8209837022517336261L;
+<i>16</i>&nbsp;
+<b class="nc"><i>17</i>&nbsp;    public RequestDisconnection() {</b>
+<b class="nc"><i>18</i>&nbsp;        this.messageType=MessageType.REQUEST_DISCONNECTION;</b>
+<i>19</i>&nbsp;    }
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    @Override
+<i>22</i>&nbsp;    public Visitable getContent() {
+<b class="nc"><i>23</i>&nbsp;        return null;</b>
+<i>24</i>&nbsp;    }
+<i>25</i>&nbsp;    
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /*
+<i>28</i>&nbsp;     * @deprecated
+<i>29</i>&nbsp;     * This method is special, is handled inside the {@link it.polimi.ingsw.PSP47.Network.Client.NetworkHandler}. It has not to be used.
+<i>30</i>&nbsp;     *
+<i>31</i>&nbsp;     * @param client the client to be handled.
+<i>32</i>&nbsp;     * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @Override
+<i>35</i>&nbsp;    public void handleClientSide(Client client, ObjectOutputStream outputServer) {}
+<i>36</i>&nbsp;    
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * @deprecated
+<i>39</i>&nbsp;     * This method doesn&#39;t do anything for now.
+<i>40</i>&nbsp;     *
+<i>41</i>&nbsp;     * @param server the server, which has got the parameters in common with all the clients.
+<i>42</i>&nbsp;     * @param virtualView the {@link VirtualView} of the client connected.
+<i>43</i>&nbsp;     * @param outputClient the {@link ObjectOutputStream} of the client. It can be used to send other messages.
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    @Override
+<i>46</i>&nbsp;    public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {}
+<i>47</i>&nbsp;    */
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 12:35</div>
+</div>
+</body>
+</html>

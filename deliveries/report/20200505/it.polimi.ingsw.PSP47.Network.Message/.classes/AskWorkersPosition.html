@@ -1,0 +1,114 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AskWorkersPosition</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Message</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AskWorkersPosition (it.polimi.ingsw.PSP47.Network.Message)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AskWorkersPosition</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Message;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.MessageType;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.Client;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.Server;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.Visitable;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableInitialPositions;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableRowsAndColumns;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.io.IOException;
+<i>12</i>&nbsp;import java.io.ObjectOutputStream;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * This message contains an array of coordinates (row1, column1, row2, column2) that indicates the initial positions of
+<i>16</i>&nbsp; * the worker of a specifical player. It is a C-&gt;S message.
+<i>17</i>&nbsp; */
+<i>18</i>&nbsp;public class AskWorkersPosition extends Message{
+<i>19</i>&nbsp;    private static final long serialVersionUID = 2612090580702427837L;
+<i>20</i>&nbsp;    private VisitableInitialPositions rowsAndColumns;
+<i>21</i>&nbsp;
+<b class="nc"><i>22</i>&nbsp;    public AskWorkersPosition(VisitableInitialPositions rowsAndColumns) {</b>
+<b class="nc"><i>23</i>&nbsp;        this.rowsAndColumns = rowsAndColumns;</b>
+<b class="nc"><i>24</i>&nbsp;        this.messageType = MessageType.ASK_WORKER_POSITION;</b>
+<i>25</i>&nbsp;    }
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    @Override
+<i>28</i>&nbsp;    public Visitable getContent() {
+<b class="nc"><i>29</i>&nbsp;        return rowsAndColumns;</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 12:35</div>
+</div>
+</body>
+</html>

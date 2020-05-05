@@ -9,22 +9,24 @@ import java.net.Socket;
 
 public class PingHandler implements Runnable{
     private final NetworkHandler networkHandler;
+    private final Socket pingSocket;
     private ObjectOutputStream outputPing;
     private ObjectInputStream inputPing;
     private boolean isConnected = true;
     
     public PingHandler(Socket pingSocket, NetworkHandler networkHandler){
+        this.pingSocket = pingSocket;
         this.networkHandler = networkHandler;
     
         try {
-            outputPing = new ObjectOutputStream(pingSocket.getOutputStream());
-            inputPing = new ObjectInputStream(pingSocket.getInputStream());
+            outputPing = new ObjectOutputStream(this.pingSocket.getOutputStream());
+            inputPing = new ObjectInputStream(this.pingSocket.getInputStream());
         }
         catch (IOException e){
             System.out.println("Connection failed.");
             this.isConnected = false;
             networkHandler.endConnection();
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
     
@@ -39,10 +41,13 @@ public class PingHandler implements Runnable{
             }
         } catch (InterruptedException | IOException e) {
             isConnected = false;
-            e.printStackTrace();
-        }
-        finally {
             networkHandler.endConnection();
+            try {
+                pingSocket.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+//            e.printStackTrace();
         }
     }
 }

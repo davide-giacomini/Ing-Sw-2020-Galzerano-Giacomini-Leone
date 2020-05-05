@@ -10,6 +10,7 @@ import java.net.Socket;
 
 public class PingServerHandler implements Runnable{
     private final int TIME_EXPIRED_MILLIS = 15000;
+    private final Socket pingSocket;
     private int timeMillis = 0;
     private final ClientHandler clientHandler;
     private ObjectOutputStream outputPing;
@@ -17,38 +18,49 @@ public class PingServerHandler implements Runnable{
     private boolean isConnected = true;
     
     public PingServerHandler(Socket pingSocket, ClientHandler clientHandler){
+        this.pingSocket = pingSocket;
         this.clientHandler = clientHandler;
     
         try {
-            outputPing = new ObjectOutputStream(pingSocket.getOutputStream());
-            inputPing = new ObjectInputStream(pingSocket.getInputStream());
+            outputPing = new ObjectOutputStream(this.pingSocket.getOutputStream());
+            inputPing = new ObjectInputStream(this.pingSocket.getInputStream());
         }
         catch (IOException e){
             System.out.println("Connection failed.");
             this.isConnected = false;
             clientHandler.endConnection();
             e.printStackTrace();
+            try {
+                this.pingSocket.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
     }
     
     @Override
     public void run() {
         new Thread(() -> {
-            try {
-                while (isConnected){
+            while (isConnected){
+                try {
                     if (timeMillis > TIME_EXPIRED_MILLIS)
                         isConnected = false;
-                
+    
                     Thread.sleep(1);
                     timeMillis++;
+                } catch (InterruptedException e) {
+                    isConnected = false;
+                    e.printStackTrace();
                 }
-            } catch (InterruptedException e) {
-                isConnected = false;
-                e.printStackTrace();
             }
-            finally {
-                clientHandler.endConnection();
+    
+            try {
+                pingSocket.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             }
+            
+            clientHandler.endConnection();
         
         }).start();
     
@@ -58,7 +70,7 @@ public class PingServerHandler implements Runnable{
     private void listen() {
         System.out.println("Started listening to the server.");
         
-        while (isConnected && !Thread.currentThread().isInterrupted()){
+        while (isConnected){
             try {
                 Ping ping = (Ping) inputPing.readObject();
 //                System.out.println("Ping listened.");
@@ -66,8 +78,14 @@ public class PingServerHandler implements Runnable{
             }
             catch (IOException | ClassNotFoundException e){
                 isConnected = false;
-                e.printStackTrace();
+//                e.printStackTrace();
             }
+        }
+    
+        try {
+            pingSocket.close();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
     }
 }

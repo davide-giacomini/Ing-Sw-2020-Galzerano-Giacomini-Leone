@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ListOfGods</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Message</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ListOfGods (it.polimi.ingsw.PSP47.Network.Message)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ListOfGods</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Message;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.MessageType;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.Client;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.Server;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.Visitable;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.io.IOException;
+<i>12</i>&nbsp;import java.io.ObjectOutputStream;
+<i>13</i>&nbsp;import java.util.ArrayList;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * This message contains two elements as it is sent both from server to client and from client to server.
+<i>17</i>&nbsp; * When it is S-&gt;C it&#39;s setted the ArrayList of godsAvailable, with all of the god chosen by the Challenger.
+<i>18</i>&nbsp; * When it is C-&gt;S it&#39;s setted the GodName chosenGod with the kind of god chosen by a player.
+<i>19</i>&nbsp; */
+<i>20</i>&nbsp;public class ListOfGods extends Message {
+<i>21</i>&nbsp;    private static final long serialVersionUID = 5244974574544564271L;
+<i>22</i>&nbsp;    private VisitableListOfGods listOfGods;
+<i>23</i>&nbsp;
+<b class="nc"><i>24</i>&nbsp;    public ListOfGods(VisitableListOfGods listOfGods) {</b>
+<b class="nc"><i>25</i>&nbsp;        this.listOfGods=listOfGods;</b>
+<b class="nc"><i>26</i>&nbsp;        this.messageType=MessageType.LIST_OF_GODS;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    @Override
+<i>30</i>&nbsp;    public Visitable getContent() {
+<b class="nc"><i>31</i>&nbsp;        return listOfGods;</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;    
+<i>34</i>&nbsp;    /*
+<i>35</i>&nbsp;     * This method calls the view to ask for the god that the player has been chosed and send a message
+<i>36</i>&nbsp;     * to the server with this information.
+<i>37</i>&nbsp;     *
+<i>38</i>&nbsp;     * @param client the client to be handled.
+<i>39</i>&nbsp;     * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    @Override
+<i>42</i>&nbsp;    public void handleClientSide(Client client, ObjectOutputStream outputServer) {
+<i>43</i>&nbsp;        GodName chosenGod = client.getView().chooseYourGod(godsAvailable);
+<i>44</i>&nbsp;        ListOfGods newMessage = new ListOfGods(MessageType.LIST_OF_GODS);
+<i>45</i>&nbsp;        newMessage.setChosenGod(chosenGod);
+<i>46</i>&nbsp;        try {
+<i>47</i>&nbsp;            outputServer.writeObject(newMessage);
+<i>48</i>&nbsp;        } catch (IOException e) {
+<i>49</i>&nbsp;            System.out.println(&quot;Error in the serialization of &quot; +this.toString()+&quot; message.&quot;);
+<i>50</i>&nbsp;            e.printStackTrace();
+<i>51</i>&nbsp;        }
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;    
+<i>54</i>&nbsp;    /**
+<i>55</i>&nbsp;     * This method receives a list of available gods and calls the view to set this into the model.
+<i>56</i>&nbsp;     *
+<i>57</i>&nbsp;     * @param server the server, which has got the parameters in common with all the clients.
+<i>58</i>&nbsp;     * @param virtualView the {@link VirtualView} of the client connected.
+<i>59</i>&nbsp;     * @param outputClient the {@link ObjectOutputStream} of the client. It can be used to send other messages.
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    @Override
+<i>62</i>&nbsp;    public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
+<i>63</i>&nbsp;        if (godsAvailable != null) {
+<i>64</i>&nbsp;            virtualView.receiveListOfGods(godsAvailable);
+<i>65</i>&nbsp;        }
+<i>66</i>&nbsp;        else if (chosenGod != null) {
+<i>67</i>&nbsp;            try {
+<i>68</i>&nbsp;                virtualView.receiveChosenGod(chosenGod);
+<i>69</i>&nbsp;            } catch (IOException e) {
+<i>70</i>&nbsp;                //TODO fare qualcosa in caso viene lanciata questa eccezione
+<i>71</i>&nbsp;                // chiedere a Monica
+<i>72</i>&nbsp;                e.printStackTrace();
+<i>73</i>&nbsp;            }
+<i>74</i>&nbsp;        }
+<i>75</i>&nbsp;    }*/
+<i>76</i>&nbsp;    
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 12:35</div>
+</div>
+</body>
+</html>

@@ -178,7 +178,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     void endConnection(){
         isConnected = false;
         notifyDisconnection(this);
-        pingServerHandler.interrupt();
         
         try {
             outputClient.close();

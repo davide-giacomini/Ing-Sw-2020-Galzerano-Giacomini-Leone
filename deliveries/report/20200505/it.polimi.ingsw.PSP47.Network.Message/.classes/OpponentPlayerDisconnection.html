@@ -1,0 +1,143 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: OpponentPlayerDisconnection</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Message</a> ]
+</div>
+
+<h1>Coverage Summary for Class: OpponentPlayerDisconnection (it.polimi.ingsw.PSP47.Network.Message)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">OpponentPlayerDisconnection</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Message;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.MessageType;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.Client;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.Server;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.Visitable;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.io.ObjectOutputStream;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;//TODO THIS MESSAGE CAN BE DELETED AND YOU CAN DO THIS IN ERROR MESSAGE
+<i>12</i>&nbsp;/**
+<i>13</i>&nbsp; * This message has the username of the player who disconnected.
+<i>14</i>&nbsp; * It&#39;s used to advise the other players.
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;public class OpponentPlayerDisconnection extends Message{
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    private static final long serialVersionUID = -6561561295860715699L;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    private String username;
+<i>21</i>&nbsp;    
+<b class="nc"><i>22</i>&nbsp;    public OpponentPlayerDisconnection(String username) {</b>
+<b class="nc"><i>23</i>&nbsp;        this.username=username;</b>
+<b class="nc"><i>24</i>&nbsp;        this.messageType=MessageType.OPPONENT_PLAYER_DISCONNECTION;</b>
+<i>25</i>&nbsp;    }
+<i>26</i>&nbsp;    
+<i>27</i>&nbsp;    /*
+<i>28</i>&nbsp;     * This client is told that an opponent player disconnected.
+<i>29</i>&nbsp;     * The game ends.
+<i>30</i>&nbsp;     *
+<i>31</i>&nbsp;     * @param client the client to be handled.
+<i>32</i>&nbsp;     * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @Override
+<i>35</i>&nbsp;    public void handleClientSide(Client client, ObjectOutputStream outputServer) {
+<i>36</i>&nbsp;        client.getView().showMessage(&quot;We are sorry: &quot;+username+&quot; has just disconnected.\nThe game is going to end.&quot;);
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;    
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * @deprecated
+<i>41</i>&nbsp;     * This method doesn&#39;t do anything for now.
+<i>42</i>&nbsp;     *
+<i>43</i>&nbsp;     * @param server the server, which has got the parameters in common with all the clients.
+<i>44</i>&nbsp;     * @param virtualView the {@link VirtualView} of the client connected.
+<i>45</i>&nbsp;     * @param outputClient the {@link ObjectOutputStream} of the client. It can be used to send other messages.
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    @Override
+<i>48</i>&nbsp;    public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
+<i>49</i>&nbsp;    
+<i>50</i>&nbsp;    } */
+<i>51</i>&nbsp;    
+<i>52</i>&nbsp;    public void setUsername(String username) {
+<b class="nc"><i>53</i>&nbsp;        this.username = username;</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    @Override
+<i>57</i>&nbsp;    public Visitable getContent() {
+<b class="nc"><i>58</i>&nbsp;        return null;</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 12:35</div>
+</div>
+</body>
+</html>

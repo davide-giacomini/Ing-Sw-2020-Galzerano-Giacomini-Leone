@@ -1,0 +1,196 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: View</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.View</a> ]
+</div>
+
+<h1>Coverage Summary for Class: View (it.polimi.ingsw.PSP47.View)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">View</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.View;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Color;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.Client;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.ArrayList;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;public abstract class View extends ViewObservable {
+<i>10</i>&nbsp;    public Client currentClient;
+<i>11</i>&nbsp;    public GameView gameView;
+<i>12</i>&nbsp;
+<b class="nc"><i>13</i>&nbsp;    public View (Client client){</b>
+<b class="nc"><i>14</i>&nbsp;        currentClient = client;</b>
+<i>15</i>&nbsp;    }
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * This method is used to print the initial Santorini Logo
+<i>19</i>&nbsp;     */
+<i>20</i>&nbsp;    public abstract void showTitle();
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    public abstract void askFirstConnection();
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * This method asks for the username
+<i>25</i>&nbsp;     * @return string which becomes the username of the player
+<i>26</i>&nbsp;     */
+<i>27</i>&nbsp;    public abstract String askUsername();
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * This method asks the user which color he/she wants for the workers
+<i>31</i>&nbsp;     * @return string which indicates the name of the color
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    public abstract Color askColorWorkers();
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * Shows a message of Error or of Warning
+<i>37</i>&nbsp;     * @param text tho display
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    public abstract void showMessage(String text);
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * This method is used to ask the numbers of players of the game
+<i>43</i>&nbsp;     * @return int to indicate the number chosen
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    public abstract void askNumberOfPlayers();
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     * This method asks the user to insert the address of the server
+<i>49</i>&nbsp;     * @return address of the client/server
+<i>50</i>&nbsp;     */
+<i>51</i>&nbsp;    public abstract String askServerIpAddress();
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * This method asks the user which of the worker he/she wants to use
+<i>55</i>&nbsp;     * @return the gender of the worker the user wants to use
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    public abstract void askWhichWorkerToUse ();
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * This method asks the user where he/she wants to put the worker
+<i>61</i>&nbsp;     * @return an array of two int indicating one the row and one the column
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    public abstract void askWhereToPositionWorkers();
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * This method asks only one of the users ( the challenger) which gods will be used during the game
+<i>67</i>&nbsp;     * @return an Arraylist with the names of the 2 or 3 gods that have been chosen
+<i>68</i>&nbsp;     */
+<i>69</i>&nbsp;    public abstract void challengerWillChooseThreeGods();
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    /**
+<i>72</i>&nbsp;     * This method makes the user choose his/her god between the ones already chosen by the challenger
+<i>73</i>&nbsp;     * @param godsChosen is the array of the available gods (chosen by the challenger)
+<i>74</i>&nbsp;     * @return the God chosen by the client
+<i>75</i>&nbsp;     */
+<i>76</i>&nbsp;    public abstract void chooseYourGod(ArrayList&lt;GodName&gt; godsChosen);
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * This is the basic method to ask what the user wants to do in its turn.
+<i>80</i>&nbsp;     * @return an arraylist which contains as first parameter the enum Action and as second the enum Direction
+<i>81</i>&nbsp;     */
+<i>82</i>&nbsp;    public abstract void askAction();
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /**
+<i>85</i>&nbsp;     * @return GameView
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    public abstract GameView getGameView();
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * This method is used to show the initial public information about all the clients in the game
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    public abstract void showPublicInformation();
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     * this method calls the print support that prints the updated board of the game
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    public abstract void showCurrentBoard();
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * This method tells the username of the winner
+<i>101</i>&nbsp;     * @param usernameWinner is the username of the winner
+<i>102</i>&nbsp;     */
+<i>103</i>&nbsp;    public abstract void theWinnerIs(String usernameWinner );
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;    /**
+<i>106</i>&nbsp;     * This method tells the username of the winner
+<i>107</i>&nbsp;     * @param usernameLoser is the username of the winner
+<i>108</i>&nbsp;     */
+<i>109</i>&nbsp;    public abstract void theLoserIs(String usernameLoser );
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 12:35</div>
+</div>
+</body>
+</html>
