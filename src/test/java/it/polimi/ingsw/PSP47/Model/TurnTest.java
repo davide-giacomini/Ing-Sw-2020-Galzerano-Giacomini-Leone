@@ -16,26 +16,28 @@ public class TurnTest {
     Turn turn;
     Player player;
     God god;
-    Slot[][] slots = new Slot[Board.ROWSNUMBER][Board.COLUMNSNUMBER];
+    Slot[][] slots = new Slot[Board.ROWS_NUMBER][Board.COLUMNS_NUMBER];
+    private Game game;
     
     @Before
     public void setUp() throws Exception {
-        player = new Player("1", Color.BLUE);
-        for (int i=0; i<Board.ROWSNUMBER; i++) {
-            for (int j=0; j<Board.COLUMNSNUMBER; j++) {
-                slots[i][j] = Board.getBoard().getSlot(i,j);
+        game = new Game(3);
+        player = new Player("1", Color.BLUE, game);
+        for (int i = 0; i<Board.ROWS_NUMBER; i++) {
+            for (int j = 0; j<Board.COLUMNS_NUMBER; j++) {
+                slots[i][j] = game.getBoard().getSlot(i,j);
             }
         }
     }
     
     @After
     public void tearDown() throws Exception {
-        Board.getBoard().clearBoard();
+        game.getBoard().clearBoard();
         player = null;
         turn = null;
         god = null;
-        for (int i=0; i<Board.ROWSNUMBER; i++) {
-            for (int j=0; j<Board.COLUMNSNUMBER; j++) {
+        for (int i = 0; i<Board.ROWS_NUMBER; i++) {
+            for (int j = 0; j<Board.COLUMNS_NUMBER; j++) {
                 slots[i][j] = null;
             }
         }
@@ -122,7 +124,7 @@ public class TurnTest {
     
     @Test (expected = InvalidMoveException.class)
     public void setWorkerGender_SetWorkerTwoTimes_CannotUseBothWorkers_ThrowsWrongBuildOrMoveException() throws Exception {
-        player = new Player("test", Color.BLUE);
+        player = new Player("test", Color.BLUE,game);
         god = new Apollo(player, "Apollo test");
         turn = new Turn(player);
         
@@ -135,7 +137,7 @@ public class TurnTest {
     }
     @Test
     public void setWorkerGender_SetWorkerTwoTimes_CanUseBothWorkers_NormallyChangesWorkerGender() throws Exception {
-        player = new Player("test", Color.BLUE);
+        player = new Player("test", Color.BLUE,game);
         god = new Apollo(player, "Prometheus test");
         turn = new Turn(player);
         
@@ -149,7 +151,7 @@ public class TurnTest {
     
     @Test
     public void setWantsToBuildDome_GodIsAtlas_WantsToBuildDomeSetTrue () throws Exception {
-        player = new Player("test", Color.BLUE);
+        player = new Player("test", Color.BLUE,game);
         god = new Atlas(player, "atlas test");
         turn = new Turn(player);
         
@@ -158,7 +160,7 @@ public class TurnTest {
     }
     @Test (expected = InvalidBuildException.class)
     public void setWantsToBuildDome_GodIsNotAtlas_ThrowsWrongBuildOrMoveException () throws Exception {
-        player = new Player("test", Color.BLUE);
+        player = new Player("test", Color.BLUE,game);
         god = new Prometheus(player, "atlas test");
         turn = new Turn(player);
         
@@ -189,7 +191,7 @@ public class TurnTest {
     }*/
     @Test
     public void executeMove_ThirdLevelNotReached_PlayerIsNotWinning() throws Exception{
-        player = new Player("test", Color.BLUE);
+        player = new Player("test", Color.BLUE,game);
         god = new Prometheus(player, "atlas test");
         turn = new Turn(player);
         

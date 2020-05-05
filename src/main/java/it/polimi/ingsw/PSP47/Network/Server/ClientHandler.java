@@ -351,12 +351,13 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      */
     void sendUpdateSlot(Slot updatedSlot) {
         //TODO passare lo slot senza settarne uno nuovo
-        Slot newSlot = new Slot(updatedSlot.getRow(), updatedSlot.getColumn());
+        /*Slot newSlot = new Slot(updatedSlot.getRow(), updatedSlot.getColumn());
         newSlot.setWorker(updatedSlot.getWorker()) ;
         newSlot.setWorkerColor(updatedSlot.getWorkerColor());
         newSlot.setLevel(updatedSlot.getLevel());
         newSlot.setWorkerOn(updatedSlot.isWorkerOnSlot());
-        UpdatedSlot message = new UpdatedSlot(newSlot);
+        UpdatedSlot message = new UpdatedSlot(newSlot);*/
+        UpdatedSlot message = new UpdatedSlot(updatedSlot);
         send(message);
     }
 

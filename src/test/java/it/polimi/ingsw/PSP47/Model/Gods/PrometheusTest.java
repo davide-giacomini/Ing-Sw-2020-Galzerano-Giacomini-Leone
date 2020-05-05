@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP47.Enumerations.Gender;
 import it.polimi.ingsw.PSP47.Enumerations.Level;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.PSP47.Model.Game;
 import it.polimi.ingsw.PSP47.Model.Player;
 import it.polimi.ingsw.PSP47.Model.Turn;
 import org.junit.After;
@@ -87,28 +88,29 @@ public class PrometheusTest {
     Player opponentPlayer;
     Prometheus prometheus;
     Turn turn;
+    private Game game;
     
     
     @Before
     public void setUp() throws Exception {
         // this is a setting of the case one
-        
-        player = new Player("player", Color.WHITE);
-        opponentPlayer = new Player("opponent player", Color.BLUE);
+        game = new Game(3);
+        player = new Player("player", Color.WHITE, game);
+        opponentPlayer = new Player("opponent player", Color.BLUE, game);
         prometheus = new Prometheus(player, "Prometheus");
         turn = new Turn(player);
-        opponentPlayer.getWorker(Gender.MALE).setSlot(Board.getBoard().getSlot(0, 0));
-        player.getWorker(Gender.MALE).setSlot(Board.getBoard().getSlot(1, 1));
-        Board.getBoard().getSlot(0, 0).setLevel(Level.GROUND);
+        opponentPlayer.getWorker(Gender.MALE).setSlot(game.getBoard().getSlot(0, 0));
+        player.getWorker(Gender.MALE).setSlot(game.getBoard().getSlot(1, 1));
+        game.getBoard().getSlot(0, 0).setLevel(Level.GROUND);
         player.getWorker(Gender.MALE).getSlot().setLevel(Level.LEVEL2);
-        Board.getBoard().getSlot(1, 2).setLevel(Level.LEVEL3);
-        Board.getBoard().getSlot(2, 1).setLevel(Level.DOME);
+        game.getBoard().getSlot(1, 2).setLevel(Level.LEVEL3);
+        game.getBoard().getSlot(2, 1).setLevel(Level.DOME);
         turn.setWorkerGender(Gender.MALE);
     }
     
     @After
     public void tearDown() throws Exception {
-        Board.getBoard().clearBoard();
+        game.getBoard().clearBoard();
         player = null;
         opponentPlayer = null;
         prometheus = null;
@@ -120,7 +122,7 @@ public class PrometheusTest {
         assertFalse(prometheus.moveThenBuild());
         assertTrue(player.move(Direction.RIGHT, player.getWorker(Gender.MALE)));
         assertTrue(prometheus.moveThenBuild());
-        assertEquals(player.getWorker(Gender.MALE), Board.getBoard().getSlot(1, 2).getWorker());
+        assertEquals(player.getWorker(Gender.MALE), game.getBoard().getSlot(1, 2).getWorker());
     }
     
     @Test(expected = InvalidMoveException.class)
@@ -164,7 +166,7 @@ public class PrometheusTest {
     @Test
     public void build_CorrectOutput() throws Exception {
         turn.executeBuild(Direction.LEFT);
-        assertEquals(Board.getBoard().getSlot(1, 0).getLevel(), Level.LEVEL1);
+        assertEquals(game.getBoard().getSlot(1, 0).getLevel(), Level.LEVEL1);
     }
     
     @Test(expected = InvalidBuildException.class)
@@ -203,33 +205,33 @@ public class PrometheusTest {
     
     @Test
     public void checkIfCanGoON_BlockedFirstMove_OutputFalse() throws Exception {
-        Board.getBoard().getSlot(0, 1).setLevel(Level.DOME);
-        Board.getBoard().getSlot(0, 2).setLevel(Level.DOME);
-        Board.getBoard().getSlot(1, 0).setLevel(Level.DOME);
-        Board.getBoard().getSlot(1, 2).setLevel(Level.DOME);
-        Board.getBoard().getSlot(2, 0).setLevel(Level.DOME);
-        Board.getBoard().getSlot(2, 2).setLevel(Level.DOME);
+        game.getBoard().getSlot(0, 1).setLevel(Level.DOME);
+        game.getBoard().getSlot(0, 2).setLevel(Level.DOME);
+        game.getBoard().getSlot(1, 0).setLevel(Level.DOME);
+        game.getBoard().getSlot(1, 2).setLevel(Level.DOME);
+        game.getBoard().getSlot(2, 0).setLevel(Level.DOME);
+        game.getBoard().getSlot(2, 2).setLevel(Level.DOME);
         assertFalse(prometheus.checkIfCanGoOn(player.getWorker(Gender.MALE)));
     }
     
     @Test
     public void checkIfCanGoON_MoveThenCannotBuild_OutputFalse() throws Exception {
         turn.executeMove(Direction.UP);
-        Board.getBoard().getSlot(0, 2).setLevel(Level.DOME);
-        Board.getBoard().getSlot(1, 0).setLevel(Level.DOME);
-        Board.getBoard().getSlot(1, 1).setLevel(Level.DOME);
-        Board.getBoard().getSlot(1, 2).setLevel(Level.DOME);
+        game.getBoard().getSlot(0, 2).setLevel(Level.DOME);
+        game.getBoard().getSlot(1, 0).setLevel(Level.DOME);
+        game.getBoard().getSlot(1, 1).setLevel(Level.DOME);
+        game.getBoard().getSlot(1, 2).setLevel(Level.DOME);
         assertFalse(prometheus.checkIfCanGoOn(player.getWorker(Gender.MALE)));
     }
     
     @Test
     public void checkIfCanGoON_BuildThenCannotMove_OutputFalse() throws Exception {
         turn.executeBuild(Direction.RIGHT);
-        Board.getBoard().getSlot(0, 1).setLevel(Level.DOME);
-        Board.getBoard().getSlot(0, 2).setLevel(Level.DOME);
-        Board.getBoard().getSlot(1, 0).setLevel(Level.DOME);
-        Board.getBoard().getSlot(2, 0).setLevel(Level.DOME);
-        Board.getBoard().getSlot(2, 2).setLevel(Level.DOME);
+        game.getBoard().getSlot(0, 1).setLevel(Level.DOME);
+        game.getBoard().getSlot(0, 2).setLevel(Level.DOME);
+        game.getBoard().getSlot(1, 0).setLevel(Level.DOME);
+        game.getBoard().getSlot(2, 0).setLevel(Level.DOME);
+        game.getBoard().getSlot(2, 2).setLevel(Level.DOME);
         assertFalse(prometheus.checkIfCanGoOn(player.getWorker(Gender.MALE)));
     }
     
@@ -237,9 +239,9 @@ public class PrometheusTest {
     public void checkIfCanGoON_BuildThenMoveThenCannotBuild_OutputFalse() throws Exception {
         turn.executeBuild(Direction.RIGHT);
         turn.executeMove(Direction.UP);
-        Board.getBoard().getSlot(0, 2).setLevel(Level.DOME);
-        Board.getBoard().getSlot(1, 0).setLevel(Level.DOME);
-        Board.getBoard().getSlot(1, 1).setLevel(Level.DOME);
+        game.getBoard().getSlot(0, 2).setLevel(Level.DOME);
+        game.getBoard().getSlot(1, 0).setLevel(Level.DOME);
+        game.getBoard().getSlot(1, 1).setLevel(Level.DOME);
         assertFalse(prometheus.checkIfCanGoOn(player.getWorker(Gender.MALE)));
     }
     

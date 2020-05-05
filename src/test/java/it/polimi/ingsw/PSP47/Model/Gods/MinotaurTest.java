@@ -21,15 +21,17 @@ public class MinotaurTest {
     private Board board;
     private Player secondPlayer;
     private Worker secondWorker;
-
+    private Game game;
+    
     @Before
     public void setUp() throws Exception{
-        board = Board.getBoard();
+        game = new Game(3);
+        board = game.getBoard();
         slotM = board.getSlot(2,2);
         slotF = board.getSlot(0,0);
         slot2 = board.getSlot(3,3);
-        player = new Player("Arianna", Color.BLUE);
-        secondPlayer = new Player("David", Color.WHITE);
+        player = new Player("Arianna", Color.BLUE, game);
+        secondPlayer = new Player("David", Color.WHITE, game);
 
         workerM = player.getWorker(Gender.MALE);
         workerF = player.getWorker(Gender.FEMALE);

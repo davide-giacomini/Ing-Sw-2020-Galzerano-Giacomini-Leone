@@ -1,14 +1,11 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Model.Board;
+import it.polimi.ingsw.PSP47.Model.*;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Enumerations.Gender;
 import it.polimi.ingsw.PSP47.Enumerations.Level;
 import it.polimi.ingsw.PSP47.Model.Exceptions.*;
-import it.polimi.ingsw.PSP47.Model.Player;
-import it.polimi.ingsw.PSP47.Model.Turn;
-import it.polimi.ingsw.PSP47.Model.Worker;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,12 +20,14 @@ public class AtlasTest {
     private Worker maleWorker;
     private Player otherPlayer;
     private Worker otherWorker;
-
+    private Game game;
+    
     @Before
     public void setUp ()
             throws Exception {
-        board = Board.getBoard();
-        player = new Player("Monica", Color.YELLOW);
+        game = new Game(3);
+        board = game.getBoard();
+        player = new Player("Monica", Color.YELLOW, game);
         player.setGod(new Atlas(player, "Atlas"));
         maleWorker = player.getWorker(Gender.MALE);
         maleWorker.setSlot(board.getSlot(0,0));
@@ -36,7 +35,7 @@ public class AtlasTest {
         femaleWorker.setSlot(board.getSlot(2,2));
         turn = new Turn(player);
         turn.setWorkerGender(Gender.MALE);
-        otherPlayer = new Player("Arianna", Color.BLUE);
+        otherPlayer = new Player("Arianna", Color.BLUE, game);
         otherWorker = otherPlayer.getWorker(Gender.FEMALE);
     }
 

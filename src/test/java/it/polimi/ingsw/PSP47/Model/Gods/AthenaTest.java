@@ -25,16 +25,16 @@ public class AthenaTest {
     @Before
     public void setUp ()
             throws Exception {
-        board = Board.getBoard();
-        athenaPlayer = new Player("Monica", Color.YELLOW);
+        game = new Game(3);
+        board = game.getBoard();
+        athenaPlayer = new Player("Monica", Color.YELLOW, game);
         athenaPlayer.setGod(new Athena(athenaPlayer, "Athena"));
         athenaWorker = athenaPlayer.getWorker(Gender.MALE);
         athenaWorker.setSlot(board.getSlot(3,3));
         otherAthenaWorker = athenaPlayer.getWorker(Gender.FEMALE);
         otherAthenaWorker.setSlot(board.getSlot(0,0));
-        secondPlayer = new Player("Arianna", Color.BLUE);
-        thirdPlayer = new Player("Davide", Color.GREEN);
-        game = new Game(3);
+        secondPlayer = new Player("Arianna", Color.BLUE, game);
+        thirdPlayer = new Player("Davide", Color.GREEN, game);
         game.addPlayer(athenaPlayer);
         game.addPlayer(secondPlayer);
         game.addPlayer(thirdPlayer);

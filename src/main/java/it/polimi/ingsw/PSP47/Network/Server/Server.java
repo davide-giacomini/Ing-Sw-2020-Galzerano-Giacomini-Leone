@@ -236,7 +236,6 @@ public class Server implements ClientHandlerListener {
      * It cleans the server.
      */
     private void cleanServer(){
-        Board.getBoard().clearBoard();
         maxPlayersNumber = -1;
         firstClientHandler = null;
         firstPlayerConnected = false;

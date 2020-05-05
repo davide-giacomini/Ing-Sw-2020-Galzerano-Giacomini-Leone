@@ -28,7 +28,7 @@ public class TurnController {
         this.views = views;
         this.game = game;
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
-        this.player = Game.getPlayer(indexOfCurrentPlayer);
+        this.player = game.getPlayer(indexOfCurrentPlayer);
         this.turn = new Turn(player);
         this.controller = controller;
     }

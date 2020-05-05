@@ -43,7 +43,7 @@ public class Apollo extends God {
             return worker.move(direction);
         } catch (SlotOccupiedException e) {
             // the worker set in the destination slot
-            Worker opponentWorker = Board.getNearbySlot(direction, worker.getSlot()).getWorker();
+            Worker opponentWorker = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot()).getWorker();
             Slot previousSlot = worker.getSlot();
             
             // if there is actually an opponent worker on the destination slot
@@ -105,7 +105,7 @@ public class Apollo extends God {
             try {
 
                 worker.checkDirection(direction);
-                Slot destinationSlot = Board.getNearbySlot(direction, worker.getSlot());
+                Slot destinationSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
 
                 // else, check if the worker can move to the destinationSlot
                 //if it is occupied do the special check

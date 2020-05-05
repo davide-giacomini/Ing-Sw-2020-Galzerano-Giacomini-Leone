@@ -21,17 +21,18 @@ public class DemeterTest {
     private Board board;
     private Player secondPlayer;
     private Worker secondWorker;
-
-
+    private Game game;
+    
+    
     @Before
     public void setUp()
             throws Exception {
-
-        board = Board.getBoard();
+        game = new Game(3);
+        board = game.getBoard();
         slot1 = board.getSlot(3,3);
         slot2 = board.getSlot(4,4);
-        player = new Player("Arianna", Color.BLUE);
-        secondPlayer = new Player("David", Color.YELLOW);
+        player = new Player("Arianna", Color.BLUE, game);
+        secondPlayer = new Player("David", Color.YELLOW, game);
         worker = player.getWorker(Gender.MALE);
         secondWorker = player.getWorker(Gender.FEMALE);
         worker.setSlot(slot1);
@@ -44,7 +45,7 @@ public class DemeterTest {
 
     @After
     public void tearDown() {
-        Board.getBoard().clearBoard();
+        game.getBoard().clearBoard();
     }
 
     @Test
