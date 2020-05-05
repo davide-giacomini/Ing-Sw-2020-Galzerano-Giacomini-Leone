@@ -39,10 +39,6 @@ public class Server implements ClientHandlerListener {
      * The socket's port to connect to from the client.
      */
     public final static int SOCKET_PORT = 7777;
-    /**
-     * The socket's port for the ping check
-     */
-    public final static int PING_PORT = 7778;
     private final ServerSocket serverSocket;
     private volatile boolean firstPlayerConnected = false;
     private volatile boolean gameStarted = false;

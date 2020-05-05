@@ -59,7 +59,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         // start to listen to the ping
         serverTimer = new ServerTimer(this);
         new Thread(serverTimer).start();
-    
+        
         // start the game
         try {
             if (gameAlreadyStarted) {
@@ -74,6 +74,19 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
             isConnected = false;
             e.printStackTrace();
         }
+    
+        // Send a ping each 5 seconds.
+        new Thread(() -> {
+            while (isConnected) {
+                try {
+                    send(new Ping());
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    endConnection();
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     
         dispatchMessages();
     }
@@ -136,8 +149,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     /**
-     * This Runnable class handles the messages living the the clientHandler free to receive ping messages. The messages which
-     * handle the connection and disconnection of the client are forwarded to the server, otherwise they are are
+     * This Runnable class handles the messages living the clientHandler free to receive ping messages. The messages
+     * which handle the connection and disconnection of the client are forwarded to the server, otherwise they are
      * forwarded to the virtual view.
      */
     private class MessageHandler implements Runnable {
@@ -172,7 +185,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     *
     * @param message the message that must be sent.
     */
-    private void send(Message message) {
+    private synchronized void send(Message message) {
         try {
             outputClient.writeObject(message);
         } catch (IOException e) {
@@ -189,7 +202,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         isConnected = false;
         notifyDisconnection(this);
         serverTimer.setIsConnectedFalse();
-        
+        messageExecutor.shutdownNow();
+    
         try {
             clientSocket.close();
         } catch (IOException e) {

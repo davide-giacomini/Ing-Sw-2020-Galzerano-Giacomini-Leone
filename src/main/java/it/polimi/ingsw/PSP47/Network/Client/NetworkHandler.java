@@ -1,13 +1,15 @@
 package it.polimi.ingsw.PSP47.Network.Client;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Network.Message.*;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
-import it.polimi.ingsw.PSP47.Network.Message.ConnectionFailed;
+import it.polimi.ingsw.PSP47.Network.Message.*;
 import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.View.ViewListener;
-import it.polimi.ingsw.PSP47.Visitor.*;
+import it.polimi.ingsw.PSP47.Visitor.NetworkHandlerVisitor;
+import it.polimi.ingsw.PSP47.Visitor.Visitable;
+import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
+import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
 
 import java.io.*;
 import java.net.Socket;
@@ -23,8 +25,10 @@ public class NetworkHandler implements Runnable, ViewListener {
     private final Socket serverSocket;
     private ObjectInputStream inputServer;
     private ObjectOutputStream outputServer;
-    private boolean isConnected;
-    private final NetworkHandlerVisitor networkHandlerVisitor;
+    private boolean isConnected = true;
+    private final NetworkHandlerVisitor networkHandlerVisitor = new NetworkHandlerVisitor(this);
+    private final ExecutorService messageExecutor = Executors.newSingleThreadExecutor();
+    private ClientTimer clientTimer;
     
     /**
      * This constructor set up the management between the {@link Client} and the {@link it.polimi.ingsw.PSP47.Network.Server.Server}.
@@ -35,8 +39,6 @@ public class NetworkHandler implements Runnable, ViewListener {
     public NetworkHandler(View view, Socket serverSocket){
         this.view = view;
         this.serverSocket = serverSocket;
-        this.isConnected = true;
-        this.networkHandlerVisitor= new NetworkHandlerVisitor(this);
         view.addViewListener(this);
 
         try {
@@ -45,10 +47,9 @@ public class NetworkHandler implements Runnable, ViewListener {
         }
         catch (IOException e){
             System.out.println("Connection failed.");
-            this.isConnected = false;
+            endConnection();
             e.printStackTrace();
         }
-//        new ListenToServerPing(inputServer, this).start();
     }
     
     /**
@@ -58,6 +59,9 @@ public class NetworkHandler implements Runnable, ViewListener {
      */
     @Override
     public void run() {
+        clientTimer = new ClientTimer(this);
+        new Thread(clientTimer).start();
+        
         // Send a ping each 5 seconds.
         new Thread(() -> {
             while (isConnected) {
@@ -75,7 +79,8 @@ public class NetworkHandler implements Runnable, ViewListener {
     }
     
     /**
-     * This method dispatches the messages coming from the the server and calls other methods useful to handle them.
+     * This method dispatches the messages coming from the the server. If the message is a ping it is handled,
+     * otherwise it forwards them to the runnable class {@link MessageHandler}.
      */
     public void dispatchMessages() {
         System.out.println("Started listening to the server.");
@@ -85,93 +90,126 @@ public class NetworkHandler implements Runnable, ViewListener {
             try {
                 message = (Message) inputServer.readObject();
                 switch (message.getMessageType()) {
-                    case FIRST_CONNECTION:
-                        handleFirstConnection();
+                    case PING:
+                        clientTimer.resetTime();
                         break;
-                    case REQUEST_PLAYERS_NUMBER:
-                        view.askNumberOfPlayers();
-                        break;
-                    case WRONG_PARAMETERS:
-                        view.showMessage(((WrongParameters) message).getErrorMessage());
-                        handleFirstConnection();
-                        break;
-                    case ASK_WORKER_POSITION:
-                        view.askWhereToPositionWorkers();
-                        break;
-                    case CHOOSE_ACTION:
-                        view.askAction();
-                        break;
-                    case CHOOSE_WORKER:
-                        view.askWhichWorkerToUse();
-                        break;
-                    case CONNECTION_ACCEPTED:
-                        VisitableInformation visitableConnectionAccepted = (VisitableInformation) message.getContent();
-                        String username = visitableConnectionAccepted.getUsername();
-                        Color color = visitableConnectionAccepted.getColor();
-        
-                        view.getGameView().setMyUsername(username);
-                        view.getGameView().setMyColor(color);
-                        break;
-                    case CONNECTION_FAILED:
-                        view.showMessage(((ConnectionFailed) message).getErrorMessage());
-                        isConnected = false;
-                        break;
-                    case ERROR:
-                        String errorText = ((ErrorMessage) message).getErrorText();
-                        view.showMessage(errorText);
-                        break;
-                    case LIST_OF_GODS:
-                        VisitableListOfGods visitableGods = (VisitableListOfGods) message.getContent();
-                        ArrayList<GodName> godNames = visitableGods.getGodNames();
-                        view.chooseYourGod(godNames);
-                        break;
-                    case PLAYERS_NUMBER:
-                        PlayersNumber messagePlayers = (PlayersNumber) message;
-                        int number = messagePlayers.getNumberOfPlayers();
-                        view.getGameView().setNumberOfPlayers(number);
-                        break;
-                    case PUBLIC_INFORMATION:
-                        PublicInformation messageInfo = (PublicInformation) message;
-        
-                        view.getGameView().setUsernames(messageInfo.getUsernames());
-                        view.getGameView().setColors(messageInfo.getColors());
-                        view.getGameView().setGods(((PublicInformation) message).getGodNames());
-        
-                        view.showPublicInformation();
-                        break;
-                    case UPDATE_SLOT:
-                        UpdatedSlot messageSlot = (UpdatedSlot) message;
-                        Slot slot = messageSlot.getUpdatedSlot();
-                        view.getGameView().getBoardView().setSlot(slot);
-                        view.showCurrentBoard();
-                        break;
-                    case CHALLENGER:
-                        view.challengerWillChooseThreeGods();
-                        break;
-                    case OPPONENT_LOOSING:
-                        username = ((OpponentLoosing) message).getUsername();
-                        view.showMessage("Player " + username + " lost.");
-                        break;
-                    case OPPONENT_WINNING:
-                        username = ((OpponentWinning) message).getUsername();
-                        view.showMessage("Player " + username + " win.");
+                    default:
+                        messageExecutor.submit(new MessageHandler(message, this));
                         break;
                 }
             }
             catch (IOException e){
                 view.showMessage("We are sorry: " +
                         "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");
-                isConnected = false;
-                //e.printStackTrace();
+                
+                if (isConnected)
+                    endConnection();
+                
+                e.printStackTrace();
             }
             catch (ClassNotFoundException e){
                 view.showMessage("Error in casting during the readObject.");
-                isConnected = false;
-                //e.printStackTrace();
+                
+                if (isConnected)
+                    endConnection();
+                
+                e.printStackTrace();
             }
         }
 
         view.showMessage("Game closed.");
+//        System.out.println(messageExecutor.isShutdown());
+//        System.out.println(messageExecutor.isTerminated());
+    }
+    
+    /**
+     * This Runnable class handles the messages living the networkHandler free to receive ping messages.
+     */
+    private class MessageHandler implements Runnable {
+        Message message;
+        NetworkHandler networkHandler;
+        
+        public MessageHandler(Message message, NetworkHandler networkHandler){
+            this.message = message;
+            this.networkHandler = networkHandler;
+        }
+        
+        @Override
+        public void run() {
+            switch (message.getMessageType()) {
+                case FIRST_CONNECTION:
+                    handleFirstConnection();
+                    break;
+                case REQUEST_PLAYERS_NUMBER:
+                    view.askNumberOfPlayers();
+                    break;
+                case WRONG_PARAMETERS:
+                    view.showMessage(((WrongParameters) message).getErrorMessage());
+                    handleFirstConnection();
+                    break;
+                case ASK_WORKER_POSITION:
+                    view.askWhereToPositionWorkers();
+                    break;
+                case CHOOSE_ACTION:
+                    view.askAction();
+                    break;
+                case CHOOSE_WORKER:
+                    view.askWhichWorkerToUse();
+                    break;
+                case CONNECTION_ACCEPTED:
+                    VisitableInformation visitableConnectionAccepted = (VisitableInformation) message.getContent();
+                    String username = visitableConnectionAccepted.getUsername();
+                    Color color = visitableConnectionAccepted.getColor();
+        
+                    view.getGameView().setMyUsername(username);
+                    view.getGameView().setMyColor(color);
+                    break;
+                case CONNECTION_FAILED:
+                    view.showMessage(((ConnectionFailed) message).getErrorMessage());
+                    endConnection();
+                    break;
+                case ERROR:
+                    String errorText = ((ErrorMessage) message).getErrorText();
+                    view.showMessage(errorText);
+                    break;
+                case LIST_OF_GODS:
+                    VisitableListOfGods visitableGods = (VisitableListOfGods) message.getContent();
+                    ArrayList<GodName> godNames = visitableGods.getGodNames();
+                    view.chooseYourGod(godNames);
+                    break;
+                case PLAYERS_NUMBER:
+                    PlayersNumber messagePlayers = (PlayersNumber) message;
+                    int number = messagePlayers.getNumberOfPlayers();
+                    view.getGameView().setNumberOfPlayers(number);
+                    break;
+                case PUBLIC_INFORMATION:
+                    PublicInformation messageInfo = (PublicInformation) message;
+        
+                    view.getGameView().setUsernames(messageInfo.getUsernames());
+                    view.getGameView().setColors(messageInfo.getColors());
+                    view.getGameView().setGods(((PublicInformation) message).getGodNames());
+        
+                    view.showPublicInformation();
+                    break;
+                case UPDATE_SLOT:
+                    UpdatedSlot messageSlot = (UpdatedSlot) message;
+                    Slot slot = messageSlot.getUpdatedSlot();
+                    view.getGameView().getBoardView().setSlot(slot);
+                    view.showCurrentBoard();
+                    break;
+                case CHALLENGER:
+                    view.challengerWillChooseThreeGods();
+                    break;
+                case OPPONENT_LOOSING:
+                    username = ((OpponentLoosing) message).getUsername();
+                    view.showMessage("Player " + username + " lost.");
+                    break;
+                case OPPONENT_WINNING:
+                    username = ((OpponentWinning) message).getUsername();
+                    view.showMessage("Player " + username + " win.");
+                    break;
+            }
+        }
     }
     
     /**
@@ -179,7 +217,7 @@ public class NetworkHandler implements Runnable, ViewListener {
      *
      * @param message the message that must be sent.
      */
-    public void send(Message message) {
+    public synchronized void send(Message message) {
         try {
             outputServer.writeObject(message);
         } catch (IOException e) {
@@ -191,6 +229,8 @@ public class NetworkHandler implements Runnable, ViewListener {
 
     void endConnection(){
         isConnected = false;
+        clientTimer.setIsConnectedFalse();
+        messageExecutor.shutdownNow();
         
         try {
             serverSocket.close();
