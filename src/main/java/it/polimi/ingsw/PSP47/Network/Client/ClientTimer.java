@@ -1,21 +1,21 @@
-package it.polimi.ingsw.PSP47.Network.Server;
+package it.polimi.ingsw.PSP47.Network.Client;
 
 /**
- * This class controls if the client is still connected to the network.
+ * This class controls if the server is still connected to the network.
  */
-public class ServerTimer implements Runnable{
+public class ClientTimer implements Runnable{
     public final static int TIME_EXPIRED_MILLIS = 15000;
     private int timeMillis = 0;
-    private final ClientHandler clientHandler;
+    private final NetworkHandler networkHandler;
     private boolean isConnected = true;
     
-    public ServerTimer(ClientHandler clientHandler){
-        this.clientHandler = clientHandler;
+    public ClientTimer(NetworkHandler networkHandler){
+        this.networkHandler = networkHandler;
     }
     
     /**
      * This method controls, each milliseconds, that the client is still connected to the server.
-     * If not, it calls the {@link ClientHandler#endConnection()} and terminates.
+     * If not, it calls the {@link NetworkHandler#endConnection()} and terminates.
      */
     @Override
     public void run() {
@@ -23,7 +23,7 @@ public class ServerTimer implements Runnable{
             try {
                 if (timeMillis > TIME_EXPIRED_MILLIS)
                     isConnected = false;
-    
+            
                 Thread.sleep(1);
                 timeMillis++;
             } catch (InterruptedException e) {
@@ -31,7 +31,7 @@ public class ServerTimer implements Runnable{
                 e.printStackTrace();
             }
         }
-        clientHandler.endConnection();
+        networkHandler.endConnection();
     }
     
     void setIsConnectedFalse(){
@@ -39,7 +39,7 @@ public class ServerTimer implements Runnable{
     }
     
     /**
-     * When a ping is listened by the {@link ClientHandler}, the timer is reset.
+     * When a ping is listened by the {@link NetworkHandler}, the timer is reset.
      */
     void resetTime(){
         timeMillis = 0;

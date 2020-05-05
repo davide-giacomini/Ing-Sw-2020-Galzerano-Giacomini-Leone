@@ -136,8 +136,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     /**
-     * This Runnable class handles the messages living the the clientHandler free to receive ping messages. The messages which
-     * handle the connection and disconnection of the client are forwarded to the server, otherwise they are are
+     * This Runnable class handles the messages living the clientHandler free to receive ping messages. The messages
+     * which handle the connection and disconnection of the client are forwarded to the server, otherwise they are
      * forwarded to the virtual view.
      */
     private class MessageHandler implements Runnable {
@@ -172,7 +172,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     *
     * @param message the message that must be sent.
     */
-    private void send(Message message) {
+    private synchronized void send(Message message) {
         try {
             outputClient.writeObject(message);
         } catch (IOException e) {
@@ -189,7 +189,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         isConnected = false;
         notifyDisconnection(this);
         serverTimer.setIsConnectedFalse();
-        
+        messageExecutor.shutdownNow();
+    
         try {
             clientSocket.close();
         } catch (IOException e) {
