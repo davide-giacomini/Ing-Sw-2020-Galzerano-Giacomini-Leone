@@ -302,8 +302,6 @@ public class GameController implements VirtualViewListener {
             view.sendError("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just lost.");
         }
 
-        views.remove(views.get(indexOfCurrentPlayer));
-
         Slot slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
         slot.setWorker(null);
         slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
@@ -311,6 +309,8 @@ public class GameController implements VirtualViewListener {
 
         game.getPlayers().remove(Game.getPlayer(indexOfCurrentPlayer));
         views.get(indexOfCurrentPlayer).sendLosingAdvice();
+    
+        views.remove(views.get(indexOfCurrentPlayer));
 
         if (Game.getNumberOfPlayers() == 2) {
             endGame();
@@ -335,6 +335,7 @@ public class GameController implements VirtualViewListener {
      * This method implements the update of the Observer Pattern.
      * It's called every time the virtual view receives a message from the
      * client side, so its content is notified to the controller.
+     *
      * @param visitableObject the content of the message.
      */
     @Override

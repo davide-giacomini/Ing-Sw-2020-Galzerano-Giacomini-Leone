@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP47.Network.Server;
 
-import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Message.Ping;
 
 import java.io.IOException;
@@ -8,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class PingServerHandler implements Runnable{
+public class PingListener implements Runnable{
     private final int TIME_EXPIRED_MILLIS = 15000;
     private final Socket pingSocket;
     private int timeMillis = 0;
@@ -17,7 +16,7 @@ public class PingServerHandler implements Runnable{
     private ObjectInputStream inputPing;
     private boolean isConnected = true;
     
-    public PingServerHandler(Socket pingSocket, ClientHandler clientHandler){
+    public PingListener(Socket pingSocket, ClientHandler clientHandler){
         this.pingSocket = pingSocket;
         this.clientHandler = clientHandler;
     

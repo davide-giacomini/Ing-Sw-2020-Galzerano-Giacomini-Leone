@@ -10,10 +10,12 @@ import it.polimi.ingsw.PSP47.Visitor.Visitable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * This class handles the connection and the communication between the server and a client.
+ */
 public class ClientHandler extends ClientHandlerObservable implements Runnable{
     private final Socket clientSocket;
     private final Socket clientPingSocket;
@@ -25,7 +27,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     Thread pingServerHandler;
     
     /**
-     * This constructor set up the management between the {@link Client} and the {@link Server}.
+     * This constructor initializes the input stream and output stream of the sockets.
      *
      * @param clientSocket the socket of the {@link Client} connected to the server.
      * @param gameAlreadyStarted if the game is already started.
@@ -47,30 +49,14 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     /**
-     * This method instantiates the {@link ObjectInputStream} and the {@link ObjectOutputStream} with
-     * {@link java.io.InputStream} and {@link java.io.OutputStream} of the client's socket in order to
-     * handle serialization.
+     * This method makes the server listen to the ping from the client and checks if the game is already started.
+     * If so, the client handler immediately closes the connection. Otherwise, it asks to the client the username
+     * and the color and then it begins to listen to the messages from the client.
      */
     @Override
     public void run() {
-//        InetAddress clientAddress = clientSocket.getInetAddress();
-//        new Thread(() -> {
-//            while (true){
-//                try {
-//                    if (!clientAddress.isReachable(5000))
-//                        break;
-//
-////                    System.out.println("Ping sent.");
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            System.out.println("The client isn't reachable.\nYou disconnected.");
-//            endConnection();
-//        }).start();
-        
-        pingServerHandler = new Thread(new PingServerHandler(clientPingSocket, this));
+        // start to listen to the ping
+        pingServerHandler = new Thread(new PingListener(clientPingSocket, this));
         pingServerHandler.start();
     
         // start the game
@@ -92,8 +78,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     /**
-     * This method handle the messages that come from the client.
-     * Each different message is handled by a method of this class, method which is called within this method.
+     * This method dispatches the messages coming from the client. The messages which handle the connection and
+     * disconnection of the client are forwarded to the server, otherwise they are are forwarded to the virtual view.
      */
     public void dispatchMessages() {
         System.out.println("Started listening the client at the address" + clientSocket.getInetAddress());
@@ -108,11 +94,10 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                     case REQUEST_PLAYERS_NUMBER:
                         notifyPlayersNumber((RequestPlayersNumber) message);
                         break;
+                        //TODO disconnessione volontaria del client.
                     default:
                         Visitable visitableObject = message.getContent();
                         virtualView.notifyVirtualViewListener(visitableObject);
-                        //TODO qua viene un null ponter exception perché all'inizio la virtual view non
-                        // è ancora stata iniziata
                         break;
                 }
             } catch (ClassNotFoundException e) {
@@ -131,9 +116,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                 }
                 System.out.println("Client " + clientSocket.getInetAddress() + " disconnected.");
                 
-                //TODO scollegamento:
-                // scollegamento di rete: boh.
-                
                 e.printStackTrace();
             } catch (IOException e) {
                 System.out.println("Error in the I/O of the client " + clientSocket.getInetAddress() + ":" +
@@ -151,9 +133,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                     isConnected = false;
                 }
                 System.out.println("Client " + clientSocket.getInetAddress() + " disconnected.");
-                
-                //TODO scollegamento:
-                // scollegamento di rete: boh.
                 
                 e.printStackTrace();
             }
@@ -175,6 +154,9 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         }
     }
     
+    /**
+     * It ends the connection of this client and notifies the server to handle it.
+     */
     void endConnection(){
         isConnected = false;
         notifyDisconnection(this);
@@ -187,19 +169,38 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         }
     }
     
+    /**
+     * It sends a message to the client to ask them the max number of players they want.
+     */
     void askMaxPlayersNumber(){
         send(new RequestPlayersNumber(null));
     }
     
+    /**
+     * It sends a message to the client to warn them that the first player hasn't chosen the game's parameters yet
+     * and so they have to wait.
+     */
     void warnFirstPlayerIsChoosing(){
-        send(new ErrorMessage("Sei stato messo in coda."));
+        send(new ErrorMessage("Wait for the first player to choose the game's parameters."));
     }
     
+    /**
+     * It sends a message to the client to ask them again the username and color, because the previous ones
+     * submitted were not different from the other players already added to the game.
+     *
+     * @param wrongParameter it can be username, color or both.
+     */
     void askAgainParameters(String wrongParameter){
         send(new WrongParameters("An other players chose your " + wrongParameter + ".\n" +
                 "Please try with another."));
     }
     
+    /**
+     * It sends a message to the client to warn them that the game is already started because other players have
+     * been added before them.
+     * It ends the game and the connection.
+     *
+     */
     void notifyGameStartedWithoutYou(){
         gameAlreadyStarted = true;
         send(new ConnectionFailed("The game is already started.\nTry another time."));
@@ -207,6 +208,12 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         endConnection();
     }
     
+    /**
+     * It sends a message to the client to advise them that the first player, who had to choose the game's parameters,
+     * suddenly disconnected and the game cannot be set.
+     * It ends the game and the connection.
+     *
+     */
     void notifyFirstClientDisconnected(){
         send(new ConnectionFailed("The first player disconnected and the game cannot be set.\n"+
                 "Please try another time."));
@@ -214,33 +221,42 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         endConnection();
     }
     
+    /**
+     * It sends a message to the client to warn them that the player with the username specified disconnected.
+     * It ends the game and the connection.
+     *
+     * @param username the player's username who disconnected.
+     */
     void notifyOpponentClientDisconnected(String username){
         send(new ConnectionFailed("The player" + username + " disconnected. Game over.\n"));
         
         endConnection();
     }
     
-    void notifyOpponentClientWon(String username){
-        send(new OpponentWinning(username));
-        
-        endConnection();
-    }
-    
-    void notifyOpponentClientLost(String username){
-        send(new OpponentLoosing(username));
-    }
-    
+    /**
+     * It creates the virtual view when the game starts.
+     *
+     * @param username virtualView's player's username
+     * @param color virtualView's player's color.
+     * @return the virtual view just created.
+     */
     VirtualView createVirtualView(String username, Color color){
         return (this.virtualView = new VirtualView(username, color, this));
     }
     
-    void sendWin(){
-        notifyWin(this);
+    /**
+     * It sends a message to the client telling them that they won.
+     */
+    void showYouWon(){
+        notifyWin();
         endConnection();
     }
     
-    void sendLose(){
-        notifyLose(this);
+    /**
+     * It sends a message to the client telling them that they lost.
+     */
+    void showYouLost(){
+        notifyLoss(this);
         endConnection();
     }
 
@@ -255,14 +271,14 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
 
     /**
-     * This method send a message to the client to tell him that he is the Challenger.
+     * This method send a message to the client to tell them that they are the Challenger.
      */
     void sendYouAreTheChallenger()  {
         send(new YouAreTheChallenger());
     }
 
     /**
-     * This method sends a message to the client with the list of available gods he can choose from.
+     * This method sends a message to the client with the list of available gods they can choose from.
      *
      * @param gods list of available gods.
      */
@@ -291,6 +307,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param updatedSlot the modified slot.
      */
     void sendUpdateSlot(Slot updatedSlot) {
+        //TODO passare lo slot senza settarne uno nuovo
         Slot newSlot = new Slot(updatedSlot.getRow(), updatedSlot.getColumn());
         newSlot.setWorker(updatedSlot.getWorker()) ;
         newSlot.setWorkerColor(updatedSlot.getWorkerColor());
