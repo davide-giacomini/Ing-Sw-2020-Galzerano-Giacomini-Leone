@@ -44,7 +44,6 @@ public class Server implements ClientHandlerListener {
      */
     public final static int PING_PORT = 7778;
     private final ServerSocket serverSocket;
-    private final ServerSocket pingSocket;
     private volatile boolean firstPlayerConnected = false;
     private volatile boolean gameStarted = false;
     private int maxPlayersNumber = -1;
@@ -54,13 +53,12 @@ public class Server implements ClientHandlerListener {
     private GameController gameController;
     
     /**
-     * It creates the server sockets to connect with the clients.
+     * It creates the server socket to connect with the clients.
      *
-     * @throws IOException if the {@link #serverSocket} or the {@link #pingSocket} can't be created.
+     * @throws IOException if the {@link #serverSocket} can't be created.
      */
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(SOCKET_PORT);
-        this.pingSocket = new ServerSocket(PING_PORT);
     }
     
     /**
@@ -70,10 +68,8 @@ public class Server implements ClientHandlerListener {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                Socket clientPingSocket = pingSocket.accept();
-                
                 synchronized (this) {
-                    ClientHandler clientHandler = new ClientHandler(clientSocket, gameStarted, clientPingSocket);
+                    ClientHandler clientHandler = new ClientHandler(clientSocket, gameStarted);
                     clientHandlers.add(clientHandler);
                     clientHandler.addClientHandlerListener(this);
                     new Thread(clientHandler).start();

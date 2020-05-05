@@ -9,23 +9,22 @@ import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.View.ViewListener;
 import it.polimi.ingsw.PSP47.Visitor.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * This class handles the transfer of messages between the client and the server.
  */
 public class NetworkHandler implements Runnable, ViewListener {
-    private View view;
-    private Socket serverSocket;
+    private final View view;
+    private final Socket serverSocket;
     private ObjectInputStream inputServer;
     private ObjectOutputStream outputServer;
     private boolean isConnected;
-    private NetworkHandlerVisitor networkHandlerVisitor;
+    private final NetworkHandlerVisitor networkHandlerVisitor;
     
     /**
      * This constructor set up the management between the {@link Client} and the {@link it.polimi.ingsw.PSP47.Network.Server.Server}.
@@ -54,11 +53,24 @@ public class NetworkHandler implements Runnable, ViewListener {
     
     /**
      * This method instantiates the {@link ObjectInputStream} and the {@link ObjectOutputStream} with
-     * {@link java.io.InputStream} and {@link java.io.OutputStream} of the server's socket in order to
+     * {@link InputStream} and {@link OutputStream} of the server's socket in order to
      * handle serialization.
      */
     @Override
     public void run() {
+        // Send a ping each 5 seconds.
+        new Thread(() -> {
+            while (isConnected) {
+                try {
+                    send(new Ping());
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    endConnection();
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        
         dispatchMessages();
     }
     
@@ -72,7 +84,7 @@ public class NetworkHandler implements Runnable, ViewListener {
             Message message;
             try {
                 message = (Message) inputServer.readObject();
-                switch (message.getMessageType()){
+                switch (message.getMessageType()) {
                     case FIRST_CONNECTION:
                         handleFirstConnection();
                         break;
@@ -86,17 +98,17 @@ public class NetworkHandler implements Runnable, ViewListener {
                     case ASK_WORKER_POSITION:
                         view.askWhereToPositionWorkers();
                         break;
-                    case  CHOOSE_ACTION:
+                    case CHOOSE_ACTION:
                         view.askAction();
                         break;
                     case CHOOSE_WORKER:
                         view.askWhichWorkerToUse();
                         break;
                     case CONNECTION_ACCEPTED:
-                        VisitableInformation visitableConnectionAccepted = (VisitableInformation)  message.getContent();
+                        VisitableInformation visitableConnectionAccepted = (VisitableInformation) message.getContent();
                         String username = visitableConnectionAccepted.getUsername();
                         Color color = visitableConnectionAccepted.getColor();
-
+        
                         view.getGameView().setMyUsername(username);
                         view.getGameView().setMyColor(color);
                         break;
@@ -109,8 +121,8 @@ public class NetworkHandler implements Runnable, ViewListener {
                         view.showMessage(errorText);
                         break;
                     case LIST_OF_GODS:
-                        VisitableListOfGods visitableGods =(VisitableListOfGods) message.getContent();
-                        ArrayList<GodName> godNames =  visitableGods.getGodNames();
+                        VisitableListOfGods visitableGods = (VisitableListOfGods) message.getContent();
+                        ArrayList<GodName> godNames = visitableGods.getGodNames();
                         view.chooseYourGod(godNames);
                         break;
                     case PLAYERS_NUMBER:
@@ -120,11 +132,11 @@ public class NetworkHandler implements Runnable, ViewListener {
                         break;
                     case PUBLIC_INFORMATION:
                         PublicInformation messageInfo = (PublicInformation) message;
-
+        
                         view.getGameView().setUsernames(messageInfo.getUsernames());
                         view.getGameView().setColors(messageInfo.getColors());
                         view.getGameView().setGods(((PublicInformation) message).getGodNames());
-
+        
                         view.showPublicInformation();
                         break;
                     case UPDATE_SLOT:
@@ -179,9 +191,9 @@ public class NetworkHandler implements Runnable, ViewListener {
 
     void endConnection(){
         isConnected = false;
-
+        
         try {
-            outputServer.close();
+            serverSocket.close();
         } catch (IOException e) {
             System.out.println("Unable to close the socket of the server " + serverSocket.getInetAddress() + ".");
             e.printStackTrace();

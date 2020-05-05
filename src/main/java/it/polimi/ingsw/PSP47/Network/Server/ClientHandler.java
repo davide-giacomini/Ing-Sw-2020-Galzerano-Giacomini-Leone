@@ -12,19 +12,21 @@ import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * This class handles the connection and the communication between the server and a client.
  */
 public class ClientHandler extends ClientHandlerObservable implements Runnable{
     private final Socket clientSocket;
-    private final Socket clientPingSocket;
     private ObjectInputStream inputClient;
     private ObjectOutputStream outputClient;
     private boolean isConnected;
     private boolean gameAlreadyStarted;
     private VirtualView virtualView;
-    Thread pingServerHandler;
+    private ServerTimer serverTimer;
+    private final ExecutorService messageExecutor = Executors.newSingleThreadExecutor();
     
     /**
      * This constructor initializes the input stream and output stream of the sockets.
@@ -32,11 +34,10 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param clientSocket the socket of the {@link Client} connected to the server.
      * @param gameAlreadyStarted if the game is already started.
      */
-    public ClientHandler(Socket clientSocket, boolean gameAlreadyStarted, Socket clientPingSocket){
+    public ClientHandler(Socket clientSocket, boolean gameAlreadyStarted){
         this.clientSocket = clientSocket;
         this.isConnected = true;
         this.gameAlreadyStarted = gameAlreadyStarted;
-        this.clientPingSocket = clientPingSocket;
     
         try {
             inputClient = new ObjectInputStream(clientSocket.getInputStream());
@@ -56,8 +57,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     @Override
     public void run() {
         // start to listen to the ping
-        pingServerHandler = new Thread(new PingListener(clientPingSocket, this));
-        pingServerHandler.start();
+        serverTimer = new ServerTimer(this);
+        new Thread(serverTimer).start();
     
         // start the game
         try {
@@ -78,26 +79,21 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     /**
-     * This method dispatches the messages coming from the client. The messages which handle the connection and
-     * disconnection of the client are forwarded to the server, otherwise they are are forwarded to the virtual view.
+     * This method dispatches the messages coming from the client. If the message is a ping it is handled, otherwise
+     * it forwards them to the runnable class {@link MessageHandler}.
      */
-    public void dispatchMessages() {
+    private void dispatchMessages() {
         System.out.println("Started listening the client at the address" + clientSocket.getInetAddress());
         while (isConnected) {
             Message message;
             try {
                 message = (Message) inputClient.readObject();
                 switch (message.getMessageType()) {
-                    case FIRST_CONNECTION:
-                        notifyFirstConnection((FirstConnection) message, this);
+                    case PING:
+                        serverTimer.resetTime();
                         break;
-                    case REQUEST_PLAYERS_NUMBER:
-                        notifyPlayersNumber((RequestPlayersNumber) message);
-                        break;
-                        //TODO disconnessione volontaria del client.
                     default:
-                        Visitable visitableObject = message.getContent();
-                        virtualView.notifyVirtualViewListener(visitableObject);
+                        messageExecutor.submit(new MessageHandler(message, this));
                         break;
                 }
             } catch (ClassNotFoundException e) {
@@ -140,6 +136,38 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     /**
+     * This Runnable class handles the messages living the the clientHandler free to receive ping messages. The messages which
+     * handle the connection and disconnection of the client are forwarded to the server, otherwise they are are
+     * forwarded to the virtual view.
+     */
+    private class MessageHandler implements Runnable {
+        Message message;
+        ClientHandler clientHandler;
+        
+        public MessageHandler(Message message, ClientHandler clientHandler){
+            this.message = message;
+            this.clientHandler = clientHandler;
+        }
+        
+        @Override
+        public void run() {
+            switch (message.getMessageType()) {
+                case FIRST_CONNECTION:
+                    notifyFirstConnection((FirstConnection) message, clientHandler);
+                    break;
+                case REQUEST_PLAYERS_NUMBER:
+                    notifyPlayersNumber((RequestPlayersNumber) message);
+                    break;
+                //TODO disconnessione volontaria del client.
+                default:
+                    Visitable visitableObject = message.getContent();
+                    virtualView.notifyVirtualViewListener(visitableObject);
+                    break;
+            }
+        }
+    }
+    
+    /**
     * This method serializes the messages and sends them to the client.
     *
     * @param message the message that must be sent.
@@ -149,7 +177,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
             outputClient.writeObject(message);
         } catch (IOException e) {
             System.out.println("Error in the serialization of " + message.toString() + " message.");
-            isConnected = false;
+            endConnection();
             e.printStackTrace();
         }
     }
@@ -160,9 +188,10 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     void endConnection(){
         isConnected = false;
         notifyDisconnection(this);
+        serverTimer.setIsConnectedFalse();
         
         try {
-            outputClient.close();
+            clientSocket.close();
         } catch (IOException e) {
             System.out.println("Unable to close the socket of the client " + clientSocket.getInetAddress() + ".");
             e.printStackTrace();
