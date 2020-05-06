@@ -1,11 +1,10 @@
 package it.polimi.ingsw.PSP47.Network.Client;
 
 import it.polimi.ingsw.PSP47.Network.Server.*;
-import it.polimi.ingsw.PSP47.View.View;
-import it.polimi.ingsw.PSP47.View.CLI;
+import it.polimi.ingsw.PSP47.View.CLI.View;
+import it.polimi.ingsw.PSP47.View.CLI.CLI;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 

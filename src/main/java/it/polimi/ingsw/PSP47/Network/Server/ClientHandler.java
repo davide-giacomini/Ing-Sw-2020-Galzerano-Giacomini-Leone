@@ -59,21 +59,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         // start to listen to the ping
         serverTimer = new ServerTimer(this);
         new Thread(serverTimer).start();
-        
-        // start the game
-        try {
-            if (gameAlreadyStarted) {
-                send(new ConnectionFailed("The game is already started.\nTry another time."));
-    
-                endConnection();
-            }
-            else
-                outputClient.writeObject(new FirstConnection(null));
-        } catch (IOException e) {
-            System.out.println("Failed to send the first connection request to the client" + clientSocket.getInetAddress() +".");
-            isConnected = false;
-            e.printStackTrace();
-        }
     
         // Send a ping each 5 seconds.
         new Thread(() -> {
@@ -87,6 +72,15 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                 }
             }
         }).start();
+        
+        // start the game
+        if (gameAlreadyStarted) {
+            send(new ConnectionFailed("The game is already started.\nTry another time."));
+            endConnection();
+        }
+        else {
+            send(new FirstConnection(null));
+        }
     
         dispatchMessages();
     }
@@ -351,13 +345,12 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      */
     void sendUpdateSlot(Slot updatedSlot) {
         //TODO passare lo slot senza settarne uno nuovo
-        /*Slot newSlot = new Slot(updatedSlot.getRow(), updatedSlot.getColumn());
+        Slot newSlot = new Slot(updatedSlot.getRow(), updatedSlot.getColumn());
         newSlot.setWorker(updatedSlot.getWorker()) ;
         newSlot.setWorkerColor(updatedSlot.getWorkerColor());
         newSlot.setLevel(updatedSlot.getLevel());
         newSlot.setWorkerOn(updatedSlot.isWorkerOnSlot());
-        UpdatedSlot message = new UpdatedSlot(newSlot);*/
-        UpdatedSlot message = new UpdatedSlot(updatedSlot);
+        UpdatedSlot message = new UpdatedSlot(newSlot);
         send(message);
     }
 
