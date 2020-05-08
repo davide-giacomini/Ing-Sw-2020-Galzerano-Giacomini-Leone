@@ -12,7 +12,6 @@ import it.polimi.ingsw.PSP47.Visitor.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -99,7 +98,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                         view.askNumberOfPlayers();
                         break;
                     case WRONG_PARAMETERS:
-                        view.showMessage(((WrongParameters) message).getErrorMessage());
+                        view.showErrorMessage(((WrongParameters) message).getErrorMessage());
                         handleFirstConnection();
                         break;
                     case ASK_WORKER_POSITION:
@@ -120,12 +119,12 @@ public class NetworkHandler implements Runnable, ViewListener {
                         view.getGameView().setMyColor(color);
                         break;
                     case CONNECTION_FAILED:
-                        view.showMessage(((ConnectionFailed) message).getErrorMessage());
+                        view.showErrorMessage(((ConnectionFailed) message).getErrorMessage());
                         isConnected = false;
                         break;
                     case ERROR:
                         String errorText = ((ErrorMessage) message).getErrorText();
-                        view.showMessage(errorText);
+                        view.showErrorMessage(errorText);
                         break;
                     case LIST_OF_GODS:
                         VisitableListOfGods visitableGods =(VisitableListOfGods) message.getContent();
@@ -157,28 +156,28 @@ public class NetworkHandler implements Runnable, ViewListener {
                         break;
                     case OPPONENT_LOOSING:
                         username = ((OpponentLoosing) message).getUsername();
-                        view.showMessage("Player " + username + " lost.");
+                        view.showImportantMessage("Player " + username + " lost.");
                         break;
                     case OPPONENT_WINNING:
                         username = ((OpponentWinning) message).getUsername();
-                        view.showMessage("Player " + username + " win.");
+                        view.showImportantMessage("Player " + username + " win.");
                         break;
                 }
             }
             catch (IOException e){
-                view.showMessage("We are sorry: " +
+                view.showErrorMessage("We are sorry: " +
                         "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");
                 isConnected = false;
                 //e.printStackTrace();
             }
             catch (ClassNotFoundException e){
-                view.showMessage("Error in casting during the readObject.");
+                view.showErrorMessage("Error in casting during the readObject.");
                 isConnected = false;
                 //e.printStackTrace();
             }
         }
 
-        view.showMessage("Game closed.");
+        view.showImportantMessage("Game closed.");
     }
     
     /**

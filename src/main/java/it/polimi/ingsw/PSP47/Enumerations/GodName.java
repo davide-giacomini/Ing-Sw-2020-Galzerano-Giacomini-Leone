@@ -12,6 +12,12 @@ public enum GodName implements Serializable {
     MINOTAUR ("Minotaur"),
     PAN ("Pan"),
     PROMETHEUS("Prometheus"),
+    //advanced gods
+    HERA("Hera"),
+    HESTIA("Hestia"),
+    TRITON("Triton"),
+    CHRONUS("Chronus"),
+    ZEUS("Zeus"),
     WRONGGODNAME("");
 
     private final String god;

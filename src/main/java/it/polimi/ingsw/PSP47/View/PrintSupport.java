@@ -161,6 +161,15 @@ public class PrintSupport {
                     SLOT_PARTS[0]= UPPER_PART_SLOT;
 
                     return SLOT_PARTS;
+
+                case 5:
+                    SLOT_PARTS[4]= WITH_DOME_PART_SLOT;
+                    SLOT_PARTS[3]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[2]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[0]= UPPER_PART_SLOT;
+
+                    return SLOT_PARTS;
                 default:
                     //throw an exception
                     return EMPTY_PARTS;

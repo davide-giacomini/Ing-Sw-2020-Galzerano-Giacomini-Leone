@@ -33,12 +33,6 @@ public abstract class View extends ViewObservable {
     public abstract Color askColorWorkers();
 
     /**
-     * Shows a message of Error or of Warning
-     * @param text tho display
-     */
-    public abstract void showMessage(String text);
-
-    /**
      * This method is used to ask the numbers of players of the game
      * @return int to indicate the number chosen
      */
@@ -95,6 +89,18 @@ public abstract class View extends ViewObservable {
      * this method calls the print support that prints the updated board of the game
      */
     public abstract void showCurrentBoard();
+
+    /**
+     * Shows a message of Error or of Warning
+     * @param text tho display
+     */
+    public abstract void showErrorMessage(String text);
+
+     /**
+     * Shows a message of Update of the game
+     * @param text tho display
+     */
+    public abstract void showImportantMessage(String text);
 
     /**
      * This method tells the username of the winner

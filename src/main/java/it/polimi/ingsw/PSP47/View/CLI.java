@@ -387,11 +387,6 @@ public class CLI extends View {
         o.flush();
     }
 
-    @Override
-    public void showMessage(String text) {
-        System.out.println(AnsiCode.ANSI_RED +text + AnsiCode.ANSI_RESET);
-    }
-
     /**
      * This method is used to ask the numbers of players of the game
      * @return int to indicate the number chosen
@@ -479,6 +474,19 @@ public class CLI extends View {
         gods = gameView.getGods();
        printSupport.printUsersAndColorsAndGods(usernames, colors, gods, gameView.getNumberOfPlayers(), out);
     }
+
+
+
+    @Override
+    public void showErrorMessage(String text) {
+        System.out.println(AnsiCode.ANSI_RED +text + AnsiCode.ANSI_RESET);
+    }
+
+    @Override
+    public void showImportantMessage(String text) {
+        System.out.println(AnsiCode.ANSI_GREEN +text + AnsiCode.ANSI_RESET);
+    }
+
 
     /**
      * this method calls the print support that prints the updated board of the game
