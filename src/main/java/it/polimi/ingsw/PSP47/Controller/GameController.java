@@ -24,12 +24,12 @@ import java.util.Random;
  * and contains all the methods used to update the model.
  */
 public class GameController implements VirtualViewListener {
-    private int numberOfPlayers;
-    private static Game game;
-    private ArrayList<VirtualView> views;
+    private final int numberOfPlayers;
+    private final Game game;
+    private final ArrayList<VirtualView> views;
     private int indexOfCurrentPlayer;
     private TurnController turn;
-    private ControllerVisitor controllerVisitor;
+    private final ControllerVisitor controllerVisitor;
 
     /**
      * This is the constructor of the GameController which creates the game and set the random player who will
@@ -45,7 +45,7 @@ public class GameController implements VirtualViewListener {
         for(Map.Entry<String,Color> entry : mapUserColor.entrySet()) {
             String username = entry.getKey();
             Color color = entry.getValue();
-            game.addPlayer(new Player(username, color));
+            game.addPlayer(new Player(username, color, game));
 
             VirtualView virtualView = mapUserVirtualView.get(username);
             setView(virtualView);
@@ -109,7 +109,7 @@ public class GameController implements VirtualViewListener {
             return;
         }
         try {
-            Game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, Game.getPlayer(indexOfCurrentPlayer)));
+            game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, game.getPlayer(indexOfCurrentPlayer)));
         } catch (IOException e) {
             views.get(indexOfCurrentPlayer).sendError("Try again, there were some troubles in the conversion.");
             ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
@@ -166,10 +166,10 @@ public class GameController implements VirtualViewListener {
             if (slot1.isOccupied() || slot2.isOccupied())
                 throw new SlotOccupiedException();
 
-            Worker chosenWorkerMale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);
-            Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
-            Worker chosenWorkerFemale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
-            Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
+            Worker chosenWorkerMale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);
+            game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
+            Worker chosenWorkerFemale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
+            game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
 
             incrementIndex();
             if(indexOfCurrentPlayer == 0) {
@@ -240,9 +240,9 @@ public class GameController implements VirtualViewListener {
     private void orderViews() {
         VirtualView temp;
         for(int i=0; i<numberOfPlayers; i++) {
-            if (!Game.getPlayer(i).getUsername().equals(views.get(i).getUsername()))
+            if (!game.getPlayer(i).getUsername().equals(views.get(i).getUsername()))
                 for(int j=0; j<numberOfPlayers; j++) {
-                    if (views.get(j).getUsername().equals(Game.getPlayer(i).getUsername())) {
+                    if (views.get(j).getUsername().equals(game.getPlayer(i).getUsername())) {
                         temp = views.get(i);
                         views.set(i, views.get(j));
                         views.set(j, temp);
@@ -302,21 +302,21 @@ public class GameController implements VirtualViewListener {
             view.sendError("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just lost.");
         }
 
+        Slot slot = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
+        slot.setWorker(null);
+        slot = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
+        slot.setWorker(null);
+
+        game.getPlayers().remove(game.getPlayer(indexOfCurrentPlayer));
+        views.get(indexOfCurrentPlayer).sendLosingAdvice();
+    
         views.remove(views.get(indexOfCurrentPlayer));
 
-        Slot slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
-        slot.setWorker(null);
-        slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
-        slot.setWorker(null);
-
-        game.getPlayers().remove(Game.getPlayer(indexOfCurrentPlayer));
-        views.get(indexOfCurrentPlayer).sendLosingAdvice();
-
-        if (Game.getNumberOfPlayers() == 2) {
+        if (game.getNumberOfPlayers() == 2) {
             endGame();
         }
         else {
-            Game.setNumberOfPlayers(2);
+            game.setNumberOfPlayers(2);
             fixIndexAndStart();
         }
     }
@@ -335,6 +335,7 @@ public class GameController implements VirtualViewListener {
      * This method implements the update of the Observer Pattern.
      * It's called every time the virtual view receives a message from the
      * client side, so its content is notified to the controller.
+     *
      * @param visitableObject the content of the message.
      */
     @Override

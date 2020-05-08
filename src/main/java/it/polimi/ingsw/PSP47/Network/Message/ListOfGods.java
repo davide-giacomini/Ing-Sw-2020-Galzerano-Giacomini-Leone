@@ -30,49 +30,5 @@ public class ListOfGods extends Message {
     public Visitable getContent() {
         return listOfGods;
     }
-    
-    /*
-     * This method calls the view to ask for the god that the player has been chosed and send a message
-     * to the server with this information.
-     *
-     * @param client the client to be handled.
-     * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
-
-    @Override
-    public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        GodName chosenGod = client.getView().chooseYourGod(godsAvailable);
-        ListOfGods newMessage = new ListOfGods(MessageType.LIST_OF_GODS);
-        newMessage.setChosenGod(chosenGod);
-        try {
-            outputServer.writeObject(newMessage);
-        } catch (IOException e) {
-            System.out.println("Error in the serialization of " +this.toString()+" message.");
-            e.printStackTrace();
-        }
-    }
-    
-    /**
-     * This method receives a list of available gods and calls the view to set this into the model.
-     *
-     * @param server the server, which has got the parameters in common with all the clients.
-     * @param virtualView the {@link VirtualView} of the client connected.
-     * @param outputClient the {@link ObjectOutputStream} of the client. It can be used to send other messages.
-
-    @Override
-    public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {
-        if (godsAvailable != null) {
-            virtualView.receiveListOfGods(godsAvailable);
-        }
-        else if (chosenGod != null) {
-            try {
-                virtualView.receiveChosenGod(chosenGod);
-            } catch (IOException e) {
-                //TODO fare qualcosa in caso viene lanciata questa eccezione
-                // chiedere a Monica
-                e.printStackTrace();
-            }
-        }
-    }*/
-    
 
 }

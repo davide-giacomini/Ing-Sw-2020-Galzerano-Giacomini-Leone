@@ -9,19 +9,19 @@ import java.util.Random;
  * This class contains all the elements of a game.
  */
 public class Game {
-    private Board board;
-    private static int numberOfPlayers;
-    private boolean start;
+    private final Board board;
+    private int numberOfPlayers;
+    private boolean start;  //TODO a cosa serve?
     private Player randomPlayer;
     private ArrayList<GodName> gods;
-    private static ArrayList<Player> players ;
+    private ArrayList<Player> players ;
 
 
     public Game(int numberOfPlayers) {
         setStart();
-        Game.numberOfPlayers = numberOfPlayers;
+        this.numberOfPlayers = numberOfPlayers;
         players = new ArrayList<>(numberOfPlayers);
-        board = Board.getBoard();
+        board = new Board();
     }
 
     public void addPlayer(Player player) {
@@ -49,17 +49,17 @@ public class Game {
     }
 
     public ArrayList<Player> getPlayers() {
-        return new ArrayList<>(Game.players);
+        return new ArrayList<>(players);
     }
 
-    public static Player getPlayer(int i) { return players.get(i); }
+    public Player getPlayer(int i) { return players.get(i); }
 
-    public static int getNumberOfPlayers() {
+    public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
-    public static void setNumberOfPlayers(int numberOfPlayers) {
-        Game.numberOfPlayers = numberOfPlayers;
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     public void setStart(){ start = true; }

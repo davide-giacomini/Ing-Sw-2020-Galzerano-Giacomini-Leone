@@ -109,13 +109,13 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
      * This method sends the player who has lost.
      */
     public void sendLosingAdvice() {
-        clientHandler.sendLose();
+        clientHandler.showYouLost();
     }
 
     /**
      * This method sends the player who has win.
      */
     public void sendWinningAdvice() {
-        clientHandler.sendWin();
+        clientHandler.showYouWon();
     }
 }

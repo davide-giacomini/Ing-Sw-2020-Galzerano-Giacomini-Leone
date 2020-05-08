@@ -15,12 +15,13 @@ import static org.junit.Assert.*;
 public class BoardTest {
     private Board board;
     private Player player;
+    Game game;
 
     @Before
     public void setUp() {
-
-        board = board.getBoard();
-        player = new Player("Arianna", Color.BLUE);
+        game = new Game(3);
+        board = game.getBoard();
+        player = new Player("Arianna", Color.BLUE, game);
     }
 
     @After
@@ -28,11 +29,11 @@ public class BoardTest {
         board = null;
     }
 
-    @Test
+   /* @Test
     public void singletonBoard() {
-        Board secondBoard = Board.getBoard();
+        Board secondBoard = board.getBoard();
         assertSame(board,secondBoard);
-    }
+    }*/
 
     @Test
     public void getNearbySlot_CorrectInput_CorrectOutput_Left() throws InvalidDirectionException {

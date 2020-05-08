@@ -27,14 +27,16 @@ public class Player {
     private God god;
     private GodName godName;
     private Turn turn;
+    private final Game game;
 
 
-    public Player(String username, Color workersColor) {
+    public Player(String username, Color workersColor, Game game) {
         this.username = username;
         this.color = workersColor;
+        this.game = game;
         workers = new Worker[WORKERS_NUMBER];
-        workers[Worker.MALE] = new Worker(workersColor, Gender.MALE);
-        workers[Worker.FEMALE] = new Worker(workersColor, Gender.FEMALE);
+        workers[Worker.MALE] = new Worker(workersColor, Gender.MALE, game);
+        workers[Worker.FEMALE] = new Worker(workersColor, Gender.FEMALE, game);
     }
     
     public boolean isLoosing() {
@@ -174,7 +176,7 @@ public class Player {
     public boolean move(Direction direction, Worker worker)
             throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
         int previousLevel = worker.getSlot().getLevel().ordinal();
-        int wishedLevel = Board.getNearbySlot(direction, worker.getSlot()).getLevel().ordinal();
+        int wishedLevel = game.getBoard().getNearbySlot(direction, worker.getSlot()).getLevel().ordinal();
         if (cannotMoveUp && wishedLevel > previousLevel) {
             throw new InvalidMoveException("Level not reachable");
         }
@@ -193,5 +195,8 @@ public class Player {
             throws IndexOutOfBoundsException, InvalidDirectionException, InvalidBuildException {
         god.build(direction, worker);
     }
-
+    
+    public Game getGame() {
+        return game;
+    }
 }

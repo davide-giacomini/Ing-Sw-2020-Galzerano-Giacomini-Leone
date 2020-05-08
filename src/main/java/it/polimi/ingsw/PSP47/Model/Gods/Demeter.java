@@ -58,8 +58,8 @@ public class Demeter extends God {
         if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
     
         if (player.getTurn().getNumberOfBuildings() == 0)
-            previousSlot = Board.getNearbySlot(direction, worker.getSlot());
-        else if (Board.getNearbySlot(direction, worker.getSlot()).equals(previousSlot))
+            previousSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
+        else if (player.getGame().getBoard().getNearbySlot(direction, worker.getSlot()).equals(previousSlot))
             throw new InvalidBuildException("You are trying to build on the same slot as the previous one");
     
         try {
@@ -106,7 +106,7 @@ public class Demeter extends God {
                 try {
                     // If the direction is out of the board, jump to the catch
                     worker.checkDirection(direction);
-                    Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
+                    Slot destinationSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
                     // else, check if the worker can build on the destinationSlot
                     if (!destinationSlot.equals(previousSlot) && !destinationSlot.isOccupied())
                         return true;

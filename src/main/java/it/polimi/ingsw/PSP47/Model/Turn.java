@@ -16,12 +16,12 @@ public class Turn {
     private final int MAX_BUILDINGS;
     private int numberOfMovements;
     private int numberOfBuildings;
-    private Player player;
+    private final Player player;
     private Gender workerGender;
     private boolean wantsToBuildDome;
     private boolean canUseBothWorkers;
     private boolean alreadySetWorker;
-    private boolean canAlwaysBuildDome;
+    private final boolean canAlwaysBuildDome;
     
     public Turn(Player player) {
         this.numberOfMovements = 0;
