@@ -18,6 +18,10 @@ public abstract class VirtualViewObservable {
     public void addVirtualViewListener(VirtualViewListener virtualViewListener) {
         virtualViewListeners.add(virtualViewListener);
     }
+
+    public void removeVirtualViewListener(VirtualViewListener virtualViewListener) {
+        virtualViewListeners.remove(virtualViewListener);
+    }
     
     /**
      * This method notifies every listener that a message from the client arrived to the server.

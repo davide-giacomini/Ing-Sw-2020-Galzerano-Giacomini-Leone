@@ -127,5 +127,9 @@ public class Game {
         return null;
     }
 
+    public void removePlayer (Player player) {
+        players.remove(player);
+    }
+
 }
 

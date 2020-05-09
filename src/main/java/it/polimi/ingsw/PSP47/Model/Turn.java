@@ -40,7 +40,6 @@ public class Turn {
         this.canAlwaysBuildDome = player.getGod().canAlwaysBuildDome();
         this.alreadySetWorker = false;
         checkIfWorkersAreParalyzed();
-
     }
 
     /**
@@ -135,21 +134,8 @@ public class Turn {
         Worker femaleWorker = player.getWorker(Gender.FEMALE);
         God playerGod = player.getGod();
 
-        if (femaleWorker!=null && maleWorker!=null) {
-            if (femaleWorker.getSlot() != null && maleWorker.getSlot() != null && !playerGod.checkIfCanGoOn(femaleWorker) && !playerGod.checkIfCanGoOn(maleWorker)
-                    || femaleWorker.getSlot() == null && maleWorker.getSlot()!=null && !playerGod.checkIfCanGoOn(maleWorker)
-                    || maleWorker.getSlot() == null && femaleWorker.getSlot()!=null && !playerGod.checkIfCanGoOn(femaleWorker)) {
-                player.setLoosing(true);    // it also deletes the workers.
-            }
-        }
-        else if (femaleWorker!=null) {
-            if (femaleWorker.getSlot() != null && !playerGod.checkIfCanGoOn(femaleWorker))
-                player.setLoosing(true);
-        }
-        else {
-            if (maleWorker.getSlot()!=null && !playerGod.checkIfCanGoOn(maleWorker))
-                player.setLoosing(true);
-        }
+        if (!playerGod.checkIfCanGoOn(maleWorker) && !playerGod.checkIfCanGoOn(femaleWorker))
+            player.setLoosing(true);
     }
 
     /**

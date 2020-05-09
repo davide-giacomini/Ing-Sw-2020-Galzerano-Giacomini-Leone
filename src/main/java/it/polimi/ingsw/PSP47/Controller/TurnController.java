@@ -33,8 +33,10 @@ public class TurnController {
      * This method is called by the GameController to start a turn game.
      */
     void startTurn() {
-        if (player.isLoosing())
+        if (player.isLoosing()) {
             controller.removeLosingPlayer();
+            return;
+        }
         views.get(indexOfCurrentPlayer).sendWhichWorker();
         controller.sendAnAdvice();
     }
@@ -59,7 +61,7 @@ public class TurnController {
             if (!player.getGod().checkIfCanGoOn(player.getWorker(workerGender))) {
                 if (workerGender == Gender.MALE)
                     workerGender = Gender.FEMALE;
-                if (workerGender == Gender.FEMALE)
+                else
                     workerGender = Gender.MALE;
                 String textError = "Your worker is blocked. You are forced to use the other one";
                 views.get(indexOfCurrentPlayer).sendError(textError);
@@ -118,7 +120,7 @@ public class TurnController {
                         return;
                     }
                     if (player.getGod().getName().equals("Athena")) {
-                        Boolean moveUp = ((Athena)player.getGod()).isMoveUp();
+                        boolean moveUp = ((Athena)player.getGod()).isMoveUp();
                         for (int i = 0; i<game.getNumberOfPlayers(); i++) {
                             if (game.getPlayer(i) != null && game.getPlayer(i) != player) {
                                 game.getPlayer(i).setCannotMoveUp(moveUp);
@@ -176,7 +178,7 @@ public class TurnController {
                     return;
                 }
                 controller.turn();
-                break;
+                return;
         }
     }
 }

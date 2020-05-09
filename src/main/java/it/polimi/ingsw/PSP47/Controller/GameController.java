@@ -247,9 +247,9 @@ public class GameController implements VirtualViewListener {
      */
     private void orderViews() {
         VirtualView temp;
-        for(int i=0; i<numberOfPlayers; i++) {
+        for(int i=0; i<game.getNumberOfPlayers(); i++) {
             if (!game.getPlayer(i).getUsername().equals(views.get(i).getUsername()))
-                for(int j=0; j<numberOfPlayers; j++) {
+                for(int j=0; j<game.getNumberOfPlayers(); j++) {
                     if (views.get(j).getUsername().equals(game.getPlayer(i).getUsername())) {
                         temp = views.get(i);
                         views.set(i, views.get(j));
@@ -310,25 +310,25 @@ public class GameController implements VirtualViewListener {
      * If the players were just two, it also declares the winner and ends the game.
      */
     void removeLosingPlayer() {
-        for (VirtualView view : views) {
-            view.sendImportant("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just lost.");
-        }
+        views.get(indexOfCurrentPlayer).sendImportant("Hai perso");
+        remove();
+    }
 
-        Slot slot = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
-        slot.setWorker(null);
-        slot = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
-        slot.setWorker(null);
-
-        game.getPlayers().remove(game.getPlayer(indexOfCurrentPlayer));
-        views.get(indexOfCurrentPlayer).sendLosingAdvice();
-
-        views.remove(views.get(indexOfCurrentPlayer));
-
+    private void remove() {
         if (game.getNumberOfPlayers() == 2) {
             endGame();
         }
         else {
+            game.getPlayer(indexOfCurrentPlayer).deleteWorkers();
+
+            game.removePlayer(game.getPlayer(indexOfCurrentPlayer));
+            views.get(indexOfCurrentPlayer).sendLosingAdvice();
+            views.get(indexOfCurrentPlayer).removeVirtualViewListener(this);
+            views.remove(views.get(indexOfCurrentPlayer));
+
+            setNumberOfPlayers(2);
             game.setNumberOfPlayers(2);
+            orderViews();
             fixIndexAndStart();
         }
     }
@@ -338,7 +338,7 @@ public class GameController implements VirtualViewListener {
      */
     void endGame() {
         for (VirtualView view : views) {
-            view.sendImportant("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just won.");
+            view.sendImportant("The player " + views.get(indexOfCurrentPlayer).getUsername() + " has just won.");
         }
         views.get(indexOfCurrentPlayer).sendWinningAdvice();
     }
@@ -352,5 +352,9 @@ public class GameController implements VirtualViewListener {
     @Override
     public void update(Visitable visitableObject) {
         visitableObject.accept(controllerVisitor);
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 }

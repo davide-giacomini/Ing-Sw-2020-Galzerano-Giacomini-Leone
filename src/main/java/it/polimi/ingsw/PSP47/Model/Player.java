@@ -51,22 +51,10 @@ public class Player {
      */
     public void setLoosing(boolean loosing) {
         isLoosing = loosing;
-        if (loosing) {
-            for (Worker worker : workers) {
-                if (worker==null)
-                    continue;
-                worker.setSlot(null);
-                workers[worker.getGender().ordinal()] = null;
-            }
-        }
     }
 
     public GodName getGodName() {
         return godName;
-    }
-
-    public void setGodName(GodName godName) {
-        this.godName = godName;
     }
 
     public Color getColor() {
@@ -193,5 +181,11 @@ public class Player {
             throws IndexOutOfBoundsException, InvalidDirectionException, InvalidBuildException {
         god.build(direction, worker);
     }
-    
+
+    public void deleteWorkers() {
+        for (Worker worker : workers) {
+            Slot slot = worker.getSlot();
+            slot.setWorker(null);
+        }
+    }
 }
