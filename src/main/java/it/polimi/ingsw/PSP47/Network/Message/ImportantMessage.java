@@ -9,7 +9,7 @@ public class ImportantMessage extends Message {
 
     public ImportantMessage(String text) {
         this.text=text;
-        this.messageType= MessageType.ERROR;
+        this.messageType= MessageType.IMPORTANT;
     }
 
     public String getText() {

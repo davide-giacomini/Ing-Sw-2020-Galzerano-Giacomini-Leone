@@ -29,7 +29,7 @@ public class Chronus extends God  {
 
         boolean winCondition = false;
 
-        if (player.getGame().getBoard().getCountDomes() == 5)
+        if (player.getTurn().getBoard().getCountDomes() == 5)
             return true;
 
         try {
@@ -46,7 +46,7 @@ public class Chronus extends God  {
 
         try {
             worker.build(direction);
-            if (player.getGame().getBoard().getCountDomes() == 5) player.setWinning(true);
+            if (player.getTurn().getBoard().getCountDomes() == 5) player.setWinning(true);
         } catch (SlotOccupiedException e) {
             throw new InvalidBuildException("Slot occupied");
         }

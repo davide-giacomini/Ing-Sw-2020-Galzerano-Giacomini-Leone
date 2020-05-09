@@ -39,7 +39,7 @@ public class Hestia extends God {
 
         if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
 
-        if (player.getTurn().getNumberOfBuildings() == 1 && (player.getGame().getBoard().getNearbySlot(direction, worker.getSlot()).isPerimeterSlot()))
+        if (player.getTurn().getNumberOfBuildings() == 1 && (player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot()).isPerimeterSlot()))
         throw new InvalidBuildException("You are not allowed to build a second time on a perimeter slot!");
 
         try {
@@ -71,7 +71,7 @@ public class Hestia extends God {
                 try {
                     // If the direction is out of the board, jump to the catch
                     worker.checkDirection(direction);
-                    Slot destinationSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
+                    Slot destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot());
                     // else, check if the worker can build on the destinationSlot
                     if ( !(destinationSlot.isPerimeterSlot()) && !destinationSlot.isOccupied())
                         return true;

@@ -175,6 +175,10 @@ public class NetworkHandler implements Runnable, ViewListener {
                     String errorText = ((ErrorMessage) message).getErrorText();
                     view.showErrorMessage(errorText);
                     break;
+                case IMPORTANT:
+                    String text = ((ImportantMessage) message).getText();
+                    view.showImportantMessage(text);
+                    break;
                 case LIST_OF_GODS:
                     VisitableListOfGods visitableGods = (VisitableListOfGods) message.getContent();
                     ArrayList<GodName> godNames = visitableGods.getGodNames();

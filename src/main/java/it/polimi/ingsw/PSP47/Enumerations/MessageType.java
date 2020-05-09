@@ -27,6 +27,5 @@ public enum MessageType {
     GOD_CHOSEN,
     OPPONENT_LOOSING,
     OPPONENT_WINNING,
-    IMPORTANT,
     PING;
 }

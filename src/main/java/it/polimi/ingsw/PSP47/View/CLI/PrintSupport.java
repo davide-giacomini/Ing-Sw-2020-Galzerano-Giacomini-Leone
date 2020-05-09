@@ -19,6 +19,7 @@ public class PrintSupport {
     private static final String WITH_LEV2_PART_SLOT = "|   " + AnsiCode.ANSI_LEVEL2+ "   |";
     private static final String WITH_LEV3_PART_SLOT = "|   " + AnsiCode.ANSI_LEVEL3 + "   |";
     private static final String WITH_DOME_PART_SLOT = "|   " + AnsiCode.ANSI_DOME + "   |";
+    private static final String WITH_DOME_ATLAS_PART_SLOT = "|___" + AnsiCode.ANSI_DOME + "___|";
 
     private static final String[] EMPTY_PARTS = new String[5];
 
@@ -164,7 +165,7 @@ public class PrintSupport {
                     return SLOT_PARTS;
 
                 case 5:
-                    SLOT_PARTS[4]= WITH_DOME_PART_SLOT;
+                    SLOT_PARTS[4]= WITH_DOME_ATLAS_PART_SLOT;
                     SLOT_PARTS[3]= MIDDLE_FREE_PART_SLOT;
                     SLOT_PARTS[2]= MIDDLE_FREE_PART_SLOT;
                     SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
