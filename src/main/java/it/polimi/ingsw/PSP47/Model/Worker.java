@@ -16,13 +16,15 @@ public class Worker {
      * Variable which represents a female. It's useful to call the female worker through the player's array.
      */
     public final static int FEMALE = 1;
-    private Color color;
-    private Gender gender;
+    private final Color color;
+    private final Gender gender;
     private Slot slot;
+    private final Game game;
 
-    protected Worker(Color color, Gender gender) {
+    protected Worker(Color color, Gender gender, Game game) {
         this.color = color;
         this.gender = gender;
+        this.game = game;
     }
     
     /**
@@ -81,7 +83,7 @@ public class Worker {
 
         Slot destinationSlot;
         try {
-            destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
+            destinationSlot = game.getBoard().getNearbySlot(direction, slot);
         }
         catch (InvalidDirectionException e){
             throw new InvalidMoveException("Invalid direction of the getNearBySlot.");
@@ -107,7 +109,7 @@ public class Worker {
         
         Slot destinationSlot;
         try {
-            destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
+            destinationSlot = game.getBoard().getNearbySlot(direction, slot);
         }
         catch (InvalidDirectionException e){
             throw new InvalidBuildException("Invalid direction for the destination slot");
@@ -129,7 +131,7 @@ public class Worker {
     public void buildDome (Direction direction) throws InvalidDirectionException, SlotOccupiedException {
         checkDirection(direction);
 
-        Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
+        Slot destinationSlot = game.getBoard().getNearbySlot(direction, slot);
         if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
         if (destinationSlot.getLevel() == Level.LEVEL3)
             destinationSlot.setLevel(Level.DOME);
@@ -148,25 +150,25 @@ public class Worker {
                 if (slot.getColumn()<1) throw new IndexOutOfBoundsException();
                 break;
             case DOWN:
-                if (slot.getRow()> Board.ROWSNUMBER -2) throw new IndexOutOfBoundsException();
+                if (slot.getRow()> Board.ROWS_NUMBER -2) throw new IndexOutOfBoundsException();
                 break;
             case UP:
                 if (slot.getRow()<1) throw new IndexOutOfBoundsException();
                 break;
             case RIGHT:
-                if (slot.getColumn()>Board.COLUMNSNUMBER -2) throw new IndexOutOfBoundsException();
+                if (slot.getColumn()>Board.COLUMNS_NUMBER -2) throw new IndexOutOfBoundsException();
                 break;
             case LEFTDOWN:
-                if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()<1) throw new IndexOutOfBoundsException();
+                if (slot.getRow()>Board.ROWS_NUMBER -2 || slot.getColumn()<1) throw new IndexOutOfBoundsException();
                 break;
             case RIGHTDOWN:
-                if (slot.getRow()>Board.ROWSNUMBER-2 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
+                if (slot.getRow()>Board.ROWS_NUMBER -2 || slot.getColumn()>Board.COLUMNS_NUMBER -2) throw new IndexOutOfBoundsException();
                 break;
             case LEFTUP:
                 if (slot.getRow()<1|| slot.getColumn()<1) throw new IndexOutOfBoundsException();
                 break;
             case RIGHTUP:
-                if (slot.getRow()<1 || slot.getColumn()>Board.COLUMNSNUMBER-2) throw new IndexOutOfBoundsException();
+                if (slot.getRow()<1 || slot.getColumn()>Board.COLUMNS_NUMBER -2) throw new IndexOutOfBoundsException();
                 break;
         }
     }

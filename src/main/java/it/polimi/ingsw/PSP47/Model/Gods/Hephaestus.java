@@ -60,8 +60,8 @@ public class Hephaestus extends God {
         if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException(" Order of movements not correct");
 
         if (player.getTurn().getNumberOfBuildings() == 0)
-            doubleBuildSlot = Board.getNearbySlot(direction, worker.getSlot());
-        else if (!Board.getNearbySlot(direction, worker.getSlot()).equals(doubleBuildSlot) || (worker.getSlot().getLevel().ordinal()== 3) )
+            doubleBuildSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
+        else if (!player.getGame().getBoard().getNearbySlot(direction, worker.getSlot()).equals(doubleBuildSlot) || (worker.getSlot().getLevel().ordinal()== 3) )
             throw new InvalidBuildException("The second build cannot be permitted on a different slot");
 
         try {
@@ -109,7 +109,7 @@ public class Hephaestus extends God {
                 try {
                     // If the direction is out of the board, jump to the catch
                     worker.checkDirection(direction);
-                    Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
+                    Slot destinationSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
                     // else, check if the worker can build on the destinationSlot
                     if (destinationSlot.equals(doubleBuildSlot) && !destinationSlot.isOccupied())
                         return true;

@@ -17,12 +17,14 @@ public class WorkerTest {
     private Board board;
     private Player player;
     private Player otherPlayer;
-
+    private Game game;
+    
     @Before
     public void setUp() {
-        board = Board.getBoard();
-        player = new Player("first", Color.RED);
-        otherPlayer = new Player("second", Color.BLUE);
+        game = new Game(3);
+        board = game.getBoard();
+        player = new Player("first", Color.RED, game);
+        otherPlayer = new Player("second", Color.BLUE, game);
         otherWorkerMale = otherPlayer.getWorker(Gender.MALE);
         workerMale = player.getWorker(Gender.MALE);
     }

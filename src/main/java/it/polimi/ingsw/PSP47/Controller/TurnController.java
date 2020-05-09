@@ -23,7 +23,7 @@ public class TurnController {
         this.views = views;
         this.game = game;
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
-        this.player = Game.getPlayer(indexOfCurrentPlayer);
+        this.player = game.getPlayer(indexOfCurrentPlayer);
         this.turn = new Turn(player);
         this.controller = controller;
     }
@@ -96,14 +96,14 @@ public class TurnController {
                         views.get(indexOfCurrentPlayer).sendWhichAction();
                         return;
                     }
-                    else if (Board.getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).getLevel() == (Level.DOME) ||
-                            Board.getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).getLevel() == (Level.ATLAS_DOME)) {
+                    else if (game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).getLevel() == (Level.DOME) ||
+                            game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).getLevel() == (Level.ATLAS_DOME)) {
                         String textError = "This slot contains a dome, you cannot move here";
                         views.get(indexOfCurrentPlayer).sendError(textError);
                         views.get(indexOfCurrentPlayer).sendWhichAction();
                         return;
                     }
-                    else if (Board.getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).isWorkerOnSlot()) {
+                    else if (game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).isWorkerOnSlot()) {
                         if (!(player.getGod().getName().equals("Apollo") || player.getGod().getName().equals("Minotaur"))) {
                             String textError = "This slot contains another worker, you cannot move here";
                             views.get(indexOfCurrentPlayer).sendError(textError);

@@ -13,25 +13,24 @@ public class Board {
     /**
      * Number of rows of the board.
      */
-    public final static int ROWSNUMBER = 5;
+    public final static int ROWS_NUMBER = 5;
     /**
      * Number of columns of the board
      */
-    public final static int COLUMNSNUMBER = 5;
-    private static Slot[][] slots = new Slot[5][5];
-    private static Board board = null;
+    public final static int COLUMNS_NUMBER = 5;
+    private final Slot[][] slots = new Slot[5][5];
     
     /**
      * Create the slots inside the board.
      */
-    private Board() {
-        for (int i = 0; i < ROWSNUMBER; i++) {
-            for (int j = 0; j < COLUMNSNUMBER; j++) {
+    Board() {
+        for (int i = 0; i < ROWS_NUMBER; i++) {
+            for (int j = 0; j < COLUMNS_NUMBER; j++) {
                 slots[i][j] = new Slot(i,j);
             }
         }
     }
-    private static Board createBoard(){
+    /*private static Board createBoard(){
         if (board==null) board = new Board();
         return board;
     }
@@ -39,7 +38,7 @@ public class Board {
     public static Board getBoard() {
         if (board==null) createBoard();
         return board;
-    }
+    }*/
     
     public Slot getSlot(int row, int column) {
         return slots[row][column];
@@ -53,7 +52,7 @@ public class Board {
      * @return the slot nearby the current slot, in the direction specified
      * @throws InvalidDirectionException if none of the cases are verified.
      */
-    public static Slot getNearbySlot(Direction direction, Slot currentSlot) throws InvalidDirectionException {
+    public Slot getNearbySlot(Direction direction, Slot currentSlot) throws InvalidDirectionException {
         switch (direction){
             case LEFT:
                 return slots[currentSlot.getRow()][currentSlot.getColumn()-1];
@@ -81,8 +80,8 @@ public class Board {
      * It's useful for testing.
      */
     public void clearBoard() {
-        for (int i = 0; i < ROWSNUMBER; i++) {
-            for (int j = 0; j < COLUMNSNUMBER; j++) {
+        for (int i = 0; i < ROWS_NUMBER; i++) {
+            for (int j = 0; j < COLUMNS_NUMBER; j++) {
                 slots[i][j].removeAll();
                 slots[i][j].setWorker(null);
                 slots[i][j].setLevel(Level.GROUND);

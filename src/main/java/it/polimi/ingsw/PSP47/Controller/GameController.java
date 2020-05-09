@@ -42,7 +42,7 @@ public class GameController implements VirtualViewListener {
         for(Map.Entry<String,Color> entry : mapUserColor.entrySet()) {
             String username = entry.getKey();
             Color color = entry.getValue();
-            game.addPlayer(new Player(username, color));
+            game.addPlayer(new Player(username, color, game));
 
             VirtualView virtualView = mapUserVirtualView.get(username);
             setView(virtualView);
@@ -106,7 +106,7 @@ public class GameController implements VirtualViewListener {
             return;
         }
         try {
-            Game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, Game.getPlayer(indexOfCurrentPlayer)));
+            game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, game.getPlayer(indexOfCurrentPlayer)));
         } catch (IOException e) {
             views.get(indexOfCurrentPlayer).sendError("Try again, there were some troubles in the conversion.");
             ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
@@ -168,10 +168,10 @@ public class GameController implements VirtualViewListener {
                 views.get(indexOfCurrentPlayer).sendSetWorkers();
                 return;
             }
-            Worker chosenWorkerMale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);
-            Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
-            Worker chosenWorkerFemale = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
-            Game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
+            Worker chosenWorkerMale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);
+            game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
+            Worker chosenWorkerFemale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
+            game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
 
             incrementIndex();
             if(indexOfCurrentPlayer == 0) {
@@ -237,9 +237,9 @@ public class GameController implements VirtualViewListener {
     private void orderViews() {
         VirtualView temp;
         for(int i=0; i<numberOfPlayers; i++) {
-            if (!Game.getPlayer(i).getUsername().equals(views.get(i).getUsername()))
+            if (!game.getPlayer(i).getUsername().equals(views.get(i).getUsername()))
                 for(int j=0; j<numberOfPlayers; j++) {
-                    if (views.get(j).getUsername().equals(Game.getPlayer(i).getUsername())) {
+                    if (views.get(j).getUsername().equals(game.getPlayer(i).getUsername())) {
                         temp = views.get(i);
                         views.set(i, views.get(j));
                         views.set(j, temp);
@@ -303,20 +303,21 @@ public class GameController implements VirtualViewListener {
             view.sendError("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just lost.");
         }
 
-        Slot slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
+        Slot slot = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
         slot.setWorker(null);
-        slot = Game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
+        slot = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
         slot.setWorker(null);
 
-        game.getPlayers().remove(Game.getPlayer(indexOfCurrentPlayer));
+        game.getPlayers().remove(game.getPlayer(indexOfCurrentPlayer));
         views.get(indexOfCurrentPlayer).sendLosingAdvice();
+
         views.remove(views.get(indexOfCurrentPlayer));
 
-        if (Game.getNumberOfPlayers() == 2) {
+        if (game.getNumberOfPlayers() == 2) {
             endGame();
         }
         else {
-            Game.setNumberOfPlayers(2);
+            game.setNumberOfPlayers(2);
             fixIndexAndStart();
         }
     }

@@ -21,12 +21,14 @@ public class ArtemisTest {
     private Worker maleWorker;
     private Player otherPlayer;
     private Worker otherWorker;
-
+    private Game game;
+    
     @Before
     public void setUp ()
             throws Exception {
-        board = Board.getBoard();
-        player = new Player("Monica", Color.YELLOW);
+        game =new Game(3);
+        board = game.getBoard();
+        player = new Player("Monica", Color.YELLOW, game);
         player.setGod(new Artemis(player, "Artemis"));
         maleWorker = player.getWorker(Gender.MALE);
         maleWorker.setSlot(board.getSlot(1,1));
@@ -34,7 +36,7 @@ public class ArtemisTest {
         femaleWorker.setSlot(board.getSlot(4,4));
         turn = new Turn(player);
         turn.setWorkerGender(Gender.MALE);
-        otherPlayer = new Player("Arianna", Color.BLUE);
+        otherPlayer = new Player("Arianna", Color.BLUE, game);
         otherWorker = otherPlayer.getWorker(Gender.FEMALE);
     }
 

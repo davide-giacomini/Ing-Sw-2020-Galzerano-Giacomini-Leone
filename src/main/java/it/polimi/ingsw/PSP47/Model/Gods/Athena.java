@@ -42,16 +42,16 @@ public class Athena extends God{
         }
         int actualLevel = worker.getSlot().getLevel().ordinal();
         if (actualLevel>initialLevel) {
-            for (int i = 0; i<Game.getNumberOfPlayers(); i++) {
-                if (Game.getPlayer(i) != null && Game.getPlayer(i) != player) {
-                    Game.getPlayer(i).setCannotMoveUp(true);
+            for (int i = 0; i<player.getGame().getNumberOfPlayers(); i++) {
+                if (player.getGame().getPlayer(i) != null && player.getGame().getPlayer(i) != player) {
+                    player.getGame().getPlayer(i).setCannotMoveUp(true);
                 }
             }
         }
         else {
-            for (int i = 0; i<Game.getNumberOfPlayers(); i++) {
-                if (Game.getPlayer(i) != null && Game.getPlayer(i) != player) {
-                    Game.getPlayer(i).setCannotMoveUp(false);
+            for (int i = 0; i<player.getGame().getNumberOfPlayers(); i++) {
+                if (player.getGame().getPlayer(i) != null && player.getGame().getPlayer(i) != player) {
+                    player.getGame().getPlayer(i).setCannotMoveUp(false);
                 }
             }
         }

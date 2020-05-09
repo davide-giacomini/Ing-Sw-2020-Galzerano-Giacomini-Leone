@@ -16,11 +16,13 @@ import static org.junit.Assert.assertEquals;
 public class PlayerTest {
     Player player;
     Board board;
+    Game game;
 
     @Before
     public void setUp()  {
-        player = new Player ("Arianna", Color.BLUE);
-        board = board.getBoard();
+        game = new Game(3);
+        player = new Player ("Arianna", Color.BLUE, game);
+        board = game.getBoard();
     }
 
     @After
@@ -125,14 +127,14 @@ public class PlayerTest {
 
     @Test
     public void putWorkerOnSlot() {
-      Board board =  Board.getBoard();
+      Board board =  game.getBoard();
         assertTrue(player.putWorkerOnSlot(player.getWorker(Gender.MALE), board.getSlot(1,1)));
         assertEquals(player.getWorker(Gender.MALE), board.getSlot(1,1).getWorker());
     }
 
     @Test
     public void getWorkerPosition(){
-        Board board =  Board.getBoard();
+        Board board =  game.getBoard();
         player.putWorkerOnSlot(player.getWorker(Gender.MALE), board.getSlot(1,1));
         assertEquals(player.getWorkerPosition(player.getWorker(Gender.MALE)), board.getSlot(1,1));
     }
@@ -140,7 +142,7 @@ public class PlayerTest {
     @Test
     public void move()
             throws Exception {
-        Board board = Board.getBoard();
+        Board board = game.getBoard();
         player.setGod(new Apollo(player, "Apollo"));
         player.putWorkerOnSlot(player.getWorker(Gender.MALE), board.getSlot(1, 1));
         player.move(Direction.LEFTUP, player.getWorker(Gender.MALE));
@@ -150,7 +152,7 @@ public class PlayerTest {
     @Test(expected = InvalidMoveException.class)
     public void move_InvalidMoveException() throws Exception {
         player.setCannotMoveUp(true);
-        Board board = Board.getBoard();
+        Board board = game.getBoard();
         player.setGod(new Apollo(player, "Apollo"));
         board.getSlot(0,0).setLevel(Level.LEVEL1);
         player.putWorkerOnSlot(player.getWorker(Gender.MALE), board.getSlot(1, 1));

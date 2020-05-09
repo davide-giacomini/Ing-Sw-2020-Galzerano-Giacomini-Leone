@@ -1,11 +1,10 @@
 package it.polimi.ingsw.PSP47.Network.Client;
 
 import it.polimi.ingsw.PSP47.Network.Server.*;
-import it.polimi.ingsw.PSP47.View.View;
-import it.polimi.ingsw.PSP47.View.CLI;
+import it.polimi.ingsw.PSP47.View.CLI.View;
+import it.polimi.ingsw.PSP47.View.CLI.CLI;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -42,10 +41,8 @@ public class Client {
     
         // open a connection with the server
         Socket serverSocket;
-        Socket pingSocket;
         try {
             serverSocket = new Socket(serverIpAddress, Server.SOCKET_PORT);
-            pingSocket = new Socket(serverIpAddress, Server.PING_PORT);
         } catch (IOException e) {
             System.out.println("Server unreachable.");
             return;
@@ -55,8 +52,6 @@ public class Client {
         NetworkHandler networkHandler = new NetworkHandler(view , serverSocket);
         Thread thread = new Thread(networkHandler);
         thread.start();
-        
-        new Thread(new PingHandler(pingSocket, networkHandler)).start();
     }
     
     public View getView() {

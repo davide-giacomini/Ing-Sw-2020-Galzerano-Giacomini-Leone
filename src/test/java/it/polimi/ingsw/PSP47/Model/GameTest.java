@@ -19,9 +19,9 @@ public class GameTest {
     @Before
     public void setUp() {
         game = new Game(numberOfPlayers);
-        player = new Player("Ari", it.polimi.ingsw.PSP47.Enumerations.Color.RED);
+        player = new Player("Ari", it.polimi.ingsw.PSP47.Enumerations.Color.RED, game);
         game.addPlayer(player);
-        board = board.getBoard();
+        board = game.getBoard();
     }
 
     @After
@@ -31,7 +31,7 @@ public class GameTest {
 
     @Test
     public void checkNumberOfPlayers() {
-        assertEquals(Game.getNumberOfPlayers(), numberOfPlayers);
+        assertEquals(game.getNumberOfPlayers(), numberOfPlayers);
     }
 
 
@@ -44,20 +44,20 @@ public class GameTest {
     @Test
     public void getPlayer() {
         game.addPlayer(player);
-        assertEquals(Game.getPlayer(0), player);
+        assertEquals(game.getPlayer(0), player);
         assertEquals(game.getPlayer("Ari"), player);
 
     }
 
     @Test
     public void setNumberOfPlayers(){
-        Game.setNumberOfPlayers(1);
-        assertEquals(Game.getNumberOfPlayers(),1);
+        game.setNumberOfPlayers(1);
+        assertEquals(game.getNumberOfPlayers(),1);
     }
 
     @Test
     public void getPlayers(){
-        Player p2 = new Player("A", Color.BLUE);
+        Player p2 = new Player("A", Color.BLUE, game);
         game.addPlayer(p2);
 
         ArrayList<Player> listForCompare = new ArrayList<>();
@@ -69,66 +69,66 @@ public class GameTest {
 
     @Test
     public void putRandomInLastPosition_WhenHeWasFirst_twoPlayers() {
-        Player p2 = new Player("Moni", Color.RED);
+        Player p2 = new Player("Moni", Color.RED, game);
         game.addPlayer(p2);
         game.setRandomPlayer(player);
         game.putRandomAtLastPosition();
-        assertEquals(player, Game.getPlayer(1));
+        assertEquals(player, game.getPlayer(1));
     }
 
     @Test
     public void putRandomInLastPosition_WhenHeWasAlreadyHere_twoPlayers() {
-        Player p2 = new Player("Moni", Color.RED);
+        Player p2 = new Player("Moni", Color.RED, game);
         game.addPlayer(p2);
         game.setRandomPlayer(p2);
         game.putRandomAtLastPosition();
-        assertEquals(p2, Game.getPlayer(1));
+        assertEquals(p2, game.getPlayer(1));
     }
 
     @Test
     public void putRandomInLastPosition_WhenHeWasFirst_threePlayers() {
-        Game.setNumberOfPlayers(3);
-        Player p2 = new Player("Moni", Color.RED);
+        game.setNumberOfPlayers(3);
+        Player p2 = new Player("Moni", Color.RED, game);
         game.addPlayer(p2);
-        Player p3 = new Player("David", Color.CYAN);
+        Player p3 = new Player("David", Color.CYAN, game);
         game.addPlayer(p3);
         game.setRandomPlayer(player);
         game.putRandomAtLastPosition();
-        assertEquals(player, Game.getPlayer(2));
+        assertEquals(player, game.getPlayer(2));
     }
 
     @Test
     public void putRandomInLastPosition_WhenHeWasAlreadyHere_threePlayers() {
-        Game.setNumberOfPlayers(3);
-        Player p2 = new Player("Moni", Color.RED);
+        game.setNumberOfPlayers(3);
+        Player p2 = new Player("Moni", Color.RED, game);
         game.addPlayer(p2);
-        Player p3 = new Player("David", Color.CYAN);
+        Player p3 = new Player("David", Color.CYAN, game);
         game.addPlayer(p3);
         int size = game.getPlayers().size();
         game.setRandomPlayer(p3);
         game.putRandomAtLastPosition();
-        assertEquals(p3, Game.getPlayer(2));
+        assertEquals(p3, game.getPlayer(2));
     }
 
     @Test
     public void putRandomInLastPosition_WhenHeWasTheSecondOne_threePlayers() {
-        Game.setNumberOfPlayers(3);
-        Player p2 = new Player("Moni", Color.RED);
+        game.setNumberOfPlayers(3);
+        Player p2 = new Player("Moni", Color.RED, game);
         game.addPlayer(p2);
-        Player p3 = new Player("David", Color.CYAN);
+        Player p3 = new Player("David", Color.CYAN, game);
         game.addPlayer(p3);
         game.setRandomPlayer(p2);
         assertEquals(p2, game.getRandomPlayer());
         game.putRandomAtLastPosition();
-        assertEquals(p2, Game.getPlayer(2));
+        assertEquals(p2, game.getPlayer(2));
     }
 
     @Test
     public void randomOrder() {
-        Game.setNumberOfPlayers(3);
-        Player p2 = new Player("Moni", Color.RED);
+        game.setNumberOfPlayers(3);
+        Player p2 = new Player("Moni", Color.RED, game);
         game.addPlayer(p2);
-        Player p3 = new Player("David", Color.CYAN);
+        Player p3 = new Player("David", Color.CYAN, game);
         game.addPlayer(p3);
         game.createNewPlayersList();
         assertEquals(game.getPlayers().size(), 3);
