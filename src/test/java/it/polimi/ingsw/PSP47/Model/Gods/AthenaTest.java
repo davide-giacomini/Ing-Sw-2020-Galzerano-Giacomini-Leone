@@ -27,18 +27,18 @@ public class AthenaTest {
             throws Exception {
         game = new Game(3);
         board = game.getBoard();
-        athenaPlayer = new Player("Monica", Color.YELLOW, game);
+        athenaPlayer = new Player("Monica", Color.YELLOW);
         athenaPlayer.setGod(new Athena(athenaPlayer, "Athena"));
         athenaWorker = athenaPlayer.getWorker(Gender.MALE);
         athenaWorker.setSlot(board.getSlot(3,3));
         otherAthenaWorker = athenaPlayer.getWorker(Gender.FEMALE);
         otherAthenaWorker.setSlot(board.getSlot(0,0));
-        secondPlayer = new Player("Arianna", Color.BLUE, game);
-        thirdPlayer = new Player("Davide", Color.GREEN, game);
+        secondPlayer = new Player("Arianna", Color.BLUE);
+        thirdPlayer = new Player("Davide", Color.GREEN);
         game.addPlayer(athenaPlayer);
         game.addPlayer(secondPlayer);
         game.addPlayer(thirdPlayer);
-        turn = new Turn(athenaPlayer);
+        turn = new Turn(athenaPlayer, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
     }
 

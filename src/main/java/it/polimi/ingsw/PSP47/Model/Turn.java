@@ -18,15 +18,17 @@ public class Turn {
     private int numberOfBuildings;
     private final Player player;
     private Gender workerGender;
+    private Board board;
     private boolean wantsToBuildDome;
     private boolean canUseBothWorkers;
     private boolean alreadySetWorker;
     private final boolean canAlwaysBuildDome;
     
-    public Turn(Player player) {
+    public Turn(Player player, Board board) {
         this.numberOfMovements = 0;
         this.numberOfBuildings = 0;
         this.player = player;
+        this.board = board;
         player.setTurn(this);
         player.getGod().resetParameters();
         MIN_MOVEMENTS = player.getGod().getMIN_MOVEMENTS();
@@ -37,7 +39,7 @@ public class Turn {
         this.canUseBothWorkers = player.getGod().canUseBothWorkers();
         this.canAlwaysBuildDome = player.getGod().canAlwaysBuildDome();
         this.alreadySetWorker = false;
-        deleteWorkersIfParalyzed();
+        checkIfWorkersAreParalyzed();
 
     }
 
@@ -128,7 +130,7 @@ public class Turn {
      * This method check if both the player's workers are paralyzed in every conditions.
      * In that case, the player loses the game.
      */
-    private void deleteWorkersIfParalyzed() {
+    private void checkIfWorkersAreParalyzed() {
         Worker maleWorker = player.getWorker(Gender.MALE);
         Worker femaleWorker = player.getWorker(Gender.FEMALE);
         God playerGod = player.getGod();
@@ -164,5 +166,9 @@ public class Turn {
 
     public int getMAX_BUILDINGS() {
         return MAX_BUILDINGS;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }

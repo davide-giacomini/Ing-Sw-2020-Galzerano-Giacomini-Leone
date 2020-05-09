@@ -27,15 +27,15 @@ public class AtlasTest {
             throws Exception {
         game = new Game(3);
         board = game.getBoard();
-        player = new Player("Monica", Color.YELLOW, game);
+        player = new Player("Monica", Color.YELLOW);
         player.setGod(new Atlas(player, "Atlas"));
         maleWorker = player.getWorker(Gender.MALE);
         maleWorker.setSlot(board.getSlot(0,0));
         femaleWorker = player.getWorker(Gender.FEMALE);
         femaleWorker.setSlot(board.getSlot(2,2));
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
-        otherPlayer = new Player("Arianna", Color.BLUE, game);
+        otherPlayer = new Player("Arianna", Color.BLUE);
         otherWorker = otherPlayer.getWorker(Gender.FEMALE);
     }
 
@@ -66,7 +66,7 @@ public class AtlasTest {
         assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());
         turn.executeBuild(Direction.DOWN);
-        assertEquals(Level.DOME, board.getSlot(2,1).getLevel());
+        assertEquals(Level.ATLAS_DOME, board.getSlot(2,1).getLevel());
         assertFalse(player.isWinning());
         assertFalse(player.getGod().checkIfCanGoOn(maleWorker));
         assertTrue(player.getGod().validateEndTurn());

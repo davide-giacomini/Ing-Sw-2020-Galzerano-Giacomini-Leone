@@ -19,7 +19,7 @@ public abstract class God {
     protected boolean canAlwaysBuildDome;
     protected boolean canUseBothWorkers;
     protected Player player;
-    protected String name;  // useless until now
+    protected String name;
     
     public God(Player player, String name) {
         this.player = player;
@@ -124,7 +124,7 @@ public abstract class God {
             try {
                 // If the direction is out of the board, jump to the catch
                 worker.checkDirection(direction);
-                Slot destinationSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
+                Slot destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot());
                 // else, check if the worker can move to the destinationSlot
                 if (!destinationSlot.isOccupied()){
                     // if the player can move up and the destinationSlot hasn't got too many levels, the player can move.
@@ -157,7 +157,7 @@ public abstract class God {
             try {
                 // If the direction is out of the board, jump to the catch
                 worker.checkDirection(direction);
-                Slot destinationSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
+                Slot destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot());
                 // else, check if the worker can build on the destinationSlot
                 if (!destinationSlot.isOccupied())  return true;
             } catch (IndexOutOfBoundsException e) {

@@ -32,8 +32,8 @@ public class HephaestusTest {
         slot1 = board.getSlot(3,3);
         slot2 = board.getSlot(4,4);
 
-        player = new Player("Arianna", Color.BLUE, game);
-        secondPlayer = new Player("David", Color.YELLOW, game);
+        player = new Player("Arianna", Color.BLUE);
+        secondPlayer = new Player("David", Color.YELLOW);
 
         worker = player.getWorker(Gender.MALE);
         secondWorker = player.getWorker(Gender.FEMALE);
@@ -42,7 +42,7 @@ public class HephaestusTest {
 
         player.setGod(new Hephaestus(player, "Hephaestus"));
 
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
 
     }

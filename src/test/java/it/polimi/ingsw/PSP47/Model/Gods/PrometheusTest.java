@@ -95,10 +95,10 @@ public class PrometheusTest {
     public void setUp() throws Exception {
         // this is a setting of the case one
         game = new Game(3);
-        player = new Player("player", Color.WHITE, game);
-        opponentPlayer = new Player("opponent player", Color.BLUE, game);
+        player = new Player("player", Color.WHITE);
+        opponentPlayer = new Player("opponent player", Color.BLUE);
         prometheus = new Prometheus(player, "Prometheus");
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         opponentPlayer.getWorker(Gender.MALE).setSlot(game.getBoard().getSlot(0, 0));
         player.getWorker(Gender.MALE).setSlot(game.getBoard().getSlot(1, 1));
         game.getBoard().getSlot(0, 0).setLevel(Level.GROUND);

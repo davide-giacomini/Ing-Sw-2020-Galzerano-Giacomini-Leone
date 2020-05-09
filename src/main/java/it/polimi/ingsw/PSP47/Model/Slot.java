@@ -79,7 +79,7 @@ public class Slot extends SlotObservable implements Serializable {
     }
     
     public boolean isOccupied() {
-        return isWorkerOnSlot || level==Level.DOME;
+        return isWorkerOnSlot || level==Level.DOME || level==Level.ATLAS_DOME;
     }
     
     

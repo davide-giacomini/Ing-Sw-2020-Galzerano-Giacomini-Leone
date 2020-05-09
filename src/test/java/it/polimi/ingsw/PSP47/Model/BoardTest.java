@@ -21,7 +21,7 @@ public class BoardTest {
     public void setUp() {
         game = new Game(3);
         board = game.getBoard();
-        player = new Player("Arianna", Color.BLUE, game);
+        player = new Player("Arianna", Color.BLUE);
     }
 
     @After

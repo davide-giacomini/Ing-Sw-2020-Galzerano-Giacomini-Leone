@@ -10,6 +10,8 @@ import it.polimi.ingsw.PSP47.Model.Worker;
  * If {@link Player}'s {@link Worker} moves up, all the other players cannot move up in their turns.
  */
 public class Athena extends God{
+    private boolean moveUp;
+
     public Athena(Player player, String name) {
         super(player, name);
         MIN_MOVEMENTS = 1;
@@ -34,27 +36,17 @@ public class Athena extends God{
     public boolean move(Direction direction, Worker worker)
             throws InvalidMoveException, IndexOutOfBoundsException {
         int initialLevel = worker.getSlot().getLevel().ordinal();
-        boolean winCondition = false;
+        boolean winCondition;
         try {
             winCondition = worker.move(direction);
         } catch (SlotOccupiedException e) {
             throw new InvalidMoveException("Slot occupied");
         }
         int actualLevel = worker.getSlot().getLevel().ordinal();
-        if (actualLevel>initialLevel) {
-            for (int i = 0; i<player.getGame().getNumberOfPlayers(); i++) {
-                if (player.getGame().getPlayer(i) != null && player.getGame().getPlayer(i) != player) {
-                    player.getGame().getPlayer(i).setCannotMoveUp(true);
-                }
-            }
-        }
-        else {
-            for (int i = 0; i<player.getGame().getNumberOfPlayers(); i++) {
-                if (player.getGame().getPlayer(i) != null && player.getGame().getPlayer(i) != player) {
-                    player.getGame().getPlayer(i).setCannotMoveUp(false);
-                }
-            }
-        }
+        if (actualLevel>initialLevel)
+            setMoveUp(true);
+        else
+            setMoveUp(false);
         return winCondition;
     }
 
@@ -137,5 +129,13 @@ public class Athena extends God{
         return numberOfBuildings >= MIN_BUILDINGS && numberOfMovements >= MIN_MOVEMENTS
                 || numberOfMovements >= MIN_MOVEMENTS && player.isWinning();
     }
-    
+
+
+    public boolean isMoveUp() {
+        return moveUp;
+    }
+
+    public void setMoveUp(boolean moveUp) {
+        this.moveUp = moveUp;
+    }
 }

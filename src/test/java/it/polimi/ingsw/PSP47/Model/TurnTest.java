@@ -22,7 +22,7 @@ public class TurnTest {
     @Before
     public void setUp() throws Exception {
         game = new Game(3);
-        player = new Player("1", Color.BLUE, game);
+        player = new Player("1", Color.BLUE);
         for (int i = 0; i<Board.ROWS_NUMBER; i++) {
             for (int j = 0; j<Board.COLUMNS_NUMBER; j++) {
                 slots[i][j] = game.getBoard().getSlot(i,j);
@@ -48,7 +48,7 @@ public class TurnTest {
             throws Exception {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         
-        turn = new Turn(player);    // the constructor calls implicitly deleteWorkersIfParalyzed
+        turn = new Turn(player, game.getBoard());    // the constructor calls implicitly deleteWorkersIfParalyzed
         
         assertTrue(player.isLoosing());
         assertNull(player.getWorker(Gender.MALE));
@@ -60,7 +60,7 @@ public class TurnTest {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         // I am going to free the female worker (this is Prometheus, he can build)
         slots[3][3].setLevel(Level.LEVEL2);
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         
         assertFalse(player.isLoosing());
         assertEquals(player.getWorker(Gender.FEMALE), player.getWorker(Gender.FEMALE));
@@ -72,7 +72,7 @@ public class TurnTest {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         // I am going to free the female worker (this is Prometheus, he can build)
         slots[0][0].setLevel(Level.GROUND);
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         
         assertFalse(player.isLoosing());
         assertEquals(player.getWorker(Gender.FEMALE), player.getWorker(Gender.FEMALE));
@@ -84,7 +84,7 @@ public class TurnTest {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         player.deleteWorker(player.getWorker(Gender.MALE));
         
-        turn = new Turn(player);    // the constructor calls implicitly deleteWorkersIfParalyzed
+        turn = new Turn(player,game.getBoard());    // the constructor calls implicitly deleteWorkersIfParalyzed
     
         assertTrue(player.isLoosing());
         assertNull(player.getWorker(Gender.MALE));
@@ -95,7 +95,7 @@ public class TurnTest {
         setUp_DeleteWorkersIfParalyzed_WorkersParalyzed(player, player.getWorker(Gender.MALE), player.getWorker(Gender.FEMALE));
         player.deleteWorker(player.getWorker(Gender.FEMALE));
         
-        turn = new Turn(player);    // the constructor calls implicitly deleteWorkersIfParalyzed
+        turn = new Turn(player, game.getBoard());    // the constructor calls implicitly deleteWorkersIfParalyzed
         
         assertTrue(player.isLoosing());
         assertNull(player.getWorker(Gender.MALE));
@@ -124,9 +124,9 @@ public class TurnTest {
     
     @Test (expected = InvalidMoveException.class)
     public void setWorkerGender_SetWorkerTwoTimes_CannotUseBothWorkers_ThrowsWrongBuildOrMoveException() throws Exception {
-        player = new Player("test", Color.BLUE,game);
+        player = new Player("test", Color.BLUE);
         god = new Apollo(player, "Apollo test");
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         
         assertNull(turn.getWorkerGender());
         turn.setWorkerGender(Gender.MALE);
@@ -137,9 +137,9 @@ public class TurnTest {
     }
     @Test
     public void setWorkerGender_SetWorkerTwoTimes_CanUseBothWorkers_NormallyChangesWorkerGender() throws Exception {
-        player = new Player("test", Color.BLUE,game);
+        player = new Player("test", Color.BLUE);
         god = new Apollo(player, "Prometheus test");
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         
         turn.setCanUseBothWorkers(true);
         assertNull(turn.getWorkerGender());
@@ -151,18 +151,18 @@ public class TurnTest {
     
     @Test
     public void setWantsToBuildDome_GodIsAtlas_WantsToBuildDomeSetTrue () throws Exception {
-        player = new Player("test", Color.BLUE,game);
+        player = new Player("test", Color.BLUE);
         god = new Atlas(player, "atlas test");
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         
         turn.setWantsToBuildDome(true);
         assertTrue(turn.wantsToBuildDome());
     }
     @Test (expected = InvalidBuildException.class)
     public void setWantsToBuildDome_GodIsNotAtlas_ThrowsWrongBuildOrMoveException () throws Exception {
-        player = new Player("test", Color.BLUE,game);
+        player = new Player("test", Color.BLUE);
         god = new Prometheus(player, "atlas test");
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         
         
         turn.setWantsToBuildDome(true);
@@ -191,9 +191,9 @@ public class TurnTest {
     }*/
     @Test
     public void executeMove_ThirdLevelNotReached_PlayerIsNotWinning() throws Exception{
-        player = new Player("test", Color.BLUE,game);
+        player = new Player("test", Color.BLUE);
         god = new Prometheus(player, "atlas test");
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         
         assertEquals(0, turn.getNumberOfMovements());
         

@@ -1,15 +1,11 @@
 package it.polimi.ingsw.PSP47.Controller;
 
-import it.polimi.ingsw.PSP47.Enumerations.Action;
-import it.polimi.ingsw.PSP47.Enumerations.Direction;
-import it.polimi.ingsw.PSP47.Enumerations.Gender;
+import it.polimi.ingsw.PSP47.Enumerations.*;
+import it.polimi.ingsw.PSP47.Model.*;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
-import it.polimi.ingsw.PSP47.Model.Game;
-import it.polimi.ingsw.PSP47.Model.Player;
-import it.polimi.ingsw.PSP47.Model.Slot;
-import it.polimi.ingsw.PSP47.Model.Turn;
+import it.polimi.ingsw.PSP47.Model.Gods.Athena;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 
 import java.util.ArrayList;
@@ -29,7 +25,7 @@ public class TurnController {
         this.game = game;
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
         this.player = game.getPlayer(indexOfCurrentPlayer);
-        this.turn = new Turn(player);
+        this.turn = new Turn(player, game.getBoard());
         this.controller = controller;
     }
 
@@ -85,7 +81,7 @@ public class TurnController {
      * @param direction the direction chosen by the player
      */
     public void executeAction(Action action, Direction direction) {
-        if (!(player.getGod().checkIfCanMove(player.getWorker(workerGender)) || player.getGod().checkIfCanBuild(player.getWorker(workerGender)))) {
+        if (!(player.getGod().checkIfCanGoOn(player.getWorker(workerGender)))) { //TODO validate end turn
             player.setLoosing(true);
         }
         switch (action) {
@@ -95,11 +91,40 @@ public class TurnController {
                     break;
                 }
                 try {
-                    if (turn.getNumberOfMovements() == turn.getMAX_MOVEMENTS())
-                        throw new InvalidMoveException("Max number of movements reached");
+                    if (turn.getNumberOfMovements() == turn.getMAX_MOVEMENTS()) {
+                        String textError = "You've yet reached the max number of movements in this turn";
+                        views.get(indexOfCurrentPlayer).sendError(textError);
+                        views.get(indexOfCurrentPlayer).sendWhichAction();
+                        return;
+                    }
+                    else if (game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).getLevel() == (Level.DOME) ||
+                            game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).getLevel() == (Level.ATLAS_DOME)) {
+                        String textError = "This slot contains a dome, you cannot move here";
+                        views.get(indexOfCurrentPlayer).sendError(textError);
+                        views.get(indexOfCurrentPlayer).sendWhichAction();
+                        return;
+                    }
+                    else if (game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).isWorkerOnSlot()) {
+                        if (!(player.getGod().getName().equals("Apollo") || player.getGod().getName().equals("Minotaur"))) {
+                            String textError = "This slot contains another worker, you cannot move here";
+                            views.get(indexOfCurrentPlayer).sendError(textError);
+                            views.get(indexOfCurrentPlayer).sendWhichAction();
+                            return;
+                        }
+                    }
                     turn.executeMove(direction);
-                    if (player.isWinning())
-                       controller.endGame();
+                    if (player.isWinning()) {
+                        controller.endGame();
+                        return;
+                    }
+                    if (player.getGod().getName().equals("Athena")) {
+                        Boolean moveUp = ((Athena)player.getGod()).isMoveUp();
+                        for (int i = 0; i<game.getNumberOfPlayers(); i++) {
+                            if (game.getPlayer(i) != null && game.getPlayer(i) != player) {
+                                game.getPlayer(i).setCannotMoveUp(moveUp);
+                            }
+                        }
+                    }
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     break;
                 } catch (InvalidDirectionException | InvalidMoveException | IndexOutOfBoundsException e) {

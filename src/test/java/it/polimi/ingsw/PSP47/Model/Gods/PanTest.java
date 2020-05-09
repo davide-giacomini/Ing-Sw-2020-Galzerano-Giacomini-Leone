@@ -26,15 +26,15 @@ public class PanTest {
     public void setUp () throws Exception{
         game = new Game(3);
         board = game.getBoard();
-        player = new Player("Monica", it.polimi.ingsw.PSP47.Enumerations.Color.YELLOW, game);
+        player = new Player("Monica", it.polimi.ingsw.PSP47.Enumerations.Color.YELLOW);
         player.setGod(new Pan(player, "Pan"));
         worker = player.getWorker(Gender.MALE);
         worker.setSlot(board.getSlot(3,3));
         femaleWorker = player.getWorker(Gender.FEMALE);
         femaleWorker.setSlot(board.getSlot(4,4));
-        otherPlayer = new Player("Arianna", Color.BLUE, game);
+        otherPlayer = new Player("Arianna", Color.BLUE);
         otherWorker = player.getWorker(Gender.FEMALE);
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
     }
 

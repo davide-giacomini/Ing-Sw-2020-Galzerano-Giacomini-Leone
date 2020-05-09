@@ -371,6 +371,15 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
 
     /**
+     * This method sends a message to the client with a general information.
+     * @param text the String with the advice that must be sent.
+     */
+    void sendImportant(String text) {
+        ImportantMessage message = new ImportantMessage(text);
+        send(message);
+    }
+
+    /**
      * This method sends a message to the client to ask which worker he wants to use, asking the slot he is on.
      */
     void sendWhichWorker() {

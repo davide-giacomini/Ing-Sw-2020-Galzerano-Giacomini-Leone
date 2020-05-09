@@ -41,11 +41,11 @@ public class Minotaur extends God {
         try {
             return worker.move(direction);
         } catch (SlotOccupiedException e) {
-            Slot opponentSLot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
+            Slot opponentSLot = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot());
             // the slot in the same direction of the worker. If there is not a slot, the move is not available.
             Slot slotNearOpponentSlot;
             try {
-                slotNearOpponentSlot = player.getGame().getBoard().getNearbySlot(direction, opponentSLot);
+                slotNearOpponentSlot = player.getTurn().getBoard().getNearbySlot(direction, opponentSLot);
             } catch (IndexOutOfBoundsException er){
                 // this exception advises the caller that the slot is occupied and the opponent worker cannot move.
                 throw new InvalidMoveException("Slot occupied");
@@ -108,8 +108,8 @@ public class Minotaur extends God {
             try {
                 // If the direction is out of the board, jump to the catch
                 worker.checkDirection(direction);
-                Slot destinationSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
-                Slot slotNearOpponentSlot = player.getGame().getBoard().getNearbySlot(direction, destinationSlot);
+                Slot destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot());
+                Slot slotNearOpponentSlot = player.getTurn().getBoard().getNearbySlot(direction, destinationSlot);
                 // else, check if the worker can move to the destinationSlot
                 if (!destinationSlot.isOccupied()){
                     // if the player can move up and the destinationSlot hasn't got too many levels, the player can move.

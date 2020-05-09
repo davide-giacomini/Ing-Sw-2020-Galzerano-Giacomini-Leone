@@ -23,8 +23,8 @@ public class WorkerTest {
     public void setUp() {
         game = new Game(3);
         board = game.getBoard();
-        player = new Player("first", Color.RED, game);
-        otherPlayer = new Player("second", Color.BLUE, game);
+        player = new Player("first", Color.RED);
+        otherPlayer = new Player("second", Color.BLUE);
         otherWorkerMale = otherPlayer.getWorker(Gender.MALE);
         workerMale = player.getWorker(Gender.MALE);
     }
@@ -161,7 +161,7 @@ public class WorkerTest {
         workerMale.setSlot(board.getSlot(0, 0));
         workerMale.buildDome(Direction.RIGHT);
         Slot slot = board.getSlot(0,1);
-        assertEquals(slot.getLevel(), Level.DOME);
+        assertEquals(slot.getLevel(), Level.ATLAS_DOME);
     }
 
     @Test (expected = SlotOccupiedException.class)

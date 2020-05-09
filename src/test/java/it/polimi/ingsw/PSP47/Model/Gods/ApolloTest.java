@@ -32,8 +32,8 @@ public class ApolloTest {
         slot2 = board.getSlot(3,3);
         slotF = board.getSlot(0,0);
 
-        player = new Player("Arianna", Color.BLUE, game);
-        secondPlayer = new Player("Monichella", Color.WHITE, game);
+        player = new Player("Arianna", Color.BLUE);
+        secondPlayer = new Player("Monichella", Color.WHITE);
 
         workerM = player.getWorker(Gender.MALE);
         workerF = player.getWorker(Gender.FEMALE);
@@ -45,7 +45,7 @@ public class ApolloTest {
 
         player.setGod(new Apollo(player, "Apollo"));
 
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
     }
 
