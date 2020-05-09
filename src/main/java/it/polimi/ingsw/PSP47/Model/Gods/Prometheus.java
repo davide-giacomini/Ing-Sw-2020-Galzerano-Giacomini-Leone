@@ -50,7 +50,7 @@ public class Prometheus extends God {
         else if (numberOfBuildings==1){
             moveThenBuild = false;
             // if the destination slot is higher than the current slot
-            if (worker.getSlot().getLevel().ordinal() < player.getGame().getBoard().getNearbySlot(direction, worker.getSlot()).getLevel().ordinal())
+            if (worker.getSlot().getLevel().ordinal() < player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot()).getLevel().ordinal())
                 throw new InvalidMoveException("Since you built before moving, you cannot go up");
             else {
                 try {

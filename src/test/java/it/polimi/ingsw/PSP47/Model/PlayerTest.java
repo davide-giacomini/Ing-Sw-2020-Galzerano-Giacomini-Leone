@@ -21,7 +21,7 @@ public class PlayerTest {
     @Before
     public void setUp()  {
         game = new Game(3);
-        player = new Player ("Arianna", Color.BLUE, game);
+        player = new Player ("Arianna", Color.BLUE);
         board = game.getBoard();
     }
 
@@ -87,7 +87,7 @@ public class PlayerTest {
     public void setTurn() {
         assertEquals(player.getTurn(), null);
         player.setGod(new Apollo(player, "Apollo"));
-        Turn turn = new Turn(player);
+        Turn turn = new Turn(player, game.getBoard());
         player.setTurn(turn);
         assertEquals(player.getTurn(), turn);
     }

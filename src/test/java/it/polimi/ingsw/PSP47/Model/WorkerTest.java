@@ -23,8 +23,8 @@ public class WorkerTest {
     public void setUp() {
         game = new Game(3);
         board = game.getBoard();
-        player = new Player("first", Color.RED, game);
-        otherPlayer = new Player("second", Color.BLUE, game);
+        player = new Player("first", Color.RED);
+        otherPlayer = new Player("second", Color.BLUE);
         otherWorkerMale = otherPlayer.getWorker(Gender.MALE);
         workerMale = player.getWorker(Gender.MALE);
     }

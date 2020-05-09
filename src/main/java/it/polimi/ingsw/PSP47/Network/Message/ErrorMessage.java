@@ -21,10 +21,6 @@ public class ErrorMessage extends Message {
         return errorText;
     }
 
-    public void setErrorText(String errorText) {
-        this.errorText = errorText;
-    }
-
     @Override
     public Visitable getContent() {
         return null;

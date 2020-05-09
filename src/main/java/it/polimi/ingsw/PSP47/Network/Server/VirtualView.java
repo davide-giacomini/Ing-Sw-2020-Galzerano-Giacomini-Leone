@@ -106,6 +106,14 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     }
 
     /**
+     * This method sends an advice to the client.
+     * @param text the String that contains the advice.
+     */
+    public void sendImportant(String text) {
+        clientHandler.sendImportant(text);
+    }
+
+    /**
      * This method sends the player who has lost.
      */
     public void sendLosingAdvice() {

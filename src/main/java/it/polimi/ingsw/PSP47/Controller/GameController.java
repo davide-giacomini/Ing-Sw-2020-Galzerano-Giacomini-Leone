@@ -42,7 +42,7 @@ public class GameController implements VirtualViewListener {
         for(Map.Entry<String,Color> entry : mapUserColor.entrySet()) {
             String username = entry.getKey();
             Color color = entry.getValue();
-            game.addPlayer(new Player(username, color, game));
+            game.addPlayer(new Player(username, color));
 
             VirtualView virtualView = mapUserVirtualView.get(username);
             setView(virtualView);
@@ -162,8 +162,14 @@ public class GameController implements VirtualViewListener {
             }
             Slot slot1 = game.getBoard().getSlot(row1, column1);
             Slot slot2 = game.getBoard().getSlot(row2, column2);
+            if (slot1 == slot2) {
+                String errorText = "You must choose two different slots";
+                views.get(indexOfCurrentPlayer).sendError(errorText);
+                views.get(indexOfCurrentPlayer).sendSetWorkers();
+                return;
+            }
             if (slot1.isOccupied() || slot2.isOccupied()) {
-                String errorText = "One of these slots has been already chosen.";
+                String errorText = "One of these slots has been already chosen";
                 views.get(indexOfCurrentPlayer).sendError(errorText);
                 views.get(indexOfCurrentPlayer).sendSetWorkers();
                 return;
@@ -290,7 +296,7 @@ public class GameController implements VirtualViewListener {
     void sendAnAdvice() {
         for (VirtualView view : views) {
             if (!(view.getUsername().equals(views.get(indexOfCurrentPlayer).getUsername())))
-                view.sendError("It's " + views.get(indexOfCurrentPlayer).getUsername() + "'s turn");
+                view.sendImportant("It's " + views.get(indexOfCurrentPlayer).getUsername() + "'s turn");
         }
     }
 
@@ -300,7 +306,7 @@ public class GameController implements VirtualViewListener {
      */
     void removeLosingPlayer() {
         for (VirtualView view : views) {
-            view.sendError("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just lost.");
+            view.sendImportant("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just lost.");
         }
 
         Slot slot = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE).getSlot();
@@ -327,7 +333,7 @@ public class GameController implements VirtualViewListener {
      */
     void endGame() {
         for (VirtualView view : views) {
-            view.sendError("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just won.");
+            view.sendImportant("The player " + views.get(indexOfCurrentPlayer).getUsername() + "has just won.");
         }
         views.get(indexOfCurrentPlayer).sendWinningAdvice();
     }

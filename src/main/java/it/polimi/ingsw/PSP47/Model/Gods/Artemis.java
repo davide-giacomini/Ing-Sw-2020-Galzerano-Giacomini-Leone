@@ -107,7 +107,7 @@ public class Artemis extends God {
                     if (checkOppositeDirection(firstDirection, direction))
                         continue;
                     worker.checkDirection(direction);
-                    Slot destinationSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
+                    Slot destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot());
                     if (!destinationSlot.isOccupied()) {
                         if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal() + 1)
                             return true;

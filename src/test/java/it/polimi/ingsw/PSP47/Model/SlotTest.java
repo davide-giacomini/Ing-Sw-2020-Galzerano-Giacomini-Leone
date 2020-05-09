@@ -13,9 +13,11 @@ import static org.junit.Assert.*;
 public class SlotTest {
     private Slot slot;
     private Game game;
+    Player player;
     
     @Before
     public void setUp() {
+        player = new Player("Monica", Color.BLUE);
         game = new Game(3);
         slot = game.getBoard().getSlot(2,1);
     }
@@ -35,7 +37,7 @@ public class SlotTest {
     }
     @Test
     public void getWorker(){
-        Worker w = new Worker(Color.BLUE, Gender.MALE, game);
+        Worker w = new Worker(player, Color.BLUE, Gender.MALE);
         slot.setWorker(w);
         assertEquals(slot.getWorker(),w);
     }
@@ -52,7 +54,7 @@ public class SlotTest {
         slot.setLevel(Level.DOME);
         assertTrue(slot.isOccupied());
         slot.setLevel(Level.GROUND);
-        Worker w = new Worker(Color.BLUE, Gender.MALE, game);
+        Worker w = new Worker(player, Color.BLUE, Gender.MALE);
         slot.setWorker(w);
         assertTrue(slot.isOccupied());
     }

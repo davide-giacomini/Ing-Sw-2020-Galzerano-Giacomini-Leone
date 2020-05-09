@@ -16,15 +16,15 @@ public class Worker {
      * Variable which represents a female. It's useful to call the female worker through the player's array.
      */
     public final static int FEMALE = 1;
+    Player player;
     private final Color color;
     private final Gender gender;
     private Slot slot;
-    private final Game game;
 
-    protected Worker(Color color, Gender gender, Game game) {
+    protected Worker(Player player, Color color, Gender gender) {
+        this.player = player;
         this.color = color;
         this.gender = gender;
-        this.game = game;
     }
     
     /**
@@ -83,7 +83,7 @@ public class Worker {
 
         Slot destinationSlot;
         try {
-            destinationSlot = game.getBoard().getNearbySlot(direction, slot);
+            destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, slot);
         }
         catch (InvalidDirectionException e){
             throw new InvalidMoveException("Invalid direction of the getNearBySlot.");
@@ -109,7 +109,7 @@ public class Worker {
         
         Slot destinationSlot;
         try {
-            destinationSlot = game.getBoard().getNearbySlot(direction, slot);
+            destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, slot);
         }
         catch (InvalidDirectionException e){
             throw new InvalidBuildException("Invalid direction for the destination slot");
@@ -131,7 +131,7 @@ public class Worker {
     public void buildDome (Direction direction) throws InvalidDirectionException, SlotOccupiedException {
         checkDirection(direction);
 
-        Slot destinationSlot = game.getBoard().getNearbySlot(direction, slot);
+        Slot destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, slot);
         if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
         if (destinationSlot.getLevel() == Level.LEVEL3)
             destinationSlot.setLevel(Level.DOME);

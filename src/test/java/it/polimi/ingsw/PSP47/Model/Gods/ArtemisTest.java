@@ -28,15 +28,15 @@ public class ArtemisTest {
             throws Exception {
         game =new Game(3);
         board = game.getBoard();
-        player = new Player("Monica", Color.YELLOW, game);
+        player = new Player("Monica", Color.YELLOW);
         player.setGod(new Artemis(player, "Artemis"));
         maleWorker = player.getWorker(Gender.MALE);
         maleWorker.setSlot(board.getSlot(1,1));
         femaleWorker = player.getWorker(Gender.FEMALE);
         femaleWorker.setSlot(board.getSlot(4,4));
-        turn = new Turn(player);
+        turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
-        otherPlayer = new Player("Arianna", Color.BLUE, game);
+        otherPlayer = new Player("Arianna", Color.BLUE);
         otherWorker = otherPlayer.getWorker(Gender.FEMALE);
     }
 

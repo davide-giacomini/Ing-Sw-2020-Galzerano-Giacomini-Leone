@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP47.Model.*;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.PSP47.Model.Gods.Athena;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class TurnController {
         this.game = game;
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
         this.player = game.getPlayer(indexOfCurrentPlayer);
-        this.turn = new Turn(player);
+        this.turn = new Turn(player, game.getBoard());
         this.controller = controller;
     }
 
@@ -115,6 +116,14 @@ public class TurnController {
                     if (player.isWinning()) {
                         controller.endGame();
                         return;
+                    }
+                    if (player.getGod().getName().equals("Athena")) {
+                        Boolean moveUp = ((Athena)player.getGod()).isMoveUp();
+                        for (int i = 0; i<game.getNumberOfPlayers(); i++) {
+                            if (game.getPlayer(i) != null && game.getPlayer(i) != player) {
+                                game.getPlayer(i).setCannotMoveUp(moveUp);
+                            }
+                        }
                     }
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     break;
