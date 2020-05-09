@@ -4,7 +4,7 @@ import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableGod;
 
-public class GodChosen extends Message{
+public class GodChosen extends VisitableMessage{
     private static final long serialVersionUID = 3437666900454385113L;
 
     VisitableGod god;

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP47.Network.Message;
 
 import it.polimi.ingsw.PSP47.Enumerations.MessageType;
-import it.polimi.ingsw.PSP47.Visitor.Visitable;
 
 public class ImportantMessage extends Message {
     private static final long serialVersionUID = -6704283313352329038L;
@@ -16,8 +15,4 @@ public class ImportantMessage extends Message {
         return text;
     }
 
-    @Override
-    public Visitable getContent() {
-        return null;
-    }
 }

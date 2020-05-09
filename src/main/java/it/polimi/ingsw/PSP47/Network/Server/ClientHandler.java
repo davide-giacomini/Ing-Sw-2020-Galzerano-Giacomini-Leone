@@ -167,7 +167,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                     break;
                 //TODO disconnessione volontaria del client.
                 default:
-                    Visitable visitableObject = message.getContent();
+                    Visitable visitableObject = ((VisitableMessage) message).getContent();
                     virtualView.notifyVirtualViewListener(visitableObject);
                     break;
             }

@@ -131,6 +131,7 @@ public class NetworkHandler implements Runnable, ViewListener {
     private class MessageHandler implements Runnable {
         Message message;
         NetworkHandler networkHandler;
+        Visitable visitable;
 
         public MessageHandler(Message message, NetworkHandler networkHandler){
             this.message = message;
@@ -160,7 +161,8 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.askWhichWorkerToUse();
                     break;
                 case CONNECTION_ACCEPTED:
-                    VisitableInformation visitableConnectionAccepted = (VisitableInformation) message.getContent();
+                    visitable = ((VisitableMessage) message).getContent();
+                    VisitableInformation visitableConnectionAccepted = (VisitableInformation) visitable;
                     String username = visitableConnectionAccepted.getUsername();
                     Color color = visitableConnectionAccepted.getColor();
 
@@ -180,7 +182,8 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.showImportantMessage(text);
                     break;
                 case LIST_OF_GODS:
-                    VisitableListOfGods visitableGods = (VisitableListOfGods) message.getContent();
+                    visitable = ((VisitableMessage) message).getContent();
+                    VisitableListOfGods visitableGods = (VisitableListOfGods) visitable;
                     ArrayList<GodName> godNames = visitableGods.getGodNames();
                     view.chooseYourGod(godNames);
                     break;
@@ -206,14 +209,6 @@ public class NetworkHandler implements Runnable, ViewListener {
                     break;
                 case CHALLENGER:
                     view.challengerWillChooseThreeGods();
-                    break;
-                case OPPONENT_LOOSING:
-                    username = ((OpponentLoosing) message).getUsername();
-                    view.showImportantMessage("Player " + username + " lost.");
-                    break;
-                case OPPONENT_WINNING:
-                    username = ((OpponentWinning) message).getUsername();
-                    view.showImportantMessage("Player " + username + " win.");
                     break;
             }
         }

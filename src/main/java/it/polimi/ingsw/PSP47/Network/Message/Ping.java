@@ -10,8 +10,4 @@ public class Ping extends Message {
         this.messageType = MessageType.PING;
     }
     
-    @Override
-    public Visitable getContent() {
-        return null;
-    }
 }

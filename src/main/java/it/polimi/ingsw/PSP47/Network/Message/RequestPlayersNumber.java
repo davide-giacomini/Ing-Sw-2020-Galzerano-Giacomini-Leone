@@ -4,7 +4,7 @@ import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInt;
 
-public class RequestPlayersNumber extends Message {
+public class RequestPlayersNumber extends VisitableMessage {
     private static final long serialVersionUID = -2808360409198774148L;
     private final VisitableInt numberOfPlayers;
 

@@ -81,7 +81,7 @@ public class TurnController {
      * @param direction the direction chosen by the player
      */
     public void executeAction(Action action, Direction direction) {
-        if (!(player.getGod().checkIfCanGoOn(player.getWorker(workerGender))) && !(player.getGod().validateEndTurn()) ) { //TODO validate end turn
+        if (!(player.getGod().checkIfCanGoOn(player.getWorker(workerGender))) && !(player.getGod().validateEndTurn()) ) {
             player.setLoosing(true);
         }
         switch (action) {

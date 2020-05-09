@@ -141,6 +141,11 @@ public class GameController implements VirtualViewListener {
             case MINOTAUR: return new Minotaur(player, "Minotaur");
             case HEPHAESTUS: return new Hephaestus(player, "Hephaestus");
             case PROMETHEUS: return new Prometheus(player, "Prometheus");
+            case HERA: return new Hera(player, "Hera");
+            case ZEUS: return new Zeus(player, "Zeus");
+            case HESTIA: return new Hestia(player, "Hestia");
+            case TRITON: return new Triton(player, "Triton");
+            case CHRONUS: return new Chronus(player, "Chronus");
             default: throw new IOException();
         }
     }

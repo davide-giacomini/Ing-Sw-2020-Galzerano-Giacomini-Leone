@@ -24,8 +24,4 @@ public class PlayersNumber extends Message {
         this.numberOfPlayers = numberOfPlayers;
     }
 
-    @Override
-    public Visitable getContent() {
-        return null;
-    }
 }

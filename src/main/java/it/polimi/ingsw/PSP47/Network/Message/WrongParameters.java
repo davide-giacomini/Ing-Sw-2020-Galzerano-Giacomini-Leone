@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP47.Network.Message;
 
 import it.polimi.ingsw.PSP47.Enumerations.MessageType;
-import it.polimi.ingsw.PSP47.Visitor.Visitable;
 
 public class WrongParameters extends Message {
     private static final long serialVersionUID = -6181235425571580535L;
@@ -16,8 +15,4 @@ public class WrongParameters extends Message {
         return errorMessage;
     }
     
-    @Override
-    public Visitable getContent() {
-        return null;
-    }
 }

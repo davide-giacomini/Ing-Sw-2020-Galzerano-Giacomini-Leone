@@ -29,34 +29,6 @@ public class PublicInformation extends Message{
         this.messageType=MessageType.PUBLIC_INFORMATION;
     }
 
-
-    /*
-     * This method calls the view to set all the informations about the players into the ViewDatabase and to
-     * print this in the screen.
-     *
-     * @param client the client to be handled.
-     * @param outputServer the {@link ObjectOutputStream} of the server. It can be used to send other messages.
-
-    @Override
-    public void handleClientSide(Client client, ObjectOutputStream outputServer) {
-        client.getView().getGameView().setUsernames(usernames);
-        client.getView().getGameView().setColors(colors);
-        client.getView().getGameView().setGods(godNames);
-    
-        client.getView().showPublicInformation();
-    }
-    
-    /**
-     * @deprecated
-     * This method doesn't do anything for now.
-     *
-     * @param server the server, which has got the parameters in common with all the clients.
-     * @param virtualView the {@link VirtualView} of the client connected.
-     * @param outputClient the {@link ObjectOutputStream} of the client. It can be used to send other messages.
-
-    @Override
-    public void handleServerSide(Server server, VirtualView virtualView, ObjectOutputStream outputClient) {}
-    */
     public void setUsernames(ArrayList<String> usernames) {
         this.usernames = usernames;
     }
@@ -67,11 +39,6 @@ public class PublicInformation extends Message{
 
     public void setGodNames(ArrayList<GodName> godNames) {
         this.godNames = godNames;
-    }
-
-    @Override
-    public Visitable getContent() {
-        return null;
     }
 
     public ArrayList<String> getUsernames() {

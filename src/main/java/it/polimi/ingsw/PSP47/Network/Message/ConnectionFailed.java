@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP47.Network.Message;
 
 import it.polimi.ingsw.PSP47.Enumerations.MessageType;
-import it.polimi.ingsw.PSP47.Visitor.Visitable;
 
 public class ConnectionFailed extends Message{
     private static final long serialVersionUID = 2482945733715396646L;
@@ -14,10 +13,5 @@ public class ConnectionFailed extends Message{
     
     public String getErrorMessage() {
         return errorMessage;
-    }
-
-    @Override
-    public Visitable getContent() {
-        return null;
     }
 }

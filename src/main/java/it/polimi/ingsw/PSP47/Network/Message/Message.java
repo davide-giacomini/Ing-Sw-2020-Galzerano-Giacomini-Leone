@@ -18,5 +18,4 @@ public abstract class Message implements Serializable {
         return messageType.toString();
     }
 
-    public abstract Visitable getContent();
 }
