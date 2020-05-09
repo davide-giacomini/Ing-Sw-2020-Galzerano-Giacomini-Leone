@@ -17,7 +17,6 @@ public abstract class God {
     protected int MAX_MOVEMENTS;
     protected int MAX_BUILDINGS;
     protected boolean canAlwaysBuildDome;
-    protected boolean canUseBothWorkers;
     protected Player player;
     protected String name;
     
@@ -59,13 +58,7 @@ public abstract class God {
         return canAlwaysBuildDome;
     }
     
-    /**
-     * @return true if the god is allowed to use both the workers during a single turn.
-     */
-    public boolean canUseBothWorkers() {
-        return canUseBothWorkers;
-    }
-    
+
     /**
      * This method moves a {@link Worker} from a {@link Slot} to another, towards the destination specified.
      * @param direction where the worker wants to move to.
@@ -190,4 +183,6 @@ public abstract class God {
     public String getName() {
         return name;
     }
+
+
 }

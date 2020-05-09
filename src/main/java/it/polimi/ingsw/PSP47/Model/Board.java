@@ -75,6 +75,8 @@ public class Board {
                 return slots[currentSlot.getRow()+1][currentSlot.getColumn()-1];
             case RIGHTDOWN:
                 return slots[currentSlot.getRow()+1][currentSlot.getColumn()+1];
+            case HERE:
+                return currentSlot;
             default:
                 throw new InvalidDirectionException();
         }

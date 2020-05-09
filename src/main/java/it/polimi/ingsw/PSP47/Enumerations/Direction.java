@@ -10,7 +10,8 @@ public enum Direction {
     RIGHTDOWN (5),
     DOWN (6),
     LEFTDOWN (7),
-    WRONGDIRECTION(8);
+    HERE(8), //only available for zeus
+    WRONGDIRECTION(9);
 
     private final int move;
     Direction(int move) {
@@ -42,6 +43,8 @@ public enum Direction {
                 return DOWN ;
              case  "LEFTDOWN" :
                 return LEFTDOWN ;
+             case  "HERE" :
+                return HERE ;
             default :
                 return WRONGDIRECTION;
 

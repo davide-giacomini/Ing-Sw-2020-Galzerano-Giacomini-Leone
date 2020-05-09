@@ -21,7 +21,6 @@ public class Chronus extends God  {
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
         canAlwaysBuildDome = false;
-        canUseBothWorkers = false;
     }
 
     @Override
@@ -81,6 +80,10 @@ public class Chronus extends God  {
 
     @Override
     public boolean validateEndTurn() {
-        return false;
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        return numberOfBuildings >= MIN_BUILDINGS && numberOfMovements >= MIN_MOVEMENTS
+                || numberOfMovements >= MIN_MOVEMENTS && player.isWinning();
     }
 }

@@ -141,7 +141,6 @@ public class TurnTest {
         god = new Apollo(player, "Prometheus test");
         turn = new Turn(player, game.getBoard());
         
-        turn.setCanUseBothWorkers(true);
         assertNull(turn.getWorkerGender());
         turn.setWorkerGender(Gender.MALE);
         assertEquals(turn.getWorkerGender(), Gender.MALE);

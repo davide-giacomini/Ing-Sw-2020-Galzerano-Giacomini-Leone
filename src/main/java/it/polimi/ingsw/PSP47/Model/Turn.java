@@ -10,18 +10,13 @@ import it.polimi.ingsw.PSP47.Model.Gods.God;
  * His main method are executeMove and executeBuild which update the model the correspondent action.
  */
 public class Turn {
-    private final int MIN_MOVEMENTS;
-    private final int MIN_BUILDINGS;
-    private final int MAX_MOVEMENTS;
-    private final int MAX_BUILDINGS;
+
     private int numberOfMovements;
     private int numberOfBuildings;
     private final Player player;
     private Gender workerGender;
     private Board board;
     private boolean wantsToBuildDome;
-    private boolean canUseBothWorkers;
-    private boolean alreadySetWorker;
     private final boolean canAlwaysBuildDome;
     
     public Turn(Player player, Board board) {
@@ -31,27 +26,11 @@ public class Turn {
         this.board = board;
         player.setTurn(this);
         player.getGod().resetParameters();
-        MIN_MOVEMENTS = player.getGod().getMIN_MOVEMENTS();
-        MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();
-        MAX_MOVEMENTS = player.getGod().getMAX_MOVEMENTS();
-        MAX_BUILDINGS = player.getGod().getMAX_BUILDINGS();
         this.wantsToBuildDome = false;
-        this.canUseBothWorkers = player.getGod().canUseBothWorkers();
         this.canAlwaysBuildDome = player.getGod().canAlwaysBuildDome();
-        this.alreadySetWorker = false;
         checkIfWorkersAreParalyzed();
     }
 
-    /**
-     * This function has to be used for now because there isn't the god that let the player change his
-     * worker DURING the turn. Hence, it shouldn't be used to set canUseBothWorkers run-time.
-     *
-     * @param canUseBothWorkers it's true if the player can choose both workers, false otherwise.
-     */
-    @Deprecated
-    public void setCanUseBothWorkers(boolean canUseBothWorkers){
-        this.canUseBothWorkers = canUseBothWorkers;
-    }
 
     public Gender getWorkerGender () {
         return workerGender;
@@ -68,14 +47,8 @@ public class Turn {
     /**
      * This method set the worker that will be used during the turn.
      * @param workerGender the gender of the chosen worker
-     * @throws InvalidMoveException if the player has already chosen its worker and he cannot change
-     * it during the turn.
      */
-    public void setWorkerGender(Gender workerGender) throws InvalidMoveException {
-        if (!alreadySetWorker)
-            this.alreadySetWorker = true;
-        else if (!canUseBothWorkers)
-            throw new InvalidMoveException("You cannot choose an other worker in the middle of the turn");
+    public void setWorkerGender(Gender workerGender) {
         this.workerGender = workerGender;
     }
 
@@ -144,14 +117,6 @@ public class Turn {
      */
     public boolean validateEndTurn() {
         return player.getGod().validateEndTurn();
-    }
-
-    public int getMAX_MOVEMENTS() {
-        return MAX_MOVEMENTS;
-    }
-
-    public int getMAX_BUILDINGS() {
-        return MAX_BUILDINGS;
     }
 
     public Board getBoard() {

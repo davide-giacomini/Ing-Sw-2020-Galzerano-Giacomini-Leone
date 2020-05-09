@@ -22,7 +22,6 @@ public class Triton extends God  {
         MAX_MOVEMENTS = 1;
         MAX_BUILDINGS = 1;
         canAlwaysBuildDome = false;
-        canUseBothWorkers = false;
 
     }
 
@@ -78,7 +77,7 @@ public class Triton extends God  {
 
         if (numberOfMovements==0)
             return checkIfCanMove(worker);
-        else if (numberOfMovements>1 && numberOfBuildings==0)
+        else if (numberOfMovements>=1 && numberOfBuildings==0)
             return checkIfCanMove(worker) || checkIfCanBuild(worker);
 
         return false;
