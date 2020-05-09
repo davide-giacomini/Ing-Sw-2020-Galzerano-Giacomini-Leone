@@ -67,7 +67,7 @@ public class AtlasTest {
         assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());
         turn.executeBuild(Direction.DOWN);
-        assertEquals(Level.DOME, board.getSlot(2,1).getLevel());
+        assertEquals(Level.ATLAS_DOME, board.getSlot(2,1).getLevel());
         assertFalse(player.isWinning());
         assertFalse(player.getGod().checkIfCanGoOn(maleWorker));
         assertTrue(player.getGod().validateEndTurn());

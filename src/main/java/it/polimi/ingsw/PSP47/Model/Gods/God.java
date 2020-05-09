@@ -19,7 +19,7 @@ public abstract class God {
     protected boolean canAlwaysBuildDome;
     protected boolean canUseBothWorkers;
     protected Player player;
-    protected String name;  // useless until now
+    protected String name;
     
     public God(Player player, String name) {
         this.player = player;

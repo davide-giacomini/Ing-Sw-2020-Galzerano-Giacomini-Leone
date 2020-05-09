@@ -8,7 +8,8 @@ public enum Level implements Serializable {
     LEVEL1 (1),
     LEVEL2 (2),
     LEVEL3 (3),
-    DOME (4);
+    DOME (4),
+    ATLAS_DOME (5);
     
     private final int level;
     Level(int level) {

@@ -37,7 +37,7 @@ public class Turn {
         this.canUseBothWorkers = player.getGod().canUseBothWorkers();
         this.canAlwaysBuildDome = player.getGod().canAlwaysBuildDome();
         this.alreadySetWorker = false;
-        deleteWorkersIfParalyzed();
+        checkIfWorkersAreParalyzed();
 
     }
 
@@ -128,7 +128,7 @@ public class Turn {
      * This method check if both the player's workers are paralyzed in every conditions.
      * In that case, the player loses the game.
      */
-    private void deleteWorkersIfParalyzed() {
+    private void checkIfWorkersAreParalyzed() {
         Worker maleWorker = player.getWorker(Gender.MALE);
         Worker femaleWorker = player.getWorker(Gender.FEMALE);
         God playerGod = player.getGod();

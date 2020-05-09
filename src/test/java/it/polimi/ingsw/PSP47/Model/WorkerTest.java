@@ -159,7 +159,7 @@ public class WorkerTest {
         workerMale.setSlot(board.getSlot(0, 0));
         workerMale.buildDome(Direction.RIGHT);
         Slot slot = board.getSlot(0,1);
-        assertEquals(slot.getLevel(), Level.DOME);
+        assertEquals(slot.getLevel(), Level.ATLAS_DOME);
     }
 
     @Test (expected = SlotOccupiedException.class)

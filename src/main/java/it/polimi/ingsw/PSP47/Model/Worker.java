@@ -131,7 +131,10 @@ public class Worker {
 
         Slot destinationSlot = Board.getBoard().getNearbySlot(direction, slot);
         if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
-        destinationSlot.setLevel(Level.DOME);
+        if (destinationSlot.getLevel() == Level.LEVEL3)
+            destinationSlot.setLevel(Level.DOME);
+        else
+            destinationSlot.setLevel(Level.ATLAS_DOME);
     }
 
     /**
