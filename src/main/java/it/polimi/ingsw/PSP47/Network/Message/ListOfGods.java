@@ -13,9 +13,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
- * This message contains two elements as it is sent both from server to client and from client to server.
- * When it is S->C it's setted the ArrayList of godsAvailable, with all of the god chosen by the Challenger.
- * When it is C->S it's setted the GodName chosenGod with the kind of god chosen by a player.
+ * This message contains the list of gods available during the game.
  */
 public class ListOfGods extends VisitableMessage {
     private static final long serialVersionUID = 5244974574544564271L;

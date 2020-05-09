@@ -2,6 +2,9 @@ package it.polimi.ingsw.PSP47.Enumerations;
 
 import java.io.Serializable;
 
+/**
+ * Enumerations which represents all the available gods.
+ */
 public enum GodName implements Serializable {
     APOLLO (""),
     ARTEMIS ("Arthemis"),
@@ -35,7 +38,6 @@ public enum GodName implements Serializable {
      * @return enum of the Gender
      */
     public static GodName getGodsNameByName(String name)  {
-
 
         switch (name.toUpperCase()) {
             case "APOLLO" :

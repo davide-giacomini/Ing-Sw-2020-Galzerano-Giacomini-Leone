@@ -35,13 +35,6 @@ public class GameTest {
         assertEquals(game.getNumberOfPlayers(), numberOfPlayers);
     }
 
-
-    @Test
-    public void setStart(){
-        assertTrue(game.isGameStarted());
-    }
-
-
     @Test
     public void getPlayer() {
         game.addPlayer(player);

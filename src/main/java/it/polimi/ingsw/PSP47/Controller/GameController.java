@@ -22,7 +22,7 @@ import java.util.Random;
  */
 public class GameController implements VirtualViewListener {
     private int numberOfPlayers;
-    private static Game game;
+    private Game game;
     private ArrayList<VirtualView> views;
     private int indexOfCurrentPlayer;
     private TurnController turn;
@@ -50,6 +50,10 @@ public class GameController implements VirtualViewListener {
         }
         game.setRandomPlayer(chooseRandomPlayer());
         startController();
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     /**
@@ -151,8 +155,9 @@ public class GameController implements VirtualViewListener {
     }
 
     /**
-     * This method set both workers into their correspondent slots, checking if they're already occupied or
-     * if the chosen slots are out of range.
+     * This method set both workers into their correspondent slots, checking if they're already occupied,
+     * if they are two different slots or if they are out of range. If all these checks are negative
+     * the slots are setted, otherwise the method sends an error and asks again.
      */
     public void setWorkers( int[] RowsAndColumns)  {
             int row1 = RowsAndColumns[0];
@@ -310,17 +315,19 @@ public class GameController implements VirtualViewListener {
      * If the players were just two, it also declares the winner and ends the game.
      */
     void removeLosingPlayer() {
-        views.get(indexOfCurrentPlayer).sendImportant("Hai perso");
-        remove();
-    }
+        views.get(indexOfCurrentPlayer).sendImportant("I'm sorry, you have lost :-(");
 
-    private void remove() {
         if (game.getNumberOfPlayers() == 2) {
-            endGame();
+            incrementIndex();
+            endGame(game.getPlayer(indexOfCurrentPlayer).getUsername());
         }
         else {
+            if (game.getPlayer(indexOfCurrentPlayer).getGod().getName().equals("Athena")) {
+                for (int i = 0; i < game.getNumberOfPlayers(); i++) {
+                    game.getPlayer(i).setCannotMoveUp(false);
+                }
+            }
             game.getPlayer(indexOfCurrentPlayer).deleteWorkers();
-
             game.removePlayer(game.getPlayer(indexOfCurrentPlayer));
             views.get(indexOfCurrentPlayer).sendLosingAdvice();
             views.get(indexOfCurrentPlayer).removeVirtualViewListener(this);
@@ -336,9 +343,9 @@ public class GameController implements VirtualViewListener {
     /**
      * This method close the game when someone has won.
      */
-    void endGame() {
+    void endGame(String username) {
         for (VirtualView view : views) {
-            view.sendImportant("The player " + views.get(indexOfCurrentPlayer).getUsername() + " has just won.");
+            view.sendImportant("The player " + username + " has won :-)");
         }
         views.get(indexOfCurrentPlayer).sendWinningAdvice();
     }
@@ -354,19 +361,4 @@ public class GameController implements VirtualViewListener {
         visitableObject.accept(controllerVisitor);
     }
 
-    public boolean heraWinCondition(Worker currentWorker){
-        boolean thereIsHera = false;
-        for(Player player : game.getPlayers()){
-            if (player.getGod().getName().equals("Hera")) {
-                thereIsHera = true;
-                break;
-            }
-        }
-
-        return currentWorker.getSlot().isPerimeterSlot() && !currentWorker.getPlayer().getGod().getName().equals("Hera") && thereIsHera ;
-    }
-
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-    }
 }

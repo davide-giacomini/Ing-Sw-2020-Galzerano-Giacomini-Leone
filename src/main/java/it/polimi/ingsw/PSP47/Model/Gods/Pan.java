@@ -20,7 +20,7 @@ public class Pan extends God{
 
     /**
      * This method calls the standard move of a worker:
-     * Atlas doesn't modify the moving rules.
+     * Pan doesn't modify the moving rules.
      * The only difference is in the return value.
      * @param direction where the worker wants to move to.
      * @param worker the {@link Player}'s {@link Worker} to be moved.
@@ -44,11 +44,10 @@ public class Pan extends God{
 
     /**
      * This method calls the standard build of a worker:
-     * Athena doesn't modify the building rules.
+     * Pan doesn't modify the building rules.
      * @param direction specifies the slot where to build
      * @param worker one of the player's workers
      * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
-     * @throws InvalidDirectionException if there are some troubles of I/O.
      * @throws InvalidBuildException if the build is not permitted.
      */
     @Override

@@ -11,14 +11,11 @@ import java.util.Random;
 public class Game {
     private final Board board;
     private int numberOfPlayers;
-    private boolean start;  //TODO a cosa serve?
     private Player randomPlayer;
     private ArrayList<GodName> gods;
     private ArrayList<Player> players ;
 
-
     public Game(int numberOfPlayers) {
-        setStart();
         this.numberOfPlayers = numberOfPlayers;
         players = new ArrayList<>(numberOfPlayers);
         board = new Board();
@@ -44,9 +41,6 @@ public class Game {
         this.randomPlayer = randomPlayer;
     }
 
-    public boolean isGameStarted() {
-        return start;
-    }
 
     public ArrayList<Player> getPlayers() {
         return new ArrayList<>(players);
@@ -61,8 +55,6 @@ public class Game {
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
-
-    public void setStart(){ start = true; }
 
     public Board getBoard() {
         return board;

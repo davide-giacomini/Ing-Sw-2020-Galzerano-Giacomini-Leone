@@ -2,6 +2,9 @@ package it.polimi.ingsw.PSP47.Enumerations;
 
 import java.io.Serializable;
 
+/**
+ * Enumeration which represents the possible levels that can be built during the game.
+ */
 public enum Level implements Serializable {
     
     GROUND (0),

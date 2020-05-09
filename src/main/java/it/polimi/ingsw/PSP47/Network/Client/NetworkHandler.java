@@ -229,6 +229,9 @@ public class NetworkHandler implements Runnable, ViewListener {
         }
     }
 
+    /**
+     * This method close the client process with no errors.
+     */
     void endConnection(){
         isConnected = false;
         clientTimer.setIsConnectedFalse();
@@ -250,6 +253,12 @@ public class NetworkHandler implements Runnable, ViewListener {
         view.askFirstConnection();
     }
 
+    /**
+     * This method implements the update of the Observer Pattern.
+     * It is called every time the view receives an input from the client,
+     * so its content is notified to the Network Handler.
+     * @param visitableObject the content of the input.
+     */
     @Override
     public void update (Visitable visitableObject){
         visitableObject.accept(networkHandlerVisitor);

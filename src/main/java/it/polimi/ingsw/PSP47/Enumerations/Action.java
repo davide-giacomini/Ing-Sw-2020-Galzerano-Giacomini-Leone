@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP47.Enumerations;
 
-/**Enumeration for the type of available actions**/
+/**
+ * Enumeration for the type of available actions.
+ * **/
 public enum Action {
     MOVE,
     BUILD,

@@ -2,6 +2,9 @@ package it.polimi.ingsw.PSP47.Enumerations;
 
 import java.io.Serializable;
 
+/**
+ * Enumeration which represent the available colors.
+ */
 public enum Color implements Serializable {
 
     RED(0),

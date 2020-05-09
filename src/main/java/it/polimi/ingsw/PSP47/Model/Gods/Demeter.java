@@ -70,7 +70,7 @@ public class Demeter extends God {
     }
 
     /**
-     * It does nothing.
+     * At the end of the turn the previousSlot must be reset, as it won't be the same on the next turn.
      */
     @Override
     public void resetParameters() {

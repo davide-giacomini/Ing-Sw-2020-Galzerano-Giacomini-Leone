@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP47.Enumerations;
 
+/**
+ * Enumeration which represents the possible direction that can be chosen by a player.
+ */
 public enum Direction {
 
     LEFT (0),

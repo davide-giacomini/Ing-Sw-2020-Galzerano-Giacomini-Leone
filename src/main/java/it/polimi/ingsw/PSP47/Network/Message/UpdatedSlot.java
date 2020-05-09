@@ -11,12 +11,9 @@ import java.io.ObjectOutputStream;
 
 /**
  * This message contains an update from the model (a modified slot).
- * It's a S->C message.
  */
 public class UpdatedSlot extends Message{
     private static final long serialVersionUID = 709094366320013507L;
-
-
 
     private Slot updatedSlot ;
 
