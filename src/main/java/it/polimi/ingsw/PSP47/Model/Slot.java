@@ -101,4 +101,8 @@ public class Slot extends SlotObservable implements Serializable {
     public boolean isWorkerOnSlot() {
         return isWorkerOnSlot;
     }
+
+    public boolean isPerimeterSlot(){
+        return (getRow()==0 || getRow()==4 || getColumn()==0 || getColumn()==4);
+    }
 }

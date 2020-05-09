@@ -19,7 +19,12 @@ public class Board {
      */
     public final static int COLUMNS_NUMBER = 5;
     private final Slot[][] slots = new Slot[5][5];
-    
+
+    /**
+     * Counter used for counting the number of domes built
+     */
+    private int countDomes = 0;
+
     /**
      * Create the slots inside the board.
      */
@@ -88,5 +93,14 @@ public class Board {
             }
         }
     }
-    
+
+    public int getCountDomes() {
+        return countDomes;
+    }
+
+    public void incrementCountDomes(){
+        countDomes++;
+    }
+
+
 }

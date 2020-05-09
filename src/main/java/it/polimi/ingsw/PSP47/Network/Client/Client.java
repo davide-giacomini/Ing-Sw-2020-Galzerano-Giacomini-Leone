@@ -1,8 +1,10 @@
 package it.polimi.ingsw.PSP47.Network.Client;
 
+import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Server.*;
-import it.polimi.ingsw.PSP47.View.CLI.View;
 import it.polimi.ingsw.PSP47.View.CLI.CLI;
+import it.polimi.ingsw.PSP47.View.View;
+
 
 import java.io.IOException;
 import java.net.Socket;
@@ -28,7 +30,7 @@ public class Client {
     public void init() {
         //initial request of choice between GUI or CLI
         Scanner scanner = new Scanner(System.in);
-        System.out.println("CLI or GUI ?");
+        System.out.println("CLI or GUI ?" + GodName.APOLLO.getPower());
         String viewChoice = scanner.nextLine();
         
         if ("CLI".equals(viewChoice.toUpperCase())) {

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
-import it.polimi.ingsw.PSP47.Model.Board;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
@@ -40,8 +39,8 @@ public class Hestia extends God {
 
         if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
 
-        if (player.getTurn().getNumberOfBuildings() == 1 && ((Board.getNearbySlot(direction, worker.getSlot()).getRow()==0) || (Board.getNearbySlot(direction, worker.getSlot()).getRow()==4)))
-            throw new InvalidBuildException("You are not allowed to build a second time on a perimeter slot!");
+        if (player.getTurn().getNumberOfBuildings() == 1 && (player.getGame().getBoard().getNearbySlot(direction, worker.getSlot()).isPerimeterSlot()))
+        throw new InvalidBuildException("You are not allowed to build a second time on a perimeter slot!");
 
         try {
             worker.build(direction);
@@ -72,9 +71,9 @@ public class Hestia extends God {
                 try {
                     // If the direction is out of the board, jump to the catch
                     worker.checkDirection(direction);
-                    Slot destinationSlot = Board.getBoard().getNearbySlot(direction, worker.getSlot());
+                    Slot destinationSlot = player.getGame().getBoard().getNearbySlot(direction, worker.getSlot());
                     // else, check if the worker can build on the destinationSlot
-                    if ( !((destinationSlot.getRow()==0) || (destinationSlot.getRow()==4)) && !destinationSlot.isOccupied())
+                    if ( !(destinationSlot.isPerimeterSlot()) && !destinationSlot.isOccupied())
                         return true;
                 }
                 catch (IndexOutOfBoundsException e) {

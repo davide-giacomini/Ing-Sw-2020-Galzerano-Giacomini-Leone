@@ -119,6 +119,7 @@ public class Worker {
         levelToUpdate = destinationSlot.getLevel();
         switch (levelToUpdate) {
             case LEVEL3: destinationSlot.setLevel(Level.DOME);
+                 game.getBoard().incrementCountDomes();
             break;
             case LEVEL2: destinationSlot.setLevel(Level.LEVEL3);
             break;

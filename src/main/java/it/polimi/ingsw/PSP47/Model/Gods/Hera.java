@@ -13,7 +13,14 @@ import it.polimi.ingsw.PSP47.Model.Worker;
 public class Hera extends God  {
 
     public Hera(Player player, String name) {
+
         super(player, name);
+        MIN_MOVEMENTS = 1;
+        MIN_BUILDINGS = 1;
+        MAX_MOVEMENTS = 1;
+        MAX_BUILDINGS = 1;
+        canAlwaysBuildDome = false;
+        canUseBothWorkers = false;
     }
 
     @Override

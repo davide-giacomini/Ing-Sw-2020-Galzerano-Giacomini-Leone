@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP47.View.CLI;
 
 import it.polimi.ingsw.PSP47.Enumerations.*;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
+import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.Visitor.*;
 
 import java.io.PrintStream;
@@ -282,6 +283,16 @@ public class CLI extends View {
 
         out.println("#9 Prometheus – If you don’t move up a level during your turn you may build before and after you move.");
 
+        out.println("#10 Hestia - Your worker may build one additional time. The additional build cannot be on a perimeter space.");
+
+        out.println("#11 Hera - An opponent cannot win by moving on to a perimeter space.");
+
+        out.println("#12 Chronus - You also win when there are at least five complete Towers on the board.");
+
+        out.println("#13 Triton - Each time your Worker moves onto a perimeter space (ground or block), it may immediately move again.");
+
+        out.println("#14 Zeus - your Worker may build under itself in its current space, forcing it up one level. You do not win by forcing yourself up the 3rd level.");
+        //TODO AGGIUNGERE GETPOWER DEGLI DEI
 
         do {
             out.println("Choose which god you want to add in the list : you can choose " + gameView.getNumberOfPlayers() );

@@ -214,6 +214,7 @@ public class Server implements ClientHandlerListener {
             Iterator<ClientHandler> iterator = connectionsAccepted.keySet().iterator();
             ClientHandler client = iterator.next();
             connectionsAccepted.remove(client);
+            client.endConnection();
         }
         
         cleanServer();

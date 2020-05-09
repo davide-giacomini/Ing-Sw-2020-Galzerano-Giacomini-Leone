@@ -4,8 +4,8 @@ import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Message.*;
-import it.polimi.ingsw.PSP47.View.CLI.View;
 import it.polimi.ingsw.PSP47.View.CLI.ViewListener;
+import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.Visitor.NetworkHandlerVisitor;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
@@ -102,7 +102,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                 }
             }
             catch (IOException e){
-                view.showMessage("We are sorry: " +
+                view.showErrorMessage("We are sorry: " +
                         "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");
 
                 if (isConnected)
@@ -111,7 +111,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                 e.printStackTrace();
             }
             catch (ClassNotFoundException e){
-                view.showMessage("Error in casting during the readObject.");
+                view.showErrorMessage("Error in casting during the readObject.");
 
                 if (isConnected)
                     endConnection();
@@ -120,7 +120,7 @@ public class NetworkHandler implements Runnable, ViewListener {
             }
         }
 
-        view.showMessage("Game closed.");
+        view.showImportantMessage("Game closed.");
 //        System.out.println(messageExecutor.isShutdown());
 //        System.out.println(messageExecutor.isTerminated());
     }
@@ -147,7 +147,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.askNumberOfPlayers();
                     break;
                 case WRONG_PARAMETERS:
-                    view.showMessage(((WrongParameters) message).getErrorMessage());
+                    view.showErrorMessage(((WrongParameters) message).getErrorMessage());
                     handleFirstConnection();
                     break;
                 case ASK_WORKER_POSITION:
@@ -168,12 +168,12 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.getGameView().setMyColor(color);
                     break;
                 case CONNECTION_FAILED:
-                    view.showMessage(((ConnectionFailed) message).getErrorMessage());
+                    view.showErrorMessage(((ConnectionFailed) message).getErrorMessage());
                     endConnection();
                     break;
                 case ERROR:
                     String errorText = ((ErrorMessage) message).getErrorText();
-                    view.showMessage(errorText);
+                    view.showErrorMessage(errorText);
                     break;
                 case LIST_OF_GODS:
                     VisitableListOfGods visitableGods = (VisitableListOfGods) message.getContent();
@@ -205,11 +205,11 @@ public class NetworkHandler implements Runnable, ViewListener {
                     break;
                 case OPPONENT_LOOSING:
                     username = ((OpponentLoosing) message).getUsername();
-                    view.showMessage("Player " + username + " lost.");
+                    view.showImportantMessage("Player " + username + " lost.");
                     break;
                 case OPPONENT_WINNING:
                     username = ((OpponentWinning) message).getUsername();
-                    view.showMessage("Player " + username + " win.");
+                    view.showImportantMessage("Player " + username + " win.");
                     break;
             }
         }

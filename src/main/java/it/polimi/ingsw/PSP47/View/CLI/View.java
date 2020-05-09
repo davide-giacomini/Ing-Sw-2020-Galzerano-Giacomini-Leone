@@ -3,6 +3,8 @@ package it.polimi.ingsw.PSP47.View;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
+import it.polimi.ingsw.PSP47.View.CLI.GameView;
+import it.polimi.ingsw.PSP47.View.CLI.ViewObservable;
 
 import java.util.ArrayList;
 

@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP47.Enumerations;
 import java.io.Serializable;
 
 public enum GodName implements Serializable {
-    APOLLO ("Apollo"),
+    APOLLO (""),
     ARTEMIS ("Arthemis"),
     ATHENA ("Athena"),
     ATLAS ("Atlas"),
@@ -56,10 +56,24 @@ public enum GodName implements Serializable {
                 return PAN;
             case "PROMETHEUS" :
                 return PROMETHEUS;
+            case "HESTIA" :
+                return HESTIA;
+            case "HERA":
+                return HERA;
+            case "TRITON":
+                return TRITON;
+            case "CHRONUS":
+                return CHRONUS;
+            case "ZEUS" :
+                return ZEUS;
             default :
                 return WRONGGODNAME;
 
         }
+    }
+
+    public String getPower(){
+        return god;
     }
 
 }
