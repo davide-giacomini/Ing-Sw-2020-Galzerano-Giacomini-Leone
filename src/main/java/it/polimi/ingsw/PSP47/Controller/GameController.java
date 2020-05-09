@@ -353,4 +353,16 @@ public class GameController implements VirtualViewListener {
     public void update(Visitable visitableObject) {
         visitableObject.accept(controllerVisitor);
     }
+
+    public boolean heraWinCondition(Worker currentWorker){
+        boolean thereIsHera = false;
+        for(Player player : game.getPlayers()){
+            if (player.getGod().getName().equals("Hera")) {
+                thereIsHera = true;
+                break;
+            }
+        }
+
+        return currentWorker.getSlot().isPerimeterSlot() && !currentWorker.getPlayer().getGod().getName().equals("Hera") && thereIsHera ;
+    }
 }

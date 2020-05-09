@@ -16,7 +16,7 @@ public class Worker {
      * Variable which represents a female. It's useful to call the female worker through the player's array.
      */
     public final static int FEMALE = 1;
-    Player player;
+    private Player player;
     private final Color color;
     private final Gender gender;
     private Slot slot;
@@ -65,7 +65,7 @@ public class Worker {
         this.slot.setWorker(this);
         int nextLevel = getSlot().getLevel().ordinal();
         
-        return nextLevel-previousLevel>0 && getSlot().getLevel()==Level.LEVEL3;
+        return nextLevel-previousLevel>0 && getSlot().getLevel()==Level.LEVEL3 ;
     }
     
     /**
@@ -171,8 +171,12 @@ public class Worker {
             case RIGHTUP:
                 if (slot.getRow()<1 || slot.getColumn()>Board.COLUMNS_NUMBER -2) throw new IndexOutOfBoundsException();
                 break;
+            case HERE:
+                break;
         }
     }
 
-
+    public Player getPlayer() {
+        return player;
+    }
 }

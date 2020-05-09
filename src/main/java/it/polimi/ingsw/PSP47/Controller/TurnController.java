@@ -59,7 +59,7 @@ public class TurnController {
             if (!player.getGod().checkIfCanGoOn(player.getWorker(workerGender))) {
                 if (workerGender == Gender.MALE)
                     workerGender = Gender.FEMALE;
-                if (workerGender == Gender.FEMALE)
+                else
                     workerGender = Gender.MALE;
                 String textError = "Your worker is blocked. You are forced to use the other one";
                 views.get(indexOfCurrentPlayer).sendError(textError);
@@ -91,7 +91,7 @@ public class TurnController {
                     break;
                 }
                 try {
-                    if (turn.getNumberOfMovements() == turn.getMAX_MOVEMENTS()) {
+                    if (turn.getNumberOfMovements() == player.getGod().getMAX_MOVEMENTS()) {
                         String textError = "You've yet reached the max number of movements in this turn";
                         views.get(indexOfCurrentPlayer).sendError(textError);
                         views.get(indexOfCurrentPlayer).sendWhichAction();
@@ -113,7 +113,7 @@ public class TurnController {
                         }
                     }
                     turn.executeMove(direction);
-                    if (player.isWinning()) {
+                    if (player.isWinning() && !(controller.heraWinCondition(player.getWorker(workerGender)))) {
                         controller.endGame();
                         return;
                     }
@@ -139,7 +139,7 @@ public class TurnController {
                     break;
                 }
                 try {
-                    if (turn.getNumberOfBuildings() == turn.getMAX_BUILDINGS())
+                    if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
                         throw new InvalidBuildException("Max number of buildings reached");
                     turn.executeBuild(direction);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
@@ -156,7 +156,7 @@ public class TurnController {
                     break;
                 }
                 try {
-                    if (turn.getNumberOfBuildings() == turn.getMAX_BUILDINGS())
+                    if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
                         throw new InvalidBuildException("Max number of buildings reached");
                     turn.setWantsToBuildDome(true);
                     turn.executeBuild(direction);

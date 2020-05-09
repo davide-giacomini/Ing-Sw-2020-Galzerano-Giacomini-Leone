@@ -10,10 +10,7 @@ import it.polimi.ingsw.PSP47.Model.Gods.God;
  * His main method are executeMove and executeBuild which update the model the correspondent action.
  */
 public class Turn {
-    private final int MIN_MOVEMENTS;
-    private final int MIN_BUILDINGS;
-    private final int MAX_MOVEMENTS;
-    private final int MAX_BUILDINGS;
+
     private int numberOfMovements;
     private int numberOfBuildings;
     private final Player player;
@@ -31,10 +28,6 @@ public class Turn {
         this.board = board;
         player.setTurn(this);
         player.getGod().resetParameters();
-        MIN_MOVEMENTS = player.getGod().getMIN_MOVEMENTS();
-        MIN_BUILDINGS = player.getGod().getMIN_BUILDINGS();
-        MAX_MOVEMENTS = player.getGod().getMAX_MOVEMENTS();
-        MAX_BUILDINGS = player.getGod().getMAX_BUILDINGS();
         this.wantsToBuildDome = false;
         this.canUseBothWorkers = player.getGod().canUseBothWorkers();
         this.canAlwaysBuildDome = player.getGod().canAlwaysBuildDome();
@@ -158,14 +151,6 @@ public class Turn {
      */
     public boolean validateEndTurn() {
         return player.getGod().validateEndTurn();
-    }
-
-    public int getMAX_MOVEMENTS() {
-        return MAX_MOVEMENTS;
-    }
-
-    public int getMAX_BUILDINGS() {
-        return MAX_BUILDINGS;
     }
 
     public Board getBoard() {

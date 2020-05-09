@@ -81,6 +81,10 @@ public class Chronus extends God  {
 
     @Override
     public boolean validateEndTurn() {
-        return false;
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        return numberOfBuildings >= MIN_BUILDINGS && numberOfMovements >= MIN_MOVEMENTS
+                || numberOfMovements >= MIN_MOVEMENTS && player.isWinning();
     }
 }
