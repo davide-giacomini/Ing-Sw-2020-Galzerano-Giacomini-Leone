@@ -13,13 +13,14 @@ import static org.junit.Assert.*;
 public class GameTest {
     private Game game;
     Board board;
-    private Player player;
+    private Player player, secondPlayer;
     private int numberOfPlayers = 2;
 
     @Before
     public void setUp() {
         game = new Game(numberOfPlayers);
-        player = new Player("Ari", it.polimi.ingsw.PSP47.Enumerations.Color.RED);
+        player = new Player("Ari", Color.RED);
+        secondPlayer = new Player("Anna", Color.GREEN);
         game.addPlayer(player);
         board = game.getBoard();
     }
@@ -50,21 +51,22 @@ public class GameTest {
     }
 
     @Test
-    public void setNumberOfPlayers(){
-        game.setNumberOfPlayers(1);
-        assertEquals(game.getNumberOfPlayers(),1);
-    }
-
-    @Test
     public void getPlayers(){
-        Player p2 = new Player("A", Color.BLUE);
-        game.addPlayer(p2);
+        game.addPlayer(secondPlayer);
 
         ArrayList<Player> listForCompare = new ArrayList<>();
         listForCompare.add(player);
-        listForCompare.add(p2);
+        listForCompare.add(secondPlayer);
 
         assertEquals(game.getPlayers(), listForCompare);
+        game.removePlayer(player);
+        game.removePlayer(secondPlayer);
+    }
+
+    @Test
+    public void setNumberOfPlayers(){
+        game.setNumberOfPlayers(1);
+        assertEquals(game.getNumberOfPlayers(),1);
     }
 
     @Test

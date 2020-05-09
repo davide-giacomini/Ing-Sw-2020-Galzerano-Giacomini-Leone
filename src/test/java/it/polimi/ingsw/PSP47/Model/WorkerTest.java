@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Enumerations.Gender;
 import it.polimi.ingsw.PSP47.Enumerations.Level;
 import it.polimi.ingsw.PSP47.Model.Exceptions.SlotOccupiedException;
+import it.polimi.ingsw.PSP47.Model.Gods.Artemis;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,13 +19,19 @@ public class WorkerTest {
     private Player player;
     private Player otherPlayer;
     private Game game;
+    private Turn turn;
     
     @Before
     public void setUp() {
         game = new Game(3);
         board = game.getBoard();
         player = new Player("first", Color.RED);
+        player.setGod(new Artemis(player, "Artemis"));
         otherPlayer = new Player("second", Color.BLUE);
+        workerMale = player.getWorker(Gender.MALE);
+        workerMale.setSlot(board.getSlot(1,1));
+        turn = new Turn(player, game.getBoard());
+        turn.setWorkerGender(Gender.MALE);
         otherWorkerMale = otherPlayer.getWorker(Gender.MALE);
         workerMale = player.getWorker(Gender.MALE);
     }
@@ -170,6 +177,11 @@ public class WorkerTest {
         workerMale.setSlot(board.getSlot(0, 0));
         otherWorkerMale.setSlot(board.getSlot(0, 1));
         workerMale.buildDome(Direction.RIGHT);
+    }
+
+    @Test
+    public void getPlayer() {
+        assertEquals(workerMale.getPlayer(),player);
     }
 
 

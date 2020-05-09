@@ -24,20 +24,23 @@ public class ArtemisTest {
     private Game game;
     
     @Before
-    public void setUp ()
-            throws Exception {
+    public void setUp () throws Exception {
         game =new Game(3);
         board = game.getBoard();
+
         player = new Player("Monica", Color.YELLOW);
         player.setGod(new Artemis(player, "Artemis"));
+
+        otherPlayer = new Player("Arianna", Color.BLUE);
+        otherWorker = otherPlayer.getWorker(Gender.FEMALE);
+
         maleWorker = player.getWorker(Gender.MALE);
         maleWorker.setSlot(board.getSlot(1,1));
         femaleWorker = player.getWorker(Gender.FEMALE);
         femaleWorker.setSlot(board.getSlot(4,4));
+
         turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
-        otherPlayer = new Player("Arianna", Color.BLUE);
-        otherWorker = otherPlayer.getWorker(Gender.FEMALE);
     }
 
     @After
@@ -108,9 +111,7 @@ public class ArtemisTest {
     @Test (expected = InvalidMoveException.class)
     public void move_NotReachableLevelException()
             throws Exception {
-        otherWorker.setSlot(board.getSlot(2,2));
-        otherWorker.build(Direction.UP);
-        otherWorker.build(Direction.UP);
+        board.getSlot(1,2).setLevel(Level.DOME);
         turn.executeMove(Direction.RIGHT);
     }
 
@@ -122,6 +123,29 @@ public class ArtemisTest {
         turn.executeMove(Direction.RIGHT);
     }
 
+    @Test
+    public void move_IndexOutOfBoundsException()
+            throws Exception {
+        board.getSlot(1,1).setLevel(Level.LEVEL2);
+        maleWorker.setSlot(board.getSlot(1,1));
+        turn.executeMove(Direction.LEFTUP);
+
+        board.getSlot(0,1).setLevel(Level.DOME);
+        board.getSlot(1,0).setLevel(Level.DOME);
+
+        assertFalse(player.getGod().checkIfCanMove(maleWorker));
+
+    }
+
+    @Test (expected = InvalidMoveException.class)
+    public void move_WrongBuildOrMoveException() throws Exception {
+        turn.executeMove(Direction.LEFT);
+        turn.executeBuild(Direction.UP);
+        assertTrue(player.getGod().validateEndTurn());
+        turn.executeMove(Direction.DOWN);
+    }
+
+
     @Test (expected = InvalidBuildException.class)
     public void build_SlotOccupiedException()
             throws Exception {
@@ -129,6 +153,8 @@ public class ArtemisTest {
         turn.executeMove(Direction.LEFT);
         turn.executeBuild(Direction.DOWN);
     }
+
+    //fatto nel controller
 
    /* @Test (expected = InvalidBuildException.class)
     public void build_NoAvailableBuildingsException()
@@ -155,13 +181,6 @@ public class ArtemisTest {
         turn.executeBuild(Direction.UP);
     }
 
-    @Test (expected = InvalidMoveException.class)
-    public void move_WrongBuildOrMoveException() throws Exception {
-        turn.executeMove(Direction.LEFT);
-        turn.executeBuild(Direction.UP);
-        assertTrue(player.getGod().validateEndTurn());
-        turn.executeMove(Direction.DOWN);
-    }
 
     @Test (expected = InvalidMoveException.class)
     public void turn_tryToBackInTheFirst_1()
@@ -220,18 +239,6 @@ public class ArtemisTest {
         assertTrue(player.getGod().checkIfCanMove(maleWorker));
     }
 
-    @Test
-    public void move_IndexOutOfBoundsException()
-            throws Exception {
-        board.getSlot(1,1).setLevel(Level.LEVEL2);
-        maleWorker.setSlot(board.getSlot(1,1));
-        turn.executeMove(Direction.LEFTUP);
 
-        board.getSlot(0,1).setLevel(Level.DOME);
-        board.getSlot(1,0).setLevel(Level.DOME);
-
-        assertFalse(player.getGod().checkIfCanMove(maleWorker));
-
-    }
 
 }

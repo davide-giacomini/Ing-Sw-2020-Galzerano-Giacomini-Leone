@@ -16,32 +16,27 @@ import static org.junit.Assert.*;
 public class MinotaurTest {
     private Turn turn;
     private Player player;
-    private Worker workerM, workerF;
-    private Slot slot2, slotM,slotF;
+    private Worker maleWorker, femaleWorker;
     private Board board;
     private Player secondPlayer;
-    private Worker secondWorker;
+    private Worker otherWorker;
     private Game game;
     
     @Before
     public void setUp() throws Exception{
         game = new Game(3);
         board = game.getBoard();
-        slotM = board.getSlot(2,2);
-        slotF = board.getSlot(0,0);
-        slot2 = board.getSlot(3,3);
+        
         player = new Player("Arianna", Color.BLUE);
+        player.setGod(new Minotaur(player, "Minotaur"));
         secondPlayer = new Player("David", Color.WHITE);
 
-        workerM = player.getWorker(Gender.MALE);
-        workerF = player.getWorker(Gender.FEMALE);
-
-        secondWorker = secondPlayer.getWorker(Gender.FEMALE);
-        workerM.setSlot(slotM);
-        workerF.setSlot(slotF);
-        secondWorker.setSlot(slot2);
-
-        player.setGod(new Minotaur(player, "Minotaur"));
+        maleWorker = player.getWorker(Gender.MALE);
+        femaleWorker = player.getWorker(Gender.FEMALE);
+        otherWorker = secondPlayer.getWorker(Gender.FEMALE);
+        maleWorker.setSlot(board.getSlot(2,2));
+        femaleWorker.setSlot(board.getSlot(0,0));
+        otherWorker.setSlot(board.getSlot(3,3));
 
         turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
@@ -54,14 +49,14 @@ public class MinotaurTest {
 
     @Test
     public void turn_CorrectInput_CorrectOutput_withoutSpecialMove() throws Exception{
-        assertTrue (player.getGod().checkIfCanMove(workerM));
+        assertTrue (player.getGod().checkIfCanMove(maleWorker));
         turn.executeMove(Direction.RIGHT);
-        assertTrue(player.getGod().checkIfCanGoOn(workerM));
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());
 
-        assertTrue(player.getGod().checkIfCanBuild(workerM));
+        assertTrue(player.getGod().checkIfCanBuild(maleWorker));
         turn.executeBuild(Direction.LEFTUP);
-        assertFalse(player.getGod().checkIfCanGoOn(workerM));
+        assertFalse(player.getGod().checkIfCanGoOn(maleWorker));
         assertTrue(player.getGod().validateEndTurn());
 
 
@@ -69,14 +64,14 @@ public class MinotaurTest {
 
     @Test
     public void turn_CorrectInput_CorrectOutput_withSpecialMove() throws Exception{
-        assertTrue (player.getGod().checkIfCanMove(workerM));
+        assertTrue (player.getGod().checkIfCanMove(maleWorker));
         turn.executeMove(Direction.RIGHTDOWN);
-        assertTrue(player.getGod().checkIfCanGoOn(workerM));
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());
 
-        assertTrue(player.getGod().checkIfCanBuild(workerM));
+        assertTrue(player.getGod().checkIfCanBuild(maleWorker));
         turn.executeBuild(Direction.LEFTUP);
-        assertFalse(player.getGod().checkIfCanGoOn(workerM));
+        assertFalse(player.getGod().checkIfCanGoOn(maleWorker));
         assertTrue(player.getGod().validateEndTurn());
 
 
@@ -84,52 +79,26 @@ public class MinotaurTest {
 
     @Test (expected = InvalidMoveException.class)
     public void move_SlotOccupiedException_becauseOutOfBoard() throws Exception{
-        secondWorker.setSlot(board.getSlot(2,4));
-        workerM.setSlot(board.getSlot(2,3));
+        otherWorker.setSlot(board.getSlot(2,4));
+        maleWorker.setSlot(board.getSlot(2,3));
         turn.executeMove(Direction.RIGHT);
     }
 
     @Test (expected = InvalidMoveException.class)
     public void move_SlotOccupiedException_becauseOccupied()
             throws Exception{
-        secondWorker.setSlot(board.getSlot(2,3));
-        secondWorker.build(Direction.RIGHT);
-        secondWorker.build(Direction.RIGHT);
-        secondWorker.build(Direction.RIGHT);
-        secondWorker.build(Direction.RIGHT);
+        board.getSlot(2,3).setLevel(Level.DOME);
         turn.executeMove(Direction.RIGHT);
     }
 
     @Test
-    public void checkIfCanMove_withCannotMoveUp() throws Exception{
-        player.setCannotMoveUp(true);
-        assertTrue(player.getGod().checkIfCanMove(workerM));
-
-    }
-
-    @Test
-    public void checkIfCanMove() throws Exception{
-        secondWorker.setSlot(board.getSlot(2,1));
-        assertTrue(player.getGod().checkIfCanMove(workerM));
-
-    }
-
-    @Test
     public void build_IndexOutOfBoundsException_firstBuild() throws Exception{
-        workerM.setSlot(board.getSlot(4,4));
+        maleWorker.setSlot(board.getSlot(4,4));
         board.getSlot(3,3).setLevel(Level.DOME);
         board.getSlot(3,4).setLevel(Level.DOME);
         board.getSlot(4,3).setLevel(Level.DOME);
-        /*
-        board.getSlot(2,4).setLevel(Level.DOME);
-        board.getSlot(2,3).setLevel(Level.DOME);
 
-
-        board.getSlot(4,2).setLevel(Level.DOME);
-        board.getSlot(2,2).setLevel(Level.DOME);
-        board.getSlot(3,2).setLevel(Level.DOME);*/
-
-        assertFalse(player.getGod().checkIfCanMove(workerM));
+        assertFalse(player.getGod().checkIfCanMove(maleWorker));
 
     }
 
@@ -142,6 +111,18 @@ public class MinotaurTest {
     }
 
 
+    @Test
+    public void checkIfCanMove_withCannotMoveUp() throws Exception{
+        player.setCannotMoveUp(true);
+        assertTrue(player.getGod().checkIfCanMove(maleWorker));
 
+    }
+
+    @Test
+    public void checkIfCanMove() throws Exception{
+        otherWorker.setSlot(board.getSlot(2,1));
+        assertTrue(player.getGod().checkIfCanMove(maleWorker));
+
+    }
 
     }

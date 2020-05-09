@@ -16,11 +16,11 @@ import static org.junit.Assert.*;
 public class DemeterTest {
     private Turn turn;
     private Player player;
-    private Worker worker;
-    private Slot slot1, slot2;
+    private Worker maleWorker;
+    private Worker femaleWorker;
     private Board board;
     private Player secondPlayer;
-    private Worker secondWorker;
+
     private Game game;
     
     
@@ -29,15 +29,15 @@ public class DemeterTest {
             throws Exception {
         game = new Game(3);
         board = game.getBoard();
-        slot1 = board.getSlot(3,3);
-        slot2 = board.getSlot(4,4);
+        
         player = new Player("Arianna", Color.BLUE);
-        secondPlayer = new Player("David", Color.YELLOW);
-        worker = player.getWorker(Gender.MALE);
-        secondWorker = player.getWorker(Gender.FEMALE);
-        worker.setSlot(slot1);
-        secondWorker.setSlot(slot2);
         player.setGod(new Demeter(player, "Demeter"));
+        secondPlayer = new Player("David", Color.YELLOW);
+        
+        maleWorker = player.getWorker(Gender.MALE);
+        femaleWorker = player.getWorker(Gender.FEMALE);
+        maleWorker.setSlot(board.getSlot(3,3));
+        femaleWorker.setSlot(board.getSlot(4,4));
 
         turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
@@ -52,14 +52,14 @@ public class DemeterTest {
     public void turn_CorrectInput_CorrectOutput_OneBuild()
             throws Exception {
 
-        assertTrue (player.getGod().checkIfCanMove(worker));
+        assertTrue (player.getGod().checkIfCanMove(maleWorker));
         turn.executeMove(Direction.RIGHT);
-        assertTrue(player.getGod().checkIfCanGoOn(worker));
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());
 
-        assertTrue(player.getGod().checkIfCanBuild(worker));
+        assertTrue(player.getGod().checkIfCanBuild(maleWorker));
         turn.executeBuild(Direction.LEFTUP);
-        assertTrue(player.getGod().checkIfCanGoOn(worker));
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertTrue(player.getGod().validateEndTurn());
 
     }
@@ -68,18 +68,18 @@ public class DemeterTest {
     public void turn_CorrectInput_CorrectOutput_TwoBuild()
             throws Exception {
 
-        assertTrue (player.getGod().checkIfCanMove(worker));
+        assertTrue (player.getGod().checkIfCanMove(maleWorker));
         turn.executeMove(Direction.RIGHT);
-        assertTrue(player.getGod().checkIfCanGoOn(worker));
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());
 
-        assertTrue(player.getGod().checkIfCanBuild(worker));
+        assertTrue(player.getGod().checkIfCanBuild(maleWorker));
         turn.executeBuild(Direction.LEFTUP);
-        assertTrue(player.getGod().checkIfCanGoOn(worker));
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
 
-        assertTrue(player.getGod().checkIfCanBuild(worker));
+        assertTrue(player.getGod().checkIfCanBuild(maleWorker));
         turn.executeBuild(Direction.UP);
-        assertFalse(player.getGod().checkIfCanGoOn(worker));
+        assertFalse(player.getGod().checkIfCanGoOn(maleWorker));
         assertTrue(player.getGod().validateEndTurn());
 
     }
@@ -93,12 +93,12 @@ public class DemeterTest {
     @Test (expected = InvalidMoveException.class)
     public void move_NotReachableLevelException()
             throws Exception {
-        
-        secondWorker.build(Direction.LEFT);
-        secondWorker.build(Direction.LEFT);
+
+        board.getSlot(4,3).setLevel(Level.LEVEL2);
         turn.executeMove(Direction.DOWN);
     }
 
+    //fatto dal controller
    /* @Test (expected = InvalidMoveException.class)
     public void move_NoAvailableMovementsException()
             throws Exception {
@@ -127,7 +127,7 @@ public class DemeterTest {
         turn.executeMove(Direction.LEFT);
         turn.executeBuild(Direction.DOWN);
         turn.executeBuild(Direction.UP);
-        assertFalse(player.getGod().checkIfCanBuild(worker));
+        assertFalse(player.getGod().checkIfCanBuild(maleWorker));
         turn.executeBuild(Direction.DOWN);
     }
 
@@ -147,7 +147,7 @@ public class DemeterTest {
         board.getSlot(3,3).setLevel(Level.DOME);
         board.getSlot(4,3).setLevel(Level.DOME);
         board.getSlot(4,4).setLevel(Level.DOME);
-        assertFalse(player.getGod().checkIfCanBuild(worker));
+        assertFalse(player.getGod().checkIfCanBuild(maleWorker));
 
     }
 
@@ -161,7 +161,7 @@ public class DemeterTest {
         board.getSlot(3,3).setLevel(Level.DOME);
         board.getSlot(4,3).setLevel(Level.DOME);
         board.getSlot(4,4).setLevel(Level.DOME);
-        assertFalse(player.getGod().checkIfCanBuild(worker));
+        assertFalse(player.getGod().checkIfCanBuild(maleWorker));
 
     }
 

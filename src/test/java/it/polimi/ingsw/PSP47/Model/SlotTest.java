@@ -37,9 +37,9 @@ public class SlotTest {
     }
     @Test
     public void getWorker(){
-        Worker w = new Worker(player, Color.BLUE, Gender.MALE);
-        slot.setWorker(w);
-        assertEquals(slot.getWorker(),w);
+        Worker worker = new Worker(player, Color.BLUE, Gender.MALE);
+        slot.setWorker(worker);
+        assertEquals(slot.getWorker(),worker);
     }
     @Test
     public void getLevel(){
@@ -62,6 +62,41 @@ public class SlotTest {
     @Test
     public void toString_compareOfStrings(){
         assertEquals(slot.toString(),"Row: " + slot.getRow() + "\nColumn: " + slot.getColumn());
+    }
+
+    @Test
+    public void getWorkerColor() {
+        Worker worker = new Worker(player, Color.BLUE, Gender.MALE);
+        slot.setWorker(worker);
+        assertEquals(slot.getWorkerColor(), worker.getColor());
+    }
+
+    @Test
+    public void setWorkerColor() {
+        Worker worker = new Worker(player, Color.BLUE, Gender.MALE);
+        slot.setWorker(worker);
+        slot.setWorkerColor(Color.BLUE);
+        assertEquals(slot.getWorkerColor(), worker.getColor());
+    }
+
+    @Test
+    public void setWorkerOn() {
+        slot.setWorkerOn(true);
+        assertTrue(slot.isWorkerOnSlot());
+    }
+
+    @Test
+    public void isWorkerOnSlot() {
+        assertFalse(slot.isWorkerOnSlot());
+        Worker worker = new Worker(player, Color.BLUE, Gender.MALE);
+        slot.setWorker(worker);
+        assertTrue(slot.isWorkerOnSlot());
+    }
+
+    @Test
+    public void isPerimeterSlot(){
+        Slot perimeterSlot = game.getBoard().getSlot(0,0);
+        assertTrue(perimeterSlot.isPerimeterSlot());
     }
 
 

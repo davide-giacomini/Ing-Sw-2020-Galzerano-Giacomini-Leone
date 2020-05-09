@@ -16,32 +16,30 @@ import static org.junit.Assert.*;
 public class ApolloTest {
     private Turn turn;
     private Player player;
-    private Worker workerF,workerM;
+    private Worker femaleWorker,maleWorker;
     private Slot slotF, slotM, slot2;
     private Board board;
     private Player secondPlayer;
-    private Worker secondWorker;
+    private Worker otherWorker;
     private Game game;
     
     @Before
     public void setUp()
             throws Exception {
+
         game = new Game(3);
         board = game.getBoard();
-        slotM = board.getSlot(2,2);
-        slot2 = board.getSlot(3,3);
-        slotF = board.getSlot(0,0);
 
         player = new Player("Arianna", Color.BLUE);
         secondPlayer = new Player("Monichella", Color.WHITE);
 
-        workerM = player.getWorker(Gender.MALE);
-        workerF = player.getWorker(Gender.FEMALE);
+        maleWorker = player.getWorker(Gender.MALE);
+        femaleWorker = player.getWorker(Gender.FEMALE);
 
-        secondWorker = secondPlayer.getWorker(Gender.FEMALE);
-        workerM.setSlot(slotM);
-        workerF.setSlot(slotF);
-        secondWorker.setSlot(slot2);
+        otherWorker = secondPlayer.getWorker(Gender.FEMALE);
+        maleWorker.setSlot(board.getSlot(2,2));
+        femaleWorker.setSlot(board.getSlot(0,0));
+        otherWorker.setSlot(board.getSlot(3,3));
 
         player.setGod(new Apollo(player, "Apollo"));
 
@@ -54,18 +52,26 @@ public class ApolloTest {
         board.clearBoard();
     }
 
+    @Test
+    public void get_Numbers(){
+        assertEquals(player.getGod().getMAX_BUILDINGS(),1);
+        assertEquals(player.getGod().getMIN_BUILDINGS(),1);
+        assertEquals(player.getGod().getMAX_MOVEMENTS(),1);
+        assertEquals(player.getGod().getMIN_BUILDINGS(),1);
+    }
+
 
     @Test
     public void turn_CorrectInput_CorrectOutput_withoutSpecialMove()  throws Exception{
         assertEquals(player.getGod().getName(), "Apollo");
-        assertTrue (player.getGod().checkIfCanMove(workerM));
+        assertTrue (player.getGod().checkIfCanMove(maleWorker));
         turn.executeMove(Direction.RIGHT);
-        assertTrue(player.getGod().checkIfCanGoOn(workerM));
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());
 
-        assertTrue(player.getGod().checkIfCanBuild(workerM));
+        assertTrue(player.getGod().checkIfCanBuild(maleWorker));
         turn.executeBuild(Direction.LEFTUP);
-        assertFalse(player.getGod().checkIfCanGoOn(workerM));
+        assertFalse(player.getGod().checkIfCanGoOn(maleWorker));
         assertTrue(player.getGod().validateEndTurn());
 
 
@@ -74,14 +80,14 @@ public class ApolloTest {
     @Test
     public void turn_CorrectInput_CorrectOutput_withSpecialMove()  throws Exception{
 
-        assertTrue (player.getGod().checkIfCanMove(workerM));
+        assertTrue (player.getGod().checkIfCanMove(maleWorker));
         turn.executeMove(Direction.RIGHTDOWN);
-        assertTrue(player.getGod().checkIfCanGoOn(workerM));
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());
 
-        assertTrue(player.getGod().checkIfCanBuild(workerM));
+        assertTrue(player.getGod().checkIfCanBuild(maleWorker));
         turn.executeBuild(Direction.LEFT);
-        assertFalse(player.getGod().checkIfCanGoOn(workerM));
+        assertFalse(player.getGod().checkIfCanGoOn(maleWorker));
         assertTrue(player.getGod().validateEndTurn());
 
 
@@ -90,6 +96,7 @@ public class ApolloTest {
     @Test (expected = InvalidMoveException.class)
     public void move_SlotOccupiedException()  throws Exception {
         board.getSlot(1,1).setLevel(Level.DOME);
+
         turn.executeMove(Direction.LEFTUP);
 
     }
@@ -97,38 +104,39 @@ public class ApolloTest {
         @Test
     public void checkIfCanMove_withCannotMoveUp() throws Exception{
         player.setCannotMoveUp(true);
-        secondWorker.setSlot(board.getSlot(2,1));
-        assertTrue(player.getGod().checkIfCanMove(workerM));
+        otherWorker.setSlot(board.getSlot(2,1));
+        assertTrue(player.getGod().checkIfCanMove(maleWorker));
     }
 
     @Test
     public void checkIfCanMoveInNormalCondition_withCannotMoveUp() throws Exception {
         player.setCannotMoveUp(true);
-        assertTrue(player.getGod().checkIfCanMove(workerM));
+        assertTrue(player.getGod().checkIfCanMove(maleWorker));
     }
 
     @Test
     public void checkIfCanMove() throws Exception {
-        secondWorker.setSlot(board.getSlot(2,1));
-        assertTrue(player.getGod().checkIfCanMove(workerM));
+        otherWorker.setSlot(board.getSlot(2,1));
+
+        assertTrue(player.getGod().checkIfCanMove(maleWorker));
 
     }
 
     @Test
     public void move_IndexOutOfBoundsException() throws Exception {
-        workerM.setSlot(board.getSlot(4,4));
+        maleWorker.setSlot(board.getSlot(4,4));
         board.getSlot(3,3).setLevel(Level.DOME);
         board.getSlot(3,4).setLevel(Level.DOME);
         board.getSlot(4,3).setLevel(Level.DOME);
 
-        assertFalse(player.getGod().checkIfCanMove(workerM));
+        assertFalse(player.getGod().checkIfCanMove(maleWorker));
 
     }
 
     @Test (expected = InvalidBuildException.class)
     public void build_InvalidBuildException()  throws Exception{
 
-        assertTrue(player.getGod().checkIfCanBuild(workerM));
+        assertTrue(player.getGod().checkIfCanBuild(maleWorker));
         turn.executeBuild(Direction.LEFT);
     }
 

@@ -13,27 +13,30 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 public class PanTest {
-    private Worker worker;
     private Board board;
     private Player player;
     private Turn turn;
     private Player otherPlayer;
     private Worker otherWorker;
-    private Worker femaleWorker;
+    private Worker maleWorker,femaleWorker;
     private Game game;
     
     @Before
     public void setUp () throws Exception{
         game = new Game(3);
         board = game.getBoard();
+
         player = new Player("Monica", it.polimi.ingsw.PSP47.Enumerations.Color.YELLOW);
         player.setGod(new Pan(player, "Pan"));
-        worker = player.getWorker(Gender.MALE);
-        worker.setSlot(board.getSlot(3,3));
+        otherPlayer = new Player("Arianna", Color.BLUE);
+
+
+        maleWorker = player.getWorker(Gender.MALE);
+        maleWorker.setSlot(board.getSlot(3,3));
         femaleWorker = player.getWorker(Gender.FEMALE);
         femaleWorker.setSlot(board.getSlot(4,4));
-        otherPlayer = new Player("Arianna", Color.BLUE);
         otherWorker = player.getWorker(Gender.FEMALE);
+
         turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
     }
@@ -47,11 +50,11 @@ public class PanTest {
     public void turn_CorrectInput_CorrectOutput()
             throws Exception{
         turn.executeMove(Direction.LEFT);
-        assertTrue(player.getGod().checkIfCanGoOn(worker));
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());
         turn.executeBuild(Direction.DOWN);
         assertFalse(player.isWinning());
-        assertFalse(player.getGod().checkIfCanGoOn(worker));
+        assertFalse(player.getGod().checkIfCanGoOn(maleWorker));
         assertTrue(player.getGod().validateEndTurn());
     }
 
@@ -70,6 +73,7 @@ public class PanTest {
         turn.executeMove(Direction.UP);
     }
 
+    //fatto dal controller
     /*@Test (expected = InvalidMoveException.class)
     public void move_NoAvailableMovementsException()
             throws Exception{
@@ -85,6 +89,7 @@ public class PanTest {
         turn.executeBuild(Direction.UP);
     }
 
+    //fatto dal controller
     /*@Test (expected = InvalidBuildException.class)
     public void build_NoAvailableBuildingsException()
             throws Exception{

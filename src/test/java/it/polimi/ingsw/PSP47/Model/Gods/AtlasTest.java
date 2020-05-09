@@ -27,16 +27,21 @@ public class AtlasTest {
             throws Exception {
         game = new Game(3);
         board = game.getBoard();
+
         player = new Player("Monica", Color.YELLOW);
         player.setGod(new Atlas(player, "Atlas"));
+
+        otherPlayer = new Player("Arianna", Color.BLUE);
+        otherWorker = otherPlayer.getWorker(Gender.FEMALE);
+
         maleWorker = player.getWorker(Gender.MALE);
         maleWorker.setSlot(board.getSlot(0,0));
         femaleWorker = player.getWorker(Gender.FEMALE);
         femaleWorker.setSlot(board.getSlot(2,2));
+
         turn = new Turn(player, game.getBoard());
         turn.setWorkerGender(Gender.MALE);
-        otherPlayer = new Player("Arianna", Color.BLUE);
-        otherWorker = otherPlayer.getWorker(Gender.FEMALE);
+
     }
 
     @After
@@ -82,12 +87,11 @@ public class AtlasTest {
     @Test (expected = InvalidMoveException.class)
     public void move_NotReachableLevelException()
             throws Exception {
-        otherWorker.setSlot(board.getSlot(1,1));
-        otherWorker.build(Direction.UP);
-        otherWorker.build(Direction.UP);
+        board.getSlot(0,1).setLevel(Level.LEVEL2);
         turn.executeMove(Direction.RIGHT);
     }
 
+    //fatto dal controller
     /*@Test (expected = InvalidMoveException.class)
     public void move_NoAvailableMovementsException()
             throws Exception {
@@ -103,6 +107,7 @@ public class AtlasTest {
         turn.executeBuild(Direction.RIGHT);
     }
 
+    //fatto dal controller
     /*@Test (expected = InvalidBuildException.class)
     public void build_NoAvailableBuildingsException()
             throws Exception {
@@ -125,5 +130,19 @@ public class AtlasTest {
         turn.wantsToBuildDome();
         player.canBuildDome();
         turn.executeBuild(Direction.RIGHT);
+    }
+
+    @Test (expected = InvalidBuildException.class)
+    public void build_WantsToBuildDome_slotOccupied()
+            throws Exception {
+        turn.setWantsToBuildDome(true);
+        board.getSlot(2,1).setLevel(Level.DOME);
+        turn.executeMove(Direction.RIGHTDOWN);
+        assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
+        assertFalse(player.getGod().validateEndTurn());
+        turn.executeBuild(Direction.DOWN);
+        assertFalse(player.isWinning());
+        assertFalse(player.getGod().checkIfCanGoOn(maleWorker));
+        assertTrue(player.getGod().validateEndTurn());
     }
 }

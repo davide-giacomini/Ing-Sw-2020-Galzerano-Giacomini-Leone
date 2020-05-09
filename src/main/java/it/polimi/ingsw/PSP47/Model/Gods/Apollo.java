@@ -108,7 +108,7 @@ public class Apollo extends God {
 
                 // else, check if the worker can move to the destinationSlot
                 //if it is occupied do the special check
-                if (destinationSlot!=null && destinationSlot.isOccupied() ){
+                if (destinationSlot!=null && destinationSlot.isWorkerOnSlot() && !destinationSlot.getWorker().getColor().equals(worker.getColor()) ){
                     //Since there has to be a switch between workers following the rules, I have to consider that
                     //in both movements the difference of levels has to be max 1
                     if (!player.cannotMoveUp() && destinationSlot.getLevel().ordinal() <= worker.getSlot().getLevel().ordinal()+1)

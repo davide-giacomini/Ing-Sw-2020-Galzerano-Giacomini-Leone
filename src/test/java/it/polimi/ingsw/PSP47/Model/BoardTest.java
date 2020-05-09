@@ -29,31 +29,25 @@ public class BoardTest {
         board = null;
     }
 
-   /* @Test
-    public void singletonBoard() {
-        Board secondBoard = board.getBoard();
-        assertSame(board,secondBoard);
-    }*/
-
     @Test
     public void getNearbySlot_CorrectInput_CorrectOutput_Left() throws InvalidDirectionException {
 
-            Slot slot = board.getNearbySlot(Direction.LEFT,board.getSlot(3,3));
-            assertSame(board.getSlot(3,2), slot);
+        Slot slot = board.getNearbySlot(Direction.LEFT,board.getSlot(3,3));
+        assertSame(board.getSlot(3,2), slot);
     }
 
     @Test
     public void getNearbySlot_CorrectInput_CorrectOutput_Right() throws InvalidDirectionException{
-            Slot slot = board.getNearbySlot(Direction.RIGHT,board.getSlot(3,3));
-            assertSame(board.getSlot(3,4), slot);
+        Slot slot = board.getNearbySlot(Direction.RIGHT,board.getSlot(3,3));
+        assertSame(board.getSlot(3,4), slot);
 
     }
 
     @Test
     public void getNearbySlot_CorrectInput_CorrectOutputUp() throws InvalidDirectionException{
 
-            Slot slot = board.getNearbySlot(Direction.UP,board.getSlot(3,3));
-            assertSame(board.getSlot(2,3), slot);
+        Slot slot = board.getNearbySlot(Direction.UP,board.getSlot(3,3));
+        assertSame(board.getSlot(2,3), slot);
 
     }
 

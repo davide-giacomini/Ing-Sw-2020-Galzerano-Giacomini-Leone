@@ -18,7 +18,6 @@ public class HephaestusTest {
     private Turn turn;
     private Player player;
     private Worker worker;
-    private Slot slot1, slot2;
     private Board board;
     private Player secondPlayer;
     private Worker secondWorker;
@@ -29,16 +28,13 @@ public class HephaestusTest {
         game = new Game(3);
         board = game.getBoard();
 
-        slot1 = board.getSlot(3,3);
-        slot2 = board.getSlot(4,4);
-
         player = new Player("Arianna", Color.BLUE);
         secondPlayer = new Player("David", Color.YELLOW);
 
         worker = player.getWorker(Gender.MALE);
         secondWorker = player.getWorker(Gender.FEMALE);
-        worker.setSlot(slot1);
-        secondWorker.setSlot(slot2);
+        worker.setSlot(board.getSlot(3,3));
+        secondWorker.setSlot(board.getSlot(4,4));
 
         player.setGod(new Hephaestus(player, "Hephaestus"));
 
@@ -49,7 +45,7 @@ public class HephaestusTest {
 
     @After
     public void tearDown() {
-        game.getBoard().clearBoard();
+        board.clearBoard();
     }
 
     @Test
@@ -96,6 +92,7 @@ public class HephaestusTest {
         turn.executeMove(Direction.DOWN);
     }
 
+    //fatto dal controller
    /* @Test (expected = InvalidMoveException.class)
     public void move_NoAvailableMovementsException() throws  Exception {
         turn.executeMove(Direction.LEFT);
@@ -110,12 +107,11 @@ public class HephaestusTest {
     @Test (expected = InvalidBuildException.class)
     public void second_build_WrongBuildOrMoveException() throws  Exception {
         turn.executeMove(Direction.LEFT);
-
         turn.executeBuild(Direction.RIGHT);
-
         turn.executeBuild(Direction.LEFTUP);
     }
 
+    //fatto dal controller
     /*@Test (expected = InvalidBuildException.class)
     public void build_NoAvailableBuildingsException() throws  Exception{
         turn.executeMove(Direction.LEFT);
