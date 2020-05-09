@@ -6,7 +6,7 @@ import it.polimi.ingsw.PSP47.Visitor.VisitableInitialPositions;
 
 /**
  * This message contains an array of coordinates (row1, column1, row2, column2) that indicates the initial positions of
- * the worker of a specifical player. It is a C->S message.
+ * the worker of a specific player.
  */
 public class AskWorkersPosition extends VisitableMessage{
     private static final long serialVersionUID = 2612090580702427837L;

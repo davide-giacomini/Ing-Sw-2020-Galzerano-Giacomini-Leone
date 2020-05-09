@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP47.Enumerations;
 
+/**
+ * Enumeration which represents all the message to send during the game.
+ */
 public enum MessageType {
     REQUEST_CONNECTION,
     CONNECTION_FAILED,

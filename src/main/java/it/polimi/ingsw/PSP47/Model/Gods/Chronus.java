@@ -23,6 +23,16 @@ public class Chronus extends God  {
         canAlwaysBuildDome = false;
     }
 
+    /**
+     * This method calls the standard move of a worker after controlling
+     * if there are five complete towards on the board, as in this case the
+     * player instantly win.
+     * @param direction where the worker wants to move to.
+     * @param worker the {@link Player}'s {@link Worker} to be moved.
+     * @return true if the winning condition has been verified, false otherwise
+     * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
+     * @throws InvalidMoveException if the move is invalid.
+     */
     @Override
     public boolean move(Direction direction, Worker worker) throws IndexOutOfBoundsException, InvalidMoveException{
 
@@ -39,6 +49,15 @@ public class Chronus extends God  {
 
     }
 
+    /**
+     * This method calls the standard move of a worker after controlling
+     * if there are five complete towards on the board, as in this case the
+     * player instantly win.
+     * @param direction specifies the slot where to build
+     * @param worker one of the player's workers
+     * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
+     * @throws InvalidBuildException if building is not permitted.
+     */
     @Override
     public void build(Direction direction, Worker worker) throws IndexOutOfBoundsException, InvalidBuildException{
         if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements not correct");
@@ -51,21 +70,41 @@ public class Chronus extends God  {
         }
     }
 
+    /**
+     * It does nothing.
+     */
     @Override
     public void resetParameters() {
 
     }
 
+    /**
+     * This method directly calls the God's method checkIfCanMoveInNormalConditions,
+     * as in this case there is nothing else to control.
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @return true if the worker can move, false otherwise
+     */
     @Override
     public boolean checkIfCanMove(Worker worker) {
         return checkIfCanMoveInNormalConditions(worker);
     }
 
+    /**
+     * This method directly calls the God's method checkIfCanBuildInNormalConditions,
+     * as in this case there is nothing else to control.
+     * @param worker {@link Player}'s {@link Worker} selected to be checked.
+     * @return true if the worker can build, false otherwise.
+     */
     @Override
     public boolean checkIfCanBuild(Worker worker) {
         return checkIfCanBuildInNormalConditions(worker);
     }
 
+    /**
+     * This method checks if the worker is paralyzed or not.
+     * @param worker the worker chosen to be checked.
+     * @return true if the worker can go on, false otherwise.
+     */
     @Override
     public boolean checkIfCanGoOn(Worker worker) {
         int numberOfMovements = player.getTurn().getNumberOfMovements();
@@ -78,6 +117,10 @@ public class Chronus extends God  {
         return false;
     }
 
+    /**
+     * This method checks if the player has completed a turn or if he still have to do some actions.
+     * @return true if he can end his turn, false otherwise.
+     */
     @Override
     public boolean validateEndTurn() {
         int numberOfMovements = player.getTurn().getNumberOfMovements();

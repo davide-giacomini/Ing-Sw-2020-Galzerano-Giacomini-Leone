@@ -80,99 +80,178 @@ public class TurnController {
         if (!(player.getGod().checkIfCanGoOn(player.getWorker(workerGender))) && !(player.getGod().validateEndTurn()) ) {
             player.setLoosing(true);
         }
+        if (player.isLoosing()) {
+            controller.removeLosingPlayer();
+            return;
+        }
         switch (action) {
             case MOVE:
-                if (player.isLoosing()) {
-                    controller.removeLosingPlayer();
-                    break;
-                }
-                try {
-                    if (turn.getNumberOfMovements() == player.getGod().getMAX_MOVEMENTS()) {
-                        String textError = "You've yet reached the max number of movements in this turn";
-                        views.get(indexOfCurrentPlayer).sendError(textError);
-                        views.get(indexOfCurrentPlayer).sendWhichAction();
-                        return;
-                    }
-                    else if (game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).getLevel() == (Level.DOME) ||
-                            game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).getLevel() == (Level.ATLAS_DOME)) {
-                        String textError = "This slot contains a dome, you cannot move here";
-                        views.get(indexOfCurrentPlayer).sendError(textError);
-                        views.get(indexOfCurrentPlayer).sendWhichAction();
-                        return;
-                    }
-                    else if (game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender))).isWorkerOnSlot()) {
-                        if (!(player.getGod().getName().equals("Apollo") || player.getGod().getName().equals("Minotaur"))) {
-                            String textError = "This slot contains another worker, you cannot move here";
-                            views.get(indexOfCurrentPlayer).sendError(textError);
-                            views.get(indexOfCurrentPlayer).sendWhichAction();
-                            return;
-                        }
-                    }
-                    turn.executeMove(direction);
-                    if (player.isWinning() && !(controller.heraWinCondition(player.getWorker(workerGender)))) {
-                        controller.endGame();
-                        return;
-                    }
-                    if (player.getGod().getName().equals("Athena")) {
-                        boolean moveUp = ((Athena)player.getGod()).isMoveUp();
-                        for (int i = 0; i<game.getNumberOfPlayers(); i++) {
-                            if (game.getPlayer(i) != null && game.getPlayer(i) != player) {
-                                game.getPlayer(i).setCannotMoveUp(moveUp);
-                            }
-                        }
-                    }
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
-                    break;
-                } catch (InvalidDirectionException | InvalidMoveException | IndexOutOfBoundsException e) {
-                    String textError = e.getMessage();
-                    views.get(indexOfCurrentPlayer).sendError(textError);
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
-                    return;
-                }
+                move(direction);
+                break;
             case BUILD:
-                if (player.isLoosing()) {
-                    controller.removeLosingPlayer();
-                    break;
-                }
-                try {
-                    if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
-                        throw new InvalidBuildException("Max number of buildings reached");
-                    turn.executeBuild(direction);
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
-                    break;
-                } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
-                    String textError = e.getMessage();
-                    views.get(indexOfCurrentPlayer).sendError(textError);
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
-                    return;
-                }
+                build(direction);
+                break;
             case BUILDDOME:
-                if (player.isLoosing()) {
-                    controller.removeLosingPlayer();
-                    break;
-                }
-                try {
-                    if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
-                        throw new InvalidBuildException("Max number of buildings reached");
-                    turn.setWantsToBuildDome(true);
-                    turn.executeBuild(direction);
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
-                    break;
-                } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
-                    String textError = e.getMessage();
-                    views.get(indexOfCurrentPlayer).sendError(textError);
-                    views.get(indexOfCurrentPlayer).sendWhichAction();
-                    return;
-                }
+                buildDome(direction);
+                break;
             case END:
                 if (!turn.validateEndTurn()) {
-                    String textError = "You cannot end your turn, you must do another action!";
+                    String textError = "You're not allowed to end your turn. You have to choose another action";
                     views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     return;
                 }
                 controller.turn();
-                return;
         }
+    }
+
+    /**
+     * This method executes a move. There are several check before the model's method
+     * is called: if all of them are negative, the action is executed.
+     * Otherwise, it sends an error and asks again.
+     * @param direction the direction where the worker is going to move
+     */
+    private void move(Direction direction) {
+        try {
+            Slot actualSlot = player.getWorkerPosition(player.getWorker(workerGender));
+            Slot destinationSlot = game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender)));
+            String textError = null;
+            if (turn.getNumberOfMovements() == player.getGod().getMAX_MOVEMENTS())
+                textError = "You've yet reached the max number of movements in this turn";
+            else if (destinationSlot.getLevel() == (Level.DOME) || destinationSlot.getLevel() == (Level.ATLAS_DOME))
+                textError = "This slot contains a dome, you cannot move here";
+            else if (destinationSlot.isWorkerOnSlot()) {
+                if (!(player.getGod().getName().equals("Apollo") || player.getGod().getName().equals("Minotaur"))) {
+                    textError = "This slot contains another worker, you cannot move here";
+                }
+            }
+            else if (actualSlot.getLevel().ordinal() > actualSlot.getLevel().ordinal() && player.cannotMoveUp() ||
+                destinationSlot.getLevel().ordinal() > (actualSlot.getLevel().ordinal() + 1))
+                textError = "This slot is unreachable, its level is too high";
+            if (textError != null) {
+                views.get(indexOfCurrentPlayer).sendError(textError);
+                views.get(indexOfCurrentPlayer).sendWhichAction();
+                return;
+            }
+            turn.executeMove(direction);
+            if (player.isWinning() && !(heraWinCondition(player.getWorker(workerGender)))) {
+                controller.endGame(player.getUsername());
+                return;
+            }
+            if (player.getGod().getName().equals("Athena")) {
+                boolean moveUp = ((Athena)player.getGod()).isMoveUp();
+                for (int i = 0; i<game.getNumberOfPlayers(); i++) {
+                    if (game.getPlayer(i) != null && game.getPlayer(i) != player) {
+                        game.getPlayer(i).setCannotMoveUp(moveUp);
+                    }
+                }
+            }
+            views.get(indexOfCurrentPlayer).sendWhichAction();
+        } catch (InvalidDirectionException | InvalidMoveException | IndexOutOfBoundsException e) {
+            String textError = e.getMessage();
+            views.get(indexOfCurrentPlayer).sendError(textError);
+            views.get(indexOfCurrentPlayer).sendWhichAction();
+        }
+    }
+
+    /**
+     * This method executes a build. There are several check before the model's method
+     * is called: if all of them are negative, the action is executed.
+     * Otherwise, it sends an error and asks again.
+     * @param direction the direction where the worker is going to build
+     */
+    private void build(Direction direction) {
+        try {
+            String textError = null;
+            Slot destinationSlot = game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender)));
+            turn.setWantsToBuildDome(true);
+            if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
+                textError = "You've yet reached the max number of buildings in this turn";
+            else if (destinationSlot.getLevel() == Level.DOME || destinationSlot.getLevel() == Level.ATLAS_DOME)
+                textError = "This slot yet contains a dome, you cannot build ih this position";
+            else if (destinationSlot.isWorkerOnSlot()) {
+                if (!(player.getGod().getName().equals("Zeus") && direction == Direction.HERE))
+                    textError = "This slot is occupied by a worker, you cannot build here";
+            }
+            if (textError != null) {
+                views.get(indexOfCurrentPlayer).sendError(textError);
+                views.get(indexOfCurrentPlayer).sendWhichAction();
+                return;
+            }
+            turn.executeBuild(direction);
+            if (game.getBoard().getCountDomes() == 5 && chronusPlayer() != null) {
+                controller.endGame(chronusPlayer().getUsername());
+                return;
+            }
+            views.get(indexOfCurrentPlayer).sendWhichAction();
+        } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
+            String textError = e.getMessage();
+            views.get(indexOfCurrentPlayer).sendError(textError);
+            views.get(indexOfCurrentPlayer).sendWhichAction();
+        }
+    }
+
+    /**
+     * This method executes a dome building. There are several check before the model's method
+     * is called: if all of them are negative, the action is executed.
+     * Otherwise, it sends an error and asks again.
+     * @param direction the direction where the worker is going to build a dome
+     */
+    private void buildDome(Direction direction) {
+        try {
+            String textError = null;
+            Slot destinationSlot = game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender)));
+            turn.setWantsToBuildDome(true);
+            if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
+                textError = "You've yet reached the max number of buildings in this turn";
+            else if (!player.getGod().canAlwaysBuildDome())
+                textError = "You're not allowed to build a dome in this way";
+            else if (destinationSlot.getLevel() == Level.DOME || destinationSlot.getLevel() == Level.ATLAS_DOME)
+                textError = "This slot yet contains a dome, you cannot build ih this position";
+            else if (destinationSlot.isWorkerOnSlot())
+                textError = "This slot is occupied by a worker, you cannot build here";
+            if (textError != null) {
+                views.get(indexOfCurrentPlayer).sendError(textError);
+                views.get(indexOfCurrentPlayer).sendWhichAction();
+                return;
+            }
+            turn.executeBuild(direction);
+            views.get(indexOfCurrentPlayer).sendWhichAction();
+        } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
+            String textError = e.getMessage();
+            views.get(indexOfCurrentPlayer).sendError(textError);
+            views.get(indexOfCurrentPlayer).sendWhichAction();
+        }
+    }
+
+    /**
+     * This method controls if the worker that has been playing currently is in a perimeter slot and if
+     * in this game there is a player who is using Hera's power.
+     * That's because in this case even if a player reached the third level he cannot win.
+     * @param currentWorker the worker who is actually moving.
+     * @return if the worker is on a perimeter slot and if Hera is in the game.
+     */
+    private boolean heraWinCondition(Worker currentWorker){
+        boolean thereIsHera = false;
+        for(Player player : game.getPlayers()){
+            if (player.getGod().getName().equals("Hera")) {
+                thereIsHera = true;
+                break;
+            }
+        }
+        return currentWorker.getSlot().isPerimeterSlot() && !currentWorker.getPlayer().getGod().getName().equals("Hera") && thereIsHera ;
+    }
+
+    /**
+     * This method controls if there is a player who is using Chronus' power.
+     * @return the instance of the player.
+     */
+    private Player chronusPlayer() {
+        for (int i = 0; i<game.getNumberOfPlayers(); i++) {
+            if (game.getPlayer(i).getGod().getName().equals("Chronus")) {
+                return player;
+            }
+        }
+        return null;
     }
 }

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP47.Enumerations;
 
+/**
+ * Enumeration which represents the possible genders of a worker.
+ */
 public enum Gender {
 
     MALE (0),

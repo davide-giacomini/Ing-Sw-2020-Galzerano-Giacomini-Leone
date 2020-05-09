@@ -13,5 +13,4 @@ public class YouAreTheChallenger extends Message{
     this.messageType=MessageType.CHALLENGER;
     }
 
-
 }

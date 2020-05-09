@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
+import it.polimi.ingsw.PSP47.Enumerations.Level;
 import it.polimi.ingsw.PSP47.Model.*;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
@@ -89,10 +90,7 @@ public class AthenaTest {
     @Test (expected = InvalidMoveException.class)
     public void move_NotReachableLevelException()
             throws Exception {
-        Worker otherWorker = secondPlayer.getWorker(Gender.FEMALE);
-        otherWorker.setSlot(board.getSlot(2,2));
-        otherWorker.build(Direction.RIGHT);
-        otherWorker.build(Direction.RIGHT);
+        board.getSlot(2,3).setLevel(Level.LEVEL3);
         turn.executeMove(Direction.UP);
     }
 
