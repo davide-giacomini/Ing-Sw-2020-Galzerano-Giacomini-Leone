@@ -21,25 +21,6 @@ public class Atlas extends God {
     }
 
     /**
-     * This method calls the standard move of a worker:
-     * Atlas doesn't modify the moving rules.
-     * @param direction where the worker wants to move to.
-     * @param worker the {@link Player}'s {@link Worker} to be moved.
-     * @return true if the winning condition has been verified, false otherwise
-     * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
-     * @throws InvalidMoveException if the move is invalid.
-     */
-    @Override
-    public boolean move(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, InvalidMoveException {
-        try {
-            return worker.move(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidMoveException("Slot occupied");
-        }
-    }
-
-    /**
      * This method calls two different worker's methods, depending on the setting of WantsToBuildDome.
      * @param direction specifies the slot where to build
      * @param worker one of the player's workers
@@ -69,35 +50,6 @@ public class Atlas extends God {
             }
         }
 
-    }
-
-    /**
-     * It does nothing.
-     */
-    @Override
-    public void resetParameters() {
-    }
-
-    /**
-     * This method directly calls the God's method checkIfCanMoveInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can move, false otherwise
-     */
-    @Override
-    public boolean checkIfCanMove(Worker worker) {
-        return checkIfCanMoveInNormalConditions(worker);
-    }
-
-    /**
-     * This method directly calls the God's method checkIfCanBuildInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can build, false otherwise.
-     */
-    @Override
-    public boolean checkIfCanBuild(Worker worker) {
-        return checkIfCanBuildInNormalConditions(worker);
     }
 
     /**

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
-import it.polimi.ingsw.PSP47.Model.Board;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Model.Exceptions.*;
 import it.polimi.ingsw.PSP47.Model.Player;
@@ -23,24 +22,6 @@ public class Demeter extends God {
         canAlwaysBuildDome = false;
     }
 
-    /**
-     * This method calls the standard move of a worker:
-     * Demeter doesn't modify the moving rules.
-     * @param direction where the worker wants to move to.
-     * @param worker the {@link Player}'s {@link Worker} to be moved.
-     * @return true if the winning condition has been verified, false otherwise
-     * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
-     * @throws InvalidMoveException if the move is invalid.
-     */
-    @Override
-    public boolean move(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, InvalidMoveException {
-        try {
-            return worker.move(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidMoveException("Slot occupied");
-        }
-    }
 
     /**
      * This method allows a second build only if the new slot where to build differs from the old one
@@ -77,16 +58,6 @@ public class Demeter extends God {
         previousSlot = null;
     }
 
-    /**
-     * This method directly calls the God's method checkIfCanMoveInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can move, false otherwise
-     */
-    @Override
-    public boolean checkIfCanMove(Worker worker) {
-        return checkIfCanMoveInNormalConditions(worker);
-    }
 
     /**
      * This method directly calls the God's method checkIfCanBuildInNormalConditions or

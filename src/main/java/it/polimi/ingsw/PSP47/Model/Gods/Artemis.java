@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
-import it.polimi.ingsw.PSP47.Model.Board;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Model.Exceptions.*;
 import it.polimi.ingsw.PSP47.Model.Player;
@@ -63,27 +62,7 @@ public class Artemis extends God {
     }
 
     /**
-     * This method calls the standard build of a worker:
-     * Artemis doesn't modify the building rules.
-     * @param direction specifies the slot where to build
-     * @param worker one of the player's workers
-     * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
-     * @throws InvalidBuildException if building is not permitted.
-     */
-    @Override
-    public void build(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, InvalidBuildException {
-        if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
-    
-        try {
-            worker.build(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidBuildException("Slot occupied");
-        }
-    }
-
-    /**
-     * It resets the fistDirection.
+     * It resets the firstDirection.
      */
     @Override
     public void resetParameters() {
@@ -121,17 +100,6 @@ public class Artemis extends God {
             }
             return false;
         }
-    }
-
-    /**
-     * This method directly calls the God's method checkIfCanBuildInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can build, false otherwise.
-     */
-    @Override
-    public boolean checkIfCanBuild(Worker worker) {
-        return checkIfCanBuildInNormalConditions(worker);
     }
 
     /**

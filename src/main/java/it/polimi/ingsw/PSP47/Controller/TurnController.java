@@ -164,7 +164,6 @@ public class TurnController {
         try {
             String textError = null;
             Slot destinationSlot = game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender)));
-            turn.setWantsToBuildDome(true);
             if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
                 textError = "You've yet reached the max number of buildings in this turn";
             else if (destinationSlot.getLevel() == Level.DOME || destinationSlot.getLevel() == Level.ATLAS_DOME)

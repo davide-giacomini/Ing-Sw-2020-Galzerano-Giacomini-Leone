@@ -32,7 +32,7 @@ public class Pan extends God{
     @Override
     public boolean move(Direction direction, Worker worker) throws IndexOutOfBoundsException,  InvalidMoveException {
         int previousLevel = worker.getSlot().getLevel().ordinal();
-        boolean winCondition = false;
+        boolean winCondition;
         try {
             winCondition = worker.move(direction);
         } catch (SlotOccupiedException e) {
@@ -59,35 +59,6 @@ public class Pan extends God{
         } catch (SlotOccupiedException e) {
             throw new InvalidBuildException("Slot occupied");
         }
-    }
-
-    /**
-     * In does nothing.
-     */
-    @Override
-    public void resetParameters() {
-    }
-
-    /**
-     * This method directly calls the God's method checkIfCanMoveInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can move, false otherwise
-     */
-    @Override
-    public boolean checkIfCanMove(Worker worker) {
-        return checkIfCanMoveInNormalConditions(worker);
-    }
-
-    /**
-     * This method directly calls the God's method checkIfCanBuildInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can build, false otherwise.
-     */
-    @Override
-    public boolean checkIfCanBuild(Worker worker) {
-        return checkIfCanBuildInNormalConditions(worker);
     }
 
     /**

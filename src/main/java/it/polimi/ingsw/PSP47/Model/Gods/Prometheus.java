@@ -86,34 +86,13 @@ public class Prometheus extends God {
     }
 
     /**
-     * It does nothing.
+     * It reset the parameter moveThenBuild as it changes in every turn.
      */
     @Override
     public void resetParameters() {
         moveThenBuild = false;
     }
 
-    /**
-     * This method directly calls the God's method checkIfCanMoveInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can move, false otherwise
-     */
-    @Override
-    public boolean checkIfCanMove(Worker worker) {
-        return checkIfCanMoveInNormalConditions(worker);
-    }
-
-    /**
-     * This method directly calls the God's method checkIfCanBuildInNormalConditions or
-     * does a special check for the second build
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can build, false otherwise.
-     */
-    @Override
-    public boolean checkIfCanBuild(Worker worker) {
-        return checkIfCanBuildInNormalConditions(worker);
-    }
 
     /**
      * This method checks if the worker is paralyzed or not.

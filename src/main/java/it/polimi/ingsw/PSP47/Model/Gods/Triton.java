@@ -56,25 +56,6 @@ public class Triton extends God  {
     }
 
     /**
-     * This method calls the standard build of a worker:
-     * Triton doesn't modify the building rules.
-     * @param direction specifies the slot where to build
-     * @param worker one of the player's workers
-     * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
-     * @throws InvalidBuildException if the build is not permitted.
-     */
-    @Override
-    public void build(Direction direction, Worker worker) throws IndexOutOfBoundsException, InvalidBuildException {
-        if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
-
-        try {
-            worker.build(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidBuildException("Slot occupied");
-        }
-    }
-
-    /**
      * At the end of the turn the MAX_MOVEMENTS, which could have been increased, must back to its original value.
      */
     @Override
@@ -82,27 +63,6 @@ public class Triton extends God  {
         MAX_MOVEMENTS = 1;
     }
 
-    /**
-     * This method directly calls the God's method checkIfCanMoveInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can move, false otherwise
-     */
-    @Override
-    public boolean checkIfCanMove(Worker worker) {
-            return checkIfCanMoveInNormalConditions(worker);
-    }
-
-    /**
-     * This method directly calls the God's method checkIfCanBuildInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can build, false otherwise.
-     */
-    @Override
-    public boolean checkIfCanBuild(Worker worker) {
-        return checkIfCanBuildInNormalConditions(worker);
-    }
 
     /**
      * This method checks if the worker is paralyzed or not.

@@ -68,8 +68,14 @@ public abstract class God {
      * @throws InvalidDirectionException if there are some troubles of I/O.
      * @throws InvalidMoveException if the move is invalid.
      */
-    public abstract boolean move(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, InvalidMoveException, InvalidDirectionException;
+    public boolean move(Direction direction, Worker worker)
+            throws IndexOutOfBoundsException, InvalidMoveException, InvalidDirectionException {
+        try {
+            return worker.move(direction);
+        } catch (SlotOccupiedException e) {
+            throw new InvalidMoveException("Slot occupied");
+        }
+    }
     
     /**
      * This method builds a construction on the {@link Slot} adjacent to the {@link Worker} in the direction chosen.
@@ -79,21 +85,31 @@ public abstract class God {
      * @throws InvalidDirectionException if there are problems with I/O
      * @throws InvalidBuildException if building is not permitted.
      */
-    public abstract void build(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, InvalidBuildException, InvalidDirectionException;
+    public void build(Direction direction, Worker worker)
+            throws IndexOutOfBoundsException, InvalidBuildException, InvalidDirectionException {
+        if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
+
+        try {
+            worker.build(direction);
+        } catch (SlotOccupiedException e) {
+            throw new InvalidBuildException("Slot occupied");
+        }
+    }
+
     
     /**
      * Reset all the additional eventual parameters of the god.
      * It has to be called inside the god and it's not necessary for every god.
      */
-    public abstract void resetParameters();
+    public void resetParameters() {}
     
     /**
      * @return true if it's possible to move,false otherwise.
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @throws InvalidDirectionException if the default case in the choice of the direction is reached.
      */
-    public abstract boolean checkIfCanMove(Worker worker);
+    public boolean checkIfCanMove(Worker worker) {
+        return checkIfCanMoveInNormalConditions(worker);
+    }
     
     /**
      * See {@link #checkIfCanGoOn(Worker)}
@@ -101,7 +117,9 @@ public abstract class God {
      * @return true if it's possible to build, false otherwise.
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
      */
-    public abstract boolean checkIfCanBuild(Worker worker);
+    public boolean checkIfCanBuild(Worker worker) {
+        return checkIfCanBuildInNormalConditions(worker);
+    }
     
     /**
      * See {@link #checkIfCanGoOn(Worker)}

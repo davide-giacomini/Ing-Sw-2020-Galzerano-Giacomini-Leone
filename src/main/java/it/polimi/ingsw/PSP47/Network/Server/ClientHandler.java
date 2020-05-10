@@ -48,7 +48,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
             e.printStackTrace();
         }
     }
-    
+
     /**
      * This method makes the server listen to the ping from the client and checks if the game is already started.
      * If so, the client handler immediately closes the connection. Otherwise, it asks to the client the username

@@ -27,25 +27,6 @@ public class Hephaestus extends God {
     }
 
     /**
-     * This method calls the standard move of a worker:
-     * Hephaestus doesn't modify the moving rules.
-     * @param direction where the worker wants to move to.
-     * @param worker the {@link Player}'s {@link Worker} to be moved.
-     * @return true if the winning condition has been verified, false otherwise
-     * @throws InvalidMoveException if the move is not permitted.
-     * @throws IndexOutOfBoundsException if the worker try to move in a direction that is out out the board
-     */
-    @Override
-    public boolean move(Direction direction, Worker worker)  throws IndexOutOfBoundsException, InvalidMoveException {
-
-        try {
-            return worker.move(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidMoveException("Slot occupied");
-        }
-    }
-
-    /**
      * This method allows a second build only if the new slot where to build is the same as the old one
      * @param direction specifies the slot where to build
      * @param worker one of the player's workers
@@ -72,23 +53,13 @@ public class Hephaestus extends God {
     }
 
     /**
-     * It does nothing.
+     * It reset the value of doubleBuildSlot as this slot change in every turn.
      */
     @Override
     public void resetParameters() {
         doubleBuildSlot = null;
     }
 
-    /**
-     * This method directly calls the God's method checkIfCanMoveInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can move, false otherwise
-     */
-    @Override
-    public boolean checkIfCanMove(Worker worker) {
-        return checkIfCanMoveInNormalConditions(worker);
-    }
 
     /**
      * This method directly calls the God's method checkIfCanBuildInNormalConditions or
@@ -127,7 +98,6 @@ public class Hephaestus extends God {
      * This method checks if the worker is paralyzed or not.
      * @param worker the worker chosen to be checked.
      * @return true if the worker can go on, false otherwise.
-     * @throws InvalidDirectionException if there are some I/O troubles.
      */
     @Override
     public boolean checkIfCanGoOn(Worker worker) {

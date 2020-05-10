@@ -63,36 +63,6 @@ public class Apollo extends God {
     }
 
     /**
-     * This method calls the standard build of a worker:
-     * Apollo doesn't modify the building rules.
-     * @param direction specifies the slot where to build
-     * @param worker one of the player's workers
-     * @throws IndexOutOfBoundsException if the worker try to build in a direction that is out out the board
-     * @throws InvalidBuildException if building is not permitted.
-     */
-    @Override
-    public void build(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, InvalidBuildException {
-        
-        if (player.getTurn().getNumberOfMovements() == 0)
-            throw new InvalidBuildException("Order of movements incorrect");
-    
-        try {
-            worker.build(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidBuildException("Slot occupied");
-        }
-    }
-
-    /**
-     * It does nothing.
-     */
-    @Override
-    public void resetParameters() {
-        // nothing is necessary
-    }
-
-    /**
      * This methods does what checkIfCanMoveInNormalCondition does together with another verification,
      * it checks the availability of a slot by checking if it's free or if there is an enemy worker on it
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
@@ -130,16 +100,6 @@ public class Apollo extends God {
         return false;
     }
 
-    /**
-     * This method directly calls the God's method checkIfCanBuildInNormalConditions,
-     * as in this case there is nothing else to control.
-     * @param worker {@link Player}'s {@link Worker} selected to be checked.
-     * @return true if the worker can build, false otherwise.
-     */
-    @Override
-    public boolean checkIfCanBuild(Worker worker) {
-        return checkIfCanBuildInNormalConditions(worker);
-    }
 
     /**
      * This method checks if the worker is paralyzed or not.
