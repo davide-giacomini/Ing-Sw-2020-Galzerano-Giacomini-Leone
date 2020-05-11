@@ -8,6 +8,7 @@ public enum Action {
     BUILD,
     BUILDDOME,
     END,
+    QUIT,
     WRONGACTION;
 
     /**
@@ -27,6 +28,8 @@ public enum Action {
                 return BUILDDOME ;
             case  "END" :
                 return END ;
+            case "QUIT" :
+                return QUIT ;
             default :
                 return WRONGACTION;
 

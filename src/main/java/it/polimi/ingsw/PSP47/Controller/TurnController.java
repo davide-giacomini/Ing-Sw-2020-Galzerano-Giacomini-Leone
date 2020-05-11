@@ -94,6 +94,9 @@ public class TurnController {
             case BUILDDOME:
                 buildDome(direction);
                 break;
+            case QUIT:
+                controller.removeLosingPlayer();
+                break;
             case END:
                 if (!turn.validateEndTurn()) {
                     String textError = "You're not allowed to end your turn. You have to choose another action";

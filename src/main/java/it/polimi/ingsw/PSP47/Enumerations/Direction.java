@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP47.Enumerations;
 
+import it.polimi.ingsw.PSP47.Model.Slot;
+
 /**
  * Enumeration which represents the possible direction that can be chosen by a player.
  */
@@ -52,6 +54,30 @@ public enum Direction {
                 return WRONGDIRECTION;
 
         }
+    }
+
+    public static Direction getDirectionGivenSlots( Slot originSlot, Slot destinationSlot){
+
+        if (originSlot.getRow()-destinationSlot.getRow() == 0 && originSlot.getColumn() - destinationSlot.getRow() == 0)
+            return HERE;
+        else if (originSlot.getRow()-destinationSlot.getRow() == 1 && originSlot.getColumn() - destinationSlot.getRow() == 1)
+            return LEFTUP;
+        else if (originSlot.getRow()-destinationSlot.getRow() == 1 && originSlot.getColumn() - destinationSlot.getRow() == 0)
+            return LEFT;
+        else if (originSlot.getRow()-destinationSlot.getRow() == 1 && originSlot.getColumn() - destinationSlot.getRow() == -1)
+            return RIGHTUP;
+        else if (originSlot.getRow()-destinationSlot.getRow() == 0 && originSlot.getColumn() - destinationSlot.getRow() == 1)
+            return LEFT;
+        else if (originSlot.getRow()-destinationSlot.getRow() == 0 && originSlot.getColumn() - destinationSlot.getRow() == -1)
+            return RIGHT;
+        else if (originSlot.getRow()-destinationSlot.getRow() == -1 && originSlot.getColumn() - destinationSlot.getRow() == 1)
+            return LEFTDOWN;
+        else if (originSlot.getRow()-destinationSlot.getRow() == -1 && originSlot.getColumn() - destinationSlot.getRow() == 0)
+            return DOWN;
+        else if (originSlot.getRow()-destinationSlot.getRow() == -1 && originSlot.getColumn() - destinationSlot.getRow() == -1)
+            return RIGHTDOWN;
+        else
+            return WRONGDIRECTION;
     }
 
 }

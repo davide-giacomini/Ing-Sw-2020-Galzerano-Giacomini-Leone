@@ -430,7 +430,7 @@ public class CLI extends View {
      */
     @Override
     public void askAction(){
-        out.println("Here are the possible actions:  move direction  /  build direction  /  buildDome direction / end / ");
+        out.println("Here are the possible actions:  move direction  /  build direction  /  buildDome direction / end / quit ");
         out.println("The available directions are : "+ Arrays.toString(Direction.values())+ "\n");
 
 
@@ -451,11 +451,11 @@ public class CLI extends View {
 
                 if(actionInserted == Action.WRONGACTION)
                     line = null;
-                else if (!actionInserted.equals(Action.END) && (directionInserted == Direction.WRONGDIRECTION || directionInserted == null))
+                else if (!(actionInserted.equals(Action.END) || actionInserted.equals(Action.QUIT)) && (directionInserted == Direction.WRONGDIRECTION || directionInserted == null))
                     line = null;
                 else if (line.equals(""))
                     line = null;
-                else if (actionInserted.equals(Action.END) && stringParts.length >1)
+                else if ((actionInserted.equals(Action.END) || actionInserted.equals(Action.QUIT)) && stringParts.length >1)
                     line = null;
                 else{
                     ActionAndDirection.add(actionInserted);
