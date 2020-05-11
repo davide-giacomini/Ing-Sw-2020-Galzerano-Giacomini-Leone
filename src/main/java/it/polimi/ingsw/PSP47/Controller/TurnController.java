@@ -128,7 +128,7 @@ public class TurnController {
                     textError = "This slot contains another worker, you cannot move here";
                 }
             }
-            else if (actualSlot.getLevel().ordinal() > actualSlot.getLevel().ordinal() && player.cannotMoveUp() ||
+            else if (destinationSlot.getLevel().ordinal() > actualSlot.getLevel().ordinal() && player.cannotMoveUp() ||
                 destinationSlot.getLevel().ordinal() > (actualSlot.getLevel().ordinal() + 1))
                 textError = "This slot is unreachable, its level is too high";
             if (textError != null) {

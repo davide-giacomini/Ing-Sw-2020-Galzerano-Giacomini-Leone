@@ -3,7 +3,9 @@ package it.polimi.ingsw.PSP47.Network.Client;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Server.*;
 import it.polimi.ingsw.PSP47.View.CLI.CLI;
+import it.polimi.ingsw.PSP47.View.GUI.GUI;
 import it.polimi.ingsw.PSP47.View.View;
+import javafx.application.Application;
 
 
 import java.io.IOException;
@@ -37,7 +39,7 @@ public class Client {
             view = new CLI(this);
             view.showTitle();
         } else if ("GUI".equals(viewChoice.toUpperCase())) {
-            //TODO istanzia la gui come view
+            Application.launch(GUI.class);
         }
         String serverIpAddress = view.askServerIpAddress();
     
