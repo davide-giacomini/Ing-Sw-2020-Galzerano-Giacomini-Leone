@@ -1,22 +1,25 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
-import it.polimi.ingsw.PSP47.View.CLI.AnsiCode;
 import it.polimi.ingsw.PSP47.View.CLI.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
-import javafx.event.ActionEvent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 
 public class StartController extends ViewObservable {
 
     private NetworkHandler networkHandler;
+
+    private ObservableList<Color> colors = FXCollections.observableArrayList(Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.PURPLE, Color.CYAN, Color.WHITE);
 
     @FXML
     private Pane mainPane;
@@ -25,32 +28,39 @@ public class StartController extends ViewObservable {
     private TextField player_name;
 
     @FXML
-    private TextField player_color;
+    private ChoiceBox<Color> colorBox;
 
     @FXML
-    void onSubmitClick(ActionEvent event) {
-        String username;
-        String color;
-
-        username = player_name.getText();
-        color = player_color.getText();
-
-        if(!username.equals("") && !color.equals("")) {
-            addViewListener(networkHandler);
-            VisitableInformation visitableInformation = new VisitableInformation();
-            visitableInformation.setUsername(username);
-            visitableInformation.setColor(Color.getColorByName(color));
-            notifyViewListener(visitableInformation);
-
-        }
-    }
+    private ImageView joinButton;
 
     @FXML
-    void onSubmit(MouseEvent event) {
-        System.out.println("Cliccando qui parteciperai alla partita");
+    private void initialize() {
+        colorBox.setItems(colors);
     }
+
 
     public void setNetworkHandler(NetworkHandler networkHandler) {
             this.networkHandler= networkHandler;
     }
+
+    @FXML
+    void OnSubmitClick(MouseEvent event) {
+        String username;
+
+        username = player_name.getText();
+
+        if(!username.equals("") && colorBox.getValue() != null) {
+            addViewListener(networkHandler);
+            VisitableInformation visitableInformation = new VisitableInformation();
+            visitableInformation.setUsername(username);
+            visitableInformation.setColor(colorBox.getValue());
+            notifyViewListener(visitableInformation);
+            joinButton.isDisabled();
+        }
+    }
+
+    void ableButton() {
+        joinButton.setDisable(false);
+    }
+
 }

@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP47.View.GUI;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
-import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.View.CLI.GameView;
@@ -11,6 +10,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class GUI extends Application implements View {
 
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/FXML/esempio.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/FXML/startPane.fxml"));
         root = fxmlLoader.load();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -61,7 +61,7 @@ public class GUI extends Application implements View {
 
     }
 
-    public static <T> T setLayout(Scene scene, String path) {
+    private <T> T setLayout(Scene scene, String path) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUI.class.getResource(path));
 
@@ -107,7 +107,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void askFirstConnection() {
-
+        startController.ableButton();
     }
 
     @Override
@@ -122,8 +122,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void askNumberOfPlayers() {
-        setLayout(scene,"/FXML/startPane.fxml");
-
+        setLayout(scene,"/FXML/choosePlayers.fxml");
     }
 
 
@@ -169,7 +168,9 @@ public class GUI extends Application implements View {
 
     @Override
     public void showErrorMessage(String text) {
-
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setContentText(text);
+        alert.show();
     }
 
     @Override
