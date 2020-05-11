@@ -2,22 +2,26 @@ package it.polimi.ingsw.PSP47.View.CLI;
 
 import it.polimi.ingsw.PSP47.Enumerations.*;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
+import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
+import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.Visitor.*;
 
+import java.io.IOException;
 import java.io.PrintStream;
+import java.net.Socket;
 import java.util.*;
 
-public class CLI extends View {
-
+public class CLI extends ViewObservable implements View  {
+    private NetworkHandler networkHandler;
+    public GameView gameView;
 
     private PrintSupport printSupport;
     private Scanner in;
     private PrintStream out;
     
 
-    public CLI(Client client) {
-        super(client);
+    public CLI() {
         this.in = new Scanner(System.in);
         this.out = new PrintStream(System.out);
         gameView = new GameView();
@@ -121,29 +125,26 @@ public class CLI extends View {
     }
 
     /**
-     * This method asks the user to insert the address of the serve
-     * @return address of the client/server
-     */
+     * This method starts the thread that will be the network handler
+    */
     @Override
-    public String askServerIpAddress () {
-        String address = null;
+    public void setConnection (String address) {
 
-        do {
+        // open a connection with the server   //TODO chiedere se va bene inseirirlo qui
+        Socket serverSocket;
+        try {
+            serverSocket = new Socket(address, Server.SOCKET_PORT);
+        } catch (IOException e) {
+            System.out.println("Server unreachable.");
+            return;
+        }
+        System.out.println("Connected to the address " + serverSocket.getInetAddress());
 
-            out.println("Insert address and press " + AnsiCode.ANSI_ENTER_KEY + " : ");
+        networkHandler = new NetworkHandler(this , serverSocket);
+        addViewListener(networkHandler);
 
-
-            if (in.hasNextLine()){
-
-                address = in.nextLine();
-                if(address.equals("")) {
-                    out.println(AnsiCode.ANSI_RED+ "Address not inserted or wrong!\n"+ AnsiCode.ANSI_RESET);
-                    address = null;
-                }
-            }
-        }while (address== null);
-
-        return address;
+        Thread thread = new Thread(networkHandler);
+        thread.start();
 
     }
 
@@ -383,7 +384,8 @@ public class CLI extends View {
     public void theLoserIs(String usernameLoser ){
         out.println("\n\n" + usernameLoser + " you lost. Your adventure ends here \n ");
     }
-    
+
+
     @Override
     public GameView getGameView() {
         return gameView;
@@ -506,5 +508,7 @@ public class CLI extends View {
     public void showCurrentBoard(){
         printSupport.printCurrBoard(printSupport.buildCurrBoard(gameView.getBoardView()), out);
     }
+
+
 
 }

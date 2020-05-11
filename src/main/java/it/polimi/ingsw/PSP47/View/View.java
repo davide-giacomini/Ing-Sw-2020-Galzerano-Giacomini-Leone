@@ -8,20 +8,18 @@ import it.polimi.ingsw.PSP47.View.CLI.ViewObservable;
 
 import java.util.ArrayList;
 
-public abstract class View extends ViewObservable {
-    public Client currentClient;
-    public GameView gameView;
-
-    public View (Client client){
-        currentClient = client;
-    }
+public interface View  {
 
     /**
      * This method is used to print the initial Santorini Logo
      */
     public abstract void showTitle();
 
+    /**
+     * This method is used to ask username and color
+     */
     public abstract void askFirstConnection();
+
     /**
      * This method asks for the username
      * @return string which becomes the username of the player
@@ -41,10 +39,9 @@ public abstract class View extends ViewObservable {
     public abstract void askNumberOfPlayers();
 
     /**
-     * This method asks the user to insert the address of the server
-     * @return address of the client/server
+     *This methods starts the thread in the view that will be the network handler
      */
-    public abstract String askServerIpAddress();
+    public abstract void setConnection(String address);
 
     /**
      * This method asks the user which of the worker he/she wants to use
@@ -115,7 +112,6 @@ public abstract class View extends ViewObservable {
      * @param usernameLoser is the username of the winner
      */
     public abstract void theLoserIs(String usernameLoser );
-
 
 
 }

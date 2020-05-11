@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP47.Network.Client;
 
-import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Server.*;
 import it.polimi.ingsw.PSP47.View.CLI.CLI;
 import it.polimi.ingsw.PSP47.View.GUI.GUI;
@@ -12,12 +11,15 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+import static javafx.application.Application.launch;
+
 /**
  * This class instantiates a thread for each client and handles the choice of the graphical interface and the
  * {@link Server} the user wants to connect to.
  */
 public class Client {
     private View view;
+
     
     public static void main(String[] args) {
         Client client = new Client();
@@ -32,19 +34,24 @@ public class Client {
     public void init() {
         //initial request of choice between GUI or CLI
         Scanner scanner = new Scanner(System.in);
-        System.out.println("CLI or GUI ?" + GodName.APOLLO.getPower());
+
+        String serverIpAddress = askServerIpAddress(scanner);
+
+        System.out.println("CLI or GUI ?");
         String viewChoice = scanner.nextLine();
-        
+
+
         if ("CLI".equals(viewChoice.toUpperCase())) {
-            view = new CLI(this);
+            view = new CLI();
             view.showTitle();
+            view.setConnection(serverIpAddress);
         } else if ("GUI".equals(viewChoice.toUpperCase())) {
-            Application.launch(GUI.class);
+
+            Application.launch(GUI.class, serverIpAddress);
         }
-        String serverIpAddress = view.askServerIpAddress();
     
         // open a connection with the server
-        Socket serverSocket;
+        /*Socket serverSocket;
         try {
             serverSocket = new Socket(serverIpAddress, Server.SOCKET_PORT);
         } catch (IOException e) {
@@ -53,12 +60,35 @@ public class Client {
         }
         System.out.println("Connected to the address " + serverSocket.getInetAddress());
     
-        NetworkHandler networkHandler = new NetworkHandler(view , serverSocket);
+         networkHandler = new NetworkHandler(view , serverSocket);
+
+        view.setClient(this);
         Thread thread = new Thread(networkHandler);
-        thread.start();
+        thread.start();*/
+
     }
     
     public View getView() {
         return view;
+    }
+
+
+    public String askServerIpAddress (Scanner scanner) {
+        String address = null;
+
+        do {
+
+            System.out.println("Insert address : ");
+
+                address = scanner.nextLine();
+                if(address.equals("")) {
+                    System.out.println( "Address not inserted or wrong!\n");
+                    address = null;
+                }
+
+        }while (address== null);
+
+        return address;
+
     }
 }

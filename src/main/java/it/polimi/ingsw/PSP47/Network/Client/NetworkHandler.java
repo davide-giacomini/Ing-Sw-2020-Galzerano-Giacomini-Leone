@@ -42,7 +42,6 @@ public class NetworkHandler implements Runnable, ViewListener {
     public NetworkHandler(View view, Socket serverSocket){
         this.view = view;
         this.serverSocket = serverSocket;
-        view.addViewListener(this);
 
         try {
             outputServer = new ObjectOutputStream(serverSocket.getOutputStream());
