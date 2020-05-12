@@ -1,0 +1,120 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Gender</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Enumerations</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Gender (it.polimi.ingsw.PSP47.Enumerations)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Gender</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    63,6%
+  </span>
+  <span class="absValue">
+    (7/ 11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Enumerations;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * Enumeration which represents the possible genders of a worker.
+<i>5</i>&nbsp; */
+<b class="fc"><i>6</i>&nbsp;public enum Gender {</b>
+<i>7</i>&nbsp;
+<b class="fc"><i>8</i>&nbsp;    MALE (0),</b>
+<b class="fc"><i>9</i>&nbsp;    FEMALE (1),</b>
+<b class="fc"><i>10</i>&nbsp;    WRONGGENDER(2);</b>
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    private final int gender;
+<b class="fc"><i>13</i>&nbsp;    Gender(int gender) {</b>
+<b class="fc"><i>14</i>&nbsp;        this.gender = gender;</b>
+<b class="fc"><i>15</i>&nbsp;    }</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * method used to convert strings into enum
+<i>19</i>&nbsp;     * @param name is the name as a string of the Gender
+<i>20</i>&nbsp;     * @return enum of the Gender
+<i>21</i>&nbsp;     */
+<i>22</i>&nbsp;    public static Gender getGenderByName(String name)  {
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;
+<b class="nc"><i>25</i>&nbsp;        switch (name.toUpperCase()) {</b>
+<i>26</i>&nbsp;            case &quot;MALE&quot; :
+<b class="nc"><i>27</i>&nbsp;                return MALE;</b>
+<i>28</i>&nbsp;            case &quot;FEMALE&quot; :
+<b class="nc"><i>29</i>&nbsp;                return FEMALE;</b>
+<i>30</i>&nbsp;            default :
+<b class="nc"><i>31</i>&nbsp;                return WRONGGENDER;</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;        }
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;}
+<i>37</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 12:34</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: VirtualView</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Server</a> ]
+</div>
+
+<h1>Coverage Summary for Class: VirtualView (it.polimi.ingsw.PSP47.Network.Server)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VirtualView</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Server;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Color;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Slot;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Model.SlotListener;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.util.ArrayList;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * This class implements a virtualView, which basically represents the connection between the network and the controller.
+<i>12</i>&nbsp; * There is one for each player.
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;public class VirtualView extends VirtualViewObservable implements SlotListener {
+<i>15</i>&nbsp;    private ClientHandler clientHandler;
+<i>16</i>&nbsp;    private final String username;
+<i>17</i>&nbsp;    private final it.polimi.ingsw.PSP47.Enumerations.Color color;
+<i>18</i>&nbsp;    
+<b class="nc"><i>19</i>&nbsp;    public VirtualView (String username, Color color, ClientHandler clientHandler){</b>
+<b class="nc"><i>20</i>&nbsp;        this.username = username;</b>
+<b class="nc"><i>21</i>&nbsp;        this.color = color;</b>
+<b class="nc"><i>22</i>&nbsp;        this.clientHandler = clientHandler;</b>
+<i>23</i>&nbsp;    }
+<i>24</i>&nbsp;    
+<i>25</i>&nbsp;    public String getUsername() {
+<b class="nc"><i>26</i>&nbsp;        return username;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;    
+<i>29</i>&nbsp;    public it.polimi.ingsw.PSP47.Enumerations.Color getColor() {
+<b class="nc"><i>30</i>&nbsp;        return color;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /**
+<i>35</i>&nbsp;     * This method sends a model update client side.
+<i>36</i>&nbsp;     * @param slot the slot that has been updated.
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    @Override
+<i>39</i>&nbsp;    public void update(Slot slot) {
+<b class="nc"><i>40</i>&nbsp;        clientHandler.sendUpdateSlot(slot);</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    /**
+<i>44</i>&nbsp;     * This method sends the number of players of the game.
+<i>45</i>&nbsp;     * @param numberOfPlayers the parameter that must be sent to the client.
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    public void sendNumberOfPlayers(int numberOfPlayers) {
+<b class="nc"><i>48</i>&nbsp;        clientHandler.sendNumberOfPlayers(numberOfPlayers);</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * This method sends a notify who tells who is the challenger.
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public void sendChallenger() {
+<b class="nc"><i>55</i>&nbsp;        clientHandler.sendYouAreTheChallenger();</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * This method calls the clientHandler to send the list of available gods.
+<i>60</i>&nbsp;     * @param gods list of gods.
+<i>61</i>&nbsp;     */
+<i>62</i>&nbsp;    public void sendGodsList(ArrayList&lt;GodName&gt; gods) {
+<b class="nc"><i>63</i>&nbsp;        clientHandler.sendGodsList(gods);</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * This method sends the information about all the players of the game.
+<i>69</i>&nbsp;     * @param usernames list of usernames
+<i>70</i>&nbsp;     * @param colors list of colors
+<i>71</i>&nbsp;     * @param godNames list of gods
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    public void sendPublicInformation(ArrayList&lt;String&gt; usernames, ArrayList&lt;Color&gt; colors, ArrayList&lt;GodName&gt; godNames) {
+<b class="nc"><i>74</i>&nbsp;        clientHandler.sendPublicInformation(usernames, colors, godNames);</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * This method sends the request of the initial position of the workers.
+<i>79</i>&nbsp;     */
+<i>80</i>&nbsp;    public void sendSetWorkers()  {
+<b class="nc"><i>81</i>&nbsp;        clientHandler.sendAskWorkersPosition();</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /**
+<i>85</i>&nbsp;     * This method sends the request of the choice about which worker use in a turn.
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    public void sendWhichWorker() {
+<b class="nc"><i>88</i>&nbsp;        clientHandler.sendWhichWorker();</b>
+<i>89</i>&nbsp;    }
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    /**
+<i>92</i>&nbsp;     * This method sends the request of the choice about what to do next:
+<i>93</i>&nbsp;     * A player can move, build, build a dome or end his turn.
+<i>94</i>&nbsp;     */
+<i>95</i>&nbsp;    public void sendWhichAction() {
+<b class="nc"><i>96</i>&nbsp;        clientHandler.sendAction();</b>
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * This method sends an error to the client.
+<i>101</i>&nbsp;     * It contains an errorString which will be printed to inform him about what he did wrong.
+<i>102</i>&nbsp;     * @param errorText the errorString that must be sent to the client.
+<i>103</i>&nbsp;     */
+<i>104</i>&nbsp;    public void sendError(String errorText) {
+<b class="nc"><i>105</i>&nbsp;        clientHandler.sendError(errorText);</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    /**
+<i>109</i>&nbsp;     * This method sends an advice to the client.
+<i>110</i>&nbsp;     * @param text the String that contains the advice.
+<i>111</i>&nbsp;     */
+<i>112</i>&nbsp;    public void sendImportant(String text) {
+<b class="nc"><i>113</i>&nbsp;        clientHandler.sendImportant(text);</b>
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * This method sends the player who has lost.
+<i>118</i>&nbsp;     */
+<i>119</i>&nbsp;    public void sendLosingAdvice() {
+<b class="nc"><i>120</i>&nbsp;        clientHandler.showYouLost();</b>
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * This method sends the player who has win.
+<i>125</i>&nbsp;     */
+<i>126</i>&nbsp;    public void sendWinningAdvice() {
+<b class="nc"><i>127</i>&nbsp;        clientHandler.showYouWon();</b>
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 12:34</div>
+</div>
+</body>
+</html>
