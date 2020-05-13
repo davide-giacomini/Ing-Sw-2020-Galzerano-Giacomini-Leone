@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ChoosePlayersController">
+<Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ChoosePlayersController">
    <children>
       <ImageView fitHeight="400.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -18,11 +18,6 @@
       <ImageView fitHeight="406.0" fitWidth="124.0" layoutX="481.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Images/ps_curtain_right.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="142.0" fitWidth="361.0" layoutX="120.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Images/santorini-logo.png" />
          </image>
       </ImageView>
       <Text fill="#020083" layoutX="159.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please, choose the number of players">
@@ -40,15 +35,23 @@
             <Font name="Savoye LET Plain:1.0" size="26.0" />
          </font>
       </CheckBox>
-      <ImageView accessibleRole="BUTTON" fitHeight="150.0" fitWidth="200.0" layoutX="200.0" layoutY="303.0" onMouseClicked="#ClickOnDone" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="doneButton" accessibleRole="BUTTON" fitHeight="41.0" fitWidth="171.0" layoutX="215.0" layoutY="314.0" onMouseClicked="#ClickOnDone" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Images/labelbutton_modeselect.png" />
          </image>
       </ImageView>
-      <Text fill="WHITE" layoutX="271.0" layoutY="338.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Done">
+      <Text fx:id="doneText" fill="WHITE" layoutX="270.0" layoutY="346.0" onMouseClicked="#ClickOnDone" strokeType="OUTSIDE" strokeWidth="0.0" text="Done">
          <font>
             <Font name="Savoye LET Plain:1.0" size="38.0" />
          </font>
+         <effect>
+            <Glow />
+         </effect>
       </Text>
+      <ImageView fitHeight="115.0" fitWidth="322.0" layoutX="153.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/santorini-logo.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>

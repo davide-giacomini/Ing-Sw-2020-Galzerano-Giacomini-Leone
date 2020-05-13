@@ -1,10 +1,10 @@
 package it.polimi.ingsw.PSP47.View.CLI;
 
 import it.polimi.ingsw.PSP47.Enumerations.*;
-import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.View.View;
+import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.*;
 
 import java.io.IOException;
@@ -66,7 +66,6 @@ public class CLI extends ViewObservable implements View  {
      * This method asks for the username
      * @return string which becomes the username of the player
      */
-    @Override
     public String askUsername () {
         String username = null;
 
@@ -92,7 +91,6 @@ public class CLI extends ViewObservable implements View  {
      * This method asks the user which color he/she wants for the workers
      * @return string which indicates the name of the color
      */
-    @Override
     public Color askColorWorkers() {
         String color = null;
         Color acceptableColor = null;
@@ -364,25 +362,6 @@ public class CLI extends ViewObservable implements View  {
     public void tellYourTurnIndex(int Index){
         gameView.setMyIndex(Index);
         out.println("You're the "+ Index + " player in the game. \n");
-    }
-
-
-    /**
-     * This method tells the username of the winner
-     * @param usernameWinner is the username of the winner
-     */
-    @Override
-    public void theWinnerIs(String usernameWinner ){
-        out.println("\n\n THE WINNER IS : "+ usernameWinner);
-    }
-
-    /**
-     * This method tells the username of the winner
-     * @param usernameLoser is the username of the winner
-     */
-    @Override
-    public void theLoserIs(String usernameLoser ){
-        out.println("\n\n" + usernameLoser + " you lost. Your adventure ends here \n ");
     }
 
 

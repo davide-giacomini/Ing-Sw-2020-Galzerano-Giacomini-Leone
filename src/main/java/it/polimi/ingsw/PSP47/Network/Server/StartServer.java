@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP47.Network.Server;
 import java.io.IOException;
 
 /**
- * This cass instantiates a new server.
+ * This class instantiates a new server.
  */
 public class StartServer {
     public static void main( String[] args )
