@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP47.View.CLI;
 import it.polimi.ingsw.PSP47.Enumerations.*;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
+import it.polimi.ingsw.PSP47.View.GameView;
 import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.*;
@@ -53,11 +54,11 @@ public class CLI extends ViewObservable implements View  {
 
         clearConsole();
 
-        othersTurn("anna");
-        gameView.setMyUsername("moni");
-        theWinnerIs("moni");
-        theLoserIs();
-        showEnd();
+        //othersTurn("anna");
+        //gameView.setMyUsername("moni");
+        //theWinnerIs("moni");
+        //theLoserIs();
+        //showEnd();
 
     }
 

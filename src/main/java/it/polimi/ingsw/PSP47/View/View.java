@@ -1,8 +1,6 @@
 package it.polimi.ingsw.PSP47.View;
 
-import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
-import it.polimi.ingsw.PSP47.View.CLI.GameView;
 
 import java.util.ArrayList;
 
@@ -82,22 +80,28 @@ public interface View  {
      * @param text tho display
      */
      void showImportantMessage(String text);
-    public abstract void showImportantMessage(String text);
 
     /**
      * This method tells the username of the winner
      * @param usernameWinner is the username of the winner
      */
-    public abstract void theWinnerIs(String usernameWinner );
+     void theWinnerIs(String usernameWinner );
 
     /**
-     * This method tells the username of the winner
+     * This method tells the user that he/she lost
      */
-    public abstract void theLoserIs();
+     void theLoserIs();
 
-    public void othersTurn(String usernameOnTurn);
+    /**
+     * This method shows the user that it's someone else turn
+     * @param usernameOnTurn username of the player who's doing its turn
+     */
+    void othersTurn(String usernameOnTurn);
 
-    public void showEnd();
+    /**
+     * This method show the final byebye of the game
+     */
+    void showEnd();
 
 
 }

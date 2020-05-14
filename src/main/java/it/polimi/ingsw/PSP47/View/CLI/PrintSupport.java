@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP47.View.CLI;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
-import it.polimi.ingsw.PSP47.View.CLI.AnsiCode;
+import it.polimi.ingsw.PSP47.View.BoardView;
 
 import java.io.PrintStream;
 import java.util.ArrayList;

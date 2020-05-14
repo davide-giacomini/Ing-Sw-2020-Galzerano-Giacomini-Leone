@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP47.View.CLI;
+package it.polimi.ingsw.PSP47.View;
 
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Enumerations.Level;

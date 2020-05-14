@@ -101,7 +101,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                 }
             }
             catch (IOException e){
-                view.showErrorMessage("We are sorry: " +
+                view.showImportantMessage("We are sorry: " +
                         "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");
 
                 if (isConnected)

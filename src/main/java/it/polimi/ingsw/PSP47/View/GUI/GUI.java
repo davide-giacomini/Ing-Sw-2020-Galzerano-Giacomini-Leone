@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP47.View.GUI;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
-import it.polimi.ingsw.PSP47.View.CLI.GameView;
+import it.polimi.ingsw.PSP47.View.GameView;
 import it.polimi.ingsw.PSP47.View.View;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -165,6 +165,26 @@ public class GUI extends Application implements View {
 
     @Override
     public void showImportantMessage(String text) {
+
+    }
+
+    @Override
+    public void theWinnerIs(String usernameWinner) {
+
+    }
+
+    @Override
+    public void theLoserIs() {
+
+    }
+
+    @Override
+    public void othersTurn(String usernameOnTurn) {
+
+    }
+
+    @Override
+    public void showEnd() {
 
     }
 

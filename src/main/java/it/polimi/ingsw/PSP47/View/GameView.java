@@ -1,12 +1,13 @@
-package it.polimi.ingsw.PSP47.View.CLI;
+package it.polimi.ingsw.PSP47.View;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 
 import java.util.ArrayList;
 
-/*This class stores in the client some basic information of the model that the view needs in order to
-interact with the user
+/**
+ * This class stores in the client some basic information of the model that the view needs in order to
+ *interact with the user
  */
 public class GameView {
 
@@ -100,19 +101,4 @@ public class GameView {
         return gods;
     }
 
-
-
-
-    /*for now what I need is:  - board
-                                -slots
-                               - lista colori
-                               - lista username
-                               -ordine players
-                               -challenger?
-                               -lista gods
-                               -number of players
-                               -which number are you in the turn
-
-
-    */
 }
