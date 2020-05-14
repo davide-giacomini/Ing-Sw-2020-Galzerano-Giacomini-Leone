@@ -15,6 +15,11 @@ public enum MessageType {
     UPDATE_SLOT, CHALLENGER,
     ERROR,
     IMPORTANT,
+    //important message in specific
+    TURN,
+    WINNIG,
+    LOSING,
+    //
     CHOOSE_WORKER,
     CHOOSE_ACTION,
     ASK_WORKER_POSITION,

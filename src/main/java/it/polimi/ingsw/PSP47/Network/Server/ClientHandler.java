@@ -2,11 +2,13 @@ package it.polimi.ingsw.PSP47.Network.Server;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
+import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Message.*;
 import it.polimi.ingsw.PSP47.Network.Message.ConnectionFailed;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
+import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
 import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
 
 import java.io.*;
@@ -374,8 +376,10 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * This method sends a message to the client with a general information.
      * @param text the String with the advice that must be sent.
      */
-    void sendImportant(String text) {
+    void sendImportant(String text, MessageType messageType) {
+
         ImportantMessage message = new ImportantMessage(text);
+        message.setMessageType(messageType);
         send(message);
     }
 
@@ -391,5 +395,20 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      */
     void sendAction() {
         send(new ChooseAction(null));
+    }
+
+
+    /**
+     * This method sends a method to the client to set in it his/her color and username.
+     * @param username of the client
+     * @param color of the client
+     */
+    void sendConnectionAccepted(String username, Color color){
+
+        VisitableInformation visitableInformation = new VisitableInformation();
+        visitableInformation.setUsername(username);
+        visitableInformation.setColor(color);
+        ConnectionAccepted connectionAccepted = new ConnectionAccepted(visitableInformation);
+        send(connectionAccepted);
     }
 }

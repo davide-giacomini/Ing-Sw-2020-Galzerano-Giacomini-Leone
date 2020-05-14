@@ -15,7 +15,9 @@ public abstract class Message implements Serializable {
     public MessageType getMessageType(){
         return messageType;
     }
-    
+
+    public void setMessageType(MessageType messageType) { this.messageType = messageType; }
+
     @Override
     public String toString(){
         return messageType.toString();

@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP47.Controller;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.Gender;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
+import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Model.*;
 import it.polimi.ingsw.PSP47.Model.Gods.*;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
@@ -306,7 +307,7 @@ public class GameController implements VirtualViewListener {
     void sendAnAdvice() {
         for (VirtualView view : views) {
             if (!(view.getUsername().equals(views.get(indexOfCurrentPlayer).getUsername())))
-                view.sendImportant("It's " + views.get(indexOfCurrentPlayer).getUsername() + "'s turn");
+                view.sendImportant( views.get(indexOfCurrentPlayer).getUsername() , MessageType.TURN);
         }
     }
 
@@ -315,7 +316,7 @@ public class GameController implements VirtualViewListener {
      * If the players were just two, it also declares the winner and ends the game.
      */
     void removeLosingPlayer() {
-        views.get(indexOfCurrentPlayer).sendImportant("I'm sorry, you have lost :-(");
+        views.get(indexOfCurrentPlayer).sendImportant("", MessageType.LOSING);
 
         if (game.getNumberOfPlayers() == 2) {
             incrementIndex();
@@ -345,7 +346,7 @@ public class GameController implements VirtualViewListener {
      */
     void endGame(String username) {
         for (VirtualView view : views) {
-            view.sendImportant("The player " + username + " has won :-)");
+            view.sendImportant( username , MessageType.WINNIG);
         }
         views.get(indexOfCurrentPlayer).sendWinningAdvice();
     }

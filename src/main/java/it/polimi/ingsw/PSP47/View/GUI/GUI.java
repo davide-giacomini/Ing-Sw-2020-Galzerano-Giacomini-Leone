@@ -184,9 +184,18 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void theLoserIs(String usernameLoser) {
+    public void theLoserIs() {
 
     }
 
+    @Override
+    public void othersTurn(String usernameOnTurn) {
+
+    }
+
+    @Override
+    public void showEnd() {
+
+    }
 
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP47.Network.Server;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
+import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Model.SlotListener;
 
@@ -109,8 +110,8 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
      * This method sends an advice to the client.
      * @param text the String that contains the advice.
      */
-    public void sendImportant(String text) {
-        clientHandler.sendImportant(text);
+    public void sendImportant(String text, MessageType messageType) {
+        clientHandler.sendImportant(text, messageType);
     }
 
     /**

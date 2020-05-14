@@ -96,6 +96,7 @@ public class Server implements ClientHandlerListener {
             firstClientHandler = clientHandler;
             connectionsAccepted.put(clientHandler, new PlayerParameters(username, color));
             clientHandlers.remove(clientHandler);
+            clientHandler.sendConnectionAccepted(username, color);
             clientHandler.askMaxPlayersNumber();
             return;
         }
@@ -135,8 +136,9 @@ public class Server implements ClientHandlerListener {
         
         // At this point you can enter the game and wait for other players
         connectionsAccepted.put(clientHandler, new PlayerParameters(username, color));
+        clientHandler.sendConnectionAccepted(username, color);
         clientHandlers.remove(clientHandler);
-        //TODO mandare un messaggio di riuscita connessione.
+
         
         // With enough players, the game starts.
         if (connectionsAccepted.size() == maxPlayersNumber)

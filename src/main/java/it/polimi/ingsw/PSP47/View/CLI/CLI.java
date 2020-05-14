@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class CLI extends ViewObservable implements View  {
     private NetworkHandler networkHandler;
@@ -34,18 +35,30 @@ public class CLI extends ViewObservable implements View  {
      * This method is used to print the initial Santorini Logo
      */
     public void showTitle() {
-        String santoriniName = "     ____       ____   ____    __      ____    ____    ____        __         \n" +
-                               "    |____|     |      |    |  |  | |    ||    |    |  |    |  ||  |  | |  ||  \n" +
-                               "    |_°°_|     |____  |____|  |  | |    ||    |    |  |____|  ||  |  | |  ||  \n" +
-                               "    |____|          | |    |  |  | |    ||    |    |  |\\      ||  |  | |  ||  \n" +
-                               "    |    |      ____| |    |  |  |_|    ||    |____|  | \\     ||  |  |_|  ||  \n";
 
         String intro ="Welcome to the Digital Version of Santorini Board Game, \n" +
                       "programmers:AriannaGalzerano-DavideGiacomini-MonicaLeone\n" +
                       "Before starting please insert the required parameters...\n";
 
-        out.println( AnsiCode.ANSI_BLUE + santoriniName + AnsiCode.ANSI_RESET);
+         printSupport.printTitle(out) ;
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        printSupport.printDotSequence(out);
+
         out.println(AnsiCode.ANSI_CYAN + intro + AnsiCode.ANSI_RESET);
+
+        clearConsole();
+
+        othersTurn("anna");
+        gameView.setMyUsername("moni");
+        theWinnerIs("moni");
+        theLoserIs();
+        showEnd();
+
     }
 
     public void askFirstConnection(){
@@ -58,6 +71,7 @@ public class CLI extends ViewObservable implements View  {
         visitableInformation.setUsername(username);
         visitableInformation.setColor(color);
         notifyViewListener(visitableInformation);
+        clearConsole();
 
     }
 
@@ -79,12 +93,13 @@ public class CLI extends ViewObservable implements View  {
 
                 username = in.nextLine();
                 if(username.equals("")) {
+                 printSupport.printError(out);
                 out.println(AnsiCode.ANSI_RED + "Username not inserted or wrong!\n"+ AnsiCode.ANSI_RESET);
                 username = null;
             }}
         }while (username== null);
 
-
+        clearConsole();
         return username;
     }
 
@@ -114,12 +129,16 @@ public class CLI extends ViewObservable implements View  {
                 acceptableColor = Color.getColorByName(color);
                 if (acceptableColor == Color.WRONGCOLOR) {
                     color = null;
+                    printSupport.printError(out);
                     out.println(AnsiCode.ANSI_RED +"Color not available! \n"+ AnsiCode.ANSI_RESET);
                 }
-            }else
-                out.println(AnsiCode.ANSI_RED +"Color not inserted! \n"+ AnsiCode.ANSI_RESET);
-
+            }else {
+                printSupport.printError(out);
+                out.println(AnsiCode.ANSI_RED + "Color not inserted! \n" + AnsiCode.ANSI_RESET);
+            }
         }while (color == null);
+
+        clearConsole();
 
         return acceptableColor;
     }
@@ -130,21 +149,23 @@ public class CLI extends ViewObservable implements View  {
     @Override
     public void setConnection (String address) {
 
-        // open a connection with the server   //TODO chiedere se va bene inseirirlo qui
+        // open a connection with the server
         Socket serverSocket;
         try {
             serverSocket = new Socket(address, Server.SOCKET_PORT);
         } catch (IOException e) {
-            System.out.println("Server unreachable.");
+            printSupport.printError(out);
+            out.println("Server unreachable.");
             return;
         }
-        System.out.println("Connected to the address " + serverSocket.getInetAddress());
+        out.println("Connected to the address " + serverSocket.getInetAddress());
 
         networkHandler = new NetworkHandler(this , serverSocket);
         addViewListener(networkHandler);
 
         Thread thread = new Thread(networkHandler);
         thread.start();
+
 
     }
 
@@ -164,6 +185,7 @@ public class CLI extends ViewObservable implements View  {
             try {
                 newRowAndColumn[0] = Integer.parseInt(in.nextLine())-1;
             } catch (NumberFormatException e) {
+                printSupport.printError(out);
                 out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
                 newRowAndColumn[0] = 9000;
             }
@@ -175,6 +197,7 @@ public class CLI extends ViewObservable implements View  {
             try {
                 newRowAndColumn[1] = Integer.parseInt(in.nextLine())-1;
             } catch (NumberFormatException e) {
+                printSupport.printError(out);
                 out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
                 newRowAndColumn[1] = 9000;
             }
@@ -185,7 +208,8 @@ public class CLI extends ViewObservable implements View  {
         visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);
         notifyViewListener(visitableRowsAndColumns);
 
-        /*no more return*/
+
+        clearConsole();
 
     }
 
@@ -205,6 +229,7 @@ public class CLI extends ViewObservable implements View  {
                     try {
                         newRowAndColumn[0] = Integer.parseInt(in.nextLine())-1;
                     } catch (NumberFormatException e) {
+                        printSupport.printError(out);
                         out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
                         newRowAndColumn[0] = 9000;
                     }
@@ -216,7 +241,8 @@ public class CLI extends ViewObservable implements View  {
                     try {
                         newRowAndColumn[1] = Integer.parseInt(in.nextLine())-1;
                     } catch (NumberFormatException e) {
-                         out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
+                        printSupport.printError(out);
+                        out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
                         newRowAndColumn[1] = 9000;
                     }
 
@@ -227,6 +253,7 @@ public class CLI extends ViewObservable implements View  {
                     try {
                         newRowAndColumn[2] = Integer.parseInt(in.nextLine())-1;
                      } catch (NumberFormatException e) {
+                        printSupport.printError(out);
                         out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
                         newRowAndColumn[2] = 9000;
                     }
@@ -238,6 +265,7 @@ public class CLI extends ViewObservable implements View  {
                     try {
                         newRowAndColumn[3] = Integer.parseInt(in.nextLine())-1;
                     } catch (NumberFormatException e) {
+                        printSupport.printError(out);
                         out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
                         newRowAndColumn[3] = 9000;
                     }
@@ -247,6 +275,8 @@ public class CLI extends ViewObservable implements View  {
         VisitableInitialPositions visitableRowsAndColumns = new VisitableInitialPositions();
         visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);
         notifyViewListener(visitableRowsAndColumns);
+
+        clearConsole();
 
 
     }
@@ -293,7 +323,6 @@ public class CLI extends ViewObservable implements View  {
         out.println("#13 Triton - Each time your Worker moves onto a perimeter space (ground or block), it may immediately move again.");
 
         out.println("#14 Zeus - your Worker may build under itself in its current space, forcing it up one level. You do not win by forcing yourself up the 3rd level.");
-        //TODO AGGIUNGERE GETPOWER DEGLI DEI
 
         do {
             out.println("Choose which god you want to add in the list : you can choose " + gameView.getNumberOfPlayers() );
@@ -303,14 +332,16 @@ public class CLI extends ViewObservable implements View  {
                 godName = GodName.getGodsNameByName(god);
 
                 if(godName == GodName.WRONGGODNAME || godsChosen.contains(godName)) {
+                    printSupport.printError(out);
                     out.println(AnsiCode.ANSI_RED +"God already chosen or wrong!\n"+ AnsiCode.ANSI_RESET);
                     i--;
                 }else{
                     godsChosen.add(godName);
                 }
-            }else
-                out.println(AnsiCode.ANSI_RED + "God not inserted! \n"+ AnsiCode.ANSI_RESET);
-
+            }else {
+                printSupport.printError(out);
+                out.println(AnsiCode.ANSI_RED + "God not inserted! \n" + AnsiCode.ANSI_RESET);
+            }
             i++;
 
         }while (i < gameView.getNumberOfPlayers());
@@ -318,6 +349,8 @@ public class CLI extends ViewObservable implements View  {
         VisitableListOfGods visitableGods = new VisitableListOfGods();
         visitableGods.setGodNames(godsChosen);
         notifyViewListener(visitableGods);
+
+        clearConsole();
 
 
     }
@@ -334,7 +367,7 @@ public class CLI extends ViewObservable implements View  {
 
         out.println("These are the available gods :");
         for (GodName g: godsChosen){
-            System.out.println( g) ;
+            out.println( g) ;
         }
 
 
@@ -345,19 +378,23 @@ public class CLI extends ViewObservable implements View  {
                 godName = GodName.getGodsNameByName(god);
 
                 if(godName == GodName.WRONGGODNAME || god.equals("")) {
+                    printSupport.printError(out);
                     out.println(AnsiCode.ANSI_RED + "God not available or wrong!\n"+ AnsiCode.ANSI_RESET);
                     god = null;
                 }else{
                     gameView.setMyGod(godName);
                 }
-            }else
-                out.println(AnsiCode.ANSI_RED + "God not inserted! \n"+ AnsiCode.ANSI_RESET);
-
+            }else {
+                printSupport.printError(out);
+                out.println(AnsiCode.ANSI_RED + "God not inserted! \n" + AnsiCode.ANSI_RESET);
+            }
         }while (god == null);
 
         VisitableGod visitableGodChosen = new VisitableGod();
         visitableGodChosen.setGodName(godName);
         notifyViewListener(visitableGodChosen);
+
+        clearConsole();
     }
 
 
@@ -373,16 +410,23 @@ public class CLI extends ViewObservable implements View  {
      */
     @Override
     public void theWinnerIs(String usernameWinner ){
-        out.println("\n\n THE WINNER IS : "+ usernameWinner);
+        if(gameView.getMyUsername().equals(usernameWinner))
+            printSupport.printWin(out);
     }
 
     /**
      * This method tells the username of the winner
-     * @param usernameLoser is the username of the winner
      */
     @Override
-    public void theLoserIs(String usernameLoser ){
-        out.println("\n\n" + usernameLoser + " you lost. Your adventure ends here \n ");
+    public void theLoserIs( ){
+        printSupport.printLost(out);
+    }
+
+    @Override
+    public void othersTurn(String usernameOnTurn) {
+        printSupport.printDotSequence(out);
+        out.println("It's "+ usernameOnTurn + "'s Turn . . . Please Wait ");
+        printSupport.printWait(out);
     }
 
 
@@ -413,6 +457,7 @@ public class CLI extends ViewObservable implements View  {
                 try {
                     num = Integer.parseInt(in.nextLine());
                 } catch (NumberFormatException e) {
+                    printSupport.printError(out);
                     out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
                     num = 0;
                 }
@@ -422,7 +467,7 @@ public class CLI extends ViewObservable implements View  {
         VisitableInt visitableNumber = new VisitableInt(num);
         notifyViewListener(visitableNumber);
 
-
+        clearConsole();
 
     }
 
@@ -471,6 +516,8 @@ public class CLI extends ViewObservable implements View  {
         visitableActionAndDirection.setAction(actionInserted);
         visitableActionAndDirection.setDirection(directionInserted);
         notifyViewListener(visitableActionAndDirection);
+
+        clearConsole();
     }
 
     /**
@@ -486,18 +533,22 @@ public class CLI extends ViewObservable implements View  {
         colors = gameView.getColors();
         gods = gameView.getGods();
        printSupport.printUsersAndColorsAndGods(usernames, colors, gods, gameView.getNumberOfPlayers(), out);
+
+        clearConsole();
     }
 
 
 
     @Override
     public void showErrorMessage(String text) {
-        System.out.println(AnsiCode.ANSI_RED +text + AnsiCode.ANSI_RESET);
+        printSupport.printError(out);
+        out.println(AnsiCode.ANSI_RED +text + AnsiCode.ANSI_RESET);
     }
 
     @Override
     public void showImportantMessage(String text) {
-        System.out.println(AnsiCode.ANSI_GREEN +text + AnsiCode.ANSI_RESET);
+
+        out.println(AnsiCode.ANSI_GREEN +text + AnsiCode.ANSI_RESET);
     }
 
 
@@ -509,6 +560,16 @@ public class CLI extends ViewObservable implements View  {
         printSupport.printCurrBoard(printSupport.buildCurrBoard(gameView.getBoardView()), out);
     }
 
+    /**
+     * Clears the console
+     */
+    public void clearConsole() {
+        out.print(AnsiCode.ANSI_CLEARCONSOLE);
+        out.flush();
+    }
 
+    public void showEnd(){
+        printSupport.printGoodBye(out);
+    }
 
 }

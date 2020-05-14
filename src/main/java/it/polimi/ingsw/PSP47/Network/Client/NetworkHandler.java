@@ -119,7 +119,7 @@ public class NetworkHandler implements Runnable, ViewListener {
             }
         }
 
-        view.showImportantMessage("Game closed.");
+        view.showEnd();
 //        System.out.println(messageExecutor.isShutdown());
 //        System.out.println(messageExecutor.isTerminated());
     }
@@ -209,6 +209,16 @@ public class NetworkHandler implements Runnable, ViewListener {
                 case CHALLENGER:
                     view.challengerWillChooseThreeGods();
                     break;
+                case TURN :
+                    view.othersTurn(((ImportantMessage) message).getText());
+                    break;
+                case LOSING:
+                    view.theLoserIs();
+                    break;
+                case WINNIG:
+                    view.theWinnerIs(((ImportantMessage) message).getText());
+                    break;
+
             }
         }
     }

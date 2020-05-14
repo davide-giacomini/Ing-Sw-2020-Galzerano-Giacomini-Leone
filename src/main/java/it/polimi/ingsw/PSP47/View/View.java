@@ -109,9 +109,12 @@ public interface View  {
 
     /**
      * This method tells the username of the winner
-     * @param usernameLoser is the username of the winner
      */
-    public abstract void theLoserIs(String usernameLoser );
+    public abstract void theLoserIs();
+
+    public void othersTurn(String usernameOnTurn);
+
+    public void showEnd();
 
 
 }
