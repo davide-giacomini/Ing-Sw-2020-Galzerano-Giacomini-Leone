@@ -10,18 +10,18 @@ interact with the user
  */
 public class GameView {
 
-    public String myUsername;
-    public Color myColor;
-    public int myIndex;
-    public GodName myGod;
-    public int numberOfPlayers ;
-    public BoardView boardView ;
+    private String myUsername;
+    private Color myColor;
+    private int myIndex;
+    private GodName myGod;
+    private int numberOfPlayers ;
+    private BoardView boardView ;
 
     public ArrayList<String> usernames = new ArrayList<String>();
     public ArrayList<Color> colors = new ArrayList<Color>();
     public ArrayList <GodName> gods = new ArrayList<GodName>();
 
-    GameView(){
+    public GameView(){
         this.boardView = new BoardView();
     }
 

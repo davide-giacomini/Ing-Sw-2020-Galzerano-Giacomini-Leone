@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP47.View.CLI;
+package it.polimi.ingsw.PSP47.View;
 
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;

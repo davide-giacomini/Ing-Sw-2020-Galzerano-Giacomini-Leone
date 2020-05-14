@@ -1,10 +1,10 @@
 package it.polimi.ingsw.PSP47.View.CLI;
 
 import it.polimi.ingsw.PSP47.Enumerations.*;
-import it.polimi.ingsw.PSP47.Network.Client.Client;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.View.View;
+import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.*;
 
 import java.io.IOException;
@@ -80,7 +80,6 @@ public class CLI extends ViewObservable implements View  {
      * This method asks for the username
      * @return string which becomes the username of the player
      */
-    @Override
     public String askUsername () {
         String username = null;
 
@@ -107,7 +106,6 @@ public class CLI extends ViewObservable implements View  {
      * This method asks the user which color he/she wants for the workers
      * @return string which indicates the name of the color
      */
-    @Override
     public Color askColorWorkers() {
         String color = null;
         Color acceptableColor = null;

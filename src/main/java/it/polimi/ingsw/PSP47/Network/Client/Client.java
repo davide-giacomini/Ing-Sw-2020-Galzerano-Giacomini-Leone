@@ -43,7 +43,7 @@ public class Client {
 
         if ("CLI".equals(viewChoice.toUpperCase())) {
             view = new CLI();
-            view.showTitle();
+            ((CLI)view).showTitle();
             view.setConnection(serverIpAddress);
         } else if ("GUI".equals(viewChoice.toUpperCase())) {
 

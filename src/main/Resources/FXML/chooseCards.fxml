@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ChooseCardsController">
+   <children>
+      <ImageView fitHeight="850.0" fitWidth="236.0" layoutX="-5.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/ps_curtain_left.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="812.0" fitWidth="255.0" layoutX="866.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/ps_curtain_right.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Apollo" fitHeight="150.0" fitWidth="200.0" layoutX="243.0" layoutY="139.0" onMouseClicked="#selectApollo" onMouseEntered="#onApollo" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Apollo.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Athena" fitHeight="150.0" fitWidth="200.0" layoutX="494.0" layoutY="139.0" onMouseClicked="#selectAthena" onMouseEntered="#onAthena" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Athena.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Artemis" fitHeight="150.0" fitWidth="200.0" layoutX="368.0" layoutY="139.0" onMouseClicked="#selectArtemis" onMouseEntered="#onArtemis" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Artemis.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Atlas" fitHeight="150.0" fitWidth="200.0" layoutX="620.0" layoutY="138.0" onMouseClicked="#selectAtlas" onMouseEntered="#onAtlas" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Atlas.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Chronus" fitHeight="150.0" fitWidth="200.0" layoutX="745.0" layoutY="138.0" onMouseClicked="#selectChronus" onMouseEntered="#onChronus" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Chronus.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Demeter" fitHeight="150.0" fitWidth="200.0" layoutX="247.0" layoutY="309.0" onMouseClicked="#selectDemeter" onMouseEntered="#onDemeter" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Demeter.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Hephaestus" fitHeight="150.0" fitWidth="200.0" layoutX="369.0" layoutY="305.0" onMouseClicked="#selectHephaestus" onMouseEntered="#onHephaestus" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Hephaestus.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Hera" fitHeight="150.0" fitWidth="200.0" layoutX="492.0" layoutY="304.0" onMouseClicked="#selectHera" onMouseEntered="#onHera" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Hera.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Hestia" fitHeight="150.0" fitWidth="200.0" layoutX="618.0" layoutY="304.0" onMouseClicked="#selectHestia" onMouseEntered="#onHestia" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Hestia.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Minotaur" fitHeight="150.0" fitWidth="200.0" layoutX="745.0" layoutY="305.0" onMouseClicked="#selectMinotaur" onMouseEntered="#onMinotaur" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Minotaur.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Pan" fitHeight="150.0" fitWidth="200.0" layoutX="300.0" layoutY="471.0" onMouseClicked="#selectPan" onMouseEntered="#onPan" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Pan.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Prometheus" fitHeight="150.0" fitWidth="200.0" layoutX="432.0" layoutY="470.0" onMouseClicked="#selectPrometheus" onMouseEntered="#onPrometheus" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Prometheus.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Triton" fitHeight="150.0" fitWidth="200.0" layoutX="561.0" layoutY="471.0" onMouseClicked="#selectTriton" onMouseEntered="#onTriton" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Triton.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="Zeus" fitHeight="150.0" fitWidth="200.0" layoutX="692.0" layoutY="472.0" onMouseClicked="#selectZeus" onMouseEntered="#onZeus" onMouseExited="#exit" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Zeus.png" />
+         </image>
+      </ImageView>
+      <Text fill="#050090" layoutX="317.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You have been picked as the Challenger. You must choose the gods that can be used during the game" textAlignment="CENTER" wrappingWidth="456.02301025390625">
+         <font>
+            <Font name="Savoye LET Plain:1.0" size="32.0" />
+         </font>
+      </Text>
+      <Text fx:id="godPower" fill="#040080" layoutX="187.0" layoutY="686.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="717.2127558719928">
+         <font>
+            <Font name="Savoye LET Plain:1.0" size="33.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>

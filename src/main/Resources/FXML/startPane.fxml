@@ -3,7 +3,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -18,7 +18,7 @@
          </font>
       </Label>
       <TextField fx:id="player_name" layoutX="217.0" layoutY="234.0" />
-      <ImageView fitHeight="88.0" fitWidth="244.0" layoutX="179.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="115.0" fitWidth="322.0" layoutX="143.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Images/santorini-logo.png" />
          </image>
@@ -29,17 +29,17 @@
             <Font name="Savoye LET Plain:1.0" size="29.0" />
          </font>
       </Text>
-      <ImageView fx:id="joinButton" accessibleRole="BUTTON" fitHeight="41.0" fitWidth="188.0" layoutX="214.0" layoutY="327.0" onMouseClicked="#OnSubmitClick" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="joinButton" accessibleRole="BUTTON" fitHeight="41.0" fitWidth="188.0" layoutX="214.0" layoutY="327.0" onMouseClicked="#OnJoinClick" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Images/labelbutton_modeselect.png" />
          </image>
       </ImageView>
-      <Text fill="WHITE" layoutX="273.0" layoutY="355.0" smooth="false" strokeWidth="0.0" text="JOIN" textAlignment="CENTER">
+      <Text fx:id="joinText" accessibleRole="BUTTON" fill="WHITE" layoutX="281.0" layoutY="357.0" onMouseClicked="#OnJoinClick" smooth="false" strokeWidth="0.0" text="Join" textAlignment="CENTER">
          <font>
-            <Font name="Times New Roman Bold" size="23.0" />
+            <Font name="Savoye LET Plain:1.0" size="32.0" />
          </font>
          <effect>
-            <DropShadow />
+            <Glow />
          </effect>
       </Text>
       <ImageView fitHeight="400.0" fitWidth="119.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">

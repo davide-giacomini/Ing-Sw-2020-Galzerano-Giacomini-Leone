@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="225.0" layoutY="223.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/cb309830ce7a4e6e7be876e22f925998.gif" />
+         </image>
+         <effect>
+            <InnerShadow blurType="GAUSSIAN" color="#020268" />
+         </effect>
+      </ImageView>
+      <Text fill="#020094" layoutX="166.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Waiting for the others players....">
+         <font>
+            <Font name="Savoye LET Plain:1.0" size="32.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="143.0" fitWidth="325.0" layoutX="138.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/santorini-logo.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="400.0" fitWidth="232.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/ps_curtain_left.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="400.0" fitWidth="265.0" layoutX="484.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/ps_curtain_right.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>

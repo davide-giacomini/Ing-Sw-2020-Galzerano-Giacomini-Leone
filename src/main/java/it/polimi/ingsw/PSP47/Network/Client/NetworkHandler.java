@@ -4,7 +4,7 @@ import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Message.*;
-import it.polimi.ingsw.PSP47.View.CLI.ViewListener;
+import it.polimi.ingsw.PSP47.View.ViewListener;
 import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.Visitor.NetworkHandlerVisitor;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;

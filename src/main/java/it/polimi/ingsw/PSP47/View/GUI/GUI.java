@@ -1,12 +1,12 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
-import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.View.CLI.GameView;
 import it.polimi.ingsw.PSP47.View.View;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,40 +21,33 @@ import java.util.List;
 
 public class GUI extends Application implements View {
 
-    public NetworkHandler networkHandler;
+    private NetworkHandler networkHandler;
+    private GameView gameView;
 
-    private static GUI instance = null;
-
+    private Stage primaryStage;
     private Scene scene;
     private Parent root;
 
     private StartController startController;
 
-    public static GUI getInstance() {
-        if (instance == null)
-            instance = new GUI();
-        return instance;
-    }
-
-
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
 
-        instance = getInstance();
 
         List<String> args = getParameters().getRaw();
-
         setConnection(args.get(0));
 
+        gameView = new GameView();
 
+        this.primaryStage = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/FXML/startPane.fxml"));
         root = fxmlLoader.load();
         scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Santorini");
-        stage.setResizable(false);
-        stage.show();
+        primaryStage.setResizable(false);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Santorini");
+        primaryStage.show();
 
         startController = fxmlLoader.getController();
         startController.setNetworkHandler(networkHandler);
@@ -101,28 +94,15 @@ public class GUI extends Application implements View {
 
 
     @Override
-    public void showTitle() {
-
-    }
-
-    @Override
     public void askFirstConnection() {
-        startController.ableButton();
-    }
-
-    @Override
-    public String askUsername() {
-        return null;
-    }
-
-    @Override
-    public Color askColorWorkers() {
-        return null;
+        startController = setLayout(scene, "/FXML/startPane.fxml");
+        startController.setNetworkHandler(networkHandler);
     }
 
     @Override
     public void askNumberOfPlayers() {
-        setLayout(scene,"/FXML/choosePlayers.fxml");
+        ChoosePlayersController choosePlayersController = setLayout(scene,"/FXML/choosePlayers.fxml");
+        choosePlayersController.setNetworkHandler(networkHandler);
     }
 
 
@@ -138,12 +118,20 @@ public class GUI extends Application implements View {
 
     @Override
     public void challengerWillChooseThreeGods() {
-
+        primaryStage.setWidth(1100);
+        primaryStage.setHeight(800);
+        ChooseCardsController chooseCardsController = setLayout(scene, "/FXML/chooseCards.fxml");
+        chooseCardsController.setNetworkHandler(networkHandler);
+        chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());
     }
 
     @Override
     public void chooseYourGod(ArrayList<GodName> godsChosen) {
-
+        primaryStage.setWidth(1100);
+        primaryStage.setHeight(800);
+        ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
+        chooseCardController.setNetworkHandler(networkHandler);
+        chooseCardController.setAvailableGods(godsChosen);
     }
 
     @Override
@@ -153,7 +141,7 @@ public class GUI extends Application implements View {
 
     @Override
     public GameView getGameView() {
-        return null;
+        return gameView;
     }
 
     @Override
@@ -168,33 +156,15 @@ public class GUI extends Application implements View {
 
     @Override
     public void showErrorMessage(String text) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText(text);
-        alert.show();
+        Platform.runLater(() -> {
+            Alert a = new Alert(Alert.AlertType.WARNING);
+            a.setContentText(text);
+            a.show();
+        });
     }
 
     @Override
     public void showImportantMessage(String text) {
-
-    }
-
-    @Override
-    public void theWinnerIs(String usernameWinner) {
-
-    }
-
-    @Override
-    public void theLoserIs() {
-
-    }
-
-    @Override
-    public void othersTurn(String usernameOnTurn) {
-
-    }
-
-    @Override
-    public void showEnd() {
 
     }
 
