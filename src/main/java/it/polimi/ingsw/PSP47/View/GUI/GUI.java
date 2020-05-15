@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
+import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
@@ -24,6 +25,7 @@ public class GUI extends Application implements View {
     private NetworkHandler networkHandler;
     private GameView gameView;
 
+    private CurrentScene currentScene;
     private Stage primaryStage;
     private Scene scene;
     private Parent root;
@@ -48,6 +50,8 @@ public class GUI extends Application implements View {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Santorini");
         primaryStage.show();
+
+        currentScene = CurrentScene.START;
 
         startController = fxmlLoader.getController();
         startController.setNetworkHandler(networkHandler);
@@ -95,12 +99,14 @@ public class GUI extends Application implements View {
 
     @Override
     public void askFirstConnection() {
+        currentScene = CurrentScene.START;
         startController = setLayout(scene, "/FXML/startPane.fxml");
         startController.setNetworkHandler(networkHandler);
     }
 
     @Override
     public void askNumberOfPlayers() {
+        currentScene = CurrentScene.CHOOSE_PLAYERS;
         ChoosePlayersController choosePlayersController = setLayout(scene,"/FXML/choosePlayers.fxml");
         choosePlayersController.setNetworkHandler(networkHandler);
     }
@@ -113,11 +119,18 @@ public class GUI extends Application implements View {
 
     @Override
     public void askWhereToPositionWorkers() {
-
+        currentScene = CurrentScene.SET_WORKERS;
+        primaryStage.setHeight(700);
+        SetWorkersController controller = setLayout(scene, "/FXML/setWorkers.fxml");
+        controller.setNetworkHandler(networkHandler);
+        controller.setUsernames(gameView.getUsernames());
+        controller.setColors(gameView.getColors());
+        controller.setGods(gameView.getGods());
     }
 
     @Override
     public void challengerWillChooseThreeGods() {
+        currentScene = CurrentScene.CHOOSE_CARDS;
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         ChooseCardsController chooseCardsController = setLayout(scene, "/FXML/chooseCards.fxml");
@@ -127,6 +140,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void chooseYourGod(ArrayList<GodName> godsChosen) {
+        currentScene = CurrentScene.CHOOSE_CARD;
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
@@ -165,7 +179,11 @@ public class GUI extends Application implements View {
 
     @Override
     public void showImportantMessage(String text) {
-
+        Platform.runLater(() -> {
+            Alert a = new Alert(Alert.AlertType.INFORMATION);
+            a.setContentText(text);
+            a.show();
+        });
     }
 
     @Override
@@ -180,12 +198,38 @@ public class GUI extends Application implements View {
 
     @Override
     public void othersTurn(String usernameOnTurn) {
-
+        Platform.runLater(() -> {
+            Alert a = new Alert(Alert.AlertType.WARNING);
+            a.setContentText("It's " + usernameOnTurn + "'s turn. You can't do anything until it's your turn.");
+            a.show();
+        });
     }
 
     @Override
     public void showEnd() {
 
+    }
+
+    private String choosePath() {
+        String path = "";
+        switch (currentScene) {
+            case START:
+                path = "/FXML/startPane.fxml";
+                break;
+            case CHOOSE_PLAYERS:
+                path = "/FXML/choosePlayers.fxml";
+                break;
+            case CHOOSE_CARDS:
+                path = "/FXML/chooseCards.fxml";
+                break;
+            case CHOOSE_CARD:
+                path = "/FXML/chooseCard.fxml";
+                break;
+            case SET_WORKERS:
+                path = "/FXML/setWorkers.fxml";
+                break;
+        }
+        return path;
     }
 
 }
