@@ -241,7 +241,8 @@ public class NetworkHandler implements Runnable, ViewListener {
     /**
      * This method close the client process with no errors.
      */
-    void endConnection(){
+    @Override
+    public void endConnection(){
         isConnected = false;
         clientTimer.setIsConnectedFalse();
         messageExecutor.shutdownNow();

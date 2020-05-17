@@ -16,6 +16,12 @@ public abstract class ViewObservable {
             slotListener.update(visitableObject);
         }
     }
+    
+    public void notifyEndConnection(){
+        for (ViewListener viewListener : viewListeners) {
+            viewListener.endConnection();
+        }
+    }
 
     public void addViewListener(ViewListener viewListener){
         viewListeners.add(viewListener);

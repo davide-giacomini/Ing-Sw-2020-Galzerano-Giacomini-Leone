@@ -267,7 +267,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param username the player's username who disconnected.
      */
     void notifyOpponentClientDisconnected(String username){
-        send(new ConnectionFailed("The player" + username + " disconnected. Game over.\n"));
+        send(new ConnectionFailed("The player " + username + " disconnected. Game over.\n"));
         
         endConnection();
     }
