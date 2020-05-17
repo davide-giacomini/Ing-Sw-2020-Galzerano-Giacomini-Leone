@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP47.Model.Gods.Athena;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TurnController {
 
@@ -127,6 +128,9 @@ public class TurnController {
             String textError = null;
             if (turn.getNumberOfMovements() == player.getGod().getMAX_MOVEMENTS())
                 textError = "You've yet reached the max number of movements in this turn";
+            else if (turn.getNumberOfBuildings() == 1 && !player.getGod().getName().equals("Prometheus")) {
+                textError = "You have already built in this turn, so you can't move anymore";
+            }
             else if (destinationSlot.getLevel() == (Level.DOME) || destinationSlot.getLevel() == (Level.ATLAS_DOME))
                 textError = "This slot contains a dome, you cannot move here";
             else if (destinationSlot.isWorkerOnSlot()) {
@@ -181,6 +185,8 @@ public class TurnController {
                 if (!(player.getGod().getName().equals("Zeus") && direction == Direction.HERE))
                     textError = "This slot is occupied by a worker, you cannot build here";
             }
+            else if (turn.getNumberOfMovements() == 0 && !player.getGod().getName().equals("Prometheus"))
+                textError = "You have to move your worker before build";
             if (textError != null) {
                 views.get(indexOfCurrentPlayer).sendError(textError);
                 views.get(indexOfCurrentPlayer).sendWhichAction();
@@ -188,7 +194,7 @@ public class TurnController {
             }
             turn.executeBuild(direction);
             if (game.getBoard().getCountDomes() == 5 && chronusPlayer() != null) {
-                controller.endGame(chronusPlayer().getUsername());
+                controller.endGame(Objects.requireNonNull(chronusPlayer()).getUsername());
                 return;
             }
             views.get(indexOfCurrentPlayer).sendWhichAction();
@@ -239,7 +245,7 @@ public class TurnController {
      * @param currentWorker the worker who is actually moving.
      * @return if the worker is on a perimeter slot and if Hera is in the game.
      */
-    private boolean heraWinCondition(Worker currentWorker){
+    boolean heraWinCondition(Worker currentWorker){
         boolean thereIsHera = false;
         for(Player player : game.getPlayers()){
             if (player.getGod().getName().equals("Hera")) {
@@ -254,12 +260,20 @@ public class TurnController {
      * This method controls if there is a player who is using Chronus' power.
      * @return the instance of the player.
      */
-    private Player chronusPlayer() {
+    Player chronusPlayer() {
         for (int i = 0; i<game.getNumberOfPlayers(); i++) {
             if (game.getPlayer(i).getGod().getName().equals("Chronus")) {
                 return player;
             }
         }
         return null;
+    }
+
+    Gender getWorkerGender() {
+        return workerGender;
+    }
+
+    Turn getTurn() {
+        return turn;
     }
 }
