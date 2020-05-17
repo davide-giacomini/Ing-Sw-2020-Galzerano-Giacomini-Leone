@@ -362,4 +362,26 @@ public class GameController implements VirtualViewListener {
         visitableObject.accept(controllerVisitor);
     }
 
+
+
+
+    public ArrayList<VirtualView> getViews() {
+        return views;
+    }
+
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public int getIndexOfCurrentPlayer() {
+        return indexOfCurrentPlayer;
+    }
+
+    public ControllerVisitor getControllerVisitor() {
+        return controllerVisitor;
+    }
 }

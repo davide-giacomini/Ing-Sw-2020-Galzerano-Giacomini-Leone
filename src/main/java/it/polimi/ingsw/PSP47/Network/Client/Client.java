@@ -18,8 +18,6 @@ import static javafx.application.Application.launch;
  * {@link Server} the user wants to connect to.
  */
 public class Client {
-    private View view;
-
     
     public static void main(String[] args) {
         Client client = new Client();
@@ -32,13 +30,13 @@ public class Client {
      * connection with the server.
      */
     public void init() {
+        View view;
+        
         //initial request of choice between GUI or CLI
         Scanner scanner = new Scanner(System.in);
-
+    
+        String viewChoice = askWhichView(scanner);
         String serverIpAddress = askServerIpAddress(scanner);
-
-        System.out.println("CLI or GUI ?");
-        String viewChoice = scanner.nextLine();
 
 
         if ("CLI".equals(viewChoice.toUpperCase())) {
@@ -68,10 +66,19 @@ public class Client {
 
     }
     
-    public View getView() {
-        return view;
+    private String askWhichView(Scanner scanner) {
+        System.out.println("You want to play with CLI or GUI?");
+        String viewChoice = scanner.nextLine();
+        
+        
+        while (viewChoice==null || !viewChoice.toUpperCase().equals("CLI") && !viewChoice.toUpperCase().equals("GUI")) {
+            System.out.println("You have to write \"CLI\" or \"GUI\"!\nWhich one do you want?.");
+            viewChoice = scanner.nextLine();
+        }
+        
+        
+        return viewChoice;
     }
-
 
     public String askServerIpAddress (Scanner scanner) {
         String address = null;
