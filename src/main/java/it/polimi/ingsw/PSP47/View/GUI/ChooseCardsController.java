@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 public class ChooseCardsController extends ViewObservable {
 
-    NetworkHandler networkHandler;
     ArrayList<GodName> godNames = new ArrayList<>();
     int numberOfPlayers;
 
@@ -294,9 +293,6 @@ public class ChooseCardsController extends ViewObservable {
         }
     }
 
-    public void setNetworkHandler(NetworkHandler networkHandler) {
-        this.networkHandler = networkHandler;
-    }
 
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
@@ -304,7 +300,6 @@ public class ChooseCardsController extends ViewObservable {
 
     private void notifyAndWait() {
         if (godNames.size() == numberOfPlayers) {
-            addViewListener(networkHandler);
             VisitableListOfGods visitableListOfGods = new VisitableListOfGods();
             visitableListOfGods.setGodNames(godNames);
             notifyViewListener(visitableListOfGods);

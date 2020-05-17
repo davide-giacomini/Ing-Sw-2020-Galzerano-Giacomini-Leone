@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
 import javafx.collections.FXCollections;
@@ -15,8 +14,6 @@ import javafx.scene.text.Text;
 
 
 public class StartController extends ViewObservable {
-
-    private NetworkHandler networkHandler;
 
     private ObservableList<Color> colors = FXCollections.observableArrayList(Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.PURPLE, Color.CYAN, Color.WHITE);
 
@@ -38,9 +35,6 @@ public class StartController extends ViewObservable {
     }
 
 
-    public void setNetworkHandler(NetworkHandler networkHandler) {
-            this.networkHandler= networkHandler;
-    }
 
 
     @FXML
@@ -50,7 +44,6 @@ public class StartController extends ViewObservable {
         username = player_name.getText();
 
         if(!username.equals("") && colorBox.getValue() != null) {
-            addViewListener(networkHandler);
             VisitableInformation visitableInformation = new VisitableInformation();
             visitableInformation.setUsername(username);
             visitableInformation.setColor(colorBox.getValue());

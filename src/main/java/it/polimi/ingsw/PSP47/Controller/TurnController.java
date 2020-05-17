@@ -50,6 +50,12 @@ public class TurnController {
     public void setWorkerGender(int[] position) {
         int row = position[0];
         int column = position[1];
+        if (row > 4 || row < 0 || column > 4 || column < 0) {
+            String errorText = "You have select a value that is out of range.";
+            views.get(indexOfCurrentPlayer).sendError(errorText);
+            views.get(indexOfCurrentPlayer).sendSetWorkers();
+            return;
+        }
         if (game.getBoard().getSlot(row,column).getWorker() == null || game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
             String textError = "Your worker is not there";
             views.get(indexOfCurrentPlayer).sendError(textError);

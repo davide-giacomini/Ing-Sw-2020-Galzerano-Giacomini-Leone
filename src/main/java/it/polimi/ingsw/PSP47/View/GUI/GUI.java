@@ -46,7 +46,7 @@ public class GUI extends Application implements View {
         fxmlLoader.setLocation(getClass().getResource("/FXML/startPane.fxml"));
         root = fxmlLoader.load();
         scene = new Scene(root);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Santorini");
         primaryStage.show();
@@ -54,7 +54,7 @@ public class GUI extends Application implements View {
         currentScene = CurrentScene.START;
 
         startController = fxmlLoader.getController();
-        startController.setNetworkHandler(networkHandler);
+        startController.addViewListener(networkHandler);
 
     }
 
@@ -101,14 +101,14 @@ public class GUI extends Application implements View {
     public void askFirstConnection() {
         currentScene = CurrentScene.START;
         startController = setLayout(scene, "/FXML/startPane.fxml");
-        startController.setNetworkHandler(networkHandler);
+        startController.addViewListener(networkHandler);
     }
 
     @Override
     public void askNumberOfPlayers() {
         currentScene = CurrentScene.CHOOSE_PLAYERS;
         ChoosePlayersController choosePlayersController = setLayout(scene,"/FXML/choosePlayers.fxml");
-        choosePlayersController.setNetworkHandler(networkHandler);
+        choosePlayersController.addViewListener(networkHandler);
     }
 
 
@@ -122,7 +122,7 @@ public class GUI extends Application implements View {
         currentScene = CurrentScene.SET_WORKERS;
         primaryStage.setHeight(700);
         SetWorkersController controller = setLayout(scene, "/FXML/setWorkers.fxml");
-        controller.setNetworkHandler(networkHandler);
+        controller.addViewListener(networkHandler);
         controller.setUsernames(gameView.getUsernames());
         controller.setColors(gameView.getColors());
         controller.setGods(gameView.getGods());
@@ -134,7 +134,7 @@ public class GUI extends Application implements View {
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         ChooseCardsController chooseCardsController = setLayout(scene, "/FXML/chooseCards.fxml");
-        chooseCardsController.setNetworkHandler(networkHandler);
+        chooseCardsController.addViewListener(networkHandler);
         chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());
     }
 
@@ -144,7 +144,7 @@ public class GUI extends Application implements View {
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
-        chooseCardController.setNetworkHandler(networkHandler);
+        chooseCardController.addViewListener(networkHandler);
         chooseCardController.setAvailableGods(godsChosen);
     }
 
