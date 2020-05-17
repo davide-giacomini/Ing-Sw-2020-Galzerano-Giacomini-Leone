@@ -9,4 +9,7 @@ import it.polimi.ingsw.PSP47.Visitor.Visitable;
 public interface ViewListener {
 
     void update(Visitable visitableObject);
+    
+    
+    void endConnection();
 }

@@ -12,6 +12,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -34,6 +37,8 @@ public class GUI extends Application implements View {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        ImageView imageView = new ImageView();
+        System.out.println(imageView.isResizable());
 
 
         List<String> args = getParameters().getRaw();
@@ -188,7 +193,11 @@ public class GUI extends Application implements View {
 
     @Override
     public void theWinnerIs(String usernameWinner) {
-
+        currentScene = CurrentScene.WIN;
+        primaryStage.setWidth(1100);
+        primaryStage.setHeight(800);
+        WinningAdviceController winningAdviceController = setLayout(scene, "/FXML/winningAdvice.fxml");
+        winningAdviceController.addViewListener(networkHandler);
     }
 
     @Override
@@ -228,6 +237,8 @@ public class GUI extends Application implements View {
             case SET_WORKERS:
                 path = "/FXML/setWorkers.fxml";
                 break;
+            case WIN:
+                path = "/FXML/winningAdvice.fxml";
         }
         return path;
     }
