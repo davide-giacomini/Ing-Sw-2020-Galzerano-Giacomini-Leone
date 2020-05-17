@@ -38,12 +38,10 @@ public class ChoosePlayersController extends ViewObservable {
     void ClickOnDone(MouseEvent event) {
         VisitableInt visitableInt;
         if (three_players.isSelected()) {
-            addViewListener(networkHandler);
             visitableInt = new VisitableInt(3);
             notifyAndWait(visitableInt);
         }
         else if (two_players.isSelected()) {
-            addViewListener(networkHandler);
             visitableInt = new VisitableInt(2);
             notifyAndWait(visitableInt);
         }
@@ -77,10 +75,6 @@ public class ChoosePlayersController extends ViewObservable {
     void handleTwoPlayers(ActionEvent event) {
         if (two_players.isSelected())
             three_players.setSelected(false);
-    }
-
-    public void setNetworkHandler(NetworkHandler networkHandler) {
-        this.networkHandler= networkHandler;
     }
 
 

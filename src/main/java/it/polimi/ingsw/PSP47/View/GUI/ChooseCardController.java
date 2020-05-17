@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 public class ChooseCardController extends ViewObservable {
 
-    NetworkHandler networkHandler;
     ArrayList<GodName> availableGods = new ArrayList<>();
     GodName chosenGod;
 
@@ -233,7 +232,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.APOLLO)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.APOLLO);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -244,7 +242,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.ARTEMIS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.ARTEMIS);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -255,7 +252,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.ATHENA)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.ATHENA);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -266,7 +262,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.ATLAS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.ATLAS);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -277,7 +272,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.CHRONUS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.CHRONUS);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -288,7 +282,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.DEMETER)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.DEMETER);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -299,7 +292,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.HEPHAESTUS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.HEPHAESTUS);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -310,7 +302,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.HERA)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.HERA);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -321,7 +312,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.HESTIA)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.HESTIA);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -332,7 +322,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.MINOTAUR)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.MINOTAUR);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -343,7 +332,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.PAN)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.PAN);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -354,7 +342,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.PROMETHEUS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.PROMETHEUS);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -365,7 +352,6 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.TRITON)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.TRITON);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -376,15 +362,11 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.ZEUS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.ZEUS);
-            addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
         }
     }
 
-    public void setNetworkHandler(NetworkHandler networkHandler) {
-        this.networkHandler = networkHandler;
-    }
 
     void setAvailableGods(ArrayList<GodName> availableGods) {
         this.availableGods = availableGods;
