@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP47.View;
 
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
+import it.polimi.ingsw.PSP47.Model.Slot;
 
 import java.util.ArrayList;
 
@@ -102,6 +103,10 @@ public interface View  {
      * This method show the final byebye of the game
      */
     void showEnd();
+
+   void showGuiSlot(Slot slot);
+
+   void showGame();
 
 
 }

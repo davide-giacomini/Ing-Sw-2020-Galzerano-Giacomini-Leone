@@ -236,6 +236,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -247,6 +248,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -258,6 +260,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -269,6 +272,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -280,6 +284,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -291,6 +296,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -302,6 +308,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -313,6 +320,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -324,6 +332,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -335,6 +344,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -346,6 +356,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -357,6 +368,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -368,6 +380,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -379,6 +392,7 @@ public class ChooseCardController extends ViewObservable {
             addViewListener(networkHandler);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP47.View.CLI;
 
 import it.polimi.ingsw.PSP47.Enumerations.*;
+import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.View.GameView;
@@ -570,5 +571,16 @@ public class CLI extends ViewObservable implements View  {
     public void showEnd(){
         printSupport.printGoodBye(out);
     }
+
+    @Override
+    public void showGuiSlot(Slot slot) {
+
+    }
+
+    @Override
+    public void showGame() {
+        printSupport.PrintEmptyBoard(out);
+    }
+
 
 }
