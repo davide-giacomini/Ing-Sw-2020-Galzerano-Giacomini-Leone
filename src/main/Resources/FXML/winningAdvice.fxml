@@ -27,9 +27,9 @@
       </ImageView>
    </right>
    <center>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="337.0" prefWidth="259.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="337.0" prefWidth="259.0" BorderPane.alignment="CENTER">
          <children>
-            <BorderPane prefHeight="150.0" prefWidth="259.0">
+            <BorderPane prefHeight="104.0" prefWidth="259.0">
                <left>
                   <StackPane BorderPane.alignment="CENTER">
                      <children>
@@ -62,6 +62,15 @@
                      </children>
                   </StackPane>
                </right>
+            </BorderPane>
+            <BorderPane prefHeight="111.0" prefWidth="259.0">
+               <center>
+                  <Text fill="#ff8500" strokeType="OUTSIDE" strokeWidth="0.0" text="YOU WON !!!" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="System Bold Italic" size="39.0" />
+                     </font>
+                  </Text>
+               </center>
             </BorderPane>
             <Pane>
                <VBox.margin>

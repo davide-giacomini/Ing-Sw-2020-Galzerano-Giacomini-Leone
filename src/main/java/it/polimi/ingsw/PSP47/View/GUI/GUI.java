@@ -202,9 +202,12 @@ public class GUI extends Application implements View {
 
     @Override
     public void theLoserIs() {
-
+        currentScene = CurrentScene.LOSE;
+        primaryStage.setWidth(1100);
+        primaryStage.setHeight(800);
+        LosingAdviceController losingAdviceController = setLayout(scene, "/FXML/losingAdvice.fxml");
+        losingAdviceController.addViewListener(networkHandler);
     }
-
     @Override
     public void othersTurn(String usernameOnTurn) {
         Platform.runLater(() -> {
