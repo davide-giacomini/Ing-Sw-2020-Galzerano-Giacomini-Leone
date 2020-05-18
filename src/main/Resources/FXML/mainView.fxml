@@ -5,18 +5,20 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="bodybg" stylesheets="@../CCS/background.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.MainController">
    <center>
       <StackPane prefHeight="150.0" prefWidth="453.0" BorderPane.alignment="CENTER">
          <children>
@@ -25,21 +27,48 @@
                   <Image url="@../Images/board.png" />
                </image>
             </ImageView>
-            <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="235.0" prefWidth="234.0" vgap="1.0">
+            <GridPane fx:id="gridPane" accessibleRole="NODE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="235.0" prefWidth="234.0" vgap="1.0">
               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints fx:id="columnZero" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints fx:id="rowZero" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
+               <children>
+                  <Pane onMouseClicked="#GridClick" prefHeight="47.0" prefWidth="15.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <Pane onMouseClicked="#GridClick" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+               </children>
             </GridPane>
          </children>
          <BorderPane.margin>
@@ -48,16 +77,19 @@
       </StackPane>
    </center>
    <bottom>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" BorderPane.alignment="CENTER" />
+      <Text fx:id="commandText" fill="#2905a8" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your action from the Buttons :" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Savoye LET Plain:1.0" size="29.0" />
+         </font></Text>
    </bottom>
    <left>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="92.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="101.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <Button alignment="CENTER" mnemonicParsing="false" text="MOVE" />
-            <Button alignment="CENTER" mnemonicParsing="false" text="BUILD" />
-            <Button alignment="CENTER" mnemonicParsing="false" text="BUILD DOME" />
-            <Button mnemonicParsing="false" text="END" />
-            <Button alignment="CENTER" mnemonicParsing="false" text="QUIT" />
+            <Button fx:id="moveButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#OnMoveClick" text="MOVE" />
+            <Button fx:id="buildButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#OnBuildClick" text="BUILD" />
+            <Button fx:id="buildDomeButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#OnBuildDomeClick" text="BUILD DOME" />
+            <Button fx:id="endButton" mnemonicParsing="false" onMouseClicked="#OnEndClick" text="END" />
+            <Button fx:id="quitButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#OnQuitClick" text="QUIT" />
          </children>
          <BorderPane.margin>
             <Insets left="30.0" />
@@ -68,7 +100,25 @@
       </VBox>
    </left>
    <right>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="firstPlayerInfo" prefHeight="108.0" prefWidth="100.0">
+               <font>
+                  <Font name="Savoye LET Plain:1.0" size="13.0" />
+               </font></TextArea>
+            <TextArea fx:id="secondPlayerInfo" prefHeight="98.0" prefWidth="100.0">
+               <font>
+                  <Font name="Savoye LET Plain:1.0" size="13.0" />
+               </font></TextArea>
+            <TextArea fx:id="thirdPlayerInfo" prefHeight="107.0" prefWidth="100.0">
+               <font>
+                  <Font name="Savoye LET Plain:1.0" size="13.0" />
+               </font></TextArea>
+            <TextArea prefHeight="88.0" prefWidth="100.0">
+               <font>
+                  <Font name="Savoye LET Plain:1.0" size="13.0" />
+               </font></TextArea>
+         </children></VBox>
    </right>
    <top>
       <MenuBar BorderPane.alignment="CENTER">

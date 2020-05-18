@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP47.View.CLI;
 
 import it.polimi.ingsw.PSP47.Enumerations.*;
+import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkConnectionUtil;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
@@ -150,7 +151,7 @@ public class CLI extends ViewObservable implements View  {
     public void setConnection () {
         String ipAddress = askServerIpAddress(in);
         NetworkHandler networkHandler;
-        
+
         try {
             networkHandler = NetworkConnectionUtil.setConnection(this, ipAddress);
         } catch (IOException e) {
@@ -162,7 +163,7 @@ public class CLI extends ViewObservable implements View  {
 
         addViewListener(networkHandler);
     }
-    
+
     /**
      * This method asks the client the address to connect to.
      *
@@ -171,19 +172,19 @@ public class CLI extends ViewObservable implements View  {
      */
     private String askServerIpAddress (Scanner scanner) {
         String address;
-        
+
         do {
-            
+
             System.out.println("Insert address : ");
-            
+
             address = scanner.nextLine();
             if(address.equals("")) {
                 System.out.println( "Address not inserted or wrong!\n");
                 address = null;
             }
-            
+
         }while (address== null);
-        
+
         return address;
     }
 
@@ -589,5 +590,16 @@ public class CLI extends ViewObservable implements View  {
     public void showEnd(){
         printSupport.printGoodBye(out);
     }
+
+    @Override
+    public void showGuiSlot(Slot slot) {
+
+    }
+
+    @Override
+    public void showGame() {
+        printSupport.PrintEmptyBoard(out);
+    }
+
 
 }

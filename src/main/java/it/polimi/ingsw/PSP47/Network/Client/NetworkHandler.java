@@ -205,6 +205,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     Slot slot = messageSlot.getUpdatedSlot();
                     view.getGameView().getBoardView().setSlot(slot);
                     view.showCurrentBoard();
+                    view.showGuiSlot(slot);
                     break;
                 case CHALLENGER:
                     view.challengerWillChooseThreeGods();
@@ -272,6 +273,10 @@ public class NetworkHandler implements Runnable, ViewListener {
     @Override
     public void update (Visitable visitableObject){
         visitableObject.accept(networkHandlerVisitor);
+    }
+
+    public void startGame(){
+        view.showGame();
     }
 }
 

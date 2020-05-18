@@ -56,25 +56,23 @@ public enum Direction {
         }
     }
 
-    public static Direction getDirectionGivenSlots( Slot originSlot, Slot destinationSlot){
+    public static Direction getDirectionGivenSlots( int originRow, int originColumn ,int destinationRow, int destinationColumn ){
 
-        if (originSlot.getRow()-destinationSlot.getRow() == 0 && originSlot.getColumn() - destinationSlot.getRow() == 0)
+        if (originRow-destinationRow == 0 && originColumn - destinationColumn == 0)
             return HERE;
-        else if (originSlot.getRow()-destinationSlot.getRow() == 1 && originSlot.getColumn() - destinationSlot.getRow() == 1)
+        else if (originRow-destinationRow == 1 && originColumn - destinationColumn == 1)
             return LEFTUP;
-        else if (originSlot.getRow()-destinationSlot.getRow() == 1 && originSlot.getColumn() - destinationSlot.getRow() == 0)
+        else if (originRow-destinationRow == 0 && originColumn - destinationColumn == 1)
             return LEFT;
-        else if (originSlot.getRow()-destinationSlot.getRow() == 1 && originSlot.getColumn() - destinationSlot.getRow() == -1)
+        else if (originRow-destinationRow == 1 && originColumn - destinationColumn == -1)
             return RIGHTUP;
-        else if (originSlot.getRow()-destinationSlot.getRow() == 0 && originSlot.getColumn() - destinationSlot.getRow() == 1)
-            return LEFT;
-        else if (originSlot.getRow()-destinationSlot.getRow() == 0 && originSlot.getColumn() - destinationSlot.getRow() == -1)
+        else if (originRow-destinationRow == 0 && originColumn - destinationColumn == -1)
             return RIGHT;
-        else if (originSlot.getRow()-destinationSlot.getRow() == -1 && originSlot.getColumn() - destinationSlot.getRow() == 1)
+        else if (originRow-destinationRow == -1 && originColumn - destinationColumn == 1)
             return LEFTDOWN;
-        else if (originSlot.getRow()-destinationSlot.getRow() == -1 && originSlot.getColumn() - destinationSlot.getRow() == 0)
+        else if (originRow-destinationRow == -1 && originColumn - destinationColumn == 0)
             return DOWN;
-        else if (originSlot.getRow()-destinationSlot.getRow() == -1 && originSlot.getColumn() - destinationSlot.getRow() == -1)
+        else if (originRow-destinationRow == -1 && originColumn - destinationColumn == -1)
             return RIGHTDOWN;
         else
             return WRONGDIRECTION;

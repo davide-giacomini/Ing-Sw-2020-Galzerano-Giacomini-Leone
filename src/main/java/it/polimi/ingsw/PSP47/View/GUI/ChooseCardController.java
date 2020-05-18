@@ -21,6 +21,7 @@ public class ChooseCardController extends ViewObservable {
 
     ArrayList<GodName> availableGods = new ArrayList<>();
     GodName chosenGod;
+    NetworkHandler networkHandler;
 
     @FXML
     private ImageView Apollo;
@@ -234,6 +235,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.APOLLO);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -244,6 +246,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.ARTEMIS);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -254,6 +257,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.ATHENA);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -264,6 +268,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.ATLAS);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -274,6 +279,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.CHRONUS);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -284,6 +290,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.DEMETER);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -294,6 +301,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.HEPHAESTUS);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -304,6 +312,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.HERA);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -314,6 +323,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.HESTIA);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -324,6 +334,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.MINOTAUR);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -334,6 +345,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.PAN);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -344,6 +356,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.PROMETHEUS);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -354,6 +367,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.TRITON);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -364,6 +378,7 @@ public class ChooseCardController extends ViewObservable {
             visitableGod.setGodName(GodName.ZEUS);
             notifyViewListener(visitableGod);
             disableAll();
+            networkHandler.startGame();
         }
     }
 
@@ -388,5 +403,11 @@ public class ChooseCardController extends ViewObservable {
         Triton.setDisable(true);
         Zeus.setDisable(true);
     }
+
+
+    public void setNetworkHandler(NetworkHandler networkHandler) {
+        this.networkHandler = networkHandler;
+    }
+
 
 }
