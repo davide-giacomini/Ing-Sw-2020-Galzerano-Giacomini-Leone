@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP47.View.CLI;
 
 import it.polimi.ingsw.PSP47.Enumerations.*;
+import it.polimi.ingsw.PSP47.Network.Client.NetworkConnectionUtil;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.View.GameView;
@@ -28,7 +29,8 @@ public class CLI extends ViewObservable implements View  {
         this.out = new PrintStream(System.out);
         gameView = new GameView();
         printSupport = new PrintSupport();
-
+        showTitle();
+        setConnection();
     }
 
 
@@ -145,27 +147,44 @@ public class CLI extends ViewObservable implements View  {
     /**
      * This method starts the thread that will be the network handler
     */
-    @Override
-    public void setConnection (String address) {
-
-        // open a connection with the server
-        Socket serverSocket;
+    public void setConnection () {
+        String ipAddress = askServerIpAddress(in);
+        NetworkHandler networkHandler;
+        
         try {
-            serverSocket = new Socket(address, Server.SOCKET_PORT);
+            networkHandler = NetworkConnectionUtil.setConnection(this, ipAddress);
         } catch (IOException e) {
             printSupport.printError(out);
             out.println("Server unreachable.");
             return;
         }
-        out.println("Connected to the address " + serverSocket.getInetAddress());
+        out.println("Connected to the address " + ipAddress);
 
-        networkHandler = new NetworkHandler(this , serverSocket);
         addViewListener(networkHandler);
-
-        Thread thread = new Thread(networkHandler);
-        thread.start();
-
-
+    }
+    
+    /**
+     * This method asks the client the address to connect to.
+     *
+     * @param scanner the input scanner.
+     * @return the ip address to connect to.
+     */
+    private String askServerIpAddress (Scanner scanner) {
+        String address;
+        
+        do {
+            
+            System.out.println("Insert address : ");
+            
+            address = scanner.nextLine();
+            if(address.equals("")) {
+                System.out.println( "Address not inserted or wrong!\n");
+                address = null;
+            }
+            
+        }while (address== null);
+        
+        return address;
     }
 
 

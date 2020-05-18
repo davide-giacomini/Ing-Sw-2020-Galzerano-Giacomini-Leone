@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ConnectionToServerController">
+   <left>
+      <ImageView fitHeight="400.0" fitWidth="209.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER_LEFT">
+         <image>
+            <Image url="@../Images/ps_curtain_left.png" />
+         </image>
+      </ImageView>
+   </left>
+   <right>
+      <ImageView fitHeight="400.0" fitWidth="154.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER_RIGHT">
+         <image>
+            <Image url="@../Images/ps_curtain_right.png" />
+         </image>
+      </ImageView>
+   </right>
+   <center>
+      <BorderPane fx:id="internalBorderPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <top>
+            <ImageView fitHeight="115.0" fitWidth="322.0" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../Images/santorini-logo.png" />
+               </image>
+               <BorderPane.margin>
+                  <Insets top="20.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </top>
+         <center>
+            <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="91.0" prefWidth="366.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <BorderPane>
+                     <center>
+                        <Label text="Enter IP address:" textFill="#006492">
+                           <font>
+                              <Font name="System Bold Italic" size="17.0" />
+                           </font>
+                        </Label>
+                     </center>
+                  </BorderPane>
+                  <BorderPane GridPane.columnIndex="1">
+                     <center>
+                        <TextField fx:id="ipAddress" onKeyPressed="#computeAddress" prefWidth="186.0" promptText="IP address" />
+                     </center>
+                  </BorderPane>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="50.0" />
+               </BorderPane.margin>
+            </GridPane>
+         </center>
+      </BorderPane>
+   </center>
+</BorderPane>

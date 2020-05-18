@@ -363,6 +363,18 @@ public class GameController implements VirtualViewListener {
         visitableObject.accept(controllerVisitor);
     }
 
+    /**
+     * This method sets all the elements to null.
+     * It's used in the tests to clear the game.
+     */
+    void clearController() {
+        this.numberOfPlayers = 0;
+        this.views = null;
+        this.game = null;
+        this.indexOfCurrentPlayer = 0;
+        this.turn = null;
+        this.controllerVisitor = null;
+    }
 
     ArrayList<VirtualView> getViews() {
         return views;
@@ -384,7 +396,4 @@ public class GameController implements VirtualViewListener {
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
     }
 
-    public ControllerVisitor getControllerVisitor() {
-        return controllerVisitor;
-    }
 }

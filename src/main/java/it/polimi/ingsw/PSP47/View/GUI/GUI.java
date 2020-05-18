@@ -12,16 +12,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class GUI extends Application implements View {
 
@@ -33,22 +27,15 @@ public class GUI extends Application implements View {
     private Scene scene;
     private Parent root;
 
-    private StartController startController;
+    private ConnectionToServerController connectionToServerController;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ImageView imageView = new ImageView();
-        System.out.println(imageView.isResizable());
-
-
-        List<String> args = getParameters().getRaw();
-        setConnection(args.get(0));
-
         gameView = new GameView();
 
         this.primaryStage = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/FXML/startPane.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/FXML/connectionToServer.fxml"));
         root = fxmlLoader.load();
         scene = new Scene(root);
         primaryStage.setResizable(true);
@@ -58,11 +45,14 @@ public class GUI extends Application implements View {
 
         currentScene = CurrentScene.START;
 
-        startController = fxmlLoader.getController();
-        startController.addViewListener(networkHandler);
-
+        connectionToServerController = fxmlLoader.getController();
+        connectionToServerController.setGui(this);
     }
-
+    
+    public void setNetworkHandler(NetworkHandler networkHandler) {
+        this.networkHandler = networkHandler;
+    }
+    
     private <T> T setLayout(Scene scene, String path) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUI.class.getResource(path));
@@ -80,32 +70,11 @@ public class GUI extends Application implements View {
         return loader.getController();
     }
 
-    //TODO vedere se va bene inserirlo nella gui
-    @Override
-    public void setConnection(String address) {
-
-        // open a connection with the server
-        Socket serverSocket;
-        try {
-            serverSocket = new Socket(address, Server.SOCKET_PORT);
-        } catch (IOException e) {
-            System.out.println("Server unreachable.");
-            return;
-        }
-        System.out.println("Connected to the address " + serverSocket.getInetAddress());
-
-        networkHandler = new NetworkHandler(this, serverSocket);
-
-        Thread thread = new Thread(networkHandler);
-        thread.start();
-
-    }
-
 
     @Override
     public void askFirstConnection() {
         currentScene = CurrentScene.START;
-        startController = setLayout(scene, "/FXML/startPane.fxml");
+        StartController startController = setLayout(scene, "/FXML/startPane.fxml");
         startController.addViewListener(networkHandler);
     }
 
@@ -221,29 +190,4 @@ public class GUI extends Application implements View {
     public void showEnd() {
 
     }
-
-    private String choosePath() {
-        String path = "";
-        switch (currentScene) {
-            case START:
-                path = "/FXML/startPane.fxml";
-                break;
-            case CHOOSE_PLAYERS:
-                path = "/FXML/choosePlayers.fxml";
-                break;
-            case CHOOSE_CARDS:
-                path = "/FXML/chooseCards.fxml";
-                break;
-            case CHOOSE_CARD:
-                path = "/FXML/chooseCard.fxml";
-                break;
-            case SET_WORKERS:
-                path = "/FXML/setWorkers.fxml";
-                break;
-            case WIN:
-                path = "/FXML/winningAdvice.fxml";
-        }
-        return path;
-    }
-
 }
