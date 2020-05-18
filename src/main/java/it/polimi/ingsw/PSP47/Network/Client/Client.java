@@ -7,8 +7,6 @@ import it.polimi.ingsw.PSP47.View.View;
 import javafx.application.Application;
 
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 
 import static javafx.application.Application.launch;
@@ -35,18 +33,12 @@ public class Client {
         //initial request of choice between GUI or CLI
         Scanner scanner = new Scanner(System.in);
     
-        String viewChoice = askWhichView(scanner);
-        String serverIpAddress = askServerIpAddress(scanner);
+        String viewChoice = askView(scanner);
 
-
-        if ("CLI".equals(viewChoice.toUpperCase())) {
-            view = new CLI();
-            ((CLI)view).showTitle();
-            view.setConnection(serverIpAddress);
-        } else if ("GUI".equals(viewChoice.toUpperCase())) {
-
-            Application.launch(GUI.class, serverIpAddress);
-        }
+        if ("CLI".equals(viewChoice.toUpperCase()))
+            new CLI();
+        else if ("GUI".equals(viewChoice.toUpperCase()))
+            Application.launch(GUI.class);
     
         // open a connection with the server
         /*Socket serverSocket;
@@ -66,7 +58,7 @@ public class Client {
 
     }
     
-    private String askWhichView(Scanner scanner) {
+    private String askView(Scanner scanner) {
         System.out.println("You want to play with CLI or GUI?");
         String viewChoice = scanner.nextLine();
         
@@ -78,24 +70,5 @@ public class Client {
         
         
         return viewChoice;
-    }
-
-    public String askServerIpAddress (Scanner scanner) {
-        String address = null;
-
-        do {
-
-            System.out.println("Insert address : ");
-
-                address = scanner.nextLine();
-                if(address.equals("")) {
-                    System.out.println( "Address not inserted or wrong!\n");
-                    address = null;
-                }
-
-        }while (address== null);
-
-        return address;
-
     }
 }

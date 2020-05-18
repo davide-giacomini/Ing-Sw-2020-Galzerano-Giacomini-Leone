@@ -20,11 +20,6 @@ public interface View  {
     void askNumberOfPlayers();
 
     /**
-     *This methods starts the thread in the view that will be the network handler
-     */
-    void setConnection(String address);
-
-    /**
      * This method asks the user which of the worker he/she wants to use
      * @return the gender of the worker the user wants to use
      */

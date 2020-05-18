@@ -9,6 +9,7 @@ import java.util.Random;
  * This class contains all the elements of a game.
  */
 public class Game {
+    private boolean isActive;
     private final Board board;
     private int numberOfPlayers;
     private Player randomPlayer;
@@ -16,6 +17,7 @@ public class Game {
     private ArrayList<Player> players ;
 
     public Game(int numberOfPlayers) {
+        this.isActive = true;
         this.numberOfPlayers = numberOfPlayers;
         players = new ArrayList<>(numberOfPlayers);
         board = new Board();
@@ -123,5 +125,12 @@ public class Game {
         players.remove(player);
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 }
 

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 public class SetWorkersController extends ViewObservable {
 
-    private NetworkHandler networkHandler;
     private int[] newRowAndColumn = new int[4];
     private ArrayList<String> usernames = new ArrayList<>();
     private ArrayList<Color> colors = new ArrayList<>();
@@ -177,7 +176,6 @@ public class SetWorkersController extends ViewObservable {
             }
         }
         if (i == 2) {
-            addViewListener(networkHandler);
             VisitableInitialPositions visitableInitialPositions = new VisitableInitialPositions();
             visitableInitialPositions.setRowsAndColumns(newRowAndColumn);
             notifyViewListener(visitableInitialPositions);
@@ -197,7 +195,4 @@ public class SetWorkersController extends ViewObservable {
         this.gods = gods;
     }
 
-    public void setNetworkHandler(NetworkHandler networkHandler) {
-        this.networkHandler = networkHandler;
-    }
 }

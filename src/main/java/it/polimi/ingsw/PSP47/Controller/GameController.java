@@ -345,6 +345,7 @@ public class GameController implements VirtualViewListener {
      * This method close the game when someone has won.
      */
     void endGame(String username) {
+        game.setActive(false);
         for (VirtualView view : views) {
             view.sendImportant( username , MessageType.WINNIG);
         }
@@ -362,10 +363,20 @@ public class GameController implements VirtualViewListener {
         visitableObject.accept(controllerVisitor);
     }
 
+    /**
+     * This method sets all the elements to null.
+     * It's used in the tests to clear the game.
+     */
+    void clearController() {
+        this.numberOfPlayers = 0;
+        this.views = null;
+        this.game = null;
+        this.indexOfCurrentPlayer = 0;
+        this.turn = null;
+        this.controllerVisitor = null;
+    }
 
-
-
-    public ArrayList<VirtualView> getViews() {
+    ArrayList<VirtualView> getViews() {
         return views;
     }
 
@@ -377,11 +388,12 @@ public class GameController implements VirtualViewListener {
         return game;
     }
 
-    public int getIndexOfCurrentPlayer() {
+    int getIndexOfCurrentPlayer() {
         return indexOfCurrentPlayer;
     }
 
-    public ControllerVisitor getControllerVisitor() {
-        return controllerVisitor;
+    public void setIndexOfCurrentPlayer(int indexOfCurrentPlayer) {
+        this.indexOfCurrentPlayer = indexOfCurrentPlayer;
     }
+
 }

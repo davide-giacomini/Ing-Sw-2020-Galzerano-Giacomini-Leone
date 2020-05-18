@@ -5,5 +5,7 @@ public enum CurrentScene {
     CHOOSE_PLAYERS,
     CHOOSE_CARDS,
     CHOOSE_CARD,
-    SET_WORKERS;
+    SET_WORKERS,
+    WIN,
+    LOSE
 }
