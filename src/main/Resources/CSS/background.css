@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "Savoye";
+    src: url("/Fonts/savoye.ttf");
+}
+
+.bodybg {
+    -fx-background-image: url("/Images/lightblue.png");
+}
+
+.root {
+    -fx-font-family: "Savoye";
+}

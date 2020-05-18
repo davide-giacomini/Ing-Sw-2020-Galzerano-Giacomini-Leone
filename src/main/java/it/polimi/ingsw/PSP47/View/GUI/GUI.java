@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP47.View.GUI;
 import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
-import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.View.GameView;
 import it.polimi.ingsw.PSP47.View.View;
 import javafx.application.Application;
@@ -12,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -36,8 +36,10 @@ public class GUI extends Application implements View {
         this.primaryStage = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/FXML/connectionToServer.fxml"));
+        Font.loadFont(getClass().getResourceAsStream("Fonts/savoye.ttf"), 14);
         root = fxmlLoader.load();
         scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/CSS/background.css").toExternalForm());
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Santorini");
