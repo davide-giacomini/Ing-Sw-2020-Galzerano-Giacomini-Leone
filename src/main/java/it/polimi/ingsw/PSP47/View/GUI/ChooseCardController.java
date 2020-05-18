@@ -21,6 +21,7 @@ public class ChooseCardController extends ViewObservable {
 
     ArrayList<GodName> availableGods = new ArrayList<>();
     GodName chosenGod;
+    NetworkHandler networkHandler;
 
     @FXML
     private ImageView Apollo;
@@ -402,5 +403,11 @@ public class ChooseCardController extends ViewObservable {
         Triton.setDisable(true);
         Zeus.setDisable(true);
     }
+
+
+    public void setNetworkHandler(NetworkHandler networkHandler) {
+        this.networkHandler = networkHandler;
+    }
+
 
 }

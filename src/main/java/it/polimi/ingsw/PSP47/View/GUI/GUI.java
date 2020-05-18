@@ -99,28 +99,12 @@ public class GUI extends Application implements View {
         Platform.runLater(() -> {
         currentScene = CurrentScene.CHOOSE_PLAYERS;
         ChoosePlayersController choosePlayersController = setLayout(scene,"/FXML/choosePlayers.fxml");
-        choosePlayersController.setNetworkHandler(networkHandler);
         choosePlayersController.addViewListener(networkHandler);
 
         });
     }
 
 
-    @Override
-    public void askWhichWorkerToUse() {
-
-    }
-
-    @Override
-    public void askWhereToPositionWorkers() {
-        currentScene = CurrentScene.SET_WORKERS;
-        primaryStage.setHeight(700);
-        SetWorkersController controller = setLayout(scene, "/FXML/setWorkers.fxml");
-        controller.addViewListener(networkHandler);
-        controller.setUsernames(gameView.getUsernames());
-        controller.setColors(gameView.getColors());
-        controller.setGods(gameView.getGods());
-    }
 
     @Override
     public void challengerWillChooseThreeGods() {
@@ -129,7 +113,6 @@ public class GUI extends Application implements View {
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         ChooseCardsController chooseCardsController = setLayout(scene, "/FXML/chooseCards.fxml");
-        chooseCardsController.setNetworkHandler(networkHandler);
         chooseCardsController.addViewListener(networkHandler);
         chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());
         });
@@ -142,6 +125,7 @@ public class GUI extends Application implements View {
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
             ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
+            chooseCardController.setNetworkHandler(networkHandler);
             chooseCardController.addViewListener(networkHandler);
             chooseCardController.setAvailableGods(godsChosen);
 
@@ -209,4 +193,109 @@ public class GUI extends Application implements View {
     public void showEnd() {
 
     }
+
+
+    private String choosePath() {
+        String path = "";
+        switch (currentScene) {
+            case START:
+                path = "/FXML/startPane.fxml";
+                break;
+            case CHOOSE_PLAYERS:
+                path = "/FXML/choosePlayers.fxml";
+                break;
+            case CHOOSE_CARDS:
+                path = "/FXML/chooseCards.fxml";
+                break;
+            case CHOOSE_CARD:
+                path = "/FXML/chooseCard.fxml";
+                break;
+            case SET_WORKERS:
+                path = "/FXML/setWorkers.fxml";
+                break;
+        }
+        return path;
+    }
+
+    /**
+     * method imoplemented in order to display the same board but with the different slot that has just been updated from the model
+     * @param slot is the slot that has been changed
+     */
+    @Override
+    public void showGuiSlot(Slot slot) {
+        Platform.runLater(()-> {
+            mainController.changeSlot(slot);
+        });
+    }
+
+    /**
+     * method used to set the main scene, when the scene with the board is setted, the default moment is wait
+     * the public information are displayed
+     */
+    @Override
+    public void showGame() {
+        Platform.runLater(()-> {
+            mainController = setLayout(scene, "/FXML/mainView.fxml");
+            primaryStage.setHeight(700);
+            mainController.setMoment(Action.WAIT);
+            mainController.addViewListener(networkHandler);
+            mainController.initialize();
+            start = true;
+        });
+    }
+
+    /**
+     * method that sets a the moment in which the gui expects the worker to use, in order to allow the main controller to handle the click differently
+     */
+    @Override
+    public void askWhichWorkerToUse() {
+        Platform.runLater(() -> {
+            mainController.setMoment(Action.ASK_WHICH_WORKER);
+            mainController.initialize();
+        });
+    }
+
+    /**
+     * method that sets method a the moment in which the gui expects two positions for the initial workers, in order to allow the main controller to handle the click differently
+     */
+    @Override
+    public void askWhereToPositionWorkers() {
+        Platform.runLater(() -> {
+            mainController.setMoment(Action.ASK_INITIAL_POSITION);
+            mainController.setUsernames(gameView.getUsernames());
+            mainController.setColors(gameView.getColors());
+            mainController.setGods(gameView.getGods());
+            mainController.initialize();
+        });
+    }
+
+    /**
+     * method that if the game hasn't started informs the user with an alert to wait, otherwise it sets the wait moment in main scene
+     */
+    @Override
+    public void othersTurn(String usernameOnTurn) {
+        Platform.runLater(() -> {
+            if(!start) {
+                Alert a = new Alert(Alert.AlertType.WARNING);
+                a.setContentText("It's " + usernameOnTurn + "'s turn. You can't do anything until it's your turn.");
+                a.show();
+            }else {
+                currentScene = CurrentScene.SET_WORKERS;
+                mainController.setMoment(Action.WAIT);
+                mainController.initialize();
+            }
+        });
+    }
+
+    /**
+     * method that indicates to the controller with the new moment set that it has to wait for action + slot
+     */
+    @Override
+    public void askAction() {
+        Platform.runLater(() -> {
+            mainController.setMoment(Action.CHOOSEACT);
+            mainController.initialize();
+        });
+    }
+
 }
