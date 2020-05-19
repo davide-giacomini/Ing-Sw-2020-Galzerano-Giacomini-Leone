@@ -294,19 +294,19 @@ public class MainController extends ViewObservable {
      */
     private String getImageWorkerFromColor(Color workerColor) {
         if(workerColor== Color.BLUE)
-            return "/Images/pedinablu.png";
+            return "/Images/female_blue.png";
         else if (workerColor== Color.RED)
-           return "/Images/pedinarossa.png";
+           return "/Images/female_cyan.png";
         else if (workerColor== Color.YELLOW)
-           return "/Images/pedinagialla.png";
+           return "/Images/female_yellow.png";
         else if (workerColor== Color.GREEN)
-           return "/Images/pedinaverde.png";
+           return "/Images/female_green.png";
         else if (workerColor== Color.PURPLE)
-           return "/Images/pedinaviola.png";
+           return "/Images/female_purple.png";
         else if (workerColor== Color.WHITE)
-           return "/Images/pedinabianca.png";
+           return "/Images/female_white.png";
         else if (workerColor== Color.CYAN)
-           return "/Images/pedinaazzurra.png";
+           return "/Images/female_cyan.png";
        else
         return null;
     }
