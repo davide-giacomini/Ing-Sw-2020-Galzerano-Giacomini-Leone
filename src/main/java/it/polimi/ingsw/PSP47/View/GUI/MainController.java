@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -167,7 +168,7 @@ public class MainController extends ViewObservable {
     //TODO CHANGE WITH NOTIFY IMPLEMENTED BY DAVID
     @FXML
     void OnQuitClick(MouseEvent event) {
-        networkHandler.endConnection();
+        notifyEndConnection();
     }
 
     /**
@@ -274,9 +275,9 @@ public class MainController extends ViewObservable {
 
         if (slot.isWorkerOnSlot()){
             //aggiunta livelli poi worker
-            FileInputStream input = null;
-            input = getImageWorkerFromColor(slot.getWorkerColor());
-            Image image = new Image(input);
+            //FileInputStream input = null;
+            //input = getImageWorkerFromColor(slot.getWorkerColor());
+            Image image = new Image(getImageWorkerFromColor(slot.getWorkerColor()));
             ImageView im1 = new ImageView(image);
             im1.fitWidthProperty().bind(pane.widthProperty());
             im1.fitHeightProperty().bind(pane.heightProperty());
@@ -291,25 +292,22 @@ public class MainController extends ViewObservable {
      * @param workerColor is the color of the worker
      * @return image of the worker
      */
-    private FileInputStream getImageWorkerFromColor(Color workerColor) {
-        try {
+    private String getImageWorkerFromColor(Color workerColor) {
         if(workerColor== Color.BLUE)
-            return new FileInputStream("/Users/arigalzi/Desktop/Ing-Sw-2020-Galzerano-Giacomini-Leone/src/main/Resources/Images/pedinablu.png");
+            return "/Images/pedinablu.png";
         else if (workerColor== Color.RED)
-           return new FileInputStream("/Users/arigalzi/Desktop/Ing-Sw-2020-Galzerano-Giacomini-Leone/src/main/Resources/Images/pedinarossa.png");
+           return "/Images/pedinarossa.png";
         else if (workerColor== Color.YELLOW)
-           return new FileInputStream("/Users/arigalzi/Desktop/Ing-Sw-2020-Galzerano-Giacomini-Leone/src/main/Resources/Images/pedinagialla.png");
+           return "/Images/pedinagialla.png";
         else if (workerColor== Color.GREEN)
-           return new FileInputStream("/Users/arigalzi/Desktop/Ing-Sw-2020-Galzerano-Giacomini-Leone/src/main/Resources/Images/pedinaverde.png");
+           return "/Images/pedinaverde.png";
         else if (workerColor== Color.PURPLE)
-           return new FileInputStream("/Users/arigalzi/Desktop/Ing-Sw-2020-Galzerano-Giacomini-Leone/src/main/Resources/Images/pedinaviola.png");
+           return "/Images/pedinaviola.png";
         else if (workerColor== Color.WHITE)
-           return new FileInputStream("/Users/arigalzi/Desktop/Ing-Sw-2020-Galzerano-Giacomini-Leone/src/main/Resources/Images/pedinabianca.png");
+           return "/Images/pedinabianca.png";
         else if (workerColor== Color.CYAN)
-           return new FileInputStream("/Users/arigalzi/Desktop/Ing-Sw-2020-Galzerano-Giacomini-Leone/src/main/Resources/Images/pedinaazzurra.png");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+           return "/Images/pedinaazzurra.png";
+       else
         return null;
     }
 
