@@ -1,0 +1,157 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Client</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Client (it.polimi.ingsw.PSP47.Network.Client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Client</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.*;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.View.CLI.CLI;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.View.GUI.GUI;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.View.View;
+<i>7</i>&nbsp;import javafx.application.Application;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.util.Scanner;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import static javafx.application.Application.launch;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * This class instantiates a thread for each client and handles the choice of the graphical interface and the
+<i>16</i>&nbsp; * {@link Server} the user wants to connect to.
+<i>17</i>&nbsp; */
+<b class="nc"><i>18</i>&nbsp;public class Client {</b>
+<i>19</i>&nbsp;    
+<i>20</i>&nbsp;    public static void main(String[] args) {
+<b class="nc"><i>21</i>&nbsp;        Client client = new Client();</b>
+<b class="nc"><i>22</i>&nbsp;        client.init();</b>
+<i>23</i>&nbsp;    }
+<i>24</i>&nbsp;    
+<i>25</i>&nbsp;    /**
+<i>26</i>&nbsp;     * This method asks the user what graphical interface they desire and which {@link Server} they want to connect to.
+<i>27</i>&nbsp;     * If everything goes well, a new thread is instantiated: the {@link NetworkHandler}. It will handle the
+<i>28</i>&nbsp;     * connection with the server.
+<i>29</i>&nbsp;     */
+<i>30</i>&nbsp;    public void init() {
+<i>31</i>&nbsp;        View view;
+<i>32</i>&nbsp;        
+<i>33</i>&nbsp;        //initial request of choice between GUI or CLI
+<b class="nc"><i>34</i>&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+<i>35</i>&nbsp;    
+<b class="nc"><i>36</i>&nbsp;        String viewChoice = askView(scanner);</b>
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;        if (&quot;CLI&quot;.equals(viewChoice.toUpperCase()))</b>
+<b class="nc"><i>39</i>&nbsp;            new CLI();</b>
+<b class="nc"><i>40</i>&nbsp;        else if (&quot;GUI&quot;.equals(viewChoice.toUpperCase()))</b>
+<b class="nc"><i>41</i>&nbsp;            Application.launch(GUI.class);</b>
+<i>42</i>&nbsp;    
+<i>43</i>&nbsp;        // open a connection with the server
+<i>44</i>&nbsp;        /*Socket serverSocket;
+<i>45</i>&nbsp;        try {
+<i>46</i>&nbsp;            serverSocket = new Socket(serverIpAddress, Server.SOCKET_PORT);
+<i>47</i>&nbsp;        } catch (IOException e) {
+<i>48</i>&nbsp;            System.out.println(&quot;Server unreachable.&quot;);
+<i>49</i>&nbsp;            return;
+<i>50</i>&nbsp;        }
+<i>51</i>&nbsp;        System.out.println(&quot;Connected to the address &quot; + serverSocket.getInetAddress());
+<i>52</i>&nbsp;    
+<i>53</i>&nbsp;         networkHandler = new NetworkHandler(view , serverSocket);
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;        view.setClient(this);
+<i>56</i>&nbsp;        Thread thread = new Thread(networkHandler);
+<i>57</i>&nbsp;        thread.start();*/
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;    
+<i>61</i>&nbsp;    private String askView(Scanner scanner) {
+<b class="nc"><i>62</i>&nbsp;        System.out.println(&quot;You want to play with CLI or GUI?&quot;);</b>
+<b class="nc"><i>63</i>&nbsp;        String viewChoice = scanner.nextLine();</b>
+<i>64</i>&nbsp;        
+<i>65</i>&nbsp;        
+<b class="nc"><i>66</i>&nbsp;        while (viewChoice==null || !viewChoice.toUpperCase().equals(&quot;CLI&quot;) &amp;&amp; !viewChoice.toUpperCase().equals(&quot;GUI&quot;)) {</b>
+<b class="nc"><i>67</i>&nbsp;            System.out.println(&quot;You have to write \&quot;CLI\&quot; or \&quot;GUI\&quot;!\nWhich one do you want?.&quot;);</b>
+<b class="nc"><i>68</i>&nbsp;            viewChoice = scanner.nextLine();</b>
+<i>69</i>&nbsp;        }
+<i>70</i>&nbsp;        
+<i>71</i>&nbsp;        
+<b class="nc"><i>72</i>&nbsp;        return viewChoice;</b>
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 12:19</div>
+</div>
+</body>
+</html>

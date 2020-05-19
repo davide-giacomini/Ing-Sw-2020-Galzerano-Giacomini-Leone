@@ -1,0 +1,431 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GUI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.View.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GUI (it.polimi.ingsw.PSP47.View.GUI)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 116)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GUI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">GUI$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 119)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.View.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Action;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Action;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Slot;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP47.View.GameView;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP47.View.View;
+<i>11</i>&nbsp;import javafx.application.Application;
+<i>12</i>&nbsp;import javafx.application.Platform;
+<i>13</i>&nbsp;import javafx.event.EventHandler;
+<i>14</i>&nbsp;import javafx.fxml.FXMLLoader;
+<i>15</i>&nbsp;import javafx.scene.Parent;
+<i>16</i>&nbsp;import javafx.scene.Scene;
+<i>17</i>&nbsp;import javafx.scene.control.Alert;
+<i>18</i>&nbsp;import javafx.scene.text.Font;
+<i>19</i>&nbsp;import javafx.stage.Stage;
+<i>20</i>&nbsp;import javafx.stage.WindowEvent;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.util.ArrayList;
+<i>24</i>&nbsp;
+<b class="nc"><i>25</i>&nbsp;public class GUI extends Application implements View {</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    private NetworkHandler networkHandler;
+<i>28</i>&nbsp;    private GameView gameView;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    private CurrentScene currentScene;
+<i>31</i>&nbsp;    private Stage primaryStage;
+<i>32</i>&nbsp;    private Scene scene;
+<i>33</i>&nbsp;    private Parent root;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    private ConnectionToServerController connectionToServerController;
+<i>36</i>&nbsp;    private MainController mainController;
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;    private boolean start = false;</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    @Override
+<i>41</i>&nbsp;    public void start(Stage primaryStage) throws Exception {
+<b class="nc"><i>42</i>&nbsp;        gameView = new GameView();</b>
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;        this.primaryStage = primaryStage;</b>
+<b class="nc"><i>45</i>&nbsp;        FXMLLoader fxmlLoader = new FXMLLoader();</b>
+<b class="nc"><i>46</i>&nbsp;        fxmlLoader.setLocation(getClass().getResource(&quot;/FXML/connectionToServer.fxml&quot;));</b>
+<b class="nc"><i>47</i>&nbsp;        Font.loadFont(getClass().getResourceAsStream(&quot;Fonts/savoye.ttf&quot;), 14);</b>
+<b class="nc"><i>48</i>&nbsp;        root = fxmlLoader.load();</b>
+<b class="nc"><i>49</i>&nbsp;        scene = new Scene(root);</b>
+<b class="nc"><i>50</i>&nbsp;        scene.getStylesheets().add(getClass().getResource(&quot;/CSS/background.css&quot;).toExternalForm());</b>
+<b class="nc"><i>51</i>&nbsp;        primaryStage.setResizable(true);</b>
+<b class="nc"><i>52</i>&nbsp;        primaryStage.setScene(scene);</b>
+<b class="nc"><i>53</i>&nbsp;        primaryStage.setTitle(&quot;Santorini&quot;);</b>
+<b class="nc"><i>54</i>&nbsp;        primaryStage.show();</b>
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;        currentScene = CurrentScene.START;</b>
+<i>57</i>&nbsp;
+<b class="nc"><i>58</i>&nbsp;        connectionToServerController = fxmlLoader.getController();</b>
+<b class="nc"><i>59</i>&nbsp;        connectionToServerController.setGui(this);</b>
+<b class="nc"><i>60</i>&nbsp;        primaryStage.setOnCloseRequest(new EventHandler&lt;&gt;() {</b>
+<i>61</i>&nbsp;            @Override
+<i>62</i>&nbsp;            public void handle(WindowEvent windowEvent) {
+<b class="nc"><i>63</i>&nbsp;                networkHandler.endConnection();</b>
+<i>64</i>&nbsp;            }
+<i>65</i>&nbsp;        });
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    public void setNetworkHandler(NetworkHandler networkHandler) {
+<b class="nc"><i>69</i>&nbsp;        this.networkHandler = networkHandler;</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    private &lt;T&gt; T setLayout(Scene scene, String path) {
+<b class="nc"><i>73</i>&nbsp;        FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>74</i>&nbsp;        loader.setLocation(GUI.class.getResource(path));</b>
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;        Parent root;
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;        try {
+<b class="nc"><i>79</i>&nbsp;            root = loader.load();</b>
+<b class="nc"><i>80</i>&nbsp;            scene.setRoot(root);</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;
+<b class="nc"><i>83</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>84</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>85</i>&nbsp;        }</b>
+<b class="nc"><i>86</i>&nbsp;        return loader.getController();</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    @Override
+<i>91</i>&nbsp;    public void askFirstConnection() {
+<b class="nc"><i>92</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>93</i>&nbsp;        currentScene = CurrentScene.START;</b>
+<b class="nc"><i>94</i>&nbsp;        StartController startController = setLayout(scene, &quot;/FXML/startPane.fxml&quot;);</b>
+<b class="nc"><i>95</i>&nbsp;        startController.addViewListener(networkHandler);</b>
+<i>96</i>&nbsp;        });
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    @Override
+<i>100</i>&nbsp;    public void askNumberOfPlayers() {
+<b class="nc"><i>101</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>102</i>&nbsp;        currentScene = CurrentScene.CHOOSE_PLAYERS;</b>
+<b class="nc"><i>103</i>&nbsp;        ChoosePlayersController choosePlayersController = setLayout(scene,&quot;/FXML/choosePlayers.fxml&quot;);</b>
+<b class="nc"><i>104</i>&nbsp;        choosePlayersController.addViewListener(networkHandler);</b>
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;        });
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    @Override
+<i>112</i>&nbsp;    public void challengerWillChooseThreeGods() {
+<b class="nc"><i>113</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>114</i>&nbsp;        currentScene = CurrentScene.CHOOSE_CARDS;</b>
+<b class="nc"><i>115</i>&nbsp;        primaryStage.setWidth(1100);</b>
+<b class="nc"><i>116</i>&nbsp;        primaryStage.setHeight(800);</b>
+<b class="nc"><i>117</i>&nbsp;        ChooseCardsController chooseCardsController = setLayout(scene, &quot;/FXML/chooseCards.fxml&quot;);</b>
+<b class="nc"><i>118</i>&nbsp;        chooseCardsController.addViewListener(networkHandler);</b>
+<b class="nc"><i>119</i>&nbsp;        chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());</b>
+<i>120</i>&nbsp;        });
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    @Override
+<i>124</i>&nbsp;    public void chooseYourGod(ArrayList&lt;GodName&gt; godsChosen) {
+<b class="nc"><i>125</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>126</i>&nbsp;            currentScene = CurrentScene.CHOOSE_CARD;</b>
+<b class="nc"><i>127</i>&nbsp;            primaryStage.setWidth(1100);</b>
+<b class="nc"><i>128</i>&nbsp;            primaryStage.setHeight(800);</b>
+<b class="nc"><i>129</i>&nbsp;            ChooseCardController chooseCardController = setLayout(scene, &quot;/FXML/chooseCard.fxml&quot;);</b>
+<b class="nc"><i>130</i>&nbsp;            chooseCardController.setNetworkHandler(networkHandler);</b>
+<b class="nc"><i>131</i>&nbsp;            chooseCardController.addViewListener(networkHandler);</b>
+<b class="nc"><i>132</i>&nbsp;            chooseCardController.setAvailableGods(godsChosen);</b>
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;        });
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    }
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;    @Override
+<i>139</i>&nbsp;    public GameView getGameView() {
+<b class="nc"><i>140</i>&nbsp;        return gameView;</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    @Override
+<i>144</i>&nbsp;    public void showPublicInformation() {
+<b class="nc"><i>145</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>146</i>&nbsp;        mainController.setUsernames(gameView.getUsernames());</b>
+<b class="nc"><i>147</i>&nbsp;        mainController.setColors(gameView.getColors());</b>
+<b class="nc"><i>148</i>&nbsp;        mainController.setGods(gameView.getGods());</b>
+<b class="nc"><i>149</i>&nbsp;        mainController.setPublicInformation();</b>
+<i>150</i>&nbsp;        });
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    @Override
+<i>154</i>&nbsp;    public void showCurrentBoard() {
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;    }
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;    @Override
+<i>159</i>&nbsp;    public void showErrorMessage(String text) {
+<b class="nc"><i>160</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>161</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>162</i>&nbsp;            a.setContentText(text);</b>
+<b class="nc"><i>163</i>&nbsp;            a.show();</b>
+<i>164</i>&nbsp;        });
+<i>165</i>&nbsp;    }
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;    @Override
+<i>168</i>&nbsp;    public void showImportantMessage(String text) {
+<b class="nc"><i>169</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>170</i>&nbsp;            Alert a = new Alert(Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i>171</i>&nbsp;            a.setContentText(text);</b>
+<b class="nc"><i>172</i>&nbsp;            a.show();</b>
+<i>173</i>&nbsp;        });
+<i>174</i>&nbsp;    }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    @Override
+<i>177</i>&nbsp;    public void theWinnerIs(String usernameWinner) {
+<b class="nc"><i>178</i>&nbsp;        currentScene = CurrentScene.WIN;</b>
+<b class="nc"><i>179</i>&nbsp;        primaryStage.setWidth(1100);</b>
+<b class="nc"><i>180</i>&nbsp;        primaryStage.setHeight(800);</b>
+<b class="nc"><i>181</i>&nbsp;        WinningAdviceController winningAdviceController = setLayout(scene, &quot;/FXML/winningAdvice.fxml&quot;);</b>
+<b class="nc"><i>182</i>&nbsp;        winningAdviceController.addViewListener(networkHandler);</b>
+<i>183</i>&nbsp;    }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;    @Override
+<i>186</i>&nbsp;    public void theLoserIs() {
+<b class="nc"><i>187</i>&nbsp;        currentScene = CurrentScene.LOSE;</b>
+<b class="nc"><i>188</i>&nbsp;        primaryStage.setWidth(1100);</b>
+<b class="nc"><i>189</i>&nbsp;        primaryStage.setHeight(800);</b>
+<b class="nc"><i>190</i>&nbsp;        LosingAdviceController losingAdviceController = setLayout(scene, &quot;/FXML/losingAdvice.fxml&quot;);</b>
+<b class="nc"><i>191</i>&nbsp;        losingAdviceController.addViewListener(networkHandler);</b>
+<i>192</i>&nbsp;    }
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;    @Override
+<i>195</i>&nbsp;    public void showEnd() {
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    private String choosePath() {
+<b class="nc"><i>201</i>&nbsp;        String path = &quot;&quot;;</b>
+<b class="nc"><i>202</i>&nbsp;        switch (currentScene) {</b>
+<i>203</i>&nbsp;            case START:
+<b class="nc"><i>204</i>&nbsp;                path = &quot;/FXML/startPane.fxml&quot;;</b>
+<b class="nc"><i>205</i>&nbsp;                break;</b>
+<i>206</i>&nbsp;            case CHOOSE_PLAYERS:
+<b class="nc"><i>207</i>&nbsp;                path = &quot;/FXML/choosePlayers.fxml&quot;;</b>
+<b class="nc"><i>208</i>&nbsp;                break;</b>
+<i>209</i>&nbsp;            case CHOOSE_CARDS:
+<b class="nc"><i>210</i>&nbsp;                path = &quot;/FXML/chooseCards.fxml&quot;;</b>
+<b class="nc"><i>211</i>&nbsp;                break;</b>
+<i>212</i>&nbsp;            case CHOOSE_CARD:
+<b class="nc"><i>213</i>&nbsp;                path = &quot;/FXML/chooseCard.fxml&quot;;</b>
+<b class="nc"><i>214</i>&nbsp;                break;</b>
+<i>215</i>&nbsp;            case SET_WORKERS:
+<b class="nc"><i>216</i>&nbsp;                path = &quot;/FXML/setWorkers.fxml&quot;;</b>
+<i>217</i>&nbsp;                break;
+<i>218</i>&nbsp;        }
+<b class="nc"><i>219</i>&nbsp;        return path;</b>
+<i>220</i>&nbsp;    }
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    /**
+<i>223</i>&nbsp;     * method imoplemented in order to display the same board but with the different slot that has just been updated from the model
+<i>224</i>&nbsp;     * @param slot is the slot that has been changed
+<i>225</i>&nbsp;     */
+<i>226</i>&nbsp;    @Override
+<i>227</i>&nbsp;    public void showGuiSlot(Slot slot) {
+<b class="nc"><i>228</i>&nbsp;        Platform.runLater(()-&gt; {</b>
+<b class="nc"><i>229</i>&nbsp;            mainController.changeSlot(slot);</b>
+<i>230</i>&nbsp;        });
+<i>231</i>&nbsp;    }
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;    /**
+<i>234</i>&nbsp;     * method used to set the main scene, when the scene with the board is setted, the default moment is wait
+<i>235</i>&nbsp;     * the public information are displayed
+<i>236</i>&nbsp;     */
+<i>237</i>&nbsp;    @Override
+<i>238</i>&nbsp;    public void showGame() {
+<b class="nc"><i>239</i>&nbsp;        Platform.runLater(()-&gt; {</b>
+<b class="nc"><i>240</i>&nbsp;            mainController = setLayout(scene, &quot;/FXML/mainView.fxml&quot;);</b>
+<b class="nc"><i>241</i>&nbsp;            primaryStage.setHeight(700);</b>
+<b class="nc"><i>242</i>&nbsp;            mainController.setMoment(Action.WAIT);</b>
+<b class="nc"><i>243</i>&nbsp;            mainController.addViewListener(networkHandler);</b>
+<b class="nc"><i>244</i>&nbsp;            mainController.initialize();</b>
+<b class="nc"><i>245</i>&nbsp;            start = true;</b>
+<i>246</i>&nbsp;        });
+<i>247</i>&nbsp;    }
+<i>248</i>&nbsp;
+<i>249</i>&nbsp;    /**
+<i>250</i>&nbsp;     * method that sets a the moment in which the gui expects the worker to use, in order to allow the main controller to handle the click differently
+<i>251</i>&nbsp;     */
+<i>252</i>&nbsp;    @Override
+<i>253</i>&nbsp;    public void askWhichWorkerToUse() {
+<b class="nc"><i>254</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>255</i>&nbsp;            mainController.setMoment(Action.ASK_WHICH_WORKER);</b>
+<b class="nc"><i>256</i>&nbsp;            mainController.initialize();</b>
+<i>257</i>&nbsp;        });
+<i>258</i>&nbsp;    }
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    /**
+<i>261</i>&nbsp;     * method that sets method a the moment in which the gui expects two positions for the initial workers, in order to allow the main controller to handle the click differently
+<i>262</i>&nbsp;     */
+<i>263</i>&nbsp;    @Override
+<i>264</i>&nbsp;    public void askWhereToPositionWorkers() {
+<b class="nc"><i>265</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>266</i>&nbsp;            mainController.setMoment(Action.ASK_INITIAL_POSITION);</b>
+<b class="nc"><i>267</i>&nbsp;            mainController.setUsernames(gameView.getUsernames());</b>
+<b class="nc"><i>268</i>&nbsp;            mainController.setColors(gameView.getColors());</b>
+<b class="nc"><i>269</i>&nbsp;            mainController.setGods(gameView.getGods());</b>
+<b class="nc"><i>270</i>&nbsp;            mainController.initialize();</b>
+<i>271</i>&nbsp;        });
+<i>272</i>&nbsp;    }
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;    /**
+<i>275</i>&nbsp;     * method that if the game hasn&#39;t started informs the user with an alert to wait, otherwise it sets the wait moment in main scene
+<i>276</i>&nbsp;     */
+<i>277</i>&nbsp;    @Override
+<i>278</i>&nbsp;    public void othersTurn(String usernameOnTurn) {
+<b class="nc"><i>279</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>280</i>&nbsp;            if(!start) {</b>
+<b class="nc"><i>281</i>&nbsp;                Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>282</i>&nbsp;                a.setContentText(&quot;It&#39;s &quot; + usernameOnTurn + &quot;&#39;s turn. You can&#39;t do anything until it&#39;s your turn.&quot;);</b>
+<b class="nc"><i>283</i>&nbsp;                a.show();</b>
+<b class="nc"><i>284</i>&nbsp;            }else {</b>
+<b class="nc"><i>285</i>&nbsp;                currentScene = CurrentScene.SET_WORKERS;</b>
+<b class="nc"><i>286</i>&nbsp;                mainController.setMoment(Action.WAIT);</b>
+<b class="nc"><i>287</i>&nbsp;                mainController.initialize();</b>
+<i>288</i>&nbsp;            }
+<i>289</i>&nbsp;        });
+<i>290</i>&nbsp;    }
+<i>291</i>&nbsp;
+<i>292</i>&nbsp;    /**
+<i>293</i>&nbsp;     * method that indicates to the controller with the new moment set that it has to wait for action + slot
+<i>294</i>&nbsp;     */
+<i>295</i>&nbsp;    @Override
+<i>296</i>&nbsp;    public void askAction() {
+<b class="nc"><i>297</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>298</i>&nbsp;            mainController.setMoment(Action.CHOOSEACT);</b>
+<b class="nc"><i>299</i>&nbsp;            mainController.initialize();</b>
+<i>300</i>&nbsp;        });
+<i>301</i>&nbsp;    }
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 12:19</div>
+</div>
+</body>
+</html>

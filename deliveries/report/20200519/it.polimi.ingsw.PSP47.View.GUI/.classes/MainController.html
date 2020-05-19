@@ -1,0 +1,428 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MainController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.View.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MainController (it.polimi.ingsw.PSP47.View.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MainController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 131)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.View.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Action;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Color;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Direction;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Slot;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP47.View.ViewObservable;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableActionAndDirection;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableInitialPositions;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableRowsAndColumns;
+<i>13</i>&nbsp;import javafx.collections.ObservableList;
+<i>14</i>&nbsp;import javafx.fxml.FXML;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import javafx.scene.Node;
+<i>17</i>&nbsp;import javafx.scene.control.Alert;
+<i>18</i>&nbsp;import javafx.scene.control.Button;
+<i>19</i>&nbsp;import javafx.scene.control.TextArea;
+<i>20</i>&nbsp;import javafx.scene.image.Image;
+<i>21</i>&nbsp;import javafx.scene.image.ImageView;
+<i>22</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>23</i>&nbsp;import javafx.scene.layout.GridPane;
+<i>24</i>&nbsp;import javafx.scene.layout.Pane;
+<i>25</i>&nbsp;import javafx.scene.text.Text;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;import java.io.FileInputStream;
+<i>28</i>&nbsp;import java.io.FileNotFoundException;
+<i>29</i>&nbsp;import java.net.URL;
+<i>30</i>&nbsp;import java.util.ArrayList;
+<i>31</i>&nbsp;import java.util.ResourceBundle;
+<i>32</i>&nbsp;
+<b class="nc"><i>33</i>&nbsp;public class MainController extends ViewObservable {</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    private NetworkHandler networkHandler;
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;    private ArrayList&lt;String&gt; usernames= new ArrayList&lt;&gt;(3);</b>
+<b class="nc"><i>38</i>&nbsp;    private ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(3);</b>
+<b class="nc"><i>39</i>&nbsp;    private ArrayList &lt;GodName&gt; gods = new ArrayList&lt;&gt;(3);</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    private Action moment;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;    private int[] newRowAndColumn = new int[4];</b>
+<b class="nc"><i>45</i>&nbsp;    private int[] workerRowAndColumn = new int[2];</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    @FXML
+<i>48</i>&nbsp;    private GridPane gridPane;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    @FXML
+<i>51</i>&nbsp;    private ArrayList&lt;Pane&gt; slots;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    @FXML
+<i>54</i>&nbsp;    private Button moveButton;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    @FXML
+<i>57</i>&nbsp;    private Button buildButton;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    @FXML
+<i>60</i>&nbsp;    private Button buildDomeButton;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    @FXML
+<i>63</i>&nbsp;    private Button endButton;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    @FXML
+<i>66</i>&nbsp;    private Button quitButton;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    @FXML
+<i>69</i>&nbsp;    private Text commandText;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    @FXML
+<i>72</i>&nbsp;    private TextArea firstPlayerInfo;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    @FXML
+<i>75</i>&nbsp;    private TextArea secondPlayerInfo;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    @FXML
+<i>78</i>&nbsp;    private TextArea thirdPlayerInfo;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    /**
+<i>82</i>&nbsp;     * in the initialize method the based on the moment in which we are in the game the text to display and col and row are resetted
+<i>83</i>&nbsp;     */
+<i>84</i>&nbsp;    void initialize() {
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;        //setto la grid pane
+<b class="nc"><i>87</i>&nbsp;        if (moment == Action.ASK_INITIAL_POSITION){</b>
+<b class="nc"><i>88</i>&nbsp;            for (int i = 0; i &lt; 4; i++) {</b>
+<b class="nc"><i>89</i>&nbsp;                newRowAndColumn[i] = -1;</b>
+<i>90</i>&nbsp;            }
+<b class="nc"><i>91</i>&nbsp;            commandText.setText(&quot;Choose where to position worker :&quot;);</b>
+<i>92</i>&nbsp;           //buildButton.setEffect(new DropShadow());
+<i>93</i>&nbsp;            //buildButton.setDisable(true);
+<i>94</i>&nbsp;            //moveButton.setEffect(new DropShadow());
+<i>95</i>&nbsp;            //moveButton.setDisable(true);
+<i>96</i>&nbsp;            //buildDomeButton.setEffect(new DropShadow());
+<i>97</i>&nbsp;            //buildDomeButton.setDisable(true);
+<i>98</i>&nbsp;            //endButton.setEffect(new DropShadow());
+<i>99</i>&nbsp;            //endButton.setDisable(true);
+<b class="nc"><i>100</i>&nbsp;        }else if(moment == Action.ASK_WHICH_WORKER){</b>
+<b class="nc"><i>101</i>&nbsp;            commandText.setText(&quot;Choose the worker you want to use :&quot;);</b>
+<b class="nc"><i>102</i>&nbsp;            workerRowAndColumn[0]= -1;</b>
+<b class="nc"><i>103</i>&nbsp;            workerRowAndColumn[1]= -1;</b>
+<b class="nc"><i>104</i>&nbsp;        }else if (moment == Action.CHOOSEACT){</b>
+<b class="nc"><i>105</i>&nbsp;            commandText.setText(&quot;Choose the action you want between the buttons :&quot;);</b>
+<i>106</i>&nbsp;
+<b class="nc"><i>107</i>&nbsp;        }else if (moment == Action.WAIT){</b>
+<b class="nc"><i>108</i>&nbsp;            commandText.setText(&quot;WAIT&quot;);</b>
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;        }
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    /**
+<i>114</i>&nbsp;     * method that handles the click in two ways : 1. you are allowed to click the button and in this case the moment has to change since now the user has to click a slot
+<i>115</i>&nbsp;     * 2. you are not allowed to click so I show you an alert
+<i>116</i>&nbsp;     * @param event
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    @FXML
+<i>119</i>&nbsp;    void OnMoveClick(MouseEvent event) {
+<b class="nc"><i>120</i>&nbsp;        if (moment == Action.WAIT){</b>
+<b class="nc"><i>121</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>122</i>&nbsp;            a.setContentText(&quot;Ooooo aspetta&quot;);</b>
+<b class="nc"><i>123</i>&nbsp;            a.show();</b>
+<b class="nc"><i>124</i>&nbsp;        }else if (moment == Action.CHOOSEACT){</b>
+<b class="nc"><i>125</i>&nbsp;            moment = Action.MOVE;</b>
+<b class="nc"><i>126</i>&nbsp;            commandText.setText(&quot;Now click on the slot where you want to move:&quot;);</b>
+<i>127</i>&nbsp;        }
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    @FXML
+<i>131</i>&nbsp;    void OnBuildClick(MouseEvent event) {
+<b class="nc"><i>132</i>&nbsp;        if (moment == Action.WAIT){</b>
+<b class="nc"><i>133</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>134</i>&nbsp;            a.setContentText(&quot;Ooooo aspetta&quot;);</b>
+<b class="nc"><i>135</i>&nbsp;            a.show();</b>
+<b class="nc"><i>136</i>&nbsp;        }else if (moment == Action.CHOOSEACT) {</b>
+<b class="nc"><i>137</i>&nbsp;            moment = Action.BUILD;</b>
+<b class="nc"><i>138</i>&nbsp;            commandText.setText(&quot;Now click on the slot where you want to build:&quot;);</b>
+<i>139</i>&nbsp;        }
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    @FXML
+<i>143</i>&nbsp;    void OnBuildDomeClick(MouseEvent event) {
+<b class="nc"><i>144</i>&nbsp;        if (moment == Action.WAIT){</b>
+<b class="nc"><i>145</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>146</i>&nbsp;            a.setContentText(&quot;Ooooo aspetta&quot;);</b>
+<b class="nc"><i>147</i>&nbsp;            a.show();</b>
+<b class="nc"><i>148</i>&nbsp;        }else if (moment == Action.CHOOSEACT) {</b>
+<b class="nc"><i>149</i>&nbsp;            moment = Action.BUILDDOME;</b>
+<b class="nc"><i>150</i>&nbsp;            commandText.setText(&quot;Now click on the slot where you want to build the Dome:&quot;);</b>
+<i>151</i>&nbsp;        }
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;    @FXML
+<i>155</i>&nbsp;    void OnEndClick(MouseEvent event) {
+<b class="nc"><i>156</i>&nbsp;        if (moment == Action.WAIT) {</b>
+<b class="nc"><i>157</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>158</i>&nbsp;            a.setContentText(&quot;Ooooo aspetta&quot;);</b>
+<b class="nc"><i>159</i>&nbsp;            a.show();</b>
+<b class="nc"><i>160</i>&nbsp;        }else if (moment == Action.CHOOSEACT) {</b>
+<b class="nc"><i>161</i>&nbsp;            moment = Action.END;</b>
+<b class="nc"><i>162</i>&nbsp;            commandText.setText(&quot;You asked to end your turn&quot;);</b>
+<b class="nc"><i>163</i>&nbsp;            VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();</b>
+<b class="nc"><i>164</i>&nbsp;            visitableActionAndDirection.setAction(moment);</b>
+<b class="nc"><i>165</i>&nbsp;            notifyViewListener(visitableActionAndDirection);</b>
+<i>166</i>&nbsp;        }
+<i>167</i>&nbsp;    }
+<i>168</i>&nbsp;    //TODO CHANGE WITH NOTIFY IMPLEMENTED BY DAVID
+<i>169</i>&nbsp;    @FXML
+<i>170</i>&nbsp;    void OnQuitClick(MouseEvent event) {
+<b class="nc"><i>171</i>&nbsp;        notifyEndConnection();</b>
+<i>172</i>&nbsp;    }
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;    /**
+<i>175</i>&nbsp;     * method that depending on the moment handles the click on the grid differently
+<i>176</i>&nbsp;     */
+<i>177</i>&nbsp;    @FXML
+<i>178</i>&nbsp;    void GridClick(MouseEvent event) {
+<i>179</i>&nbsp;
+<b class="nc"><i>180</i>&nbsp;        Node source = (Node)event.getSource() ;</b>
+<b class="nc"><i>181</i>&nbsp;        Integer colIndex = GridPane.getColumnIndex(source);</b>
+<b class="nc"><i>182</i>&nbsp;        Integer rowIndex = GridPane.getRowIndex(source);</b>
+<b class="nc"><i>183</i>&nbsp;        System.out.printf(&quot;Mouse entered cell [%d, %d]%n&quot;, colIndex, rowIndex);</b>
+<i>184</i>&nbsp;
+<b class="nc"><i>185</i>&nbsp;        if (moment == Action.ASK_INITIAL_POSITION)</b>
+<b class="nc"><i>186</i>&nbsp;            selectSlotAndNotify(rowIndex, colIndex);</b>
+<b class="nc"><i>187</i>&nbsp;        else if (moment == Action.ASK_WHICH_WORKER){</b>
+<b class="nc"><i>188</i>&nbsp;            chooseWorkerToUse(rowIndex,colIndex);</b>
+<b class="nc"><i>189</i>&nbsp;        }else if(moment == Action.MOVE || moment == Action.BUILD || moment == Action.BUILDDOME){</b>
+<b class="nc"><i>190</i>&nbsp;            VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();</b>
+<b class="nc"><i>191</i>&nbsp;            visitableActionAndDirection.setAction(moment);</b>
+<b class="nc"><i>192</i>&nbsp;             visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(workerRowAndColumn[0],workerRowAndColumn[1], rowIndex,colIndex));</b>
+<b class="nc"><i>193</i>&nbsp;            notifyViewListener(visitableActionAndDirection);</b>
+<b class="nc"><i>194</i>&nbsp;            commandText.setText(&quot;WAIT&quot;);</b>
+<b class="nc"><i>195</i>&nbsp;            moment = Action.WAIT;</b>
+<b class="nc"><i>196</i>&nbsp;        }else if (moment == Action.WAIT ){</b>
+<b class="nc"><i>197</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>198</i>&nbsp;            a.setContentText(&quot;Oooo Aspetta&quot;);</b>
+<b class="nc"><i>199</i>&nbsp;            a.show();</b>
+<i>200</i>&nbsp;        }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /**
+<i>205</i>&nbsp;     * method used to send the inital positions of the two workers
+<i>206</i>&nbsp;     * @param row of the pane clicked in the gridPane
+<i>207</i>&nbsp;     * @param column of the pane clicked in the gridPane
+<i>208</i>&nbsp;     */
+<i>209</i>&nbsp;    private void selectSlotAndNotify(int row, int column) {
+<i>210</i>&nbsp;        int i;
+<b class="nc"><i>211</i>&nbsp;        for (i = 0; i &lt; 4; i++) {</b>
+<b class="nc"><i>212</i>&nbsp;            if ( newRowAndColumn[i] == -1 ) {</b>
+<b class="nc"><i>213</i>&nbsp;                newRowAndColumn[i] = row ;</b>
+<b class="nc"><i>214</i>&nbsp;                newRowAndColumn[i +1] = column;</b>
+<b class="nc"><i>215</i>&nbsp;                break;</b>
+<i>216</i>&nbsp;            }
+<i>217</i>&nbsp;        }
+<b class="nc"><i>218</i>&nbsp;        if (i == 2) {</b>
+<i>219</i>&nbsp;            //addViewListener(networkHandler);
+<b class="nc"><i>220</i>&nbsp;            VisitableInitialPositions visitableInitialPositions = new VisitableInitialPositions();</b>
+<b class="nc"><i>221</i>&nbsp;            visitableInitialPositions.setRowsAndColumns(newRowAndColumn);</b>
+<b class="nc"><i>222</i>&nbsp;            notifyViewListener(visitableInitialPositions);</b>
+<b class="nc"><i>223</i>&nbsp;            commandText.setText(&quot;WAIT&quot;);</b>
+<b class="nc"><i>224</i>&nbsp;            moment = Action.WAIT;</b>
+<i>225</i>&nbsp;        }
+<i>226</i>&nbsp;    }
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;    /**
+<i>229</i>&nbsp;     *
+<i>230</i>&nbsp;     * @param row
+<i>231</i>&nbsp;     * @param column
+<i>232</i>&nbsp;     */
+<i>233</i>&nbsp;    private void chooseWorkerToUse(int row, int column) {
+<b class="nc"><i>234</i>&nbsp;        int i=0;</b>
+<b class="nc"><i>235</i>&nbsp;            if ( workerRowAndColumn[i] == -1 ) {</b>
+<b class="nc"><i>236</i>&nbsp;                workerRowAndColumn[i] = row ;</b>
+<b class="nc"><i>237</i>&nbsp;                workerRowAndColumn[i +1] = column;</b>
+<b class="nc"><i>238</i>&nbsp;                i=1;</b>
+<i>239</i>&nbsp;            }
+<b class="nc"><i>240</i>&nbsp;        if (i == 1) {</b>
+<i>241</i>&nbsp;            //addViewListener(networkHandler);
+<b class="nc"><i>242</i>&nbsp;            VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();</b>
+<b class="nc"><i>243</i>&nbsp;            visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);</b>
+<b class="nc"><i>244</i>&nbsp;            notifyViewListener(visitableRowsAndColumns);</b>
+<b class="nc"><i>245</i>&nbsp;            commandText.setText(&quot;WAIT&quot;);</b>
+<b class="nc"><i>246</i>&nbsp;            moment = Action.WAIT;</b>
+<i>247</i>&nbsp;        }
+<i>248</i>&nbsp;    }
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    public void setUsernames(ArrayList&lt;String&gt; usernames) {
+<b class="nc"><i>251</i>&nbsp;        this.usernames = usernames;</b>
+<i>252</i>&nbsp;    }
+<i>253</i>&nbsp;
+<i>254</i>&nbsp;    public void setColors(ArrayList&lt;Color&gt; colors) {
+<b class="nc"><i>255</i>&nbsp;        this.colors = colors;</b>
+<i>256</i>&nbsp;    }
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    public void setGods(ArrayList&lt;GodName&gt; gods) {
+<b class="nc"><i>259</i>&nbsp;        this.gods = gods;</b>
+<i>260</i>&nbsp;    }
+<i>261</i>&nbsp;    //TODO ERASE
+<i>262</i>&nbsp;    public void setNetworkHandler(NetworkHandler networkHandler) {
+<b class="nc"><i>263</i>&nbsp;        this.networkHandler = networkHandler;</b>
+<i>264</i>&nbsp;    }
+<i>265</i>&nbsp;
+<b class="nc"><i>266</i>&nbsp;    public void setMoment(Action action){ this.moment = action;}</b>
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    /**
+<i>269</i>&nbsp;     * method used when an updated slot arrives to display only the change in the specific slot, it adds for now the worker in the pane of the gridpane
+<i>270</i>&nbsp;     * @param slot is the clot that has been changed
+<i>271</i>&nbsp;     */
+<i>272</i>&nbsp;    public void changeSlot(Slot slot){
+<b class="nc"><i>273</i>&nbsp;        Pane pane = (Pane) getNodeByRowColumnIndex(slot.getRow(), slot.getColumn(), gridPane);</b>
+<b class="nc"><i>274</i>&nbsp;        pane.getChildren().removeAll();</b>
+<i>275</i>&nbsp;
+<b class="nc"><i>276</i>&nbsp;        if (slot.isWorkerOnSlot()){</b>
+<i>277</i>&nbsp;            //aggiunta livelli poi worker
+<i>278</i>&nbsp;            //FileInputStream input = null;
+<i>279</i>&nbsp;            //input = getImageWorkerFromColor(slot.getWorkerColor());
+<b class="nc"><i>280</i>&nbsp;            Image image = new Image(getImageWorkerFromColor(slot.getWorkerColor()));</b>
+<b class="nc"><i>281</i>&nbsp;            ImageView im1 = new ImageView(image);</b>
+<b class="nc"><i>282</i>&nbsp;            im1.fitWidthProperty().bind(pane.widthProperty());</b>
+<b class="nc"><i>283</i>&nbsp;            im1.fitHeightProperty().bind(pane.heightProperty());</b>
+<b class="nc"><i>284</i>&nbsp;            pane.getChildren().add(im1);</b>
+<i>285</i>&nbsp;        }else{
+<i>286</i>&nbsp;            // aggiunta livelli
+<i>287</i>&nbsp;        }
+<i>288</i>&nbsp;    }
+<i>289</i>&nbsp;
+<i>290</i>&nbsp;    /**
+<i>291</i>&nbsp;     * method that gets th worker immage based on the color of the worker that is in the slot
+<i>292</i>&nbsp;     * @param workerColor is the color of the worker
+<i>293</i>&nbsp;     * @return image of the worker
+<i>294</i>&nbsp;     */
+<i>295</i>&nbsp;    private String getImageWorkerFromColor(Color workerColor) {
+<b class="nc"><i>296</i>&nbsp;        if(workerColor== Color.BLUE)</b>
+<b class="nc"><i>297</i>&nbsp;            return &quot;/Images/pedinablu.png&quot;;</b>
+<b class="nc"><i>298</i>&nbsp;        else if (workerColor== Color.RED)</b>
+<b class="nc"><i>299</i>&nbsp;           return &quot;/Images/pedinarossa.png&quot;;</b>
+<b class="nc"><i>300</i>&nbsp;        else if (workerColor== Color.YELLOW)</b>
+<b class="nc"><i>301</i>&nbsp;           return &quot;/Images/pedinagialla.png&quot;;</b>
+<b class="nc"><i>302</i>&nbsp;        else if (workerColor== Color.GREEN)</b>
+<b class="nc"><i>303</i>&nbsp;           return &quot;/Images/pedinaverde.png&quot;;</b>
+<b class="nc"><i>304</i>&nbsp;        else if (workerColor== Color.PURPLE)</b>
+<b class="nc"><i>305</i>&nbsp;           return &quot;/Images/pedinaviola.png&quot;;</b>
+<b class="nc"><i>306</i>&nbsp;        else if (workerColor== Color.WHITE)</b>
+<b class="nc"><i>307</i>&nbsp;           return &quot;/Images/pedinabianca.png&quot;;</b>
+<b class="nc"><i>308</i>&nbsp;        else if (workerColor== Color.CYAN)</b>
+<b class="nc"><i>309</i>&nbsp;           return &quot;/Images/pedinaazzurra.png&quot;;</b>
+<i>310</i>&nbsp;       else
+<b class="nc"><i>311</i>&nbsp;        return null;</b>
+<i>312</i>&nbsp;    }
+<i>313</i>&nbsp;
+<i>314</i>&nbsp;    /**
+<i>315</i>&nbsp;     * method used to get th pane from the gridPane from its row and column
+<i>316</i>&nbsp;     * @param row of the slot that I need
+<i>317</i>&nbsp;     * @param column of the slot that I need
+<i>318</i>&nbsp;     * @param gridPane for the graphic of the board
+<i>319</i>&nbsp;     * @return
+<i>320</i>&nbsp;     */
+<i>321</i>&nbsp;    public Node getNodeByRowColumnIndex (final int row, final int column, GridPane gridPane) {
+<b class="nc"><i>322</i>&nbsp;        Node result = null;</b>
+<b class="nc"><i>323</i>&nbsp;        ObservableList&lt;Node&gt; childrens = gridPane.getChildren();</b>
+<i>324</i>&nbsp;
+<b class="nc"><i>325</i>&nbsp;        for (Node node : childrens) {</b>
+<b class="nc"><i>326</i>&nbsp;            if(GridPane.getRowIndex(node) == row &amp;&amp; GridPane.getColumnIndex(node) == column) {</b>
+<b class="nc"><i>327</i>&nbsp;                result = node;</b>
+<b class="nc"><i>328</i>&nbsp;                break;</b>
+<i>329</i>&nbsp;            }
+<b class="nc"><i>330</i>&nbsp;        }</b>
+<i>331</i>&nbsp;
+<b class="nc"><i>332</i>&nbsp;        return result;</b>
+<i>333</i>&nbsp;    }
+<i>334</i>&nbsp;
+<i>335</i>&nbsp;    /**
+<i>336</i>&nbsp;     * method used to add the public information in the scene ( they arrive after the scene has been displayed)
+<i>337</i>&nbsp;     */
+<i>338</i>&nbsp;    public void setPublicInformation(){
+<b class="nc"><i>339</i>&nbsp;        firstPlayerInfo.appendText(usernames.get(0)+&quot;\n&quot;+ colors.get(0)+&quot;\n&quot;+ gods.get(0));</b>
+<b class="nc"><i>340</i>&nbsp;        secondPlayerInfo.appendText(usernames.get(1)+&quot;\n&quot;+ colors.get(1)+&quot;\n&quot;+ gods.get(1));</b>
+<b class="nc"><i>341</i>&nbsp;        if (usernames.get(2)!=null)</b>
+<b class="nc"><i>342</i>&nbsp;            thirdPlayerInfo.appendText(usernames.get(2)+&quot;\n&quot;+ colors.get(2)+&quot;\n&quot;+ gods.get(2));</b>
+<i>343</i>&nbsp;    }
+<i>344</i>&nbsp;
+<i>345</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 12:19</div>
+</div>
+</body>
+</html>

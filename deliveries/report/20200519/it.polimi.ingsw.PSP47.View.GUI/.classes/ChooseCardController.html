@@ -1,0 +1,496 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChooseCardController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.View.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChooseCardController (it.polimi.ingsw.PSP47.View.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChooseCardController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 33)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 173)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.View.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.View.ViewObservable;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableGod;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
+<i>8</i>&nbsp;import javafx.fxml.FXML;
+<i>9</i>&nbsp;import javafx.fxml.FXMLLoader;
+<i>10</i>&nbsp;import javafx.scene.Parent;
+<i>11</i>&nbsp;import javafx.scene.effect.DropShadow;
+<i>12</i>&nbsp;import javafx.scene.effect.Shadow;
+<i>13</i>&nbsp;import javafx.scene.image.ImageView;
+<i>14</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>15</i>&nbsp;import javafx.scene.text.Text;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import java.io.IOException;
+<i>18</i>&nbsp;import java.util.ArrayList;
+<i>19</i>&nbsp;
+<b class="nc"><i>20</i>&nbsp;public class ChooseCardController extends ViewObservable {</b>
+<i>21</i>&nbsp;
+<b class="nc"><i>22</i>&nbsp;    ArrayList&lt;GodName&gt; availableGods = new ArrayList&lt;&gt;();</b>
+<i>23</i>&nbsp;    GodName chosenGod;
+<i>24</i>&nbsp;    NetworkHandler networkHandler;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    @FXML
+<i>27</i>&nbsp;    private ImageView Apollo;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    @FXML
+<i>30</i>&nbsp;    private ImageView Athena;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    @FXML
+<i>33</i>&nbsp;    private ImageView Artemis;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    @FXML
+<i>36</i>&nbsp;    private ImageView Atlas;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    @FXML
+<i>39</i>&nbsp;    private ImageView Chronus;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    @FXML
+<i>42</i>&nbsp;    private ImageView Demeter;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    @FXML
+<i>45</i>&nbsp;    private ImageView Hephaestus;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    @FXML
+<i>48</i>&nbsp;    private ImageView Hera;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    @FXML
+<i>51</i>&nbsp;    private ImageView Hestia;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    @FXML
+<i>54</i>&nbsp;    private ImageView Minotaur;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    @FXML
+<i>57</i>&nbsp;    private ImageView Pan;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    @FXML
+<i>60</i>&nbsp;    private ImageView Prometheus;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    @FXML
+<i>63</i>&nbsp;    private ImageView Triton;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    @FXML
+<i>66</i>&nbsp;    private ImageView Zeus;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    @FXML
+<i>69</i>&nbsp;    private Text godPower;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    @FXML
+<i>72</i>&nbsp;    void exit(MouseEvent event) {
+<b class="nc"><i>73</i>&nbsp;        godPower.setText(&quot;&quot;);</b>
+<b class="nc"><i>74</i>&nbsp;        Apollo.setEffect(null);</b>
+<b class="nc"><i>75</i>&nbsp;        Artemis.setEffect(null);</b>
+<b class="nc"><i>76</i>&nbsp;        Athena.setEffect(null);</b>
+<b class="nc"><i>77</i>&nbsp;        Atlas.setEffect(null);</b>
+<b class="nc"><i>78</i>&nbsp;        Chronus.setEffect(null);</b>
+<b class="nc"><i>79</i>&nbsp;        Demeter.setEffect(null);</b>
+<b class="nc"><i>80</i>&nbsp;        Hephaestus.setEffect(null);</b>
+<b class="nc"><i>81</i>&nbsp;        Hera.setEffect(null);</b>
+<b class="nc"><i>82</i>&nbsp;        Hestia.setEffect(null);</b>
+<b class="nc"><i>83</i>&nbsp;        Minotaur.setEffect(null);</b>
+<b class="nc"><i>84</i>&nbsp;        Pan.setEffect(null);</b>
+<b class="nc"><i>85</i>&nbsp;        Prometheus.setEffect(null);</b>
+<b class="nc"><i>86</i>&nbsp;        Triton.setEffect(null);</b>
+<b class="nc"><i>87</i>&nbsp;        Zeus.setEffect(null);</b>
+<i>88</i>&nbsp;    }
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    @FXML
+<i>92</i>&nbsp;    void onApollo(MouseEvent event) {
+<b class="nc"><i>93</i>&nbsp;        if (availableGods.contains(GodName.APOLLO)) {</b>
+<b class="nc"><i>94</i>&nbsp;            Apollo.setEffect(new DropShadow());</b>
+<b class="nc"><i>95</i>&nbsp;            godPower.setText(&quot;Apollo – You may move your worker onto a space occupied by an opponent’s builder. Their builder will be moved to the space your builder was just on.&quot;);</b>
+<i>96</i>&nbsp;        }
+<i>97</i>&nbsp;        else
+<b class="nc"><i>98</i>&nbsp;            Apollo.setEffect(new Shadow());</b>
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    @FXML
+<i>102</i>&nbsp;    void onArtemis(MouseEvent event) {
+<b class="nc"><i>103</i>&nbsp;        if (availableGods.contains(GodName.ARTEMIS)) {</b>
+<b class="nc"><i>104</i>&nbsp;            Artemis.setEffect(new DropShadow());</b>
+<b class="nc"><i>105</i>&nbsp;            godPower.setText(&quot;Artemis – You may move your builders two spaces but you may not move back to the space you started your turn on.&quot;);</b>
+<i>106</i>&nbsp;        }
+<i>107</i>&nbsp;        else
+<b class="nc"><i>108</i>&nbsp;            Artemis.setEffect(new Shadow());</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    @FXML
+<i>112</i>&nbsp;    void onAthena(MouseEvent event) {
+<b class="nc"><i>113</i>&nbsp;        if (availableGods.contains(GodName.ATHENA)) {</b>
+<b class="nc"><i>114</i>&nbsp;            Athena.setEffect(new DropShadow());</b>
+<b class="nc"><i>115</i>&nbsp;            godPower.setText(&quot;Athena – If you moved one of your workers up one level on your previous turn, your opponent may not move up a level on their turn.&quot;);</b>
+<i>116</i>&nbsp;        }
+<i>117</i>&nbsp;        else
+<b class="nc"><i>118</i>&nbsp;            Athena.setEffect(new Shadow());</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    @FXML
+<i>122</i>&nbsp;    void onAtlas(MouseEvent event) {
+<b class="nc"><i>123</i>&nbsp;        if (availableGods.contains(GodName.ATLAS)) {</b>
+<b class="nc"><i>124</i>&nbsp;            Atlas.setEffect(new DropShadow());</b>
+<b class="nc"><i>125</i>&nbsp;            godPower.setText(&quot;Atlas – Your builders can build a dome on any level including the ground.&quot;);</b>
+<i>126</i>&nbsp;        }
+<i>127</i>&nbsp;        else
+<b class="nc"><i>128</i>&nbsp;            Atlas.setEffect(new Shadow());</b>
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    @FXML
+<i>132</i>&nbsp;    void onChronus(MouseEvent event) {
+<b class="nc"><i>133</i>&nbsp;        if (availableGods.contains(GodName.CHRONUS)) {</b>
+<b class="nc"><i>134</i>&nbsp;            Chronus.setEffect(new DropShadow());</b>
+<b class="nc"><i>135</i>&nbsp;            godPower.setText(&quot;Chronus - You also win when there are at least five complete Towers on the board.&quot;);</b>
+<i>136</i>&nbsp;        }
+<i>137</i>&nbsp;        else
+<b class="nc"><i>138</i>&nbsp;            Chronus.setEffect(new Shadow());</b>
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    @FXML
+<i>142</i>&nbsp;    void onDemeter(MouseEvent event) {
+<b class="nc"><i>143</i>&nbsp;        if (availableGods.contains(GodName.DEMETER)) {</b>
+<b class="nc"><i>144</i>&nbsp;            Demeter.setEffect(new DropShadow());</b>
+<b class="nc"><i>145</i>&nbsp;            godPower.setText(&quot;Demeter – Your builders can build twice on your turn, but may not build twice on the same space.&quot;);</b>
+<i>146</i>&nbsp;        }
+<i>147</i>&nbsp;        else
+<b class="nc"><i>148</i>&nbsp;            Demeter.setEffect(new Shadow());</b>
+<i>149</i>&nbsp;    }
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    @FXML
+<i>152</i>&nbsp;    void onHephaestus(MouseEvent event) {
+<b class="nc"><i>153</i>&nbsp;        if (availableGods.contains(GodName.HEPHAESTUS)) {</b>
+<b class="nc"><i>154</i>&nbsp;            Hephaestus.setEffect(new DropShadow());</b>
+<b class="nc"><i>155</i>&nbsp;            godPower.setText(&quot;Hephaestus – Your builders can build twice on the same space. They may not use this ability to place a dome though.&quot;);</b>
+<i>156</i>&nbsp;        }
+<i>157</i>&nbsp;        else
+<b class="nc"><i>158</i>&nbsp;            Hephaestus.setEffect(new Shadow());</b>
+<i>159</i>&nbsp;    }
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;    @FXML
+<i>162</i>&nbsp;    void onHera(MouseEvent event) {
+<b class="nc"><i>163</i>&nbsp;        if (availableGods.contains(GodName.HERA)) {</b>
+<b class="nc"><i>164</i>&nbsp;            Hera.setEffect(new DropShadow());</b>
+<b class="nc"><i>165</i>&nbsp;            godPower.setText(&quot;Hera - An opponent cannot win by moving on to a perimeter space.&quot;);</b>
+<i>166</i>&nbsp;        }
+<i>167</i>&nbsp;        else
+<b class="nc"><i>168</i>&nbsp;            Hera.setEffect(new Shadow());</b>
+<i>169</i>&nbsp;    }
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    @FXML
+<i>172</i>&nbsp;    void onHestia(MouseEvent event) {
+<b class="nc"><i>173</i>&nbsp;        if (availableGods.contains(GodName.HESTIA)) {</b>
+<b class="nc"><i>174</i>&nbsp;            Hestia.setEffect(new DropShadow());</b>
+<b class="nc"><i>175</i>&nbsp;            godPower.setText(&quot;Hestia - Your worker may build one additional time. The additional build cannot be on a perimeter space.&quot;);</b>
+<i>176</i>&nbsp;        }
+<i>177</i>&nbsp;        else
+<b class="nc"><i>178</i>&nbsp;            Hestia.setEffect(new Shadow());</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    @FXML
+<i>182</i>&nbsp;    void onMinotaur(MouseEvent event) {
+<b class="nc"><i>183</i>&nbsp;        if (availableGods.contains(GodName.MINOTAUR)) {</b>
+<b class="nc"><i>184</i>&nbsp;            Minotaur.setEffect(new DropShadow());</b>
+<b class="nc"><i>185</i>&nbsp;            godPower.setText(&quot;Minotaur – You may move your builder onto a space occupied by an opponent’s builder if the next space in the same direction is unoccupied. You will push the other player’s builder into the next space in the same direction.&quot;);</b>
+<i>186</i>&nbsp;        }
+<i>187</i>&nbsp;        else
+<b class="nc"><i>188</i>&nbsp;            Minotaur.setEffect(new Shadow());</b>
+<i>189</i>&nbsp;    }
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    @FXML
+<i>192</i>&nbsp;    void onPan(MouseEvent event) {
+<b class="nc"><i>193</i>&nbsp;        if (availableGods.contains(GodName.PAN)) {</b>
+<b class="nc"><i>194</i>&nbsp;            Pan.setEffect(new DropShadow());</b>
+<b class="nc"><i>195</i>&nbsp;            godPower.setText(&quot;Pan – If one of your builders moves down two spaces in one movement you will automatically win the game.&quot;);</b>
+<i>196</i>&nbsp;        }
+<i>197</i>&nbsp;        else
+<b class="nc"><i>198</i>&nbsp;            Pan.setEffect(new Shadow());</b>
+<i>199</i>&nbsp;    }
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    @FXML
+<i>202</i>&nbsp;    void onPrometheus(MouseEvent event) {
+<b class="nc"><i>203</i>&nbsp;        if (availableGods.contains(GodName.PROMETHEUS)) {</b>
+<b class="nc"><i>204</i>&nbsp;            Prometheus.setEffect(new DropShadow());</b>
+<b class="nc"><i>205</i>&nbsp;            godPower.setText(&quot;Prometheus – If you don’t move up a level during your turn you may build before and after you move.&quot;);</b>
+<i>206</i>&nbsp;        }
+<i>207</i>&nbsp;        else
+<b class="nc"><i>208</i>&nbsp;            Prometheus.setEffect(new Shadow());</b>
+<i>209</i>&nbsp;    }
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    @FXML
+<i>212</i>&nbsp;    void onTriton(MouseEvent event) {
+<b class="nc"><i>213</i>&nbsp;        if (availableGods.contains(GodName.TRITON)) {</b>
+<b class="nc"><i>214</i>&nbsp;            Triton.setEffect(new DropShadow());</b>
+<b class="nc"><i>215</i>&nbsp;            godPower.setText(&quot;Triton - Each time your Worker moves onto a perimeter space (ground or block), it may immediately move again.&quot;);</b>
+<i>216</i>&nbsp;        }
+<i>217</i>&nbsp;        else
+<b class="nc"><i>218</i>&nbsp;            Triton.setEffect(new Shadow());</b>
+<i>219</i>&nbsp;    }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    @FXML
+<i>222</i>&nbsp;    void onZeus(MouseEvent event) {
+<b class="nc"><i>223</i>&nbsp;        if (availableGods.contains(GodName.ZEUS)) {</b>
+<b class="nc"><i>224</i>&nbsp;            Zeus.setEffect(new DropShadow());</b>
+<b class="nc"><i>225</i>&nbsp;            godPower.setText(&quot;Zeus - your Worker may build under itself in its current space, forcing it up one level. You do not win by forcing yourself up the 3rd level.&quot;);</b>
+<i>226</i>&nbsp;        }
+<i>227</i>&nbsp;        else
+<b class="nc"><i>228</i>&nbsp;            Zeus.setEffect(new Shadow());</b>
+<i>229</i>&nbsp;    }
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;    @FXML
+<i>232</i>&nbsp;    void selectApollo(MouseEvent event) {
+<b class="nc"><i>233</i>&nbsp;        if (availableGods.contains(GodName.APOLLO)) {</b>
+<b class="nc"><i>234</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>235</i>&nbsp;            visitableGod.setGodName(GodName.APOLLO);</b>
+<b class="nc"><i>236</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>237</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>238</i>&nbsp;            networkHandler.startGame();</b>
+<i>239</i>&nbsp;        }
+<i>240</i>&nbsp;    }
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;    @FXML
+<i>243</i>&nbsp;    void selectArtemis(MouseEvent event) {
+<b class="nc"><i>244</i>&nbsp;        if (availableGods.contains(GodName.ARTEMIS)) {</b>
+<b class="nc"><i>245</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>246</i>&nbsp;            visitableGod.setGodName(GodName.ARTEMIS);</b>
+<b class="nc"><i>247</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>248</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>249</i>&nbsp;            networkHandler.startGame();</b>
+<i>250</i>&nbsp;        }
+<i>251</i>&nbsp;    }
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;    @FXML
+<i>254</i>&nbsp;    void selectAthena(MouseEvent event) {
+<b class="nc"><i>255</i>&nbsp;        if (availableGods.contains(GodName.ATHENA)) {</b>
+<b class="nc"><i>256</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>257</i>&nbsp;            visitableGod.setGodName(GodName.ATHENA);</b>
+<b class="nc"><i>258</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>259</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>260</i>&nbsp;            networkHandler.startGame();</b>
+<i>261</i>&nbsp;        }
+<i>262</i>&nbsp;    }
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;    @FXML
+<i>265</i>&nbsp;    void selectAtlas(MouseEvent event) {
+<b class="nc"><i>266</i>&nbsp;        if (availableGods.contains(GodName.ATLAS)) {</b>
+<b class="nc"><i>267</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>268</i>&nbsp;            visitableGod.setGodName(GodName.ATLAS);</b>
+<b class="nc"><i>269</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>270</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>271</i>&nbsp;            networkHandler.startGame();</b>
+<i>272</i>&nbsp;        }
+<i>273</i>&nbsp;    }
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    @FXML
+<i>276</i>&nbsp;    void selectChronus(MouseEvent event) {
+<b class="nc"><i>277</i>&nbsp;        if (availableGods.contains(GodName.CHRONUS)) {</b>
+<b class="nc"><i>278</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>279</i>&nbsp;            visitableGod.setGodName(GodName.CHRONUS);</b>
+<b class="nc"><i>280</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>281</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>282</i>&nbsp;            networkHandler.startGame();</b>
+<i>283</i>&nbsp;        }
+<i>284</i>&nbsp;    }
+<i>285</i>&nbsp;
+<i>286</i>&nbsp;    @FXML
+<i>287</i>&nbsp;    void selectDemeter(MouseEvent event) {
+<b class="nc"><i>288</i>&nbsp;        if (availableGods.contains(GodName.DEMETER)) {</b>
+<b class="nc"><i>289</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>290</i>&nbsp;            visitableGod.setGodName(GodName.DEMETER);</b>
+<b class="nc"><i>291</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>292</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>293</i>&nbsp;            networkHandler.startGame();</b>
+<i>294</i>&nbsp;        }
+<i>295</i>&nbsp;    }
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;    @FXML
+<i>298</i>&nbsp;    void selectHephaestus(MouseEvent event) {
+<b class="nc"><i>299</i>&nbsp;        if (availableGods.contains(GodName.HEPHAESTUS)) {</b>
+<b class="nc"><i>300</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>301</i>&nbsp;            visitableGod.setGodName(GodName.HEPHAESTUS);</b>
+<b class="nc"><i>302</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>303</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>304</i>&nbsp;            networkHandler.startGame();</b>
+<i>305</i>&nbsp;        }
+<i>306</i>&nbsp;    }
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;    @FXML
+<i>309</i>&nbsp;    void selectHera(MouseEvent event) {
+<b class="nc"><i>310</i>&nbsp;        if (availableGods.contains(GodName.HERA)) {</b>
+<b class="nc"><i>311</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>312</i>&nbsp;            visitableGod.setGodName(GodName.HERA);</b>
+<b class="nc"><i>313</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>314</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>315</i>&nbsp;            networkHandler.startGame();</b>
+<i>316</i>&nbsp;        }
+<i>317</i>&nbsp;    }
+<i>318</i>&nbsp;
+<i>319</i>&nbsp;    @FXML
+<i>320</i>&nbsp;    void selectHestia(MouseEvent event) {
+<b class="nc"><i>321</i>&nbsp;        if (availableGods.contains(GodName.HESTIA)) {</b>
+<b class="nc"><i>322</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>323</i>&nbsp;            visitableGod.setGodName(GodName.HESTIA);</b>
+<b class="nc"><i>324</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>325</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>326</i>&nbsp;            networkHandler.startGame();</b>
+<i>327</i>&nbsp;        }
+<i>328</i>&nbsp;    }
+<i>329</i>&nbsp;
+<i>330</i>&nbsp;    @FXML
+<i>331</i>&nbsp;    void selectMinotaur(MouseEvent event) {
+<b class="nc"><i>332</i>&nbsp;        if (availableGods.contains(GodName.MINOTAUR)) {</b>
+<b class="nc"><i>333</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>334</i>&nbsp;            visitableGod.setGodName(GodName.MINOTAUR);</b>
+<b class="nc"><i>335</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>336</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>337</i>&nbsp;            networkHandler.startGame();</b>
+<i>338</i>&nbsp;        }
+<i>339</i>&nbsp;    }
+<i>340</i>&nbsp;
+<i>341</i>&nbsp;    @FXML
+<i>342</i>&nbsp;    void selectPan(MouseEvent event) {
+<b class="nc"><i>343</i>&nbsp;        if (availableGods.contains(GodName.PAN)) {</b>
+<b class="nc"><i>344</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>345</i>&nbsp;            visitableGod.setGodName(GodName.PAN);</b>
+<b class="nc"><i>346</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>347</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>348</i>&nbsp;            networkHandler.startGame();</b>
+<i>349</i>&nbsp;        }
+<i>350</i>&nbsp;    }
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;    @FXML
+<i>353</i>&nbsp;    void selectPrometheus(MouseEvent event) {
+<b class="nc"><i>354</i>&nbsp;        if (availableGods.contains(GodName.PROMETHEUS)) {</b>
+<b class="nc"><i>355</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>356</i>&nbsp;            visitableGod.setGodName(GodName.PROMETHEUS);</b>
+<b class="nc"><i>357</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>358</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>359</i>&nbsp;            networkHandler.startGame();</b>
+<i>360</i>&nbsp;        }
+<i>361</i>&nbsp;    }
+<i>362</i>&nbsp;
+<i>363</i>&nbsp;    @FXML
+<i>364</i>&nbsp;    void selectTriton(MouseEvent event) {
+<b class="nc"><i>365</i>&nbsp;        if (availableGods.contains(GodName.TRITON)) {</b>
+<b class="nc"><i>366</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>367</i>&nbsp;            visitableGod.setGodName(GodName.TRITON);</b>
+<b class="nc"><i>368</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>369</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>370</i>&nbsp;            networkHandler.startGame();</b>
+<i>371</i>&nbsp;        }
+<i>372</i>&nbsp;    }
+<i>373</i>&nbsp;
+<i>374</i>&nbsp;    @FXML
+<i>375</i>&nbsp;    void selectZeus(MouseEvent event) {
+<b class="nc"><i>376</i>&nbsp;        if (availableGods.contains(GodName.ZEUS)) {</b>
+<b class="nc"><i>377</i>&nbsp;            VisitableGod visitableGod = new VisitableGod();</b>
+<b class="nc"><i>378</i>&nbsp;            visitableGod.setGodName(GodName.ZEUS);</b>
+<b class="nc"><i>379</i>&nbsp;            notifyViewListener(visitableGod);</b>
+<b class="nc"><i>380</i>&nbsp;            disableAll();</b>
+<b class="nc"><i>381</i>&nbsp;            networkHandler.startGame();</b>
+<i>382</i>&nbsp;        }
+<i>383</i>&nbsp;    }
+<i>384</i>&nbsp;
+<i>385</i>&nbsp;
+<i>386</i>&nbsp;    void setAvailableGods(ArrayList&lt;GodName&gt; availableGods) {
+<b class="nc"><i>387</i>&nbsp;        this.availableGods = availableGods;</b>
+<i>388</i>&nbsp;    }
+<i>389</i>&nbsp;
+<i>390</i>&nbsp;    void disableAll() {
+<b class="nc"><i>391</i>&nbsp;        Apollo.setDisable(true);</b>
+<b class="nc"><i>392</i>&nbsp;        Artemis.setDisable(true);</b>
+<b class="nc"><i>393</i>&nbsp;        Athena.setDisable(true);</b>
+<b class="nc"><i>394</i>&nbsp;        Atlas.setDisable(true);</b>
+<b class="nc"><i>395</i>&nbsp;        Chronus.setDisable(true);</b>
+<b class="nc"><i>396</i>&nbsp;        Demeter.setDisable(true);</b>
+<b class="nc"><i>397</i>&nbsp;        Hephaestus.setDisable(true);</b>
+<b class="nc"><i>398</i>&nbsp;        Hera.setDisable(true);</b>
+<b class="nc"><i>399</i>&nbsp;        Hestia.setDisable(true);</b>
+<b class="nc"><i>400</i>&nbsp;        Minotaur.setDisable(true);</b>
+<b class="nc"><i>401</i>&nbsp;        Pan.setDisable(true);</b>
+<b class="nc"><i>402</i>&nbsp;        Prometheus.setDisable(true);</b>
+<b class="nc"><i>403</i>&nbsp;        Triton.setDisable(true);</b>
+<b class="nc"><i>404</i>&nbsp;        Zeus.setDisable(true);</b>
+<i>405</i>&nbsp;    }
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;
+<i>408</i>&nbsp;    public void setNetworkHandler(NetworkHandler networkHandler) {
+<b class="nc"><i>409</i>&nbsp;        this.networkHandler = networkHandler;</b>
+<i>410</i>&nbsp;    }
+<i>411</i>&nbsp;
+<i>412</i>&nbsp;
+<i>413</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 12:19</div>
+</div>
+</body>
+</html>

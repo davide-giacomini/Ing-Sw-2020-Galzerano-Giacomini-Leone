@@ -1,0 +1,407 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Server</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Server</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Server (it.polimi.ingsw.PSP47.Network.Server)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Server</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 111)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Server$PlayerParameters</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 115)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Server;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Controller.GameController;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Color;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Board;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Message.FirstConnection;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Message.RequestPlayersNumber;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableInt;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.io.IOException;
+<i>13</i>&nbsp;import java.net.ServerSocket;
+<i>14</i>&nbsp;import java.net.Socket;
+<i>15</i>&nbsp;import java.util.ArrayList;
+<i>16</i>&nbsp;import java.util.HashMap;
+<i>17</i>&nbsp;import java.util.Iterator;
+<i>18</i>&nbsp;import java.util.Map;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * This class wait for connections with clients and handles connections and disconnections, creating or deleting
+<i>22</i>&nbsp; * the game.
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;public class Server implements ClientHandlerListener {
+<i>25</i>&nbsp;    /**
+<i>26</i>&nbsp;     * This class is a tuple with a username and a color.
+<i>27</i>&nbsp;     */
+<b class="nc"><i>28</i>&nbsp;    private class PlayerParameters {</b>
+<i>29</i>&nbsp;        private final String username;
+<i>30</i>&nbsp;        private final Color color;
+<i>31</i>&nbsp;        
+<b class="nc"><i>32</i>&nbsp;        private PlayerParameters(String username, Color color) {</b>
+<b class="nc"><i>33</i>&nbsp;            this.username = username;</b>
+<b class="nc"><i>34</i>&nbsp;            this.color = color;</b>
+<i>35</i>&nbsp;        }
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;    
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * The socket&#39;s port to connect to from the client.
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    public final static int SOCKET_PORT = 7777;
+<i>42</i>&nbsp;    private final ServerSocket serverSocket;
+<b class="nc"><i>43</i>&nbsp;    private volatile boolean firstPlayerConnected = false;</b>
+<b class="nc"><i>44</i>&nbsp;    private volatile boolean gameStarted = false;</b>
+<b class="nc"><i>45</i>&nbsp;    private int maxPlayersNumber = -1;</b>
+<i>46</i>&nbsp;    private ClientHandler firstClientHandler;
+<b class="nc"><i>47</i>&nbsp;    private final ArrayList&lt;ClientHandler&gt; clientHandlers = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>48</i>&nbsp;    private final Map&lt;ClientHandler, PlayerParameters&gt; connectionsAccepted = new HashMap&lt;&gt;();</b>
+<i>49</i>&nbsp;    private GameController gameController;
+<i>50</i>&nbsp;    
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * It creates the server socket to connect with the clients.
+<i>53</i>&nbsp;     *
+<i>54</i>&nbsp;     * @throws IOException if the {@link #serverSocket} can&#39;t be created.
+<i>55</i>&nbsp;     */
+<b class="nc"><i>56</i>&nbsp;    public Server() throws IOException {</b>
+<b class="nc"><i>57</i>&nbsp;        this.serverSocket = new ServerSocket(SOCKET_PORT);</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;    
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * This method listens to new connections to the server.
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    public void listen() {
+<i>64</i>&nbsp;        while (true) {
+<i>65</i>&nbsp;            try {
+<b class="nc"><i>66</i>&nbsp;                Socket clientSocket = serverSocket.accept();</b>
+<b class="nc"><i>67</i>&nbsp;                synchronized (this) {</b>
+<b class="nc"><i>68</i>&nbsp;                    ClientHandler clientHandler = new ClientHandler(clientSocket, gameStarted);</b>
+<b class="nc"><i>69</i>&nbsp;                    clientHandlers.add(clientHandler);</b>
+<b class="nc"><i>70</i>&nbsp;                    clientHandler.addClientHandlerListener(this);</b>
+<b class="nc"><i>71</i>&nbsp;                    new Thread(clientHandler).start();</b>
+<b class="nc"><i>72</i>&nbsp;                }</b>
+<i>73</i>&nbsp;                
+<b class="nc"><i>74</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>75</i>&nbsp;                System.out.println(&quot;Connection Error!&quot;);</b>
+<b class="nc"><i>76</i>&nbsp;            }</b>
+<i>77</i>&nbsp;        }
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;    
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * This method handles the first connection of each player. The players are added to the game&#39;s queue to wait for
+<i>82</i>&nbsp;     * the creation of the game.
+<i>83</i>&nbsp;     *
+<i>84</i>&nbsp;     * @param message it contains the username and the color chosen by the player.
+<i>85</i>&nbsp;     * @param clientHandler the handler of the client connected to the server.
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    @Override
+<i>88</i>&nbsp;    public synchronized void handleFirstConnection(FirstConnection message, ClientHandler clientHandler) {
+<b class="nc"><i>89</i>&nbsp;        VisitableInformation firstConnectionMessage = (VisitableInformation) message.getContent();</b>
+<b class="nc"><i>90</i>&nbsp;        String username = firstConnectionMessage.getUsername();</b>
+<b class="nc"><i>91</i>&nbsp;        Color color = firstConnectionMessage.getColor();</b>
+<i>92</i>&nbsp;        
+<i>93</i>&nbsp;        // If the first player isn&#39;t connected yet, you become the first player
+<b class="nc"><i>94</i>&nbsp;        if (!firstPlayerConnected) {</b>
+<b class="nc"><i>95</i>&nbsp;            firstPlayerConnected = true;</b>
+<b class="nc"><i>96</i>&nbsp;            firstClientHandler = clientHandler;</b>
+<b class="nc"><i>97</i>&nbsp;            connectionsAccepted.put(clientHandler, new PlayerParameters(username, color));</b>
+<b class="nc"><i>98</i>&nbsp;            clientHandlers.remove(clientHandler);</b>
+<b class="nc"><i>99</i>&nbsp;            clientHandler.sendConnectionAccepted(username, color);</b>
+<b class="nc"><i>100</i>&nbsp;            clientHandler.askMaxPlayersNumber();</b>
+<i>101</i>&nbsp;            return;
+<i>102</i>&nbsp;        }
+<i>103</i>&nbsp;        // If the first player is already connected and they didn&#39;t choose a max number of player, you have to wait.
+<b class="nc"><i>104</i>&nbsp;        if (maxPlayersNumber &lt; 0) {</b>
+<b class="nc"><i>105</i>&nbsp;            clientHandler.warnFirstPlayerIsChoosing();</b>
+<i>106</i>&nbsp;            
+<b class="nc"><i>107</i>&nbsp;            while (maxPlayersNumber &lt; 0) {</b>
+<i>108</i>&nbsp;                try {
+<b class="nc"><i>109</i>&nbsp;                    wait();</b>
+<b class="nc"><i>110</i>&nbsp;                } catch (InterruptedException e) {</b>
+<b class="nc"><i>111</i>&nbsp;                    e.printStackTrace();</b>
+<b class="nc"><i>112</i>&nbsp;                }</b>
+<i>113</i>&nbsp;            }
+<i>114</i>&nbsp;            
+<i>115</i>&nbsp;            // If the first player is no more connected, the game is corrupted and it closes.
+<b class="nc"><i>116</i>&nbsp;            if (!firstPlayerConnected) {</b>
+<b class="nc"><i>117</i>&nbsp;                clientHandler.notifyFirstClientDisconnected();</b>
+<b class="nc"><i>118</i>&nbsp;                notifyAll();</b>
+<i>119</i>&nbsp;                return;
+<i>120</i>&nbsp;            }
+<i>121</i>&nbsp;            // If the game is already started, you are out.
+<b class="nc"><i>122</i>&nbsp;            if (gameStarted) {</b>
+<b class="nc"><i>123</i>&nbsp;                clientHandler.notifyGameStartedWithoutYou();</b>
+<b class="nc"><i>124</i>&nbsp;                notifyAll();</b>
+<i>125</i>&nbsp;                return;
+<i>126</i>&nbsp;            }
+<i>127</i>&nbsp;        }
+<i>128</i>&nbsp;    
+<i>129</i>&nbsp;        // It checks if your color and username are corrected.
+<i>130</i>&nbsp;        String wrongParameter;
+<b class="nc"><i>131</i>&nbsp;        if ((wrongParameter = checkParameters(username, color)) != null) {</b>
+<b class="nc"><i>132</i>&nbsp;            clientHandler.askAgainParameters(wrongParameter);</b>
+<b class="nc"><i>133</i>&nbsp;            notifyAll();</b>
+<i>134</i>&nbsp;            return;
+<i>135</i>&nbsp;        }
+<i>136</i>&nbsp;        
+<i>137</i>&nbsp;        // At this point you can enter the game and wait for other players
+<b class="nc"><i>138</i>&nbsp;        connectionsAccepted.put(clientHandler, new PlayerParameters(username, color));</b>
+<b class="nc"><i>139</i>&nbsp;        clientHandler.sendConnectionAccepted(username, color);</b>
+<b class="nc"><i>140</i>&nbsp;        clientHandlers.remove(clientHandler);</b>
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;        
+<i>143</i>&nbsp;        // With enough players, the game starts.
+<b class="nc"><i>144</i>&nbsp;        if (connectionsAccepted.size() == maxPlayersNumber)</b>
+<b class="nc"><i>145</i>&nbsp;            initGame();</b>
+<i>146</i>&nbsp;        
+<b class="nc"><i>147</i>&nbsp;        notifyAll();</b>
+<i>148</i>&nbsp;    }
+<i>149</i>&nbsp;    
+<i>150</i>&nbsp;    /**
+<i>151</i>&nbsp;     * This message sets the max number of players chosen by the first player.
+<i>152</i>&nbsp;     * @param message it contains the max number of players.
+<i>153</i>&nbsp;     */
+<i>154</i>&nbsp;    @Override
+<i>155</i>&nbsp;    public synchronized void setPlayersNumber(RequestPlayersNumber message) {
+<b class="nc"><i>156</i>&nbsp;        maxPlayersNumber = ((VisitableInt) message.getContent()).getNumber();</b>
+<i>157</i>&nbsp;        
+<b class="nc"><i>158</i>&nbsp;        notifyAll();</b>
+<i>159</i>&nbsp;    }
+<i>160</i>&nbsp;    
+<i>161</i>&nbsp;    /**
+<i>162</i>&nbsp;     * It handles an illegal disconnection of a client. Illegal means that the client disconnects after being
+<i>163</i>&nbsp;     * added to the game&#39;s players but when the game isn&#39;t finished yet.
+<i>164</i>&nbsp;     * The server, with this method, takes care of notifying and deleting all the other players, if necessary.
+<i>165</i>&nbsp;     *
+<i>166</i>&nbsp;     * @param clientHandler the client who disconnected.
+<i>167</i>&nbsp;     */
+<i>168</i>&nbsp;    @Override
+<i>169</i>&nbsp;    public synchronized void handleDisconnection(ClientHandler clientHandler) {
+<i>170</i>&nbsp;        // If the clientHandler isn&#39;t in the game yet
+<b class="nc"><i>171</i>&nbsp;        if (!connectionsAccepted.containsKey(clientHandler)) {</b>
+<b class="nc"><i>172</i>&nbsp;            clientHandlers.remove(clientHandler);</b>
+<i>173</i>&nbsp;        }
+<i>174</i>&nbsp;        // If the clientHandler is the first and the game is not started yet, the game is reset and others players
+<i>175</i>&nbsp;        // are notified. A message of the dropped connection of the first client will be sent to them.
+<b class="nc"><i>176</i>&nbsp;        else if (!gameStarted &amp;&amp; clientHandler.equals(firstClientHandler)) {</b>
+<b class="nc"><i>177</i>&nbsp;            String username = connectionsAccepted.get(clientHandler).username;</b>
+<b class="nc"><i>178</i>&nbsp;            connectionsAccepted.remove(clientHandler);</b>
+<i>179</i>&nbsp;            
+<b class="nc"><i>180</i>&nbsp;            for (ClientHandler client : connectionsAccepted.keySet()) {</b>
+<b class="nc"><i>181</i>&nbsp;                client.notifyOpponentClientDisconnected(username);</b>
+<b class="nc"><i>182</i>&nbsp;            }</b>
+<i>183</i>&nbsp;            
+<b class="nc"><i>184</i>&nbsp;            cleanServer();</b>
+<b class="nc"><i>185</i>&nbsp;            notifyAll();</b>
+<b class="nc"><i>186</i>&nbsp;        }</b>
+<i>187</i>&nbsp;        // If clientHandler is in the connections accepted, they are not the first clientHandler and the game is not
+<i>188</i>&nbsp;        // started yet, this clientHandler can exit silently, without affecting other players.
+<b class="nc"><i>189</i>&nbsp;        else if (!gameStarted) {</b>
+<b class="nc"><i>190</i>&nbsp;            connectionsAccepted.remove(clientHandler);</b>
+<i>191</i>&nbsp;        }
+<i>192</i>&nbsp;        // If the game is started and you are among the connected players.
+<i>193</i>&nbsp;        else {
+<b class="nc"><i>194</i>&nbsp;            String username = connectionsAccepted.get(clientHandler).username;</b>
+<b class="nc"><i>195</i>&nbsp;            connectionsAccepted.remove(clientHandler);</b>
+<i>196</i>&nbsp;    
+<i>197</i>&nbsp;            // The iteration is in this way because, otherwise, a remove inside a for loop gives troubles.
+<b class="nc"><i>198</i>&nbsp;            while (connectionsAccepted.size()!=0) {</b>
+<b class="nc"><i>199</i>&nbsp;                Iterator&lt;ClientHandler&gt; iterator = connectionsAccepted.keySet().iterator();</b>
+<b class="nc"><i>200</i>&nbsp;                ClientHandler client = iterator.next();</b>
+<b class="nc"><i>201</i>&nbsp;                connectionsAccepted.remove(client);</b>
+<b class="nc"><i>202</i>&nbsp;                client.notifyOpponentClientDisconnected(username);</b>
+<b class="nc"><i>203</i>&nbsp;            }</b>
+<i>204</i>&nbsp;            
+<b class="nc"><i>205</i>&nbsp;            cleanServer();</b>
+<i>206</i>&nbsp;        }
+<i>207</i>&nbsp;    }
+<i>208</i>&nbsp;    
+<i>209</i>&nbsp;    /**
+<i>210</i>&nbsp;     * This methods deletes the clients from the game, because one of them won.
+<i>211</i>&nbsp;     */
+<i>212</i>&nbsp;    @Override
+<i>213</i>&nbsp;    public synchronized void handleWinning() {
+<i>214</i>&nbsp;        // The iteration is in this way because, otherwise, a remove inside a for loop gives troubles.
+<b class="nc"><i>215</i>&nbsp;        while (connectionsAccepted.size()!=0) {</b>
+<b class="nc"><i>216</i>&nbsp;            Iterator&lt;ClientHandler&gt; iterator = connectionsAccepted.keySet().iterator();</b>
+<b class="nc"><i>217</i>&nbsp;            ClientHandler client = iterator.next();</b>
+<b class="nc"><i>218</i>&nbsp;            connectionsAccepted.remove(client);</b>
+<b class="nc"><i>219</i>&nbsp;            client.endConnection();</b>
+<b class="nc"><i>220</i>&nbsp;        }</b>
+<i>221</i>&nbsp;        
+<b class="nc"><i>222</i>&nbsp;        cleanServer();</b>
+<i>223</i>&nbsp;    }
+<i>224</i>&nbsp;    
+<i>225</i>&nbsp;    /**
+<i>226</i>&nbsp;     * This method deletes the loosing client.
+<i>227</i>&nbsp;     *
+<i>228</i>&nbsp;     * @param clientHandler the client who lost.
+<i>229</i>&nbsp;     */
+<i>230</i>&nbsp;    @Override
+<i>231</i>&nbsp;    public synchronized void handleLoosing(ClientHandler clientHandler) {
+<b class="nc"><i>232</i>&nbsp;        connectionsAccepted.remove(clientHandler);</b>
+<i>233</i>&nbsp;        
+<b class="nc"><i>234</i>&nbsp;        if (connectionsAccepted.size()==0)</b>
+<b class="nc"><i>235</i>&nbsp;            cleanServer();</b>
+<i>236</i>&nbsp;    }
+<i>237</i>&nbsp;    
+<i>238</i>&nbsp;    /**
+<i>239</i>&nbsp;     * It cleans the server.
+<i>240</i>&nbsp;     */
+<i>241</i>&nbsp;    private void cleanServer(){
+<b class="nc"><i>242</i>&nbsp;        maxPlayersNumber = -1;</b>
+<b class="nc"><i>243</i>&nbsp;        firstClientHandler = null;</b>
+<b class="nc"><i>244</i>&nbsp;        firstPlayerConnected = false;</b>
+<b class="nc"><i>245</i>&nbsp;        gameStarted = false;</b>
+<i>246</i>&nbsp;    }
+<i>247</i>&nbsp;    
+<i>248</i>&nbsp;    /**
+<i>249</i>&nbsp;     * It checks if the username and the color chosen by the client are different by the ones chosen by the others.
+<i>250</i>&nbsp;     *
+<i>251</i>&nbsp;     * @param username player&#39;s username.
+<i>252</i>&nbsp;     * @param color player&#39;s color.
+<i>253</i>&nbsp;     * @return what is equal to the others players. If username and color are different it returns null. Indeed, a
+<i>254</i>&nbsp;     * null return means that the client can play with these parameters.
+<i>255</i>&nbsp;     */
+<i>256</i>&nbsp;    private String checkParameters(String username, Color color) {
+<i>257</i>&nbsp;        PlayerParameters opponentsParameters;
+<i>258</i>&nbsp;    
+<b class="nc"><i>259</i>&nbsp;        for (ClientHandler clientHandler : connectionsAccepted.keySet()) {</b>
+<b class="nc"><i>260</i>&nbsp;            opponentsParameters = connectionsAccepted.get(clientHandler);</b>
+<i>261</i>&nbsp;        
+<b class="nc"><i>262</i>&nbsp;            if (opponentsParameters.username.equals(username) &amp;&amp; opponentsParameters.color.equals(color))</b>
+<b class="nc"><i>263</i>&nbsp;                return &quot;username and color&quot;;</b>
+<b class="nc"><i>264</i>&nbsp;            if (opponentsParameters.username.equals(username))</b>
+<b class="nc"><i>265</i>&nbsp;                return &quot;username&quot;;</b>
+<b class="nc"><i>266</i>&nbsp;            if (opponentsParameters.color.equals(color))</b>
+<b class="nc"><i>267</i>&nbsp;                return &quot;color&quot;;</b>
+<b class="nc"><i>268</i>&nbsp;        }</b>
+<i>269</i>&nbsp;        
+<b class="nc"><i>270</i>&nbsp;        return null;</b>
+<i>271</i>&nbsp;    }
+<i>272</i>&nbsp;    
+<i>273</i>&nbsp;    /**
+<i>274</i>&nbsp;     * It starts the game and sets {@link #gameStarted} = true, notifying all the players waiting inside
+<i>275</i>&nbsp;     * {@link #handleFirstConnection}.
+<i>276</i>&nbsp;     */
+<i>277</i>&nbsp;    private void initGame() {
+<i>278</i>&nbsp;        // These maps have to be passed to the gameController.
+<b class="nc"><i>279</i>&nbsp;        HashMap&lt;String,Color&gt; mapUserColor = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>280</i>&nbsp;        HashMap&lt;String, VirtualView&gt; mapUserVirtualView = new HashMap&lt;&gt;();</b>
+<i>281</i>&nbsp;        
+<b class="nc"><i>282</i>&nbsp;        for (ClientHandler clientHandler : connectionsAccepted.keySet()){</b>
+<b class="nc"><i>283</i>&nbsp;            PlayerParameters clientHandlerParameters = connectionsAccepted.get(clientHandler);</b>
+<b class="nc"><i>284</i>&nbsp;            String username = clientHandlerParameters.username;</b>
+<b class="nc"><i>285</i>&nbsp;            Color color = clientHandlerParameters.color;</b>
+<b class="nc"><i>286</i>&nbsp;            VirtualView virtualView = clientHandler.createVirtualView(username, color);</b>
+<i>287</i>&nbsp;            
+<b class="nc"><i>288</i>&nbsp;            mapUserColor.put(username, color);</b>
+<b class="nc"><i>289</i>&nbsp;            mapUserVirtualView.put(username, virtualView);</b>
+<b class="nc"><i>290</i>&nbsp;        }</b>
+<i>291</i>&nbsp;        
+<b class="nc"><i>292</i>&nbsp;        System.out.println(&quot;Game started.&quot;);</b>
+<b class="nc"><i>293</i>&nbsp;        gameStarted = true;</b>
+<b class="nc"><i>294</i>&nbsp;        gameController = new GameController(maxPlayersNumber, mapUserColor, mapUserVirtualView);</b>
+<i>295</i>&nbsp;        
+<b class="nc"><i>296</i>&nbsp;        notifyAll();</b>
+<i>297</i>&nbsp;    }
+<i>298</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 12:19</div>
+</div>
+</body>
+</html>

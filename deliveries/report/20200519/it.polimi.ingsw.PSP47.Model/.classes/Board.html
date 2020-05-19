@@ -1,0 +1,217 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Board</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Board (it.polimi.ingsw.PSP47.Model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Board</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/ 28)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Board$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (29/ 29)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Direction;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Level;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * This class represents the model of the board of the game, with inside it 25 slots, each one represented by the class
+<i>9</i>&nbsp; * {@link Slot}.
+<i>10</i>&nbsp; * The board can be instanced only one time, hence it&#39;s a thread-safe singleton.
+<i>11</i>&nbsp; */
+<i>12</i>&nbsp;public class Board {
+<i>13</i>&nbsp;    /**
+<i>14</i>&nbsp;     * Number of rows of the board.
+<i>15</i>&nbsp;     */
+<i>16</i>&nbsp;    public final static int ROWS_NUMBER = 5;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * Number of columns of the board
+<i>19</i>&nbsp;     */
+<i>20</i>&nbsp;    public final static int COLUMNS_NUMBER = 5;
+<b class="fc"><i>21</i>&nbsp;    private final Slot[][] slots = new Slot[5][5];</b>
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * Counter used for counting the number of domes built
+<i>25</i>&nbsp;     */
+<b class="fc"><i>26</i>&nbsp;    private int countDomes = 0;</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * Create the slots inside the board.
+<i>30</i>&nbsp;     */
+<b class="fc"><i>31</i>&nbsp;    Board() {</b>
+<b class="fc"><i>32</i>&nbsp;        for (int i = 0; i &lt; ROWS_NUMBER; i++) {</b>
+<b class="fc"><i>33</i>&nbsp;            for (int j = 0; j &lt; COLUMNS_NUMBER; j++) {</b>
+<b class="fc"><i>34</i>&nbsp;                slots[i][j] = new Slot(i,j);</b>
+<i>35</i>&nbsp;            }
+<i>36</i>&nbsp;        }
+<b class="fc"><i>37</i>&nbsp;    }</b>
+<i>38</i>&nbsp;    /*private static Board createBoard(){
+<i>39</i>&nbsp;        if (board==null) board = new Board();
+<i>40</i>&nbsp;        return board;
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;    
+<i>43</i>&nbsp;    public static Board getBoard() {
+<i>44</i>&nbsp;        if (board==null) createBoard();
+<i>45</i>&nbsp;        return board;
+<i>46</i>&nbsp;    }*/
+<i>47</i>&nbsp;    
+<i>48</i>&nbsp;    public Slot getSlot(int row, int column) {
+<b class="fc"><i>49</i>&nbsp;        return slots[row][column];</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;    
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     * This method return the slot nearby the slot you pass, in the direction which you specify.
+<i>54</i>&nbsp;     *
+<i>55</i>&nbsp;     * @param direction specifies which next slot you want to get
+<i>56</i>&nbsp;     * @param currentSlot you want to get the slot nearby this parameter
+<i>57</i>&nbsp;     * @return the slot nearby the current slot, in the direction specified
+<i>58</i>&nbsp;     * @throws InvalidDirectionException if none of the cases are verified.
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    public Slot getNearbySlot(Direction direction, Slot currentSlot) throws InvalidDirectionException {
+<b class="fc"><i>61</i>&nbsp;        switch (direction){</b>
+<i>62</i>&nbsp;            case LEFT:
+<b class="fc"><i>63</i>&nbsp;                return slots[currentSlot.getRow()][currentSlot.getColumn()-1];</b>
+<i>64</i>&nbsp;            case UP:
+<b class="fc"><i>65</i>&nbsp;                return slots[currentSlot.getRow()-1][currentSlot.getColumn()];</b>
+<i>66</i>&nbsp;            case DOWN:
+<b class="fc"><i>67</i>&nbsp;                return slots[currentSlot.getRow()+1][currentSlot.getColumn()];</b>
+<i>68</i>&nbsp;            case RIGHT:
+<b class="fc"><i>69</i>&nbsp;                return slots[currentSlot.getRow()][currentSlot.getColumn()+1];</b>
+<i>70</i>&nbsp;            case LEFTUP:
+<b class="fc"><i>71</i>&nbsp;                return slots[currentSlot.getRow()-1][currentSlot.getColumn()-1];</b>
+<i>72</i>&nbsp;            case RIGHTUP:
+<b class="fc"><i>73</i>&nbsp;                return slots[currentSlot.getRow()-1][currentSlot.getColumn()+1];</b>
+<i>74</i>&nbsp;            case LEFTDOWN:
+<b class="fc"><i>75</i>&nbsp;                return slots[currentSlot.getRow()+1][currentSlot.getColumn()-1];</b>
+<i>76</i>&nbsp;            case RIGHTDOWN:
+<b class="fc"><i>77</i>&nbsp;                return slots[currentSlot.getRow()+1][currentSlot.getColumn()+1];</b>
+<i>78</i>&nbsp;            case HERE:
+<b class="fc"><i>79</i>&nbsp;                return currentSlot;</b>
+<i>80</i>&nbsp;            default:
+<b class="fc"><i>81</i>&nbsp;                throw new InvalidDirectionException();</b>
+<i>82</i>&nbsp;        }
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;    
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * This method sets everything in the board null.
+<i>87</i>&nbsp;     * It&#39;s useful for testing.
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    public void clearBoard() {
+<b class="fc"><i>90</i>&nbsp;        for (int i = 0; i &lt; ROWS_NUMBER; i++) {</b>
+<b class="fc"><i>91</i>&nbsp;            for (int j = 0; j &lt; COLUMNS_NUMBER; j++) {</b>
+<b class="fc"><i>92</i>&nbsp;                slots[i][j].removeAll();</b>
+<b class="fc"><i>93</i>&nbsp;                slots[i][j].setWorker(null);</b>
+<b class="fc"><i>94</i>&nbsp;                slots[i][j].setLevel(Level.GROUND);</b>
+<i>95</i>&nbsp;            }
+<i>96</i>&nbsp;        }
+<b class="fc"><i>97</i>&nbsp;    }</b>
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    public int getCountDomes() {
+<b class="fc"><i>100</i>&nbsp;        return countDomes;</b>
+<i>101</i>&nbsp;    }
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    public void incrementCountDomes(){
+<b class="fc"><i>104</i>&nbsp;        countDomes++;</b>
+<b class="fc"><i>105</i>&nbsp;    }</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 12:19</div>
+</div>
+</body>
+</html>
