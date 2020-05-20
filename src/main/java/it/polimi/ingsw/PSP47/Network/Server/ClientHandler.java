@@ -311,9 +311,10 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
 
     /**
      * This method send a message to the client to tell them that they are the Challenger.
+     * @param usernames the list of usernames of the players.
      */
-    void sendYouAreTheChallenger()  {
-        send(new YouAreTheChallenger());
+    void sendYouAreTheChallenger(ArrayList<String> usernames) {
+        send(new YouAreTheChallenger(usernames));
     }
 
     /**

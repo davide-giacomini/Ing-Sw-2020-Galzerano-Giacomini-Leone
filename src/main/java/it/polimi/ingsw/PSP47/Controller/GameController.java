@@ -24,6 +24,7 @@ import java.util.Random;
 public class GameController implements VirtualViewListener {
     private int numberOfPlayers;
     private Game game;
+    private String chosenPlayer;
     private ArrayList<VirtualView> views;
     private int indexOfCurrentPlayer;
     private TurnController turn;
@@ -73,7 +74,7 @@ public class GameController implements VirtualViewListener {
     }
 
     /**
-     * This method is the first method which is launched in the constructor to make start the game.
+     * This method is the first method which is launched in the constructor to make the game start.
      */
     private void startController() {
          orderViews();
@@ -81,14 +82,18 @@ public class GameController implements VirtualViewListener {
         for (VirtualView view : views) {
             view.sendNumberOfPlayers(numberOfPlayers);
         }
-         views.get(index).sendChallenger();
+        ArrayList<String> usernames = new ArrayList<>();
+        for (VirtualView view : views)
+            usernames.add(view.getUsername());
+         views.get(index).sendChallenger(usernames);
     }
 
     /**
      * Update the model with the gods that will be used in the game.
      * @param gods list of chosen gods.
      */
-    public void setGods(ArrayList<GodName> gods) {
+    public void setGods(ArrayList<GodName> gods, String chosenPlayer) {
+        this.chosenPlayer = chosenPlayer;
         game.setGods(gods);
         game.putRandomAtLastPosition();
         orderViews();
@@ -119,8 +124,11 @@ public class GameController implements VirtualViewListener {
         }
         game.getGods().remove(god);
         incrementIndex();
-        if (indexOfCurrentPlayer == 0)
-            startGame();
+        if (indexOfCurrentPlayer == 0) {
+        for (VirtualView view : views)
+            view.sendImportant(null, MessageType.START_GAME);
+        startGame();
+        }
         else {
             ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
@@ -202,11 +210,12 @@ public class GameController implements VirtualViewListener {
         }
 
     /**
-     * This method creates a random order for the turn.
+     * This method creates the order that will be follow during the game.
+     * The first player has been chosen by the Challenger, then the order remains the same.
      * It must be called at the start of the game.
      */
     private void newRoundOrder() {
-        game.createNewPlayersList();
+        game.createNewPlayersList(chosenPlayer);
         orderViews();
     }
 

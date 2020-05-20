@@ -84,6 +84,12 @@ public class TurnController {
      * @param direction the direction chosen by the player
      */
     public void executeAction(Action action, Direction direction) {
+        if (direction == Direction.WRONGDIRECTION) {
+            String textError = "You must choose a near slot";
+            views.get(indexOfCurrentPlayer).sendError(textError);
+            views.get(indexOfCurrentPlayer).sendWhichAction();
+            return;
+        }
         if (!(player.getGod().checkIfCanGoOn(player.getWorker(workerGender))) && !(player.getGod().validateEndTurn()) ) {
             player.setLoosing(true);
         }

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
 import it.polimi.ingsw.PSP47.Enumerations.Action;
-import it.polimi.ingsw.PSP47.Enumerations.Action;
 import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
@@ -106,17 +105,21 @@ public class GUI extends Application implements View {
         });
     }
 
-
-
     @Override
-    public void challengerWillChooseThreeGods() {
+    public void challengerWillChooseThreeGods(ArrayList<String> usernames) {
         Platform.runLater(() -> {
         currentScene = CurrentScene.CHOOSE_CARDS;
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
-        ChooseCardsController chooseCardsController = setLayout(scene, "/FXML/chooseCards.fxml");
+        ChallengerController chooseCardsController = setLayout(scene, "/FXML/challenger.fxml");
         chooseCardsController.addViewListener(networkHandler);
         chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());
+        chooseCardsController.setFirstPlayer(usernames.get(0));
+        chooseCardsController.setSecondPlayer(usernames.get(1));
+        if (usernames.size() == 3)
+            chooseCardsController.setThirdPlayer(usernames.get(2));
+        else
+            chooseCardsController.setThirdPlayer(null);
         });
     }
 
@@ -127,7 +130,6 @@ public class GUI extends Application implements View {
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
             ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
-            chooseCardController.setNetworkHandler(networkHandler);
             chooseCardController.addViewListener(networkHandler);
             chooseCardController.setAvailableGods(godsChosen);
 
@@ -196,28 +198,6 @@ public class GUI extends Application implements View {
 
     }
 
-
-    private String choosePath() {
-        String path = "";
-        switch (currentScene) {
-            case START:
-                path = "/FXML/startPane.fxml";
-                break;
-            case CHOOSE_PLAYERS:
-                path = "/FXML/choosePlayers.fxml";
-                break;
-            case CHOOSE_CARDS:
-                path = "/FXML/chooseCards.fxml";
-                break;
-            case CHOOSE_CARD:
-                path = "/FXML/chooseCard.fxml";
-                break;
-            case SET_WORKERS:
-                path = "/FXML/setWorkers.fxml";
-                break;
-        }
-        return path;
-    }
 
     /**
      * method imoplemented in order to display the same board but with the different slot that has just been updated from the model

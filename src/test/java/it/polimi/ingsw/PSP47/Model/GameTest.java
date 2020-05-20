@@ -125,7 +125,7 @@ public class GameTest {
         game.addPlayer(p2);
         Player p3 = new Player("David", Color.CYAN);
         game.addPlayer(p3);
-        game.createNewPlayersList();
+        game.createNewPlayersList("Ari");
         assertEquals(game.getPlayers().size(), 3);
         assertSame(player, game.getPlayer("Ari"));
         assertSame(p2, game.getPlayer("Moni"));

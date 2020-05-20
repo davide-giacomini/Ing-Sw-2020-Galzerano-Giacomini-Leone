@@ -16,6 +16,7 @@ public enum MessageType {
     ERROR,
     IMPORTANT,
     //important message in specific
+    START_GAME,
     TURN,
     WINNIG,
     LOSING,

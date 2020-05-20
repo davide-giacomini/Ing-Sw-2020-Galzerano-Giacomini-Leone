@@ -74,7 +74,7 @@ public class GameControllerTest_threePlayers {
         gods.add(GodName.PAN);
         gods.add(GodName.HERA);
         gods.add(GodName.APOLLO);
-        controller.setGods(gods);
+        controller.setGods(gods, "Arianna");
 
         for (int i=0; i<numberOfPlayers; i++) {
             assertEquals(controller.getGame().getGods().get(i), gods.get(i));
@@ -127,7 +127,7 @@ public class GameControllerTest_threePlayers {
         gods.add(GodName.ATHENA);
         gods.add(GodName.APOLLO);
         gods.add(GodName.DEMETER);
-        controller.setGods(gods);
+        controller.setGods(gods, "Arianna");
         controller.setGod(GodName.ATHENA);
         controller.setGod(GodName.DEMETER);
         controller.setGod(GodName.APOLLO);
@@ -157,7 +157,7 @@ public class GameControllerTest_threePlayers {
         gods.add(GodName.ZEUS);
         gods.add(GodName.APOLLO);
         gods.add(GodName.DEMETER);
-        controller.setGods(gods);
+        controller.setGods(gods, "Arianna");
         controller.setGod(GodName.ZEUS);
         controller.setGod(GodName.DEMETER);
         controller.setGod(GodName.APOLLO);
