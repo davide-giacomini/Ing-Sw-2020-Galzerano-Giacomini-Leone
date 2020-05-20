@@ -214,13 +214,14 @@ public class NetworkHandler implements Runnable, ViewListener {
                     break;
                 case START_GAME:
                     view.showGame();
+                    break;
                 case TURN:
                     view.othersTurn(((ImportantMessage) message).getText());
                     break;
                 case LOSING:
                     view.theLoserIs();
                     break;
-                case WINNIG:
+                case WINNING:
                     view.theWinnerIs(((ImportantMessage) message).getText());
                     break;
 
@@ -233,9 +234,11 @@ public class NetworkHandler implements Runnable, ViewListener {
      *
      * @param message the message that must be sent.
      */
-    public synchronized void send(Message message) {
+    public void send(Message message) {
         try {
-            outputServer.writeObject(message);
+            synchronized (this) {
+                outputServer.writeObject(message);
+            }
         } catch (IOException e) {
             System.out.println("Error in the serialization of " + message.toString() + " message.");
             endConnection();

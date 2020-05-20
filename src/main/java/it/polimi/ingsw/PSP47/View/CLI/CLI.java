@@ -492,7 +492,8 @@ public class CLI extends ViewObservable implements View  {
     public void askNumberOfPlayers() {
         int num ;
 
-        out.println("How many players do you want in the game? Insert a number between 2 and 3");
+        out.println("Do you want to play in a game with two or three players?\n" +
+                "Insert a number between 2 and 3: " + AnsiCode.ANSI_ENTER_KEY);
             do {
                 try {
                     num = Integer.parseInt(in.nextLine());
@@ -502,7 +503,7 @@ public class CLI extends ViewObservable implements View  {
                     num = 0;
                 }
 
-            }while (num == 0 || num < 2 || num > 3);
+            }while (num < 2 || num > 3);
 
         VisitableInt visitableNumber = new VisitableInt(num);
         notifyViewListener(visitableNumber);
