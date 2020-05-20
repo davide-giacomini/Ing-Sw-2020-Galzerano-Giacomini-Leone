@@ -52,7 +52,8 @@ public class ControllerVisitor implements Visitor {
     @Override
     public void visit(VisitableListOfGods listOfGods) {
         ArrayList<GodName> list = listOfGods.getGodNames();
-        controller.setGods(list);
+        String firstPlayer = listOfGods.getChosenPlayer();
+        controller.setGods(list, firstPlayer);
     }
 
     /**

@@ -208,9 +208,13 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.showGuiSlot(slot);
                     break;
                 case CHALLENGER:
-                    view.challengerWillChooseThreeGods();
+                    YouAreTheChallenger messageNames = (YouAreTheChallenger) message;
+                    ArrayList<String>usernames = messageNames.getUsernames();
+                    view.challengerWillChooseThreeGods(usernames);
                     break;
-                case TURN :
+                case START_GAME:
+                    view.showGame();
+                case TURN:
                     view.othersTurn(((ImportantMessage) message).getText());
                     break;
                 case LOSING:
@@ -277,8 +281,5 @@ public class NetworkHandler implements Runnable, ViewListener {
         visitableObject.accept(networkHandlerVisitor);
     }
 
-    public void startGame(){
-        view.showGame();
-    }
 }
 

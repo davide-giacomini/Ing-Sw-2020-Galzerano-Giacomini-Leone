@@ -51,9 +51,10 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
 
     /**
      * This method sends a notify who tells who is the challenger.
+     * @param usernames the list of usernames of the players.
      */
-    public void sendChallenger() {
-        clientHandler.sendYouAreTheChallenger();
+    public void sendChallenger(ArrayList<String> usernames) {
+        clientHandler.sendYouAreTheChallenger(usernames);
     }
 
     /**

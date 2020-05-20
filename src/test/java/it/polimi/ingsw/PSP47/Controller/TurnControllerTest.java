@@ -292,7 +292,7 @@ public class TurnControllerTest {
         turnController.setWorkerGender(rowAndColumn);
         turnController.executeAction(Action.MOVE, Direction.DOWN);
         turnController.executeAction(Action.BUILD, Direction.DOWN);
-        turnController.executeAction(Action.END, Direction.WRONGDIRECTION);
+        turnController.executeAction(Action.END, Direction.LEFT);
         assertEquals(0, controller.getIndexOfCurrentPlayer());
     }
 
