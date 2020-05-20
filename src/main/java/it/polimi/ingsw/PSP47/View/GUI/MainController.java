@@ -1,9 +1,6 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
-import it.polimi.ingsw.PSP47.Enumerations.Action;
-import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Enumerations.Direction;
-import it.polimi.ingsw.PSP47.Enumerations.GodName;
+import it.polimi.ingsw.PSP47.Enumerations.*;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
@@ -13,6 +10,7 @@ import it.polimi.ingsw.PSP47.Visitor.VisitableRowsAndColumns;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -22,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
@@ -169,6 +168,7 @@ public class MainController extends ViewObservable {
     @FXML
     void OnQuitClick(MouseEvent event) {
         notifyEndConnection();
+        System.exit(0);
     }
 
     /**
@@ -231,20 +231,17 @@ public class MainController extends ViewObservable {
      * @param column
      */
     private void chooseWorkerToUse(int row, int column) {
-        int i=0;
-            if ( workerRowAndColumn[i] == -1 ) {
-                workerRowAndColumn[i] = row ;
-                workerRowAndColumn[i +1] = column;
-                i=1;
-            }
-        if (i == 1) {
-            //addViewListener(networkHandler);
-            VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
-            visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);
-            notifyViewListener(visitableRowsAndColumns);
-            commandText.setText("WAIT");
-            moment = Action.WAIT;
-        }
+
+        workerRowAndColumn[0] = row ;
+        workerRowAndColumn[1] = column;
+
+        //addViewListener(networkHandler);
+        VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
+        visitableRowsAndColumns.setRowsAndColumns(workerRowAndColumn);
+        notifyViewListener(visitableRowsAndColumns);
+        commandText.setText("WAIT");
+        moment = Action.WAIT;
+
     }
 
     public void setUsernames(ArrayList<String> usernames) {
@@ -271,19 +268,40 @@ public class MainController extends ViewObservable {
      */
     public void changeSlot(Slot slot){
         Pane pane = (Pane) getNodeByRowColumnIndex(slot.getRow(), slot.getColumn(), gridPane);
-        pane.getChildren().removeAll();
+        pane.getChildren().clear();
+        VBox vbox = new VBox(4);
+        vbox.setAlignment(Pos.CENTER);
+        pane.getChildren().add(vbox);
+        vbox.prefWidthProperty().bind(pane.widthProperty());
+        vbox.prefHeightProperty().bind(pane.heightProperty());
 
+        if(slot.getLevel()== Level.LEVEL1){
+
+            Image image2 = new Image("/Images/level1_1.png");
+            ImageView im2 = new ImageView(image2);
+            im2.setPreserveRatio(true);
+            im2.fitWidthProperty().bind(pane.widthProperty());
+            im2.fitHeightProperty().bind(pane.heightProperty());
+            vbox.getChildren().add(0,im2);
+        }else if(slot.getLevel()== Level.LEVEL2){
+
+        } else if(slot.getLevel()== Level.LEVEL3){
+
+        } else if (slot.getLevel()== Level.DOME){
+
+        }
         if (slot.isWorkerOnSlot()){
             //aggiunta livelli poi worker
             //FileInputStream input = null;
             //input = getImageWorkerFromColor(slot.getWorkerColor());
             Image image = new Image(getImageWorkerFromColor(slot.getWorkerColor()));
             ImageView im1 = new ImageView(image);
-            im1.fitWidthProperty().bind(pane.widthProperty());
-            im1.fitHeightProperty().bind(pane.heightProperty());
-            pane.getChildren().add(im1);
-        }else{
-            // aggiunta livelli
+            im1.setPreserveRatio(true);
+            im1.fitWidthProperty().bind(vbox.widthProperty());
+            im1.fitHeightProperty().bind(vbox.heightProperty());
+            vbox.getChildren().add(im1);
+            workerRowAndColumn[0] = slot.getRow() ;
+            workerRowAndColumn[1] = slot.getColumn();
         }
     }
 
@@ -296,7 +314,7 @@ public class MainController extends ViewObservable {
         if(workerColor== Color.BLUE)
             return "/Images/female_blue.png";
         else if (workerColor== Color.RED)
-           return "/Images/female_cyan.png";
+           return "/Images/female_red.png";
         else if (workerColor== Color.YELLOW)
            return "/Images/female_yellow.png";
         else if (workerColor== Color.GREEN)

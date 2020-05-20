@@ -74,6 +74,8 @@ public enum Direction {
             return DOWN;
         else if (originRow-destinationRow == -1 && originColumn - destinationColumn == -1)
             return RIGHTDOWN;
+        else if (originRow-destinationRow == 1 && originColumn - destinationColumn == 0)
+            return UP;
         else
             return WRONGDIRECTION;
     }

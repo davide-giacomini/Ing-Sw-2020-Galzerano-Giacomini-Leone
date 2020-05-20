@@ -231,7 +231,9 @@ public class NetworkHandler implements Runnable, ViewListener {
      */
     public synchronized void send(Message message) {
         try {
+            outputServer.reset();
             outputServer.writeObject(message);
+            outputServer.flush();
         } catch (IOException e) {
             System.out.println("Error in the serialization of " + message.toString() + " message.");
             endConnection();

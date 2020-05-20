@@ -11,7 +11,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ConnectionToServerController">
+<?import javafx.scene.text.Text?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="bodybg" stylesheets="@../CSS/background.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ConnectionToServerController">
    <left>
       <ImageView fitHeight="400.0" fitWidth="209.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER_LEFT">
          <image>
@@ -50,11 +51,8 @@
                <children>
                   <BorderPane>
                      <center>
-                        <Label text="Enter IP address:" textFill="#006492">
-                           <font>
-                              <Font name="System Bold Italic" size="17.0" />
-                           </font>
-                        </Label>
+                        <Text text="Enter IP address:" fill="#006492">
+                        </Text>
                      </center>
                   </BorderPane>
                   <BorderPane GridPane.columnIndex="1">

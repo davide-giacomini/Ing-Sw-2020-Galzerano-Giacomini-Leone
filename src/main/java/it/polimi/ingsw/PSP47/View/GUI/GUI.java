@@ -44,7 +44,7 @@ public class GUI extends Application implements View {
         this.primaryStage = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/FXML/connectionToServer.fxml"));
-        Font.loadFont(getClass().getResourceAsStream("Fonts/savoye.ttf"), 14);
+        Font.loadFont(getClass().getResourceAsStream("Fonts/savoye.ttf"), 30);
         root = fxmlLoader.load();
         scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/CSS/background.css").toExternalForm());
@@ -60,7 +60,9 @@ public class GUI extends Application implements View {
         primaryStage.setOnCloseRequest(new EventHandler<>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                networkHandler.endConnection();
+                if(networkHandler!=null)
+                    networkHandler.endConnection();
+                System.exit(0);
             }
         });
     }
@@ -193,7 +195,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void showEnd() {
-
+        System.exit(0);
     }
 
 
