@@ -43,7 +43,6 @@ public class Game {
         this.randomPlayer = randomPlayer;
     }
 
-
     public ArrayList<Player> getPlayers() {
         return new ArrayList<>(players);
     }
@@ -56,6 +55,14 @@ public class Game {
 
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public Board getBoard() {
@@ -87,26 +94,34 @@ public class Game {
     }
 
     /**
-     * This method creates a new list of players with a random order.
-     * @return the new arraylist.
+     * This method replaces the ArrayList players with a new ArrayList with the players
+     * in the order chosen by the Challenger (he decided the first player, then the order has to
+     * remains equal).
+     * @param chosenPlayer the player chosen by the Challenger to be first.
      */
-    public ArrayList<Player> randomOrder() {
-        ArrayList<Player> newArray = new ArrayList<>(3);
+    public void createNewPlayersList(String chosenPlayer) {
+        int index = -1;
+        ArrayList<Player> newArray = new ArrayList<>(numberOfPlayers);
         for (int i=0; i<numberOfPlayers; i++) {
-            Random rnd = new Random();
-            int n = rnd.nextInt(players.size());
-            newArray.add(players.get(n));
-            players.remove(n);
+            if (players.get(i).getUsername().equals(chosenPlayer))
+                index = i;
         }
-        return newArray;
+        if (index == 0)
+            newArray = players;
+        else if (index == 1 && numberOfPlayers == 3) {
+            newArray.add(players.get(index));
+            newArray.add(players.get(2));
+            newArray.add(players.get(0));
+        }
+        else if (index == numberOfPlayers - 1) {
+            newArray.add(players.get(index));
+            newArray.add(players.get(0));
+            if (numberOfPlayers == 3)
+                newArray.add(players.get(1));
+        }
+        players = newArray;
     }
 
-    /**
-     * This method replaces the ArrayList players with a new ArrayList with the players in a new random order.
-     */
-    public void createNewPlayersList() {
-        players = randomOrder();
-    }
 
     /**
      * This method returns the player who has a specific username.
@@ -125,12 +140,5 @@ public class Game {
         players.remove(player);
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 }
 

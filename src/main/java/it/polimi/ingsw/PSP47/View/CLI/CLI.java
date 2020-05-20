@@ -17,8 +17,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class CLI extends ViewObservable implements View  {
-    private NetworkHandler networkHandler;
-    public GameView gameView;
+    private GameView gameView;
 
     private PrintSupport printSupport;
     private Scanner in;
@@ -38,7 +37,7 @@ public class CLI extends ViewObservable implements View  {
     /**
      * This method is used to print the initial Santorini Logo
      */
-    public void showTitle() {
+    private void showTitle() {
 
         String intro ="Welcome to the Digital Version of Santorini Board Game, \n" +
                       "programmers:AriannaGalzerano-DavideGiacomini-MonicaLeone\n" +
@@ -65,6 +64,9 @@ public class CLI extends ViewObservable implements View  {
 
     }
 
+    /**
+     * This method is used to ask username and color.
+     */
     public void askFirstConnection(){
 
         String username = askUsername();
@@ -192,7 +194,6 @@ public class CLI extends ViewObservable implements View  {
 
     /**
      * This method asks the user which of the worker he/she wants to use
-     * @return the gender of the worker the user wants to use
      */
     @Override
     public void askWhichWorkerToUse() {
@@ -235,7 +236,6 @@ public class CLI extends ViewObservable implements View  {
 
     /**
      * This method asks the user where he/she wants to put the worker
-     * @return an array of two int indicating one the row and one the column
      */
     public void askWhereToPositionWorkers() {
         int[] newRowAndColumn = new int[4];
@@ -301,14 +301,18 @@ public class CLI extends ViewObservable implements View  {
     }
 
     /**
-     * This method asks only one of the users ( the challenger) which gods will be used during the game
-     * @return an Arraylist with the names of the 2 or 3 gods that have been chosen
+     * This method asks only one of the users (the challenger) which gods will be used during the game
+     * and which player will play first.
+     * @param usernames the list of usernames of the players.
      */
     @Override
-    public void challengerWillChooseThreeGods() {
+    public void challengerWillChooseThreeGods(ArrayList<String> usernames) {
         ArrayList<GodName> godsChosen = new ArrayList<>();
         String god ;
         GodName godName ;
+
+        String firstPlayer = null;
+
         int i = 0;
 
         out.println("Hey you! You have been picked as Challenger ");
@@ -365,8 +369,28 @@ public class CLI extends ViewObservable implements View  {
 
         }while (i < gameView.getNumberOfPlayers());
 
+        out.println("Now you have to choose the first player of the game between ");
+
+        for (int j = 0; j<gameView.getNumberOfPlayers(); j++) {
+            out.println(AnsiCode.ANSI_RED + usernames.get(j) + " " + AnsiCode.ANSI_RESET);
+        }
+
+        do{
+            out.println("Write the username of the one you choose: ");
+            if (in.hasNextLine()) {
+                firstPlayer = in.nextLine();
+
+                if (!usernames.contains(firstPlayer)) {
+                    firstPlayer = null;
+                    printSupport.printError(out);
+                    out.println(AnsiCode.ANSI_RED + "You must choose one of these names! \n" + AnsiCode.ANSI_RESET);
+                }
+            }
+        }while (firstPlayer == null);
+
         VisitableListOfGods visitableGods = new VisitableListOfGods();
         visitableGods.setGodNames(godsChosen);
+        visitableGods.setChosenPlayer(firstPlayer);
         notifyViewListener(visitableGods);
 
         clearConsole();
@@ -377,7 +401,6 @@ public class CLI extends ViewObservable implements View  {
     /**
      * This method makes the user choose his/her god between the ones already chosen by the challenger
      * @param godsChosen is the array of the available gods (chosen by the challenger)
-     * @return the God chosen by the client
      */
     @Override
     public void chooseYourGod(ArrayList<GodName> godsChosen){
@@ -417,12 +440,6 @@ public class CLI extends ViewObservable implements View  {
     }
 
 
-    public void tellYourTurnIndex(int Index){
-        gameView.setMyIndex(Index);
-        out.println("You're the "+ Index + " player in the game. \n");
-    }
-
-
     /**
      * This method tells the username of the winner
      * @param usernameWinner is the username of the winner
@@ -441,13 +458,18 @@ public class CLI extends ViewObservable implements View  {
         printSupport.printLost(out);
     }
 
+    /**
+     * This method prints an advice about who is currently playing.
+     * @param usernameOnTurn username of the player who's doing its turn
+     */
     @Override
     public void othersTurn(String usernameOnTurn) {
-        printSupport.printDotSequence(out);
-        out.println("It's "+ usernameOnTurn + "'s Turn . . . Please Wait ");
-        printSupport.printWait(out);
+        if (usernameOnTurn != null) {
+            printSupport.printDotSequence(out);
+            out.println("It's " + usernameOnTurn + "'s Turn . . . Please Wait ");
+            printSupport.printWait(out);
+        }
     }
-
 
     @Override
     public GameView getGameView() {
@@ -465,7 +487,6 @@ public class CLI extends ViewObservable implements View  {
 
     /**
      * This method is used to ask the numbers of players of the game
-     * @return int to indicate the number chosen
      */
     @Override
     public void askNumberOfPlayers() {
@@ -492,7 +513,6 @@ public class CLI extends ViewObservable implements View  {
 
     /**
      * This is the basic method to ask what the user wants to do in its turn.
-     * @return an arraylist which contains as first parameter the enum Action and as second the enum Direction
      */
     @Override
     public void askAction(){
@@ -556,20 +576,25 @@ public class CLI extends ViewObservable implements View  {
         clearConsole();
     }
 
-
-
+    /**
+     * This method prints an error message.
+     * @param text the text about the kind of error.
+     */
     @Override
     public void showErrorMessage(String text) {
         printSupport.printError(out);
         out.println(AnsiCode.ANSI_RED +text + AnsiCode.ANSI_RESET);
     }
 
+    /**
+     * This method prints an information about the game.
+     * @param text the text about the information.
+     */
     @Override
     public void showImportantMessage(String text) {
 
         out.println(AnsiCode.ANSI_GREEN +text + AnsiCode.ANSI_RESET);
     }
-
 
     /**
      * this method calls the print support that prints the updated board of the game
@@ -582,7 +607,7 @@ public class CLI extends ViewObservable implements View  {
     /**
      * Clears the console
      */
-    public void clearConsole() {
+    private void clearConsole() {
         out.print(AnsiCode.ANSI_CLEARCONSOLE);
         out.flush();
     }

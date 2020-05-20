@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" styleClass="bodybg" stylesheets="@../CSS/background.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ChooseCardsController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" styleClass="bodybg" stylesheets="@../CSS/background.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ChallengerController">
    <children>
       <ImageView fitHeight="850.0" fitWidth="236.0" layoutX="5.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="864.0" AnchorPane.topAnchor="0.0">
          <image>
@@ -21,12 +23,12 @@
             <Image url="@../Images/ps_curtain_right.png" />
          </image>
       </ImageView>
-      <Text fill="#050090" layoutX="280.0" layoutY="95.35199928283691" strokeType="OUTSIDE" strokeWidth="0.0" text="You have been picked as the Challenger. You must choose the gods that can be used during the game" textAlignment="CENTER" wrappingWidth="499.568603515625" AnchorPane.bottomAnchor="625.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="67.0">
+      <Text fill="#050090" layoutX="303.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You have been picked as the Challenger. You must choose the gods that can be used during the game and the first player of the game (you can also choose yourself). Remember that you will be the last one who will choose his power!" textAlignment="CENTER" wrappingWidth="499.568603515625" AnchorPane.bottomAnchor="566.9799938201904" AnchorPane.leftAnchor="303.0" AnchorPane.rightAnchor="297.431396484375" AnchorPane.topAnchor="31.420000076293945">
          <font>
-            <Font name="Cochin Italic" size="32.0" />
+            <Font name="Cochin Italic" size="25.0" />
          </font>
       </Text>
-      <Text fx:id="godPower" fill="#040080" layoutX="190.0" layoutY="658.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="717.2127558719928" AnchorPane.bottomAnchor="129.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="192.78724412800716" AnchorPane.topAnchor="640.099609375">
+      <Text fx:id="godPower" fill="#040080" layoutX="189.0" layoutY="627.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="717.2127558719928" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="189.0" AnchorPane.rightAnchor="193.78724412800716" AnchorPane.topAnchor="609.099609375">
          <font>
             <Font name="Savoye LET Plain:1.0" size="26.0" />
          </font>
@@ -118,5 +120,24 @@
             </ImageView>
          </children>
       </GridPane>
+      <HBox alignment="TOP_CENTER" layoutX="187.0" layoutY="692.0" prefHeight="100.0" prefWidth="734.0" spacing="30.0">
+         <children>
+            <CheckBox fx:id="first" mnemonicParsing="false" onAction="#OnTheFirst" prefHeight="50.0" prefWidth="100.0" textFill="#0010a1">
+               <font>
+                  <Font name="Savoye LET Plain:1.0" size="26.0" />
+               </font>
+            </CheckBox>
+            <CheckBox fx:id="second" mnemonicParsing="false" onAction="#OnTheSecond" prefHeight="50.0" prefWidth="100.0" textFill="#0010a1">
+               <font>
+                  <Font name="Savoye LET Plain:1.0" size="26.0" />
+               </font>
+            </CheckBox>
+            <CheckBox fx:id="third" mnemonicParsing="false" onAction="#OnTheThird" prefHeight="50.0" prefWidth="100.0" textFill="#0010a1">
+               <font>
+                  <Font name="Savoye LET Plain:1.0" size="26.0" />
+               </font>
+            </CheckBox>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

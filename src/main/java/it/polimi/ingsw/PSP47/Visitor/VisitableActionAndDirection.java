@@ -11,8 +11,8 @@ import java.util.Dictionary;
  */
 public class VisitableActionAndDirection implements Visitable  {
     private static final long serialVersionUID = -9154274020524036911L;
-    Action action;
-    Direction direction;
+    private Action action;
+    private Direction direction;
 
     @Override
     public void accept(Visitor visitor) {

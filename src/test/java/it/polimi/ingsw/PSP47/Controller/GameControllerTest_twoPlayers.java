@@ -71,7 +71,7 @@ public class GameControllerTest_twoPlayers {
         ArrayList<GodName> gods = new ArrayList<>();
         gods.add(GodName.ARTEMIS);
         gods.add(GodName.TRITON);
-        controller.setGods(gods);
+        controller.setGods(gods, "Monica");
 
         for (int i=0; i<numberOfPlayers; i++) {
             assertEquals(controller.getGame().getGods().get(i), gods.get(i));
@@ -98,7 +98,7 @@ public class GameControllerTest_twoPlayers {
         ArrayList<GodName> gods = new ArrayList<>();
         gods.add(GodName.HESTIA);
         gods.add(GodName.HERA);
-        controller.setGods(gods);
+        controller.setGods(gods, "Monica");
         for (int i=0; i<numberOfPlayers; i++) {
             assertEquals(controller.getGame().getGods().get(i), gods.get(i));
         }
@@ -114,7 +114,7 @@ public class GameControllerTest_twoPlayers {
         ArrayList<GodName> gods = new ArrayList<>();
         gods.add(GodName.ZEUS);
         gods.add(GodName.DEMETER);
-        controller.setGods(gods);
+        controller.setGods(gods, "Monica");
         for (int i=0; i<numberOfPlayers; i++) {
             assertEquals(controller.getGame().getGods().get(i), gods.get(i));
         }
@@ -130,7 +130,7 @@ public class GameControllerTest_twoPlayers {
         ArrayList<GodName> gods = new ArrayList<>();
         gods.add(GodName.APOLLO);
         gods.add(GodName.ZEUS);
-        controller.setGods(gods);
+        controller.setGods(gods, "Monica");
         controller.setGod(GodName.ZEUS);
         controller.setGod(GodName.APOLLO);
 
@@ -155,7 +155,7 @@ public class GameControllerTest_twoPlayers {
         ArrayList<GodName> gods = new ArrayList<>();
         gods.add(GodName.MINOTAUR);
         gods.add(GodName.HEPHAESTUS);
-        controller.setGods(gods);
+        controller.setGods(gods, "Monica");
         controller.setGod(GodName.MINOTAUR);
         controller.setGod(GodName.HEPHAESTUS);
 
@@ -171,7 +171,7 @@ public class GameControllerTest_twoPlayers {
         ArrayList<GodName> gods = new ArrayList<>();
         gods.add(GodName.PROMETHEUS);
         gods.add(GodName.HERA);
-        controller.setGods(gods);
+        controller.setGods(gods, "Monica");
         controller.setGod(GodName.HERA);
         controller.setGod(GodName.PROMETHEUS);
 
@@ -187,7 +187,7 @@ public class GameControllerTest_twoPlayers {
         ArrayList<GodName> gods = new ArrayList<>();
         gods.add(GodName.CHRONUS);
         gods.add(GodName.PAN);
-        controller.setGods(gods);
+        controller.setGods(gods, "Monica");
         controller.setGod(GodName.PAN);
         controller.setGod(GodName.CHRONUS);
 
@@ -211,7 +211,7 @@ public class GameControllerTest_twoPlayers {
         ArrayList<GodName> gods = new ArrayList<>();
         gods.add(GodName.HESTIA);
         gods.add(GodName.ATLAS);
-        controller.setGods(gods);
+        controller.setGods(gods, "Monica");
         controller.setGod(GodName.HESTIA);
         controller.setGod(GodName.ATLAS);
 

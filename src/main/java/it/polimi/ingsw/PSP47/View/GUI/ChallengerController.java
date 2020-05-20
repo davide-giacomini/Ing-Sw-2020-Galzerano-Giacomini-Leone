@@ -1,21 +1,27 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
-import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
-public class ChooseCardsController extends ViewObservable {
+public class ChallengerController extends ViewObservable {
 
-    ArrayList<GodName> godNames = new ArrayList<>();
-    int numberOfPlayers;
+    private ArrayList<GodName> godNames = new ArrayList<>();
+    private int numberOfPlayers;
+    private String chosenPlayer = null;
+
+    @FXML
+    private AnchorPane mainPane;
 
     @FXML
     private ImageView Apollo;
@@ -62,6 +68,19 @@ public class ChooseCardsController extends ViewObservable {
     @FXML
     private Text godPower;
 
+    @FXML
+    private CheckBox first;
+
+    @FXML
+    private CheckBox second;
+
+    @FXML
+    private CheckBox third;
+
+    @FXML
+    private void initialize() {
+
+    }
     @FXML
     void exit(MouseEvent event) {
         godPower.setText("");
@@ -293,30 +312,62 @@ public class ChooseCardsController extends ViewObservable {
         }
     }
 
+    @FXML
+    void OnTheFirst(ActionEvent event) {
+        if (first.isSelected()) {
+            second.setSelected(false);
+            third.setSelected(false);
+            chosenPlayer = first.getText();
+        }
+        notifyAndWait();
+    }
+
+    @FXML
+    void OnTheSecond(ActionEvent event) {
+        if (second.isSelected()) {
+            first.setSelected(false);
+            third.setSelected(false);
+            chosenPlayer = second.getText();
+        }
+        notifyAndWait();
+    }
+
+    @FXML
+    void OnTheThird(ActionEvent event) {
+        if (third.isSelected()) {
+            second.setSelected(false);
+            first.setSelected(false);
+            chosenPlayer = third.getText();
+        }
+        notifyAndWait();
+    }
+
+    void setFirstPlayer(String firstPlayer) {
+        first.setText(firstPlayer);
+    }
+
+    void setSecondPlayer(String secondPlayer) {
+        second.setText(secondPlayer);
+    }
+
+    void setThirdPlayer(String thirdPlayer) {
+        if (thirdPlayer != null)
+            third.setText(thirdPlayer);
+        else
+            third.setVisible(false);
+    }
 
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
 
     private void notifyAndWait() {
-        if (godNames.size() == numberOfPlayers) {
+        if (godNames.size() == numberOfPlayers && chosenPlayer != null) {
             VisitableListOfGods visitableListOfGods = new VisitableListOfGods();
             visitableListOfGods.setGodNames(godNames);
+            visitableListOfGods.setChosenPlayer(chosenPlayer);
             notifyViewListener(visitableListOfGods);
-            Apollo.setDisable(true);
-            Artemis.setDisable(true);
-            Athena.setDisable(true);
-            Atlas.setDisable(true);
-            Chronus.setDisable(true);
-            Demeter.setDisable(true);
-            Hephaestus.setDisable(true);
-            Hera.setDisable(true);
-            Hestia.setDisable(true);
-            Minotaur.setDisable(true);
-            Pan.setDisable(true);
-            Prometheus.setDisable(true);
-            Triton.setDisable(true);
-            Zeus.setDisable(true);
+            mainPane.setDisable(true);
         }
     }
 }
