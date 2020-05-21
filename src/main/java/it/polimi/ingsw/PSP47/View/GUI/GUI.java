@@ -179,15 +179,18 @@ public class GUI extends Application implements View {
 
     @Override
     public void theWinnerIs(String usernameWinner) {
+        Platform.runLater(()->{
         currentScene = CurrentScene.WIN;
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         WinningAdviceController winningAdviceController = setLayout(scene, "/FXML/winningAdvice.fxml");
         winningAdviceController.addViewListener(networkHandler);
+        });
     }
 
     @Override
     public void theLoserIs() {
+
         currentScene = CurrentScene.LOSE;
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
@@ -197,7 +200,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void showEnd() {
-        System.exit(0);
+       // System.exit(0);
     }
 
 

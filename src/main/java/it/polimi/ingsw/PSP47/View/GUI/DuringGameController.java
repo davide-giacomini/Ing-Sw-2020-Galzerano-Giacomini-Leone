@@ -293,32 +293,16 @@ public class DuringGameController extends ViewObservable {
         pane.getChildren().add(grid);
         grid.setAlignment(Pos.CENTER);
 
+        int levels = addLevels(grid,pane, slot.getLevel());
 
-       if(slot.getLevel()== Level.LEVEL1){
-
-            Image image2 = new Image("/Images/level1_1.png");
-            ImageView im2 = new ImageView(image2);
-            im2.setPreserveRatio(true);
-           im2.fitWidthProperty().bind(pane.widthProperty());
-           im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
-            grid.add(im2,0,0);
-        }else if(slot.getLevel()== Level.LEVEL2){
-
-        } else if(slot.getLevel()== Level.LEVEL3){
-
-        } else if (slot.getLevel()== Level.DOME){
-
-        }
         if (slot.isWorkerOnSlot()){
-            //aggiunta livelli poi worker
-            //FileInputStream input = null;
-            //input = getImageWorkerFromColor(slot.getWorkerColor());
+
             Image image = new Image(getImageWorkerFromColor(slot.getWorkerColor()));
             ImageView im1 = new ImageView(image);
             im1.setPreserveRatio(true);
             im1.fitWidthProperty().bind(pane.widthProperty());
             im1.fitHeightProperty().bind(pane.widthProperty().divide(4));
-            grid.add(im1,0,1);
+            grid.add(im1,0,levels);
             workerRowAndColumn[0] = slot.getRow() ;
             workerRowAndColumn[1] = slot.getColumn();
         }
@@ -377,6 +361,56 @@ public class DuringGameController extends ViewObservable {
         secondPlayerInfo.appendText(usernames.get(1)+"\n"+ colors.get(1)+"\n"+ gods.get(1));
         if (usernames.get(2)!=null)
             thirdPlayerInfo.appendText(usernames.get(2)+"\n"+ colors.get(2)+"\n"+ gods.get(2));
+    }
+
+    public int addLevels(GridPane gridPane, Pane pane, Level level){
+        int levels = 3;
+
+        if(level.ordinal() >= Level.LEVEL1.ordinal()) {
+            Image image2 = new Image("/Images/level1_1_light.png");
+            ImageView im2 = new ImageView(image2);
+            im2.setPreserveRatio(true);
+            im2.fitWidthProperty().bind(pane.widthProperty());
+            im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            gridPane.add(im2, 0, 3);
+            levels--;
+        }
+
+        if(level.ordinal() >= Level.LEVEL2.ordinal()) {
+            Image image2 = new Image("/Images/level2_1_light.png");
+            ImageView im2 = new ImageView(image2);
+            im2.setPreserveRatio(true);
+            im2.fitWidthProperty().bind(pane.widthProperty());
+            im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            gridPane.add(im2, 0, 2);
+            levels--;
+        }
+
+        if(level.ordinal() >= Level.LEVEL3.ordinal()){
+            Image image2 = new Image("/Images/level3_light.png");
+            ImageView im2 = new ImageView(image2);
+            im2.setPreserveRatio(true);
+            im2.fitWidthProperty().bind(pane.widthProperty());
+            im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            gridPane.add(im2, 0, 1);
+            levels--;
+
+
+        }
+
+        if ( level.ordinal() >= Level.DOME.ordinal()){
+            Image image2 = new Image("/Images/dome_light.png");
+            ImageView im2 = new ImageView(image2);
+            im2.setPreserveRatio(true);
+            im2.fitWidthProperty().bind(pane.widthProperty());
+            im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            gridPane.add(im2, 0, 0);
+            levels--;
+
+        }
+
+        return levels;
+
     }
 
 }
