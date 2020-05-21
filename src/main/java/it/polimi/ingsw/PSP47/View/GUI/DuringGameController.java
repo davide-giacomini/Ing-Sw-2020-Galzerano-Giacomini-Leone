@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP47.View.GUI;
 import it.polimi.ingsw.PSP47.Enumerations.*;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
+import it.polimi.ingsw.PSP47.View.GameView;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableActionAndDirection;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInitialPositions;
@@ -30,16 +31,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class DuringGameController extends ViewObservable {
-
-    private NetworkHandler networkHandler;
+public class DuringGameController extends ViewObservable{
 
     private ArrayList<String> usernames= new ArrayList<>(3);
     private ArrayList<Color> colors = new ArrayList<>(3);
     private ArrayList <GodName> gods = new ArrayList<>(3);
 
-    private Action moment;
-
+    private GameView gameView;
+    private Action action;
 
     private int[] newRowAndColumn = new int[4];
     private int[] workerRowAndColumn = new int[2];
@@ -81,33 +80,25 @@ public class DuringGameController extends ViewObservable {
     /**
      * in the initialize method the based on the moment in which we are in the game the text to display and col and row are resetted
      */
-    void initialize() {
-
-        //setto la grid pane
-        if (moment == Action.ASK_INITIAL_POSITION){
-            for (int i = 0; i < 4; i++) {
-                newRowAndColumn[i] = -1;
-            }
+    void changeText() {
+        if (gameView.getCurrentScene() == CurrentScene.ASK_INITIAL_POSITION){
             commandText.setText("Choose where to position worker :");
-           //buildButton.setEffect(new DropShadow());
-            //buildButton.setDisable(true);
-            //moveButton.setEffect(new DropShadow());
-            //moveButton.setDisable(true);
-            //buildDomeButton.setEffect(new DropShadow());
-            //buildDomeButton.setDisable(true);
-            //endButton.setEffect(new DropShadow());
-            //endButton.setDisable(true);
-        }else if(moment == Action.ASK_WHICH_WORKER){
+        }else if(gameView.getCurrentScene() == CurrentScene.ASK_WHICH_WORKER){
             commandText.setText("Choose the worker you want to use :");
-            workerRowAndColumn[0]= -1;
-            workerRowAndColumn[1]= -1;
-        }else if (moment == Action.CHOOSEACT){
+        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION){
             commandText.setText("Choose the action you want between the buttons :");
-
-        }else if (moment == Action.WAIT){
+        }else if (gameView.getCurrentScene() == CurrentScene.WAIT){
             commandText.setText("WAIT");
-
         }
+    }
+
+    void resetRowsAndColumns(){
+        for (int i = 0; i < 4; i++) {
+            newRowAndColumn[i] = -1;
+        }
+
+        workerRowAndColumn[0]= -1;
+        workerRowAndColumn[1]= -1;
     }
 
     /**
@@ -117,55 +108,59 @@ public class DuringGameController extends ViewObservable {
      */
     @FXML
     void OnMoveClick(MouseEvent event) {
-        if (moment == Action.WAIT){
+        if (gameView.getCurrentScene() == CurrentScene.WAIT){
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Ooooo aspetta");
             a.show();
-        }else if (moment == Action.CHOOSEACT){
-            moment = Action.MOVE;
+        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION){
+            action = Action.MOVE;
+            gameView.update(CurrentScene.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to move:");
         }
     }
 
     @FXML
     void OnBuildClick(MouseEvent event) {
-        if (moment == Action.WAIT){
+        if (gameView.getCurrentScene() == CurrentScene.WAIT){
             Alert a = new Alert(Alert.AlertType.WARNING);
-            a.setContentText("Ooooo aspetta");
+            a.setContentText("Please wait for your Turn!");
             a.show();
-        }else if (moment == Action.CHOOSEACT) {
-            moment = Action.BUILD;
+        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {
+            action = Action.BUILD;
+            gameView.update(CurrentScene.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to build:");
         }
     }
 
     @FXML
     void OnBuildDomeClick(MouseEvent event) {
-        if (moment == Action.WAIT){
+        if (gameView.getCurrentScene() == CurrentScene.WAIT){
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Ooooo aspetta");
             a.show();
-        }else if (moment == Action.CHOOSEACT) {
-            moment = Action.BUILDDOME;
+        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {
+            action = Action.BUILDDOME;
+            gameView.update(CurrentScene.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to build the Dome:");
         }
     }
 
     @FXML
     void OnEndClick(MouseEvent event) {
-        if (moment == Action.WAIT) {
+        if (gameView.getCurrentScene() == CurrentScene.WAIT) {
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Ooooo aspetta");
             a.show();
-        }else if (moment == Action.CHOOSEACT) {
-            moment = Action.END;
+        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {
+            action = Action.END;
+            gameView.update(CurrentScene.ACTION_CHOSEN);
             commandText.setText("You asked to end your turn");
             VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();
-            visitableActionAndDirection.setAction(moment);
+            visitableActionAndDirection.setAction(action);
             notifyViewListener(visitableActionAndDirection);
         }
     }
-    //TODO CHANGE WITH NOTIFY IMPLEMENTED BY DAVID
+
     @FXML
     void OnQuitClick(MouseEvent event) {
         notifyEndConnection();
@@ -183,20 +178,20 @@ public class DuringGameController extends ViewObservable {
         Integer rowIndex = GridPane.getRowIndex(source);
         System.out.printf("Mouse entered cell [%d, %d]%n", colIndex, rowIndex);
 
-        if (moment == Action.ASK_INITIAL_POSITION)
+        if (gameView.getCurrentScene() == CurrentScene.ASK_INITIAL_POSITION)
             selectSlotAndNotify(rowIndex, colIndex);
-        else if (moment == Action.ASK_WHICH_WORKER){
+        else if (gameView.getCurrentScene() == CurrentScene.ASK_WHICH_WORKER){
             chooseWorkerToUse(rowIndex,colIndex);
-        }else if(moment == Action.MOVE || moment == Action.BUILD || moment == Action.BUILDDOME){
+        }else if(gameView.getCurrentScene() == CurrentScene.ACTION_CHOSEN){
             VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();
-            visitableActionAndDirection.setAction(moment);
-             visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(workerRowAndColumn[0],workerRowAndColumn[1], rowIndex,colIndex));
+            visitableActionAndDirection.setAction(action);
+            visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(workerRowAndColumn[0],workerRowAndColumn[1], rowIndex,colIndex));
             notifyViewListener(visitableActionAndDirection);
             commandText.setText("WAIT");
-            moment = Action.WAIT;
-        }else if (moment == Action.WAIT ){
+            gameView.update(CurrentScene.WAIT);
+        }else if (gameView.getCurrentScene() == CurrentScene.WAIT ){
             Alert a = new Alert(Alert.AlertType.WARNING);
-            a.setContentText("Oooo Aspetta");
+            a.setContentText("Please wait for your Turn!");
             a.show();
         }
 
@@ -217,12 +212,11 @@ public class DuringGameController extends ViewObservable {
             }
         }
         if (i == 2) {
-            //addViewListener(networkHandler);
             VisitableInitialPositions visitableInitialPositions = new VisitableInitialPositions();
             visitableInitialPositions.setRowsAndColumns(newRowAndColumn);
             notifyViewListener(visitableInitialPositions);
             commandText.setText("WAIT");
-            moment = Action.WAIT;
+            gameView.update(CurrentScene.WAIT);
         }
     }
 
@@ -236,12 +230,11 @@ public class DuringGameController extends ViewObservable {
         workerRowAndColumn[0] = row ;
         workerRowAndColumn[1] = column;
 
-        //addViewListener(networkHandler);
         VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
         visitableRowsAndColumns.setRowsAndColumns(workerRowAndColumn);
         notifyViewListener(visitableRowsAndColumns);
         commandText.setText("WAIT");
-        moment = Action.WAIT;
+        gameView.update(CurrentScene.WAIT);
 
     }
 
@@ -256,12 +249,6 @@ public class DuringGameController extends ViewObservable {
     public void setGods(ArrayList<GodName> gods) {
         this.gods = gods;
     }
-    //TODO ERASE
-    public void setNetworkHandler(NetworkHandler networkHandler) {
-        this.networkHandler = networkHandler;
-    }
-
-    public void setMoment(Action action){ this.moment = action;}
 
     /**
      * method used when an updated slot arrives to display only the change in the specific slot, it adds for now the worker in the pane of the gridpane
@@ -297,12 +284,13 @@ public class DuringGameController extends ViewObservable {
 
         if (slot.isWorkerOnSlot()){
 
-            Image image = new Image(getImageWorkerFromColor(slot.getWorkerColor()));
-            ImageView im1 = new ImageView(image);
-            im1.setPreserveRatio(true);
-            im1.fitWidthProperty().bind(pane.widthProperty());
-            im1.fitHeightProperty().bind(pane.widthProperty().divide(4));
-            grid.add(im1,0,levels);
+            Image worker = new Image(getImageWorkerFromColor(slot.getWorkerColor()));
+            ImageView workerView = new ImageView(worker);
+            workerView.setPreserveRatio(true);
+            workerView.fitWidthProperty().bind(pane.widthProperty());
+            workerView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            grid.add(workerView,0,levels);
+
             workerRowAndColumn[0] = slot.getRow() ;
             workerRowAndColumn[1] = slot.getColumn();
         }
@@ -324,12 +312,10 @@ public class DuringGameController extends ViewObservable {
            return "/Images/female_green.png";
         else if (workerColor== Color.PURPLE)
            return "/Images/female_purple.png";
-        else if (workerColor== Color.WHITE)
-           return "/Images/female_white.png";
         else if (workerColor== Color.CYAN)
            return "/Images/female_cyan.png";
-       else
-        return null;
+        else //(workerColor== Color.WHITE)
+           return "/Images/female_white.png";
     }
 
     /**
@@ -359,52 +345,63 @@ public class DuringGameController extends ViewObservable {
     public void setPublicInformation(){
         firstPlayerInfo.appendText(usernames.get(0)+"\n"+ colors.get(0)+"\n"+ gods.get(0));
         secondPlayerInfo.appendText(usernames.get(1)+"\n"+ colors.get(1)+"\n"+ gods.get(1));
-        if (usernames.get(2)!=null)
+        if (usernames.size()==3)
             thirdPlayerInfo.appendText(usernames.get(2)+"\n"+ colors.get(2)+"\n"+ gods.get(2));
     }
+
 
     public int addLevels(GridPane gridPane, Pane pane, Level level){
         int levels = 3;
 
+        if (level == Level.ATLAS_DOME){
+            Image levelAtlas = new Image("/Images/dome.png");
+            ImageView levelAtlasView = new ImageView(levelAtlas);
+            levelAtlasView.setPreserveRatio(true);
+            levelAtlasView.fitWidthProperty().bind(pane.widthProperty());
+            levelAtlasView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            gridPane.add(levelAtlasView, 0, 3);
+            return levels;
+        }
+
         if(level.ordinal() >= Level.LEVEL1.ordinal()) {
-            Image image2 = new Image("/Images/level1_1_light.png");
-            ImageView im2 = new ImageView(image2);
-            im2.setPreserveRatio(true);
-            im2.fitWidthProperty().bind(pane.widthProperty());
-            im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
-            gridPane.add(im2, 0, 3);
+            Image levelOne = new Image("/Images/level1_1_light.png");
+            ImageView levelOneView = new ImageView(levelOne);
+            levelOneView.setPreserveRatio(true);
+            levelOneView.fitWidthProperty().bind(pane.widthProperty());
+            levelOneView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            gridPane.add(levelOneView, 0, 3);
             levels--;
         }
 
         if(level.ordinal() >= Level.LEVEL2.ordinal()) {
-            Image image2 = new Image("/Images/level2_1_light.png");
-            ImageView im2 = new ImageView(image2);
-            im2.setPreserveRatio(true);
-            im2.fitWidthProperty().bind(pane.widthProperty());
-            im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
-            gridPane.add(im2, 0, 2);
+            Image levelTwo = new Image("/Images/level2_1_light.png");
+            ImageView levelTwoView = new ImageView(levelTwo);
+            levelTwoView.setPreserveRatio(true);
+            levelTwoView.fitWidthProperty().bind(pane.widthProperty());
+            levelTwoView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            gridPane.add(levelTwoView, 0, 2);
             levels--;
         }
 
         if(level.ordinal() >= Level.LEVEL3.ordinal()){
-            Image image2 = new Image("/Images/level3_light.png");
-            ImageView im2 = new ImageView(image2);
-            im2.setPreserveRatio(true);
-            im2.fitWidthProperty().bind(pane.widthProperty());
-            im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
-            gridPane.add(im2, 0, 1);
+            Image levelThree = new Image("/Images/level3_light.png");
+            ImageView levelThreeView = new ImageView(levelThree);
+            levelThreeView.setPreserveRatio(true);
+            levelThreeView.fitWidthProperty().bind(pane.widthProperty());
+            levelThreeView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            gridPane.add(levelThreeView, 0, 1);
             levels--;
 
 
         }
 
         if ( level.ordinal() >= Level.DOME.ordinal()){
-            Image image2 = new Image("/Images/dome_light.png");
-            ImageView im2 = new ImageView(image2);
-            im2.setPreserveRatio(true);
-            im2.fitWidthProperty().bind(pane.widthProperty());
-            im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
-            gridPane.add(im2, 0, 0);
+            Image levelDome = new Image("/Images/dome_light.png");
+            ImageView levelDomeView = new ImageView(levelDome);
+            levelDomeView.setPreserveRatio(true);
+            levelDomeView.fitWidthProperty().bind(pane.widthProperty());
+            levelDomeView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            gridPane.add(levelDomeView, 0, 0);
             levels--;
 
         }
@@ -413,4 +410,11 @@ public class DuringGameController extends ViewObservable {
 
     }
 
+    public GameView getGameView() {
+        return gameView;
+    }
+
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
+    }
 }

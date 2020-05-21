@@ -94,7 +94,7 @@ public interface View  {
      */
     void showEnd();
 
-   void showGuiSlot(Slot slot);
+   void showNewBoard(Slot slot);
 
    void showGame();
 

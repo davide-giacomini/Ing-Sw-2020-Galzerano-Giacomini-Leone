@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
-import it.polimi.ingsw.PSP47.Enumerations.Action;
 import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
@@ -26,12 +25,10 @@ public class GUI extends Application implements View {
     private NetworkHandler networkHandler;
     private GameView gameView;
 
-    private CurrentScene currentScene;
     private Stage primaryStage;
     private Scene scene;
     private Parent root;
 
-    private ConnectionToServerController connectionToServerController;
     private DuringGameController duringGameController;
 
     private boolean start = false;
@@ -52,10 +49,11 @@ public class GUI extends Application implements View {
         primaryStage.setTitle("Santorini");
         primaryStage.show();
 
-        currentScene = CurrentScene.START;
+        gameView.update(CurrentScene.START);
 
-        connectionToServerController = fxmlLoader.getController();
+        ConnectionToServerController connectionToServerController = fxmlLoader.getController();
         connectionToServerController.setGui(this);
+
         primaryStage.setOnCloseRequest(new EventHandler<>() {
             @Override
             public void handle(WindowEvent windowEvent) {
@@ -91,7 +89,6 @@ public class GUI extends Application implements View {
     @Override
     public void askFirstConnection() {
         Platform.runLater(() -> {
-        currentScene = CurrentScene.START;
         StartController startController = setLayout(scene, "/FXML/startPane.fxml");
         startController.addViewListener(networkHandler);
         });
@@ -100,7 +97,6 @@ public class GUI extends Application implements View {
     @Override
     public void askNumberOfPlayers() {
         Platform.runLater(() -> {
-        currentScene = CurrentScene.CHOOSE_PLAYERS;
         ChoosePlayersController choosePlayersController = setLayout(scene,"/FXML/choosePlayers.fxml");
         choosePlayersController.addViewListener(networkHandler);
 
@@ -110,7 +106,6 @@ public class GUI extends Application implements View {
     @Override
     public void challengerWillChooseThreeGods(ArrayList<String> usernames) {
         Platform.runLater(() -> {
-        currentScene = CurrentScene.CHOOSE_CARDS;
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         ChallengerController chooseCardsController = setLayout(scene, "/FXML/challenger.fxml");
@@ -128,7 +123,6 @@ public class GUI extends Application implements View {
     @Override
     public void chooseYourGod(ArrayList<GodName> godsChosen) {
         Platform.runLater(() -> {
-            currentScene = CurrentScene.CHOOSE_CARD;
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
             ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
@@ -142,16 +136,6 @@ public class GUI extends Application implements View {
     @Override
     public GameView getGameView() {
         return gameView;
-    }
-
-    @Override
-    public void showPublicInformation() {
-        Platform.runLater(() -> {
-        duringGameController.setUsernames(gameView.getUsernames());
-        duringGameController.setColors(gameView.getColors());
-        duringGameController.setGods(gameView.getGods());
-        duringGameController.setPublicInformation();
-        });
     }
 
     @Override
@@ -180,7 +164,6 @@ public class GUI extends Application implements View {
     @Override
     public void theWinnerIs(String usernameWinner) {
         Platform.runLater(()->{
-        currentScene = CurrentScene.WIN;
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         WinningAdviceController winningAdviceController = setLayout(scene, "/FXML/winningAdvice.fxml");
@@ -190,8 +173,6 @@ public class GUI extends Application implements View {
 
     @Override
     public void theLoserIs() {
-
-        currentScene = CurrentScene.LOSE;
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         LosingAdviceController losingAdviceController = setLayout(scene, "/FXML/losingAdvice.fxml");
@@ -209,8 +190,10 @@ public class GUI extends Application implements View {
      * @param slot is the slot that has been changed
      */
     @Override
-    public void showGuiSlot(Slot slot) {
+    public void showNewBoard(Slot slot) {
         Platform.runLater(()-> {
+            gameView.update(CurrentScene.WAIT);
+            duringGameController.setGameView(gameView);
             duringGameController.changeSlot(slot);
         });
     }
@@ -222,11 +205,13 @@ public class GUI extends Application implements View {
     @Override
     public void showGame() {
         Platform.runLater(()-> {
+
             duringGameController = setLayout(scene, "/FXML/boardDuringGame.fxml");
             primaryStage.setHeight(700);
-            duringGameController.setMoment(Action.WAIT);
+            gameView.update(CurrentScene.WAIT);
+            duringGameController.setGameView(gameView);
             duringGameController.addViewListener(networkHandler);
-            duringGameController.initialize();
+            duringGameController.changeText();
             start = true;
         });
     }
@@ -237,8 +222,10 @@ public class GUI extends Application implements View {
     @Override
     public void askWhichWorkerToUse() {
         Platform.runLater(() -> {
-            duringGameController.setMoment(Action.ASK_WHICH_WORKER);
-            duringGameController.initialize();
+            gameView.update(CurrentScene.ASK_WHICH_WORKER);
+            duringGameController.setGameView(gameView);
+            duringGameController.resetRowsAndColumns();
+            duringGameController.changeText();
         });
     }
 
@@ -248,11 +235,13 @@ public class GUI extends Application implements View {
     @Override
     public void askWhereToPositionWorkers() {
         Platform.runLater(() -> {
-            duringGameController.setMoment(Action.ASK_INITIAL_POSITION);
+            gameView.update(CurrentScene.ASK_INITIAL_POSITION);
+            duringGameController.setGameView(gameView);
+            duringGameController.resetRowsAndColumns();
             duringGameController.setUsernames(gameView.getUsernames());
             duringGameController.setColors(gameView.getColors());
             duringGameController.setGods(gameView.getGods());
-            duringGameController.initialize();
+            duringGameController.changeText();
         });
     }
 
@@ -267,9 +256,9 @@ public class GUI extends Application implements View {
                 a.setContentText("It's " + usernameOnTurn + "'s turn. You can't do anything until it's your turn.");
                 a.show();
             }else {
-                currentScene = CurrentScene.SET_WORKERS;
-                duringGameController.setMoment(Action.WAIT);
-                duringGameController.initialize();
+                gameView.update(CurrentScene.WAIT);
+                duringGameController.setGameView(gameView);
+                duringGameController.changeText();
             }
         });
     }
@@ -280,8 +269,20 @@ public class GUI extends Application implements View {
     @Override
     public void askAction() {
         Platform.runLater(() -> {
-            duringGameController.setMoment(Action.CHOOSEACT);
-            duringGameController.initialize();
+            gameView.update(CurrentScene.CHOOSE_ACTION);
+            duringGameController.setGameView(gameView);
+            duringGameController.changeText();
+        });
+    }
+
+    @Override
+    public void showPublicInformation() {
+        Platform.runLater(() -> {
+            duringGameController.setGameView(gameView);
+            duringGameController.setUsernames(gameView.getUsernames());
+            duringGameController.setColors(gameView.getColors());
+            duringGameController.setGods(gameView.getGods());
+            duringGameController.setPublicInformation();
         });
     }
 

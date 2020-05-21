@@ -17,8 +17,6 @@ import java.io.IOException;
 
 public class ChoosePlayersController extends ViewObservable {
 
-    private NetworkHandler networkHandler;
-
     @FXML
     private Pane mainPane;
 
