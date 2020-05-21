@@ -10,17 +10,18 @@ import it.polimi.ingsw.PSP47.Visitor.VisitableRowsAndColumns;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
@@ -29,7 +30,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class MainController extends ViewObservable {
+public class DuringGameController extends ViewObservable {
 
     private NetworkHandler networkHandler;
 
@@ -268,21 +269,39 @@ public class MainController extends ViewObservable {
      */
     public void changeSlot(Slot slot){
         Pane pane = (Pane) getNodeByRowColumnIndex(slot.getRow(), slot.getColumn(), gridPane);
+        //pane.setEffect(new DropShadow());
         pane.getChildren().clear();
-        VBox vbox = new VBox(4);
-        vbox.setAlignment(Pos.CENTER);
-        pane.getChildren().add(vbox);
-        vbox.prefWidthProperty().bind(pane.widthProperty());
-        vbox.prefHeightProperty().bind(pane.heightProperty());
 
-        if(slot.getLevel()== Level.LEVEL1){
+        GridPane grid = new GridPane();
+        //grid.setGridLinesVisible(true);
+        final int numCols = 1 ;
+        final int numRows = 4 ;
+        for (int i = 0; i < numCols; i++) {
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPercentWidth(100.0 / numCols);
+            colConst.setHalignment(HPos.CENTER);
+            grid.getColumnConstraints().add(colConst);
+        }
+        for (int i = 0; i < numRows; i++) {
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPercentHeight(100.0 / numRows);
+            rowConst.setValignment(VPos.CENTER);
+            grid.getRowConstraints().add(rowConst);
+        }
+        grid.prefWidthProperty().bind(pane.widthProperty());
+        grid.prefHeightProperty().bind(pane.heightProperty());
+        pane.getChildren().add(grid);
+        grid.setAlignment(Pos.CENTER);
+
+
+       if(slot.getLevel()== Level.LEVEL1){
 
             Image image2 = new Image("/Images/level1_1.png");
             ImageView im2 = new ImageView(image2);
             im2.setPreserveRatio(true);
-            im2.fitWidthProperty().bind(pane.widthProperty());
-            im2.fitHeightProperty().bind(pane.heightProperty());
-            vbox.getChildren().add(0,im2);
+           im2.fitWidthProperty().bind(pane.widthProperty());
+           im2.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            grid.add(im2,0,0);
         }else if(slot.getLevel()== Level.LEVEL2){
 
         } else if(slot.getLevel()== Level.LEVEL3){
@@ -297,9 +316,9 @@ public class MainController extends ViewObservable {
             Image image = new Image(getImageWorkerFromColor(slot.getWorkerColor()));
             ImageView im1 = new ImageView(image);
             im1.setPreserveRatio(true);
-            im1.fitWidthProperty().bind(vbox.widthProperty());
-            im1.fitHeightProperty().bind(vbox.heightProperty());
-            vbox.getChildren().add(im1);
+            im1.fitWidthProperty().bind(pane.widthProperty());
+            im1.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            grid.add(im1,0,1);
             workerRowAndColumn[0] = slot.getRow() ;
             workerRowAndColumn[1] = slot.getColumn();
         }

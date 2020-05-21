@@ -32,7 +32,7 @@ public class GUI extends Application implements View {
     private Parent root;
 
     private ConnectionToServerController connectionToServerController;
-    private MainController mainController;
+    private DuringGameController duringGameController;
 
     private boolean start = false;
 
@@ -147,10 +147,10 @@ public class GUI extends Application implements View {
     @Override
     public void showPublicInformation() {
         Platform.runLater(() -> {
-        mainController.setUsernames(gameView.getUsernames());
-        mainController.setColors(gameView.getColors());
-        mainController.setGods(gameView.getGods());
-        mainController.setPublicInformation();
+        duringGameController.setUsernames(gameView.getUsernames());
+        duringGameController.setColors(gameView.getColors());
+        duringGameController.setGods(gameView.getGods());
+        duringGameController.setPublicInformation();
         });
     }
 
@@ -208,7 +208,7 @@ public class GUI extends Application implements View {
     @Override
     public void showGuiSlot(Slot slot) {
         Platform.runLater(()-> {
-            mainController.changeSlot(slot);
+            duringGameController.changeSlot(slot);
         });
     }
 
@@ -219,11 +219,11 @@ public class GUI extends Application implements View {
     @Override
     public void showGame() {
         Platform.runLater(()-> {
-            mainController = setLayout(scene, "/FXML/mainView.fxml");
+            duringGameController = setLayout(scene, "/FXML/boardDuringGame.fxml");
             primaryStage.setHeight(700);
-            mainController.setMoment(Action.WAIT);
-            mainController.addViewListener(networkHandler);
-            mainController.initialize();
+            duringGameController.setMoment(Action.WAIT);
+            duringGameController.addViewListener(networkHandler);
+            duringGameController.initialize();
             start = true;
         });
     }
@@ -234,8 +234,8 @@ public class GUI extends Application implements View {
     @Override
     public void askWhichWorkerToUse() {
         Platform.runLater(() -> {
-            mainController.setMoment(Action.ASK_WHICH_WORKER);
-            mainController.initialize();
+            duringGameController.setMoment(Action.ASK_WHICH_WORKER);
+            duringGameController.initialize();
         });
     }
 
@@ -245,11 +245,11 @@ public class GUI extends Application implements View {
     @Override
     public void askWhereToPositionWorkers() {
         Platform.runLater(() -> {
-            mainController.setMoment(Action.ASK_INITIAL_POSITION);
-            mainController.setUsernames(gameView.getUsernames());
-            mainController.setColors(gameView.getColors());
-            mainController.setGods(gameView.getGods());
-            mainController.initialize();
+            duringGameController.setMoment(Action.ASK_INITIAL_POSITION);
+            duringGameController.setUsernames(gameView.getUsernames());
+            duringGameController.setColors(gameView.getColors());
+            duringGameController.setGods(gameView.getGods());
+            duringGameController.initialize();
         });
     }
 
@@ -265,8 +265,8 @@ public class GUI extends Application implements View {
                 a.show();
             }else {
                 currentScene = CurrentScene.SET_WORKERS;
-                mainController.setMoment(Action.WAIT);
-                mainController.initialize();
+                duringGameController.setMoment(Action.WAIT);
+                duringGameController.initialize();
             }
         });
     }
@@ -277,8 +277,8 @@ public class GUI extends Application implements View {
     @Override
     public void askAction() {
         Platform.runLater(() -> {
-            mainController.setMoment(Action.CHOOSEACT);
-            mainController.initialize();
+            duringGameController.setMoment(Action.CHOOSEACT);
+            duringGameController.initialize();
         });
     }
 
