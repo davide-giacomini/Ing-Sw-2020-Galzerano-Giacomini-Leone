@@ -24,7 +24,6 @@ public class PrintSupport {
 
     private static final String[] EMPTY_PARTS = new String[5];
 
-
     private String[][][] BOARD_PARTS = new String[5][5][5];
 
 
@@ -261,43 +260,11 @@ public class PrintSupport {
 
     public void printWait(PrintStream out){
         String wait =
-                "        ____....----''''````    |.\n"+
-        ",’’’````            ____....----; ‘.\n"+
-        "| __....----''''````         .-.`'. ‘.\n"+
-        "|.-.                .....    | |   '. ‘.\n"+
-        "`| |        ..:::::::::::::::| |   .-;. |\n"+
-        " | |`'-;-::::::::::::::::::::| |,,.| |-=‘\n"+
-        " | |   | ::::::::::::::::::::| |   | |\n"+
-        " | |   | :::::::::::::::;;;;;| |   | |\n"+
-                        " | |   | :::::::::;;;2KY2KY2Y| |   | |\n"+
-                        " | |   | :::::;;Y2KY2KY2KY2KY| |   | |\n"+
-                        " | |   | :::;Y2Y2KY2KY2KY2KY2| |   | |\n"+
-        " | |   | :;Y2KY2KY2KY2KY2K+++| |   | |\n"+
-        " | |   | |;2KY2KY2KY2++++++++| |   | |\n"+
-        " | |   | | ;++++++++++++++++;| |   | |\n"+
-        " | |   | |  ;++++++++++++++;.| |   | |\n"+
-        " | |   | |   :++++++++++++:  | |   | |\n"+
-        " | |   | |    .:++++++++;.   | |   | |\n"+
-        " | |   | |       .:;+:..     | |   | |\n"+
-        " | |   | |         ;;        | |   | |\n"+
-        " | |   | |      .,:+;:,.     | |   | |\n"+
-        " | |   | |    .::::;+::::,   | |   | |\n"+
-        " | |   | |   ::::::;;::::::. | |   | |\n"+
-        " | |   | |  :::::::+;:::::::.| |   | |\n"+
-        " | |   | | ::::::::;;::::::::| |   | |\n"+
-        " | |   | |:::::::::+:::::::::| |   | |\n"+
-        " | |   | |:::::::::+:::::::::| |   | |\n"+
-        " | |   | ::::::::;+++;:::::::| |   | |\n"+
-        " | |   | :::::::;+++++;::::::| |   | |\n"+
-        " | |   | ::::::;+++++++;:::::| |   | |\n"+
-        " | |   |.:::::;+++++++++;::::| |   | |\n"+
-        " | | ,`':::::;+++++++++++;:::| |' -| |-..\n"+
-                        " | |'   ::::;+++++++++++++;::| |   '-' ,|\n"+
-        " | |    ::::;++++++++++++++;:| |     .' |\n"+
-        ",;-‘_   `-._===++++++++++_.-'| |   .'  .’\n"+
-        "|    ````'''----....___-'    '-' .'  .’\n"+
-        "’—….____           ````'''--;  ,’\n"+
-        "            ````’’’’——….____|.’\n";
+                "\n\n+====+\n" +
+                "|(::)|\n" +
+                 "| )( |\n" +
+                 "|(..)|\n" +
+                  "+====+\n\n";
 
         out.print(AnsiCode.ANSI_YELLOW+ wait + AnsiCode.ANSI_RESET);
     }
@@ -433,6 +400,124 @@ public class PrintSupport {
         out.println();
         out.print(AnsiCode.ANSI_BLUE+ bye + AnsiCode.ANSI_RESET);
 
+    }
+
+
+    public String[][][] getBOARD_PARTS() {
+        return BOARD_PARTS;
+    }
+
+    public void setBOARD_PARTS(String[][][] BOARD_PARTS) {
+        this.BOARD_PARTS = BOARD_PARTS;
+    }
+
+    public void buildSlot(Slot slot){
+        int level = slot.getLevel().ordinal();
+        String[] SLOT_PARTS = new String[5];
+
+        if ( slot.isWorkerOnSlot() ) {
+            String color = AnsiCode.getAnsiByName(slot.getWorkerColor().toString());
+            String WITH_WORKER_LOWER_SLOT = "|___" + color + AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "____|";
+            String WITH_WORKER_PART_SLOT =  "|   " + color + AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "    |";
+
+            switch (level){
+                case 0 :
+                    SLOT_PARTS[0]= UPPER_PART_SLOT;
+                    SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[2]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[3]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[4]= WITH_WORKER_LOWER_SLOT;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+
+                case 1 :
+                    SLOT_PARTS[0]=UPPER_PART_SLOT;
+                    SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[2]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[3]= WITH_WORKER_PART_SLOT;
+                    SLOT_PARTS[4]= WITH_LEV1_PART_SLOT ;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+
+                case 2 :
+                    SLOT_PARTS[0]= UPPER_PART_SLOT;
+                    SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[2]= WITH_WORKER_PART_SLOT;
+                    SLOT_PARTS[3]=  WITH_LEV2_PART_SLOT ;
+                    SLOT_PARTS[4]=  WITH_LEV1_PART_SLOT ;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+
+                case 3 :
+                    SLOT_PARTS[0]=  UPPER_PART_SLOT;
+                    SLOT_PARTS[1]=  WITH_WORKER_PART_SLOT;
+                    SLOT_PARTS[2]=  WITH_LEV3_PART_SLOT;
+                    SLOT_PARTS[3]=  WITH_LEV2_PART_SLOT ;
+                    SLOT_PARTS[4]=  WITH_LEV1_PART_SLOT ;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+
+
+
+            }
+        }else{
+            switch (level) {
+                case 0:
+                    SLOT_PARTS[4]= LOWER_FREE_PART_SLOT;
+                    SLOT_PARTS[3]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[2]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[0]= UPPER_PART_SLOT;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+                case 1:
+                    SLOT_PARTS[4]= WITH_LEV1_PART_SLOT;
+                    SLOT_PARTS[3]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[2]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[0]= UPPER_PART_SLOT;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+
+                case 2:
+                    SLOT_PARTS[4]= WITH_LEV1_PART_SLOT;
+                    SLOT_PARTS[3]= WITH_LEV2_PART_SLOT;
+                    SLOT_PARTS[2]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[0]= UPPER_PART_SLOT;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+
+                case 3:
+                    SLOT_PARTS[4]= WITH_LEV1_PART_SLOT;
+                    SLOT_PARTS[3]= WITH_LEV2_PART_SLOT;
+                    SLOT_PARTS[2]=WITH_LEV3_PART_SLOT;
+                    SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[0]= UPPER_PART_SLOT;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+
+                case 4:
+                    SLOT_PARTS[4]= WITH_LEV1_PART_SLOT;
+                    SLOT_PARTS[3]= WITH_LEV2_PART_SLOT;
+                    SLOT_PARTS[2]=WITH_LEV3_PART_SLOT;
+                    SLOT_PARTS[1]= WITH_DOME_PART_SLOT;
+                    SLOT_PARTS[0]= UPPER_PART_SLOT;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+
+
+                case 5:
+                    SLOT_PARTS[4]= WITH_DOME_ATLAS_PART_SLOT;
+                    SLOT_PARTS[3]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[2]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[1]= MIDDLE_FREE_PART_SLOT;
+                    SLOT_PARTS[0]= UPPER_PART_SLOT;
+                    BOARD_PARTS[slot.getRow()][slot.getColumn()]= SLOT_PARTS;
+                    return;
+
+            }
+        }
     }
 
 }

@@ -4,6 +4,9 @@ import it.polimi.ingsw.PSP47.Enumerations.Color;
 
 import java.util.*;
 
+/**
+ * TODO javadoc
+ */
 class GameServer {
     private final int playersNumber;
     private final HashMap<ClientHandler, PlayerParameters> clientHandlers = new HashMap<>();

@@ -618,13 +618,16 @@ public class CLI extends ViewObservable implements View  {
     }
 
     @Override
-    public void showGuiSlot(Slot slot) {
+    public void showNewBoard(Slot slot) {
+        out.println("NEW TRY CLI");
+        printSupport.buildSlot(slot);
+        printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);
 
     }
 
     @Override
     public void showGame() {
-        printSupport.PrintEmptyBoard(out);
+        printSupport.printCurrBoard(printSupport.buildCurrBoard(gameView.getBoardView()), out);
     }
 
 

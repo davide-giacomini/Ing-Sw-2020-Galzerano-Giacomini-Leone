@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP47.Network.Client;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
+import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Message.*;
@@ -141,23 +142,17 @@ public class NetworkHandler implements Runnable, ViewListener {
         public void run() {
             switch (message.getMessageType()) {
                 case FIRST_CONNECTION:
+                    view.getGameView().update(CurrentScene.START);
                     handleFirstConnection();
                     break;
                 case REQUEST_PLAYERS_NUMBER:
+                    view.getGameView().update(CurrentScene.CHOOSE_PLAYERS);
                     view.askNumberOfPlayers();
                     break;
                 case WRONG_PARAMETERS:
+                    view.getGameView().update(CurrentScene.START);
                     view.showErrorMessage(((WrongParameters) message).getErrorMessage());
                     handleFirstConnection();
-                    break;
-                case ASK_WORKER_POSITION:
-                    view.askWhereToPositionWorkers();
-                    break;
-                case CHOOSE_ACTION:
-                    view.askAction();
-                    break;
-                case CHOOSE_WORKER:
-                    view.askWhichWorkerToUse();
                     break;
                 case CONNECTION_ACCEPTED:
                     visitable = ((VisitableMessage) message).getContent();
@@ -181,6 +176,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.showImportantMessage(text);
                     break;
                 case LIST_OF_GODS:
+                    view.getGameView().update(CurrentScene.CHOOSE_CARD);
                     visitable = ((VisitableMessage) message).getContent();
                     VisitableListOfGods visitableGods = (VisitableListOfGods) visitable;
                     ArrayList<GodName> godNames = visitableGods.getGodNames();
@@ -190,6 +186,37 @@ public class NetworkHandler implements Runnable, ViewListener {
                     PlayersNumber messagePlayers = (PlayersNumber) message;
                     int number = messagePlayers.getNumberOfPlayers();
                     view.getGameView().setNumberOfPlayers(number);
+                    break;
+                case CHALLENGER:
+                    view.getGameView().update(CurrentScene.CHALLENGER);
+                    YouAreTheChallenger messageNames = (YouAreTheChallenger) message;
+                    ArrayList<String>usernames = messageNames.getUsernames();
+                    view.challengerWillChooseThreeGods(usernames);
+                    break;
+                case LOSING:
+                    view.getGameView().update(CurrentScene.LOSE);
+                    view.theLoserIs();
+                    break;
+                case WINNING:
+                    view.getGameView().update(CurrentScene.WIN);
+                    view.theWinnerIs(((ImportantMessage) message).getText());
+                    break;
+                case START_GAME:
+                    view.showGame();
+                    break;
+                case ASK_WORKER_POSITION:
+                    view.askWhereToPositionWorkers();
+                    break;
+                case CHOOSE_ACTION:
+                    view.askAction();
+                    break;
+                case CHOOSE_WORKER:
+                    view.getGameView().setTurn(true);
+                    view.askWhichWorkerToUse();
+                    break;
+                case TURN:
+                    view.getGameView().setTurn(false);
+                    view.othersTurn(((ImportantMessage) message).getText());
                     break;
                 case PUBLIC_INFORMATION:
                     PublicInformation messageInfo = (PublicInformation) message;
@@ -205,24 +232,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     Slot slot = messageSlot.getUpdatedSlot();
                     view.getGameView().getBoardView().setSlot(slot);
                     view.showCurrentBoard();
-                    view.showGuiSlot(slot);
-                    break;
-                case CHALLENGER:
-                    YouAreTheChallenger messageNames = (YouAreTheChallenger) message;
-                    ArrayList<String>usernames = messageNames.getUsernames();
-                    view.challengerWillChooseThreeGods(usernames);
-                    break;
-                case START_GAME:
-                    view.showGame();
-                    break;
-                case TURN:
-                    view.othersTurn(((ImportantMessage) message).getText());
-                    break;
-                case LOSING:
-                    view.theLoserIs();
-                    break;
-                case WINNING:
-                    view.theWinnerIs(((ImportantMessage) message).getText());
+                    view.showNewBoard(slot);
                     break;
 
             }
@@ -237,8 +247,10 @@ public class NetworkHandler implements Runnable, ViewListener {
     public void send(Message message) {
         try {
             synchronized (this) {
-                outputServer.writeObject(message);
-            }
+	            outputServer.reset();
+	            outputServer.writeObject(message);
+	            outputServer.flush();
+	        }
         } catch (IOException e) {
             System.out.println("Error in the serialization of " + message.toString() + " message.");
             endConnection();

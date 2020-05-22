@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP47.View;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
+import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * This class stores in the client some basic information of the model that the view needs in order to
  *interact with the user
  */
-public class GameView {
+public class GameView{
 
     private String myUsername;
     private Color myColor;
@@ -21,6 +22,9 @@ public class GameView {
     public ArrayList<String> usernames = new ArrayList<String>();
     public ArrayList<Color> colors = new ArrayList<Color>();
     public ArrayList <GodName> gods = new ArrayList<GodName>();
+
+    private CurrentScene currentScene;
+    private boolean turn;
 
     public GameView(){
         this.boardView = new BoardView();
@@ -92,7 +96,6 @@ public class GameView {
         return colors;
     }
 
-
     public void setGods(ArrayList<GodName> gods) {
         this.gods = gods;
     }
@@ -101,4 +104,21 @@ public class GameView {
         return gods;
     }
 
+    public CurrentScene getCurrentScene() {
+        return currentScene;
+    }
+
+
+
+    public void update(CurrentScene currentScene) {
+        this.currentScene = currentScene;
+    }
+
+    public boolean isTurn() {
+        return turn;
+    }
+
+    public void setTurn(boolean turn) {
+        this.turn = turn;
+    }
 }

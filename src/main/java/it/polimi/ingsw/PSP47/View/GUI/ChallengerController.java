@@ -188,6 +188,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectApollo(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.APOLLO)) {
             godNames.add(GodName.APOLLO);
             Apollo.setDisable(true);
@@ -197,6 +199,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectArtemis(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.ARTEMIS)) {
             godNames.add(GodName.ARTEMIS);
             Artemis.setDisable(true);
@@ -206,6 +210,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectAthena(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.ATHENA)) {
             godNames.add(GodName.ATHENA);
             Athena.setDisable(true);
@@ -215,6 +221,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectAtlas(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.ATLAS)) {
             godNames.add(GodName.ATLAS);
             Atlas.setDisable(true);
@@ -224,6 +232,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectChronus(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.CHRONUS)) {
             godNames.add(GodName.CHRONUS);
             Chronus.setDisable(true);
@@ -233,6 +243,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectDemeter(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.DEMETER)) {
             godNames.add(GodName.DEMETER);
             Demeter.setDisable(true);
@@ -242,6 +254,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectHephaestus(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.HEPHAESTUS)) {
             godNames.add(GodName.HEPHAESTUS);
             Hephaestus.setDisable(true);
@@ -251,6 +265,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectHera(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.HERA)) {
             godNames.add(GodName.HERA);
             Hera.setDisable(true);
@@ -260,6 +276,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectHestia(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.HESTIA)) {
             godNames.add(GodName.HESTIA);
             Hestia.setDisable(true);
@@ -269,6 +287,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectMinotaur(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.MINOTAUR)) {
             godNames.add(GodName.MINOTAUR);
             Minotaur.setDisable(true);
@@ -278,6 +298,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectPan(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.PAN)) {
             godNames.add(GodName.PAN);
             Pan.setDisable(true);
@@ -287,6 +309,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectPrometheus(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.PROMETHEUS)) {
             godNames.add(GodName.PROMETHEUS);
             Prometheus.setDisable(true);
@@ -296,6 +320,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectTriton(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.TRITON)) {
             godNames.add(GodName.TRITON);
             Triton.setDisable(true);
@@ -305,6 +331,8 @@ public class ChallengerController extends ViewObservable {
 
     @FXML
     void selectZeus(MouseEvent event) {
+        if (checkIfYetChose())
+            return;
         if (!godNames.contains(GodName.ZEUS)) {
             godNames.add(GodName.ZEUS);
             Zeus.setDisable(true);
@@ -369,5 +397,13 @@ public class ChallengerController extends ViewObservable {
             notifyViewListener(visitableListOfGods);
             mainPane.setDisable(true);
         }
+    }
+
+    private boolean checkIfYetChose() {
+        if (godNames.size() == numberOfPlayers) {
+            godPower.setText("You have yet choose enough cards, you can't select another one");
+            return true;
+        }
+        return false;
     }
 }

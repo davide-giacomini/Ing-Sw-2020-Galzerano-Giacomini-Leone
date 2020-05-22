@@ -9,11 +9,6 @@ public enum Action {
     BUILDDOME,
     END,
     QUIT,
-    //added actions //TODO distingush between actions that have to be sent to the server and the ones that indicate the moment in the game for the client
-    CHOOSEACT,
-    ASK_INITIAL_POSITION,
-    ASK_WHICH_WORKER,
-    WAIT,
     WRONGACTION;
 
     /**

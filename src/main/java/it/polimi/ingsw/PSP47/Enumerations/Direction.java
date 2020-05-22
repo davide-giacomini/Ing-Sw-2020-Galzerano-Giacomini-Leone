@@ -56,6 +56,14 @@ public enum Direction {
         }
     }
 
+    /**
+     * method used to convert two slots into the direction for this movement
+     * @param originRow is the row of the slot where the worker was at the origin
+     * @param originColumn is the column of the slot where the worker was at the origin
+     * @param destinationRow is the row of the slot where the worker was at the destination
+     * @param destinationColumn is the column of the slot where the worker was at the destionation
+     * @return
+     */
     public static Direction getDirectionGivenSlots( int originRow, int originColumn ,int destinationRow, int destinationColumn ){
 
         if (originRow-destinationRow == 0 && originColumn - destinationColumn == 0)
@@ -74,6 +82,8 @@ public enum Direction {
             return DOWN;
         else if (originRow-destinationRow == -1 && originColumn - destinationColumn == -1)
             return RIGHTDOWN;
+        else if (originRow-destinationRow == 1 && originColumn - destinationColumn == 0)
+            return UP;
         else
             return WRONGDIRECTION;
     }

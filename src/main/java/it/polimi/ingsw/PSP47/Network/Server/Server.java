@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+//TODO chiedere per synchronized
+
 /**
  * This class wait for connections with clients and handles connections and disconnections, creating or deleting
  * the game.
@@ -168,6 +170,8 @@ public class Server implements ClientHandlerListener {
                             game.removeClientHandler(opponentClientHandler);
                         }
                     }
+                    
+                    break;
                 }
             }
         }
@@ -186,8 +190,10 @@ public class Server implements ClientHandlerListener {
      */
     public synchronized void clientHandlerGameOver(ClientHandler clientHandler) {
         for (GameServer game: games) {
-            if (game.containsClientHandler(clientHandler))
+            if (game.containsClientHandler(clientHandler)) {
                 game.removeClientHandler(clientHandler);
+                break;
+            }
         }
     }
     
