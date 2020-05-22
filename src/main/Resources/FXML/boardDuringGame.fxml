@@ -6,6 +6,10 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -79,7 +83,7 @@
    <bottom>
       <Text fx:id="commandText" fill="#2905a8" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your action from the Buttons :" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
-            <Font name="Savoye LET Plain:1.0" size="29.0" />
+            <Font name="Cochin Italic" size="29.0" />
          </font></Text>
    </bottom>
    <left>
@@ -102,21 +106,26 @@
    <right>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <TextArea fx:id="firstPlayerInfo" prefHeight="108.0" prefWidth="100.0">
+            <TitledPane animated="false" text="GAME INFO" textAlignment="CENTER" textFill="#0a0c97" VBox.vgrow="NEVER">
                <font>
-                  <Font name="Savoye LET Plain:1.0" size="13.0" />
+                  <Font name="Cochin" size="13.0" />
+               </font>
+            </TitledPane>
+            <TextArea prefHeight="70.0" prefWidth="110.0" promptText="Current turn :" VBox.vgrow="NEVER">
+               <font>
+                  <Font name="Cochin" size="13.0" />
                </font></TextArea>
-            <TextArea fx:id="secondPlayerInfo" prefHeight="98.0" prefWidth="100.0">
+            <TextArea fx:id="firstPlayerInfo" prefHeight="110.0" prefWidth="110.0" promptText="First Player:" VBox.vgrow="NEVER">
                <font>
-                  <Font name="Savoye LET Plain:1.0" size="13.0" />
+                  <Font name="Cochin" size="13.0" />
                </font></TextArea>
-            <TextArea fx:id="thirdPlayerInfo" prefHeight="107.0" prefWidth="100.0">
+            <TextArea fx:id="secondPlayerInfo" prefHeight="110.0" prefWidth="110.0" promptText="Second Player:" VBox.vgrow="NEVER">
                <font>
-                  <Font name="Savoye LET Plain:1.0" size="13.0" />
+                  <Font name="Cochin" size="13.0" />
                </font></TextArea>
-            <TextArea prefHeight="88.0" prefWidth="100.0">
+            <TextArea fx:id="thirdPlayerInfo" prefHeight="110.0" prefWidth="110.0" promptText="Third Player:" VBox.vgrow="NEVER">
                <font>
-                  <Font name="Savoye LET Plain:1.0" size="13.0" />
+                  <Font name="Cochin" size="13.0" />
                </font></TextArea>
          </children></VBox>
    </right>

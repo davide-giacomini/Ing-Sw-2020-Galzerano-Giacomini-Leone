@@ -20,6 +20,10 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class is used to change what the user will see and updates the current scene (//TODO maybe move it in the messageHandler)
+ * It is only used for the graphic part, which means display and change of scene layout //TODO Check where to delete platform.runLater (ari tried and everything broke)
+ */
 public class GUI extends Application implements View {
 
     private NetworkHandler networkHandler;
@@ -163,12 +167,12 @@ public class GUI extends Application implements View {
 
     @Override
     public void theWinnerIs(String usernameWinner) {
-        Platform.runLater(()->{
+        //Platform.runLater(()->{
         primaryStage.setWidth(1100);
         primaryStage.setHeight(800);
         WinningAdviceController winningAdviceController = setLayout(scene, "/FXML/winningAdvice.fxml");
         winningAdviceController.addViewListener(networkHandler);
-        });
+        //});
     }
 
     @Override
@@ -181,34 +185,35 @@ public class GUI extends Application implements View {
 
     @Override
     public void showEnd() {
-       // System.exit(0);
+       // System.exit(0); decide how to handle the final part
     }
 
 
     /**
-     * method imoplemented in order to display the same board but with the different slot that has just been updated from the model
+     * method implemented in order to display the same board but with the different slot that has just been updated from the model
      * @param slot is the slot that has been changed
      */
     @Override
     public void showNewBoard(Slot slot) {
         Platform.runLater(()-> {
-            gameView.update(CurrentScene.WAIT);
-            duringGameController.setGameView(gameView);
+            gameView.update(CurrentScene.WAIT); //new current scene
+            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.changeSlot(slot);
         });
     }
 
     /**
-     * method used to set the main scene, when the scene with the board is setted, the default moment is wait
+     * method used to set the main scene, when the scene with the board is set, the default moment is wait
      * the public information are displayed
      */
     @Override
     public void showGame() {
         Platform.runLater(()-> {
-
+            primaryStage.setWidth(1100);
+            primaryStage.setHeight(800);
             duringGameController = setLayout(scene, "/FXML/boardDuringGame.fxml");
             primaryStage.setHeight(700);
-            gameView.update(CurrentScene.WAIT);
+            gameView.update(CurrentScene.WAIT); //new current scene
             duringGameController.setGameView(gameView);
             duringGameController.addViewListener(networkHandler);
             duringGameController.changeText();
@@ -222,21 +227,21 @@ public class GUI extends Application implements View {
     @Override
     public void askWhichWorkerToUse() {
         Platform.runLater(() -> {
-            gameView.update(CurrentScene.ASK_WHICH_WORKER);
-            duringGameController.setGameView(gameView);
+            gameView.update(CurrentScene.ASK_WHICH_WORKER); //new current scene
+            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.resetRowsAndColumns();
             duringGameController.changeText();
         });
     }
 
     /**
-     * method that sets method a the moment in which the gui expects two positions for the initial workers, in order to allow the main controller to handle the click differently
+     * method that sets method at the moment (current scene) in which the gui expects two positions for the initial workers, in order to allow the main controller to handle the click differently
      */
     @Override
     public void askWhereToPositionWorkers() {
         Platform.runLater(() -> {
-            gameView.update(CurrentScene.ASK_INITIAL_POSITION);
-            duringGameController.setGameView(gameView);
+            gameView.update(CurrentScene.ASK_INITIAL_POSITION);//new current scene
+            duringGameController.setGameView(gameView);//maybe can be deleted, not sure because it gave problems
             duringGameController.resetRowsAndColumns();
             duringGameController.setUsernames(gameView.getUsernames());
             duringGameController.setColors(gameView.getColors());
@@ -252,33 +257,39 @@ public class GUI extends Application implements View {
     public void othersTurn(String usernameOnTurn) {
         Platform.runLater(() -> {
             if(!start) {
-                Alert a = new Alert(Alert.AlertType.WARNING);
+                primaryStage.setWidth(600);
+                primaryStage.setHeight(450);
+                StartController startController = setLayout(scene, "/FXML/waitingPane.fxml"); //now instead of alert I show waiting Pane made by Moni :)
+                /*Alert a = new Alert(Alert.AlertType.WARNING);
                 a.setContentText("It's " + usernameOnTurn + "'s turn. You can't do anything until it's your turn.");
-                a.show();
+                a.show();*/
             }else {
-                gameView.update(CurrentScene.WAIT);
-                duringGameController.setGameView(gameView);
+                gameView.update(CurrentScene.WAIT);//new current scene
+                duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
                 duringGameController.changeText();
             }
         });
     }
 
     /**
-     * method that indicates to the controller with the new moment set that it has to wait for action + slot
+     * method that indicates to the DuringGameController with the new moment set that it has to wait for action + slot
      */
     @Override
     public void askAction() {
         Platform.runLater(() -> {
-            gameView.update(CurrentScene.CHOOSE_ACTION);
-            duringGameController.setGameView(gameView);
+            gameView.update(CurrentScene.CHOOSE_ACTION); //new current scene
+            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.changeText();
         });
     }
 
+    /**
+     * gives the informations to the duringGameController to set them in the lateral part of the scene
+     */
     @Override
     public void showPublicInformation() {
         Platform.runLater(() -> {
-            duringGameController.setGameView(gameView);
+            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.setUsernames(gameView.getUsernames());
             duringGameController.setColors(gameView.getColors());
             duringGameController.setGods(gameView.getGods());
