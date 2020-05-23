@@ -25,7 +25,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     private ObjectInputStream inputClient;
     private ObjectOutputStream outputClient;
     private boolean isConnected;
-    private boolean gameAlreadyStarted;
     private VirtualView virtualView;
     private ServerTimer serverTimer;
     private final ExecutorService messageExecutor = Executors.newSingleThreadExecutor();
@@ -34,12 +33,10 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * This constructor initializes the input stream and output stream of the sockets.
      *
      * @param clientSocket the socket of the {@link Client} connected to the server.
-     * @param gameAlreadyStarted if the game is already started.
      */
-    public ClientHandler(Socket clientSocket, boolean gameAlreadyStarted){
+    public ClientHandler(Socket clientSocket){
         this.clientSocket = clientSocket;
         this.isConnected = true;
-        this.gameAlreadyStarted = gameAlreadyStarted;
     
         try {
             inputClient = new ObjectInputStream(clientSocket.getInputStream());
@@ -75,14 +72,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
             }
         }).start();
         
-        // start the game
-        if (gameAlreadyStarted) {
-            send(new ConnectionFailed("The game is already started.\nTry another time."));
-            endConnection();
-        }
-        else {
-            send(new FirstConnection(null));
-        }
+        send(new RequestPlayersNumber());
     
         dispatchMessages();
     }
@@ -165,7 +155,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                     notifyFirstConnection((FirstConnection) message, clientHandler);
                     break;
                 case REQUEST_PLAYERS_NUMBER:
-                    notifyPlayersNumber((RequestPlayersNumber) message);
+                    notifyPlayersNumber((RequestPlayersNumber) message, clientHandler);
                     break;
                 default:
                     Visitable visitableObject = ((VisitableMessage) message).getContent();
@@ -180,9 +170,11 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     *
     * @param message the message that must be sent.
     */
-    private synchronized void send(Message message) {
+    private void send(Message message) {
         try {
-            outputClient.writeObject(message);
+            synchronized (this) {
+                outputClient.writeObject(message);
+            }
         } catch (IOException e) {
             System.out.println("Error in the serialization of " + message.toString() + " message.");
             endConnection();
@@ -208,10 +200,11 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     /**
-     * It sends a message to the client to ask them the max number of players they want.
+     * It sends a {@link FirstConnection} request to the client.
+     * @see FirstConnection
      */
-    void askMaxPlayersNumber(){
-        send(new RequestPlayersNumber(null));
+    void askParameters (){
+        send(new FirstConnection());
     }
     
     /**
@@ -240,7 +233,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      *
      */
     void notifyGameStartedWithoutYou(){
-        gameAlreadyStarted = true;
         send(new ConnectionFailed("The game is already started.\nTry another time."));
         
         endConnection();
@@ -283,18 +275,10 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     /**
-     * It sends a message to the client telling them that they won.
+     * This method handles a game over.
      */
-    void showYouWon(){
-        notifyWin();
-        endConnection();
-    }
-    
-    /**
-     * It sends a message to the client telling them that they lost.
-     */
-    void showYouLost(){
-        notifyLoss(this);
+    void gameOver(){
+        notifyGameOver(this);
         endConnection();
     }
 
@@ -304,8 +288,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param numberOfPlayers parameter that must be sent.
      */
     void sendNumberOfPlayers(int numberOfPlayers) {
-        PlayersNumber message = new PlayersNumber(numberOfPlayers);
-        send(message);
+        send(new PlayersNumber(numberOfPlayers));
     }
 
     /**
@@ -404,7 +387,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param color of the client
      */
     void sendConnectionAccepted(String username, Color color){
-
         VisitableInformation visitableInformation = new VisitableInformation();
         visitableInformation.setUsername(username);
         visitableInformation.setColor(color);

@@ -11,10 +11,22 @@ public class FirstConnection extends VisitableMessage {
     private static final long serialVersionUID = -8037367122696029080L;
 
     private VisitableInformation usernameAndColor;
-
+    
+    /**
+     * This is the constructor to be used by the client, to set username and color
+     *
+     * @param usernameAndColor the information of username and color.
+     */
     public FirstConnection(VisitableInformation usernameAndColor) {
         this.usernameAndColor = usernameAndColor;
         this.messageType=MessageType.FIRST_CONNECTION;
+    }
+    
+    /**
+     * This is the constructor to be used by th Server, to ask for the information.
+     */
+    public FirstConnection(){
+        this.messageType = MessageType.FIRST_CONNECTION;
     }
 
     @Override

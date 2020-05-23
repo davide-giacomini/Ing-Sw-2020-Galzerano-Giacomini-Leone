@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP47.Network.Server;
 
 import it.polimi.ingsw.PSP47.Controller.GameController;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Model.Board;
+import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Network.Message.FirstConnection;
 import it.polimi.ingsw.PSP47.Network.Message.RequestPlayersNumber;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
@@ -17,36 +17,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+//TODO chiedere per synchronized
+
 /**
  * This class wait for connections with clients and handles connections and disconnections, creating or deleting
  * the game.
  */
 public class Server implements ClientHandlerListener {
     /**
-     * This class is a tuple with a username and a color.
-     */
-    private class PlayerParameters {
-        private final String username;
-        private final Color color;
-        
-        private PlayerParameters(String username, Color color) {
-            this.username = username;
-            this.color = color;
-        }
-    }
-    
-    /**
      * The socket's port to connect to from the client.
      */
     public final static int SOCKET_PORT = 7777;
     private final ServerSocket serverSocket;
-    private volatile boolean firstPlayerConnected = false;
-    private volatile boolean gameStarted = false;
-    private int maxPlayersNumber = -1;
-    private ClientHandler firstClientHandler;
-    private final ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
-    private final Map<ClientHandler, PlayerParameters> connectionsAccepted = new HashMap<>();
-    private GameController gameController;
+    private final ArrayList<GameServer> games = new ArrayList<>();
     
     /**
      * It creates the server socket to connect with the clients.
@@ -64,13 +47,9 @@ public class Server implements ClientHandlerListener {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                synchronized (this) {
-                    ClientHandler clientHandler = new ClientHandler(clientSocket, gameStarted);
-                    clientHandlers.add(clientHandler);
-                    clientHandler.addClientHandlerListener(this);
-                    new Thread(clientHandler).start();
-                }
-                
+                ClientHandler clientHandler = new ClientHandler(clientSocket);
+                clientHandler.addClientHandlerListener(this);
+                new Thread(clientHandler).start();
             } catch (IOException e) {
                 System.out.println("Connection Error!");
             }
@@ -78,221 +57,173 @@ public class Server implements ClientHandlerListener {
     }
     
     /**
-     * This method handles the first connection of each player. The players are added to the game's queue to wait for
-     * the creation of the game.
+     * This method handles the first connection of each player. It checks if username and color are correct end then,
+     * if the {@link GameServer} is ready, the method starts it.
      *
      * @param message it contains the username and the color chosen by the player.
      * @param clientHandler the handler of the client connected to the server.
      */
     @Override
-    public synchronized void handleFirstConnection(FirstConnection message, ClientHandler clientHandler) {
-        VisitableInformation firstConnectionMessage = (VisitableInformation) message.getContent();
-        String username = firstConnectionMessage.getUsername();
-        Color color = firstConnectionMessage.getColor();
+    public void handleFirstConnection(FirstConnection message, ClientHandler clientHandler) {
+        GameServer game;
+        String wrongParameter;
+        String username;
+        Color color;
+    
+        synchronized (this) {
+            VisitableInformation firstConnectionMessage = (VisitableInformation) message.getContent();
+            username = firstConnectionMessage.getUsername();
+            color = firstConnectionMessage.getColor();
+            game = null;
         
-        // If the first player isn't connected yet, you become the first player
-        if (!firstPlayerConnected) {
-            firstPlayerConnected = true;
-            firstClientHandler = clientHandler;
-            connectionsAccepted.put(clientHandler, new PlayerParameters(username, color));
-            clientHandlers.remove(clientHandler);
-            clientHandler.sendConnectionAccepted(username, color);
-            clientHandler.askMaxPlayersNumber();
-            return;
-        }
-        // If the first player is already connected and they didn't choose a max number of player, you have to wait.
-        if (maxPlayersNumber < 0) {
-            clientHandler.warnFirstPlayerIsChoosing();
+            // Get the GameServer which contains the clientHandler
+            for (GameServer localGame : games) {
+                if (localGame.containsClientHandler(clientHandler))
+                    game = localGame;
+            }
+        
+            // If game is null it's because the clientHandler disconnected before the synchronized block
+            if (game==null) return;
             
-            while (maxPlayersNumber < 0) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            
-            // If the first player is no more connected, the game is corrupted and it closes.
-            if (!firstPlayerConnected) {
-                clientHandler.notifyFirstClientDisconnected();
-                notifyAll();
-                return;
-            }
-            // If the game is already started, you are out.
-            if (gameStarted) {
-                clientHandler.notifyGameStartedWithoutYou();
-                notifyAll();
-                return;
-            }
+            wrongParameter = game.addParametersIfDifferent(username, color, clientHandler);
         }
     
-        // It checks if your color and username are corrected.
-        String wrongParameter;
-        if ((wrongParameter = checkParameters(username, color)) != null) {
+        if (wrongParameter != null) {
             clientHandler.askAgainParameters(wrongParameter);
-            notifyAll();
+            return;
+        }
+        else
+            clientHandler.sendConnectionAccepted(username, color);
+        
+        boolean gameReady;
+        synchronized (this) {
+            if (gameReady=(game.isReady() && !game.isStarted()))
+                game.setStarted(true);
+        }
+    
+        if (!gameReady) {
+            String waitMessage = "Wait for the other players to connect.\n" +
+                    "The game will start as soon as there are " + game.getPlayersNumber() + " players.";
+            
+            clientHandler.sendImportant(waitMessage, MessageType.IMPORTANT);
             return;
         }
         
-        // At this point you can enter the game and wait for other players
-        connectionsAccepted.put(clientHandler, new PlayerParameters(username, color));
-        clientHandler.sendConnectionAccepted(username, color);
-        clientHandlers.remove(clientHandler);
-
-        
-        // With enough players, the game starts.
-        if (connectionsAccepted.size() == maxPlayersNumber)
-            initGame();
-        
-        notifyAll();
+        initGame(game);
     }
     
     /**
-     * This message sets the max number of players chosen by the first player.
+     * This method searches for a free game with the number of players specified bu the message. If there isn't such a
+     * game, it creates a new game with the number of players mentioned above.
+     *
      * @param message it contains the max number of players.
      */
     @Override
-    public synchronized void setPlayersNumber(RequestPlayersNumber message) {
-        maxPlayersNumber = ((VisitableInt) message.getContent()).getNumber();
+    public void setPlayersNumber(RequestPlayersNumber message, ClientHandler clientHandler) {
+        int playersNumberChosen = ((VisitableInt) message.getContent()).getNumber();
+        boolean clientHandlerAdded = false;
+    
+        synchronized (this) {
+            for (GameServer game : games) {
+                if (!game.isFull() && !game.isStarted() && playersNumberChosen == game.getPlayersNumber()) {
+                    game.addClientHandler(clientHandler);
+                    clientHandlerAdded = true;
+                }
+            }
         
-        notifyAll();
+            if (!clientHandlerAdded) {
+                GameServer game = new GameServer(playersNumberChosen);
+                game.addClientHandler(clientHandler);
+                games.add(game);
+            }
+        }
+    
+        clientHandler.askParameters();
     }
     
     /**
-     * It handles an illegal disconnection of a client. Illegal means that the client disconnects after being
-     * added to the game's players but when the game isn't finished yet.
+     * It handles an illegal disconnection of a client. Illegal means that the client doesn't disconnect volountarly
+     * or because the game ended.
      * The server, with this method, takes care of notifying and deleting all the other players, if necessary.
      *
      * @param clientHandler the client who disconnected.
      */
     @Override
-    public synchronized void handleDisconnection(ClientHandler clientHandler) {
-        // If the clientHandler isn't in the game yet
-        if (!connectionsAccepted.containsKey(clientHandler)) {
-            clientHandlers.remove(clientHandler);
-        }
-        // If the clientHandler is the first and the game is not started yet, the game is reset and others players
-        // are notified. A message of the dropped connection of the first client will be sent to them.
-        else if (!gameStarted && clientHandler.equals(firstClientHandler)) {
-            String username = connectionsAccepted.get(clientHandler).username;
-            connectionsAccepted.remove(clientHandler);
-            
-            for (ClientHandler client : connectionsAccepted.keySet()) {
-                client.notifyOpponentClientDisconnected(username);
+    public void handleDisconnection(ClientHandler clientHandler) {
+        String usernameDisconnected = null;
+        ArrayList<ClientHandler> clientHandlersToNotify = new ArrayList<>();
+    
+        synchronized (this) {
+            // Iterates over the game to find the clientHandler
+            for (GameServer game: games) {
+                if (game.containsClientHandler(clientHandler)) {
+                    // If the game isn't started yet, the clientHandler can exit silently
+                    if (!game.isStarted())
+                        game.removeClientHandler(clientHandler);
+                    // If the game is already started, the username is saved and the clientHandler is removed.
+                    // Then, outside the synchronized block, the other players will be notified
+                    else {
+                        usernameDisconnected = game.getClientHandlers().get(clientHandler).getUsername();
+                        game.removeClientHandler(clientHandler);
+                        
+                        // Store the opponentClientHandlers to notify them outside the loop.
+                        clientHandlersToNotify.addAll(game.getClientHandlers().keySet());
+                        
+                        // Remove the opponentClientHandlers
+                        for (ClientHandler opponentClientHandler: clientHandlersToNotify) {
+                            game.removeClientHandler(opponentClientHandler);
+                        }
+                    }
+                    
+                    break;
+                }
             }
-            
-            cleanServer();
-            notifyAll();
         }
-        // If clientHandler is in the connections accepted, they are not the first clientHandler and the game is not
-        // started yet, this clientHandler can exit silently, without affecting other players.
-        else if (!gameStarted) {
-            connectionsAccepted.remove(clientHandler);
-        }
-        // If the game is started and you are among the connected players.
-        else {
-            String username = connectionsAccepted.get(clientHandler).username;
-            connectionsAccepted.remove(clientHandler);
-    
-            // The iteration is in this way because, otherwise, a remove inside a for loop gives troubles.
-            while (connectionsAccepted.size()!=0) {
-                Iterator<ClientHandler> iterator = connectionsAccepted.keySet().iterator();
-                ClientHandler client = iterator.next();
-                connectionsAccepted.remove(client);
-                client.notifyOpponentClientDisconnected(username);
+        
+        if (usernameDisconnected!=null) {
+            for (ClientHandler opponentClientHandler: clientHandlersToNotify) {
+                opponentClientHandler.notifyOpponentClientDisconnected(usernameDisconnected);
             }
-            
-            cleanServer();
         }
     }
     
     /**
-     * This methods deletes the clients from the game, because one of them won.
-     */
-    @Override
-    public synchronized void handleWinning() {
-        // The iteration is in this way because, otherwise, a remove inside a for loop gives troubles.
-        while (connectionsAccepted.size()!=0) {
-            Iterator<ClientHandler> iterator = connectionsAccepted.keySet().iterator();
-            ClientHandler client = iterator.next();
-            connectionsAccepted.remove(client);
-            client.endConnection();
-        }
-        
-        cleanServer();
-    }
-    
-    /**
-     * This method deletes the loosing client.
+     * This method removes a client handler when the game is over.
      *
-     * @param clientHandler the client who lost.
+     * @param clientHandler game over for this clientHandler.
      */
-    @Override
-    public synchronized void handleLoosing(ClientHandler clientHandler) {
-        connectionsAccepted.remove(clientHandler);
-        
-        if (connectionsAccepted.size()==0)
-            cleanServer();
-    }
-    
-    /**
-     * It cleans the server.
-     */
-    private void cleanServer(){
-        maxPlayersNumber = -1;
-        firstClientHandler = null;
-        firstPlayerConnected = false;
-        gameStarted = false;
-    }
-    
-    /**
-     * It checks if the username and the color chosen by the client are different by the ones chosen by the others.
-     *
-     * @param username player's username.
-     * @param color player's color.
-     * @return what is equal to the others players. If username and color are different it returns null. Indeed, a
-     * null return means that the client can play with these parameters.
-     */
-    private String checkParameters(String username, Color color) {
-        PlayerParameters opponentsParameters;
-    
-        for (ClientHandler clientHandler : connectionsAccepted.keySet()) {
-            opponentsParameters = connectionsAccepted.get(clientHandler);
-        
-            if (opponentsParameters.username.equals(username) && opponentsParameters.color.equals(color))
-                return "username and color";
-            if (opponentsParameters.username.equals(username))
-                return "username";
-            if (opponentsParameters.color.equals(color))
-                return "color";
+    public synchronized void clientHandlerGameOver(ClientHandler clientHandler) {
+        for (GameServer game: games) {
+            if (game.containsClientHandler(clientHandler)) {
+                game.removeClientHandler(clientHandler);
+                break;
+            }
         }
-        
-        return null;
     }
     
     /**
-     * It starts the game and sets {@link #gameStarted} = true, notifying all the players waiting inside
-     * {@link #handleFirstConnection}.
+     * It starts the game specified.
+     *
+     * @param game the game to be started.
      */
-    private void initGame() {
+    private void initGame(GameServer game) {
         // These maps have to be passed to the gameController.
         HashMap<String,Color> mapUserColor = new HashMap<>();
         HashMap<String, VirtualView> mapUserVirtualView = new HashMap<>();
+        HashMap<ClientHandler, PlayerParameters> clientHandlers = game.getClientHandlers();
         
-        for (ClientHandler clientHandler : connectionsAccepted.keySet()){
-            PlayerParameters clientHandlerParameters = connectionsAccepted.get(clientHandler);
-            String username = clientHandlerParameters.username;
-            Color color = clientHandlerParameters.color;
+        for (Map.Entry<ClientHandler, PlayerParameters> entry : clientHandlers.entrySet()){
+            ClientHandler clientHandler = entry.getKey();
+            String username = entry.getValue().getUsername();
+            Color color = entry.getValue().getColor();
+            
             VirtualView virtualView = clientHandler.createVirtualView(username, color);
             
             mapUserColor.put(username, color);
             mapUserVirtualView.put(username, virtualView);
         }
         
-        System.out.println("Game started.");
-        gameStarted = true;
-        gameController = new GameController(maxPlayersNumber, mapUserColor, mapUserVirtualView);
-        
-        notifyAll();
+        System.out.println("Game " + game.toString() + " started.");
+        new GameController(game.getPlayersNumber(), mapUserColor, mapUserVirtualView);
     }
 }

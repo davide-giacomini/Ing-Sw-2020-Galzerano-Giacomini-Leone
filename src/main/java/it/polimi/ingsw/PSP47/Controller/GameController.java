@@ -356,7 +356,7 @@ public class GameController implements VirtualViewListener {
     void endGame(String username) {
         game.setActive(false);
         for (VirtualView view : views) {
-            view.sendImportant( username , MessageType.WINNIG);
+            view.sendImportant( username , MessageType.WINNING);
         }
         views.get(indexOfCurrentPlayer).sendWinningAdvice();
     }

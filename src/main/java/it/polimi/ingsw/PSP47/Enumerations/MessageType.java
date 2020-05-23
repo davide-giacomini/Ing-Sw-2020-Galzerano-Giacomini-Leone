@@ -18,7 +18,7 @@ public enum MessageType {
     //important message in specific
     START_GAME,
     TURN,
-    WINNIG,
+    WINNING,
     LOSING,
     //
     CHOOSE_WORKER,
