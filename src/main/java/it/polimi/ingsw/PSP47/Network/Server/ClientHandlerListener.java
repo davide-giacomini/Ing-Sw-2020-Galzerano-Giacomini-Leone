@@ -21,7 +21,7 @@ public interface ClientHandlerListener {
      *
      * @param message it contains the max number of players.
      */
-    void setPlayersNumber(RequestPlayersNumber message);
+    void setPlayersNumber(RequestPlayersNumber message, ClientHandler clientHandler);
     
     /**
      * It handles an illegal disconnection of a client. Illegal means that the client disconnects after being
@@ -32,14 +32,9 @@ public interface ClientHandlerListener {
     void handleDisconnection(ClientHandler clientHandler);
     
     /**
-     * This methods handles the fact that a client won.
-     */
-    void handleWinning();
-    
-    /**
-     * This methods handles the loss of a client.
+     * This method handles the end of the game of the {@link ClientHandler specified}.
      *
-     * @param clientHandler the client who lost.
+     * @param clientHandler the clientHandler
      */
-    void handleLoosing(ClientHandler clientHandler);
+    void clientHandlerGameOver(ClientHandler clientHandler);
 }

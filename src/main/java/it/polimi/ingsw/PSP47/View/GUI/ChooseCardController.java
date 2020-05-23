@@ -1,13 +1,9 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
-import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableGod;
-import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Shadow;
 import javafx.scene.image.ImageView;
@@ -15,9 +11,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class is the controller of the chooseCard.fxml scene.
+ * In this scene the player can choose the god's power that will use during the game.
+ */
 public class ChooseCardController extends ViewObservable {
 
     private ArrayList<GodName> availableGods = new ArrayList<>();
@@ -70,6 +69,10 @@ public class ChooseCardController extends ViewObservable {
     @FXML
     private Text godPower;
 
+    /**
+     * This method makes empty the text on the bottom of the scene and deletes the shadow effect on every card.
+     * @param event the exit of the mouse from a card area.
+     */
     @FXML
     void exit(MouseEvent event) {
         godPower.setText("");
@@ -89,7 +92,11 @@ public class ChooseCardController extends ViewObservable {
         Zeus.setEffect(null);
     }
 
-
+    /**
+     * This method sets a shadow Effect on the Apollo Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Apollo card.
+     */
     @FXML
     void onApollo(MouseEvent event) {
         if (availableGods.contains(GodName.APOLLO)) {
@@ -100,6 +107,11 @@ public class ChooseCardController extends ViewObservable {
             Apollo.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Artemis Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Artemis card.
+     */
     @FXML
     void onArtemis(MouseEvent event) {
         if (availableGods.contains(GodName.ARTEMIS)) {
@@ -110,6 +122,11 @@ public class ChooseCardController extends ViewObservable {
             Artemis.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Athena Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Athena card.
+     */
     @FXML
     void onAthena(MouseEvent event) {
         if (availableGods.contains(GodName.ATHENA)) {
@@ -120,6 +137,11 @@ public class ChooseCardController extends ViewObservable {
             Athena.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Athena Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Athena card.
+     */
     @FXML
     void onAtlas(MouseEvent event) {
         if (availableGods.contains(GodName.ATLAS)) {
@@ -130,6 +152,11 @@ public class ChooseCardController extends ViewObservable {
             Atlas.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Chronus Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Chronus card.
+     */
     @FXML
     void onChronus(MouseEvent event) {
         if (availableGods.contains(GodName.CHRONUS)) {
@@ -140,6 +167,11 @@ public class ChooseCardController extends ViewObservable {
             Chronus.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Demeter Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Demeter card.
+     */
     @FXML
     void onDemeter(MouseEvent event) {
         if (availableGods.contains(GodName.DEMETER)) {
@@ -150,6 +182,11 @@ public class ChooseCardController extends ViewObservable {
             Demeter.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Hephaestus Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Hephaestus card.
+     */
     @FXML
     void onHephaestus(MouseEvent event) {
         if (availableGods.contains(GodName.HEPHAESTUS)) {
@@ -160,6 +197,11 @@ public class ChooseCardController extends ViewObservable {
             Hephaestus.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Hera Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Hera card.
+     */
     @FXML
     void onHera(MouseEvent event) {
         if (availableGods.contains(GodName.HERA)) {
@@ -170,6 +212,11 @@ public class ChooseCardController extends ViewObservable {
             Hera.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Hestia Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Hestia card.
+     */
     @FXML
     void onHestia(MouseEvent event) {
         if (availableGods.contains(GodName.HESTIA)) {
@@ -180,6 +227,11 @@ public class ChooseCardController extends ViewObservable {
             Hestia.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Minotaur Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Minotaur card.
+     */
     @FXML
     void onMinotaur(MouseEvent event) {
         if (availableGods.contains(GodName.MINOTAUR)) {
@@ -190,6 +242,11 @@ public class ChooseCardController extends ViewObservable {
             Minotaur.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Pan Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Pan card.
+     */
     @FXML
     void onPan(MouseEvent event) {
         if (availableGods.contains(GodName.PAN)) {
@@ -200,6 +257,11 @@ public class ChooseCardController extends ViewObservable {
             Pan.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Prometheus Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Prometheus card.
+     */
     @FXML
     void onPrometheus(MouseEvent event) {
         if (availableGods.contains(GodName.PROMETHEUS)) {
@@ -210,6 +272,11 @@ public class ChooseCardController extends ViewObservable {
             Prometheus.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Triton Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Triton card.
+     */
     @FXML
     void onTriton(MouseEvent event) {
         if (availableGods.contains(GodName.TRITON)) {
@@ -220,6 +287,11 @@ public class ChooseCardController extends ViewObservable {
             Triton.setEffect(new Shadow());
     }
 
+    /**
+     * This method sets a shadow Effect on the Zeus Card and print his power on the bottom of the scene if this card is
+     * available during the game. If it's not, the card is obscured.
+     * @param event the enter of the mouse in the Zeus card.
+     */
     @FXML
     void onZeus(MouseEvent event) {
         if (availableGods.contains(GodName.ZEUS)) {
@@ -230,6 +302,11 @@ public class ChooseCardController extends ViewObservable {
             Zeus.setEffect(new Shadow());
     }
 
+    /**
+     * This method notifies the networkHandler that Apollo is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Apollo card.
+     */
     @FXML
     void selectApollo(MouseEvent event) {
         if (availableGods.contains(GodName.APOLLO)) {
@@ -240,6 +317,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Artemis is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Artemis card.
+     */
     @FXML
     void selectArtemis(MouseEvent event) {
         if (availableGods.contains(GodName.ARTEMIS)) {
@@ -250,6 +332,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Athena is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Athena card.
+     */
     @FXML
     void selectAthena(MouseEvent event) {
         if (availableGods.contains(GodName.ATHENA)) {
@@ -260,6 +347,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Atlas is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Atlas card.
+     */
     @FXML
     void selectAtlas(MouseEvent event) {
         if (availableGods.contains(GodName.ATLAS)) {
@@ -270,6 +362,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Chronus is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Chronus card.
+     */
     @FXML
     void selectChronus(MouseEvent event) {
         if (availableGods.contains(GodName.CHRONUS)) {
@@ -280,6 +377,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Demeter is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Demeter card.
+     */
     @FXML
     void selectDemeter(MouseEvent event) {
         if (availableGods.contains(GodName.DEMETER)) {
@@ -290,6 +392,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Hephaestus is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Hephaestus card.
+     */
     @FXML
     void selectHephaestus(MouseEvent event) {
         if (availableGods.contains(GodName.HEPHAESTUS)) {
@@ -300,6 +407,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Hera is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Hera card.
+     */
     @FXML
     void selectHera(MouseEvent event) {
         if (availableGods.contains(GodName.HERA)) {
@@ -310,6 +422,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Hestia is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Hestia card.
+     */
     @FXML
     void selectHestia(MouseEvent event) {
         if (availableGods.contains(GodName.HESTIA)) {
@@ -320,6 +437,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Minotaur is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Minotaur card.
+     */
     @FXML
     void selectMinotaur(MouseEvent event) {
         if (availableGods.contains(GodName.MINOTAUR)) {
@@ -330,6 +452,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Pan is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Pan card.
+     */
     @FXML
     void selectPan(MouseEvent event) {
         if (availableGods.contains(GodName.PAN)) {
@@ -340,6 +467,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Prometheus is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Prometheus card.
+     */
     @FXML
     void selectPrometheus(MouseEvent event) {
         if (availableGods.contains(GodName.PROMETHEUS)) {
@@ -350,6 +482,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Triton is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Triton card.
+     */
     @FXML
     void selectTriton(MouseEvent event) {
         if (availableGods.contains(GodName.TRITON)) {
@@ -360,6 +497,11 @@ public class ChooseCardController extends ViewObservable {
         }
     }
 
+    /**
+     * This method notifies the networkHandler that Zeus is the card chosen by the player.
+     * Then the whole scene is disabled.
+     * @param event the click of the mouse on the Zeus card.
+     */
     @FXML
     void selectZeus(MouseEvent event) {
         if (availableGods.contains(GodName.ZEUS)) {
@@ -374,6 +516,9 @@ public class ChooseCardController extends ViewObservable {
         this.availableGods = availableGods;
     }
 
+    /**
+     * This method disables the whole scene.
+     */
     private void disableAll() {
         mainPane.setDisable(true);
     }

@@ -37,6 +37,12 @@ public class GUI extends Application implements View {
 
     private boolean start = false;
 
+    /**
+     * This method makes the GUI starts running.
+     * It load the first scene and creates the gameView.
+     * @param primaryStage the Stage that will be used during the game.
+     * @throws Exception if there are some I/O troubles.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         gameView = new GameView();
@@ -72,6 +78,13 @@ public class GUI extends Application implements View {
         this.networkHandler = networkHandler;
     }
 
+    /**
+     * This method is used to change the layout of the current scene, loading another FXML file.
+     * @param scene the scene that must be changed.
+     * @param path the path of the file that has to be loaded.
+     * @param <T> the controller of the new scene.
+     * @return the controller of the new scene.
+     */
     private <T> T setLayout(Scene scene, String path) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(GUI.class.getResource(path));
@@ -89,7 +102,10 @@ public class GUI extends Application implements View {
         return loader.getController();
     }
 
-
+    /**
+     * This method loads the scene where username and color are asked and add the
+     * networkHandler as a listener.
+     */
     @Override
     public void askFirstConnection() {
         Platform.runLater(() -> {
@@ -98,6 +114,10 @@ public class GUI extends Application implements View {
         });
     }
 
+    /**
+     * This method loads the scene where the number of players is asked and add the
+     * networkHandler as a listener.
+     */
     @Override
     public void askNumberOfPlayers() {
         Platform.runLater(() -> {
@@ -107,6 +127,10 @@ public class GUI extends Application implements View {
         });
     }
 
+    /**
+     * This method loads the scene where the Challenger is asked to choose the gods and the first player of the game.
+     * @param usernames the list of players in the game.
+     */
     @Override
     public void challengerWillChooseThreeGods(ArrayList<String> usernames) {
         Platform.runLater(() -> {
@@ -124,6 +148,11 @@ public class GUI extends Application implements View {
         });
     }
 
+    /**
+     * This method loads the scene where the player has to choose the god's power that will use
+     * during the game.
+     * @param godsChosen is the array of the available gods (chosen by the challenger)
+     */
     @Override
     public void chooseYourGod(ArrayList<GodName> godsChosen) {
         Platform.runLater(() -> {
@@ -147,6 +176,10 @@ public class GUI extends Application implements View {
 
     }
 
+    /**
+     * This method loads an Alert pane with an error message.
+     * @param text the content of the error message.
+     */
     @Override
     public void showErrorMessage(String text) {
         Platform.runLater(() -> {
@@ -156,6 +189,10 @@ public class GUI extends Application implements View {
         });
     }
 
+    /**
+     * This method loads an Alert pane with an information about the game.
+     * @param text the content of the information.
+     */
     @Override
     public void showImportantMessage(String text) {
         Platform.runLater(() -> {
@@ -165,6 +202,10 @@ public class GUI extends Application implements View {
         });
     }
 
+    /**
+     * This method loads the scene where the winner is declared and the game ends.
+     * @param usernameWinner is the username of the winner.
+     */
     @Override
     public void theWinnerIs(String usernameWinner) {
         //Platform.runLater(()->{
@@ -175,6 +216,9 @@ public class GUI extends Application implements View {
         //});
     }
 
+    /**
+     * This method loads the scene where a loser is declared.
+     */
     @Override
     public void theLoserIs() {
         primaryStage.setWidth(1100);

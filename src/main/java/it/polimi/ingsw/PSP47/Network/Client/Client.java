@@ -6,10 +6,7 @@ import it.polimi.ingsw.PSP47.View.GUI.GUI;
 import it.polimi.ingsw.PSP47.View.View;
 import javafx.application.Application;
 
-
 import java.util.Scanner;
-
-import static javafx.application.Application.launch;
 
 /**
  * This class instantiates a thread for each client and handles the choice of the graphical interface and the

@@ -197,7 +197,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.getGameView().update(CurrentScene.LOSE);
                     view.theLoserIs();
                     break;
-                case WINNIG:
+                case WINNING:
                     view.getGameView().update(CurrentScene.WIN);
                     view.theWinnerIs(((ImportantMessage) message).getText());
                     break;
@@ -231,7 +231,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     UpdatedSlot messageSlot = (UpdatedSlot) message;
                     Slot slot = messageSlot.getUpdatedSlot();
                     view.getGameView().getBoardView().setSlot(slot);
-                    //view.showCurrentBoard();
+//                    view.showCurrentBoard();
                     view.showNewBoard(slot);
                     break;
 
@@ -244,11 +244,13 @@ public class NetworkHandler implements Runnable, ViewListener {
      *
      * @param message the message that must be sent.
      */
-    public synchronized void send(Message message) {
+    public void send(Message message) {
         try {
-            outputServer.reset();
-            outputServer.writeObject(message);
-            outputServer.flush();
+            synchronized (this) {
+	            outputServer.reset();
+	            outputServer.writeObject(message);
+	            outputServer.flush();
+	        }
         } catch (IOException e) {
             System.out.println("Error in the serialization of " + message.toString() + " message.");
             endConnection();
