@@ -167,7 +167,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                 case REQUEST_PLAYERS_NUMBER:
                     notifyPlayersNumber((RequestPlayersNumber) message);
                     break;
-                //TODO disconnessione volontaria del client.
                 default:
                     Visitable visitableObject = ((VisitableMessage) message).getContent();
                     virtualView.notifyVirtualViewListener(visitableObject);

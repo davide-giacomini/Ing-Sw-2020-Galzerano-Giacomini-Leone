@@ -231,7 +231,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     UpdatedSlot messageSlot = (UpdatedSlot) message;
                     Slot slot = messageSlot.getUpdatedSlot();
                     view.getGameView().getBoardView().setSlot(slot);
-                    view.showCurrentBoard();
+                    //view.showCurrentBoard();
                     view.showNewBoard(slot);
                     break;
 

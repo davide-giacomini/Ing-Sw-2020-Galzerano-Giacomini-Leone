@@ -80,7 +80,6 @@ public class BoardView {
     }
 
     public void setSlot(Slot slot) {
-        //TODO verify
         slots[slot.getRow()][slot.getColumn()] = slot;
     }
 

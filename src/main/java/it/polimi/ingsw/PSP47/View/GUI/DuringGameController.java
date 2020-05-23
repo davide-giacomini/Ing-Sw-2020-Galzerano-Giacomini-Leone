@@ -25,15 +25,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
  * This class is used to separate from the Gui class the logic of the game, based on which moment we are in the game, it
- * dislays different texts to give instructions and reacts to the user inputs differently
+ * displays different texts to give instructions and reacts to the user inputs differently
  * from the Gui it receives the GameView, in which all information about the game and current moment are stored
  */
 public class DuringGameController extends ViewObservable{
@@ -125,7 +122,7 @@ public class DuringGameController extends ViewObservable{
             action = Action.MOVE;
             gameView.update(CurrentScene.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to move:");
-        }
+        }//TODO add other cases with text
     }
 
     /**
@@ -255,7 +252,7 @@ public class DuringGameController extends ViewObservable{
      * @param column of the pane
      */
     private void chooseWorkerToUse(int row, int column) {
-
+        //add opacity to indicate the worker chosen TODO
         workerRowAndColumn[0] = row ;
         workerRowAndColumn[1] = column;
 
@@ -280,7 +277,7 @@ public class DuringGameController extends ViewObservable{
     }
 
     /**
-     * method used when an updated slot arrives; It displays only the change in the specific slot, it adds worker and alsa all levels with addLevels function
+     * method used when an updated slot arrives; It displays only the change in the specific slot, it adds worker and also all levels with addLevels function
      * by using images
      * @param slot is the clot that has been changed
      */
@@ -308,7 +305,7 @@ public class DuringGameController extends ViewObservable{
         grid.prefWidthProperty().bind(pane.widthProperty()); //associates the grid width to the one of the bigger pane (slot)
         grid.prefHeightProperty().bind(pane.heightProperty());//associates the grid height to the one of the bigger pane (slot)
         pane.getChildren().add(grid); //adds grid as son of the pane
-        grid.setAlignment(Pos.CENTER); //not sure if necessarey for allignment
+        grid.setAlignment(Pos.CENTER); //not sure if necessary for alignment
 
 
         int levels = addLevels(grid,pane, slot.getLevel()); //add images for levels
@@ -321,9 +318,10 @@ public class DuringGameController extends ViewObservable{
             workerView.fitWidthProperty().bind(pane.widthProperty());  //also the dimensions of the image have to be dimensioned based on the pane otherwhise they will grow as big as they want
             workerView.fitHeightProperty().bind(pane.widthProperty().divide(4));
             grid.add(workerView,0,levels);
-
-            workerRowAndColumn[0] = slot.getRow() ; //since a worker has been moved here, this is the worker used in the turn, I reset this parameters used for the next action //TODO CHECK IF IT WORKS WITH ALL GODS
-            workerRowAndColumn[1] = slot.getColumn();
+            if(slot.getWorkerColor() == gameView.getMyColor()) {
+                workerRowAndColumn[0] = slot.getRow(); //since a worker has been moved here, this is the worker used in the turn, I reset this parameters used for the next action
+                workerRowAndColumn[1] = slot.getColumn();
+            }
         }
     }
 

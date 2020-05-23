@@ -9,7 +9,6 @@ import it.polimi.ingsw.PSP47.Model.Player;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Model.Worker;
 
-//TODO CHIEDI CHIARIMENTO POTERE
 /**
  * If {@link Player}'s {@link Worker} moves onto a perimeter space (ground or block) , it may immediately move again.
  */
