@@ -12,7 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
-
+/**
+ * This class is the controller of the startPane.fxml scene.
+ * In this scene the player can choose his username and color.
+ */
 public class StartController extends ViewObservable {
 
     private ObservableList<Color> colors = FXCollections.observableArrayList(Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.PURPLE, Color.CYAN, Color.WHITE);
@@ -29,14 +32,19 @@ public class StartController extends ViewObservable {
     @FXML
     private ImageView joinButton;
 
+    /**
+     * This method sets the available colors that can be chosen.
+     */
     @FXML
     private void initialize() {
         colorBox.setItems(colors);
     }
 
-
-
-
+    /**
+     * This method notify the networkHandler about username and color chosen by the player,
+     * only if both of them have been set.
+     * @param event the click on the Join button.
+     */
     @FXML
     void OnJoinClick(MouseEvent event) {
         String username;

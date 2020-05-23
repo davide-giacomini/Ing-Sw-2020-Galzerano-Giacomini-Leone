@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
-import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInt;
 import javafx.event.ActionEvent;
@@ -15,6 +14,10 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
+/**
+ * This class is the controller of the choosePlayers.fxml scene.
+ * In this scene the player can choose how many players there will be in the game.
+ */
 public class ChoosePlayersController extends ViewObservable {
 
     @FXML
@@ -32,6 +35,10 @@ public class ChoosePlayersController extends ViewObservable {
     @FXML
     private ImageView doneButton;
 
+    /**
+     * This method notifies the controller with the number of player chosen by the user.
+     * @param event the click of the mouse on the Done button.
+     */
     @FXML
     void ClickOnDone(MouseEvent event) {
         VisitableInt visitableInt;
@@ -45,6 +52,10 @@ public class ChoosePlayersController extends ViewObservable {
         }
     }
 
+    /**
+     * This method loads a new scene that will be visible until the other players connect.
+     * @param visitableInt the number of players chosen by the user.
+     */
     private void notifyAndWait(VisitableInt visitableInt) {
         notifyViewListener(visitableInt);
         doneText.setDisable(true);
@@ -62,19 +73,25 @@ public class ChoosePlayersController extends ViewObservable {
         }
     }
 
-
+    /**
+     * This method handles with the choose of a three players game.
+     * @param event the click on the three players checkBox.
+     */
     @FXML
     void handleThreePlayers(ActionEvent event) {
         if (three_players.isSelected())
             two_players.setSelected(false);
     }
 
+    /**
+     * This method handles with the choose of a two players game.
+     * @param event the click on the two players checkBox.
+     */
     @FXML
     void handleTwoPlayers(ActionEvent event) {
         if (two_players.isSelected())
             three_players.setSelected(false);
     }
-
 
 }
 
