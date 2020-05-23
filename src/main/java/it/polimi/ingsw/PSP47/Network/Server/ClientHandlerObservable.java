@@ -37,9 +37,9 @@ public abstract class ClientHandlerObservable {
      *
      * @param message the message which contains the max number of players chosen by the player for the game.
      */
-    public void notifyPlayersNumber(RequestPlayersNumber message) {
+    public void notifyPlayersNumber(RequestPlayersNumber message, ClientHandler clientHandler) {
         for (ClientHandlerListener clientHandlerListener : clientHandlerListeners){
-            clientHandlerListener.setPlayersNumber(message);
+            clientHandlerListener.setPlayersNumber(message, clientHandler);
         }
     }
     
@@ -55,22 +55,13 @@ public abstract class ClientHandlerObservable {
     }
     
     /**
-     * It notifies that a client won.
+     * It notifies that the game is over for this clientHandler.
+     *
+     * @param clientHandler the clientHandler for whom the game is over.
      */
-    public void notifyWin() {
+    public void notifyGameOver(ClientHandler clientHandler){
         for (ClientHandlerListener clientHandlerListener : clientHandlerListeners) {
-            clientHandlerListener.handleWinning();
-        }
-    }
-    
-    /**
-     * It notifies that the client specified lost.
-     * 
-     * @param clientHandler handles the client which lost.
-     */
-    public void notifyLoss(ClientHandler clientHandler){
-        for (ClientHandlerListener clientHandlerListener : clientHandlerListeners) {
-            clientHandlerListener.handleLoosing(clientHandler);
+            clientHandlerListener.clientHandlerGameOver(clientHandler);
         }
     }
 }
