@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP47.Enumerations.*;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkConnectionUtil;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
-import it.polimi.ingsw.PSP47.Network.Server.Server;
 import it.polimi.ingsw.PSP47.View.GameView;
 import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
@@ -12,7 +11,6 @@ import it.polimi.ingsw.PSP47.Visitor.*;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -598,14 +596,6 @@ public class CLI extends ViewObservable implements View  {
     }
 
     /**
-     * this method calls the print support that prints the updated board of the game
-     */
-    @Override
-    public void showCurrentBoard(){
-        printSupport.printCurrBoard(printSupport.buildCurrBoard(gameView.getBoardView()), out);
-    }
-
-    /**
      * Clears the console
      */
     private void clearConsole() {
@@ -627,7 +617,8 @@ public class CLI extends ViewObservable implements View  {
 
     @Override
     public void showGame() {
-        printSupport.printCurrBoard(printSupport.buildCurrBoard(gameView.getBoardView()), out);
+        printSupport.createEmptyBoard();
+        printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);
     }
 
 

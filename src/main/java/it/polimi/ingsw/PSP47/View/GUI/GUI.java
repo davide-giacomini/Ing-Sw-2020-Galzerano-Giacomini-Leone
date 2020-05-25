@@ -171,11 +171,6 @@ public class GUI extends Application implements View {
         return gameView;
     }
 
-    @Override
-    public void showCurrentBoard() {
-
-    }
-
     /**
      * This method loads an Alert pane with an error message.
      * @param text the content of the error message.
