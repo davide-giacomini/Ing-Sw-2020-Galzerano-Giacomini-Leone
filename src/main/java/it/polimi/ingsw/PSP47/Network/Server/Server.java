@@ -67,13 +67,11 @@ public class Server implements ClientHandlerListener {
     public void handleFirstConnection(FirstConnection message, ClientHandler clientHandler) {
         GameServer game;
         String wrongParameter;
-        String username;
-        Color color;
     
         synchronized (this) {
             VisitableInformation firstConnectionMessage = (VisitableInformation) message.getContent();
-            username = firstConnectionMessage.getUsername();
-            color = firstConnectionMessage.getColor();
+            String username = firstConnectionMessage.getUsername();
+            Color color = firstConnectionMessage.getColor();
             game = null;
         
             // Get the GameServer which contains the clientHandler
@@ -92,8 +90,6 @@ public class Server implements ClientHandlerListener {
             clientHandler.askAgainParameters(wrongParameter);
             return;
         }
-        else
-            clientHandler.sendConnectionAccepted(username, color);
         
         boolean gameReady;
         synchronized (this) {
