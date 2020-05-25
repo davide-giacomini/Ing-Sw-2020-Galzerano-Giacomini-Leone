@@ -30,6 +30,8 @@ public class Server implements ClientHandlerListener {
     public final static int SOCKET_PORT = 7777;
     private final ServerSocket serverSocket;
     private final ArrayList<GameServer> games = new ArrayList<>();
+    String username;
+    Color color;
     
     /**
      * It creates the server socket to connect with the clients.
@@ -70,8 +72,8 @@ public class Server implements ClientHandlerListener {
     
         synchronized (this) {
             VisitableInformation firstConnectionMessage = (VisitableInformation) message.getContent();
-            String username = firstConnectionMessage.getUsername();
-            Color color = firstConnectionMessage.getColor();
+            username = firstConnectionMessage.getUsername();
+            color = firstConnectionMessage.getColor();
             game = null;
         
             // Get the GameServer which contains the clientHandler
@@ -89,7 +91,8 @@ public class Server implements ClientHandlerListener {
         if (wrongParameter != null) {
             clientHandler.askAgainParameters(wrongParameter);
             return;
-        }
+        } else
+            clientHandler.sendConnectionAccepted(username, color);
         
         boolean gameReady;
         synchronized (this) {

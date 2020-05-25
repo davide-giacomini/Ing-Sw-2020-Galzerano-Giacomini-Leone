@@ -17,8 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -118,7 +116,7 @@ public class DuringGameController extends ViewObservable{
             a.show();
         }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION){
             action = Action.MOVE;
-            gameView.update(CurrentScene.ACTION_CHOSEN);
+            gameView.updateMoment(CurrentScene.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to move:");
         }//TODO add other cases with text
     }
@@ -136,7 +134,7 @@ public class DuringGameController extends ViewObservable{
             a.show();
         }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {
             action = Action.BUILD;
-            gameView.update(CurrentScene.ACTION_CHOSEN);
+            gameView.updateMoment(CurrentScene.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to build:");
         }
     }
@@ -154,7 +152,7 @@ public class DuringGameController extends ViewObservable{
             a.show();
         }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {
             action = Action.BUILDDOME;
-            gameView.update(CurrentScene.ACTION_CHOSEN);
+            gameView.updateMoment(CurrentScene.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to build the Dome:");
         }
     }
@@ -177,7 +175,7 @@ public class DuringGameController extends ViewObservable{
             visitableActionAndDirection.setAction(action);
             notifyViewListener(visitableActionAndDirection);
             commandText.setText("You asked to end your turn");
-            gameView.update(CurrentScene.WAIT);
+            gameView.updateMoment(CurrentScene.WAIT);
         }
     }
 
@@ -212,7 +210,7 @@ public class DuringGameController extends ViewObservable{
             visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(workerRowAndColumn[0],workerRowAndColumn[1], rowIndex,colIndex));
             notifyViewListener(visitableActionAndDirection);
             commandText.setText("WAIT"); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
-            gameView.update(CurrentScene.WAIT);
+            gameView.updateMoment(CurrentScene.WAIT);
         }else if (gameView.getCurrentScene() == CurrentScene.WAIT ){ //if I am in this moment I cannot click
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
@@ -240,7 +238,7 @@ public class DuringGameController extends ViewObservable{
             visitableInitialPositions.setRowsAndColumns(newRowAndColumn);
             notifyViewListener(visitableInitialPositions);
             commandText.setText("WAIT");
-            gameView.update(CurrentScene.WAIT);
+            gameView.updateMoment(CurrentScene.WAIT);
         }
     }
 
@@ -258,7 +256,7 @@ public class DuringGameController extends ViewObservable{
         visitableRowsAndColumns.setRowsAndColumns(workerRowAndColumn);
         notifyViewListener(visitableRowsAndColumns);
         commandText.setText("WAIT");
-        gameView.update(CurrentScene.WAIT);
+        gameView.updateMoment(CurrentScene.WAIT);
 
     }
 

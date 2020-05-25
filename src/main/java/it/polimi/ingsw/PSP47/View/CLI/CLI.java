@@ -613,7 +613,6 @@ public class CLI extends ViewObservable implements View  {
 
     @Override
     public void showNewBoard(Slot slot) {
-        out.println("NEW TRY CLI");
         printSupport.buildSlot(slot);
         printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);
 

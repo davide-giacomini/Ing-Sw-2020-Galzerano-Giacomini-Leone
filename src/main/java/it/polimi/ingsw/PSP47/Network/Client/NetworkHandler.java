@@ -142,15 +142,15 @@ public class NetworkHandler implements Runnable, ViewListener {
         public void run() {
             switch (message.getMessageType()) {
                 case FIRST_CONNECTION:
-                    view.getGameView().update(CurrentScene.START);
+                    view.getGameView().updateMoment(CurrentScene.START);
                     handleFirstConnection();
                     break;
                 case REQUEST_PLAYERS_NUMBER:
-                    view.getGameView().update(CurrentScene.CHOOSE_PLAYERS);
+                    view.getGameView().updateMoment(CurrentScene.CHOOSE_PLAYERS);
                     view.askNumberOfPlayers();
                     break;
                 case WRONG_PARAMETERS:
-                    view.getGameView().update(CurrentScene.START);
+                    view.getGameView().updateMoment(CurrentScene.START);
                     view.showErrorMessage(((WrongParameters) message).getErrorMessage());
                     handleFirstConnection();
                     break;
@@ -176,7 +176,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.showImportantMessage(text);
                     break;
                 case LIST_OF_GODS:
-                    view.getGameView().update(CurrentScene.CHOOSE_CARD);
+                    view.getGameView().updateMoment(CurrentScene.CHOOSE_CARD);
                     visitable = ((VisitableMessage) message).getContent();
                     VisitableListOfGods visitableGods = (VisitableListOfGods) visitable;
                     ArrayList<GodName> godNames = visitableGods.getGodNames();
@@ -188,17 +188,17 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.getGameView().setNumberOfPlayers(number);
                     break;
                 case CHALLENGER:
-                    view.getGameView().update(CurrentScene.CHALLENGER);
+                    view.getGameView().updateMoment(CurrentScene.CHALLENGER);
                     YouAreTheChallenger messageNames = (YouAreTheChallenger) message;
                     ArrayList<String>usernames = messageNames.getUsernames();
                     view.challengerWillChooseThreeGods(usernames);
                     break;
                 case LOSING:
-                    view.getGameView().update(CurrentScene.LOSE);
+                    view.getGameView().updateMoment(CurrentScene.LOSE);
                     view.theLoserIs();
                     break;
                 case WINNING:
-                    view.getGameView().update(CurrentScene.WIN);
+                    view.getGameView().updateMoment(CurrentScene.WIN);
                     view.theWinnerIs(((ImportantMessage) message).getText());
                     break;
                 case START_GAME:

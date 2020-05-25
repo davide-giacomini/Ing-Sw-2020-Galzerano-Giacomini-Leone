@@ -14,14 +14,13 @@ public class GameView{
 
     private String myUsername;
     private Color myColor;
-    private int myIndex;
     private GodName myGod;
     private int numberOfPlayers ;
     private BoardView boardView ;
 
-    public ArrayList<String> usernames = new ArrayList<String>();
-    public ArrayList<Color> colors = new ArrayList<Color>();
-    public ArrayList <GodName> gods = new ArrayList<GodName>();
+    private ArrayList<String> usernames = new ArrayList<String>();
+    private ArrayList<Color> colors = new ArrayList<Color>();
+    private ArrayList <GodName> gods = new ArrayList<GodName>();
 
     private CurrentScene currentScene;
     private boolean turn;
@@ -29,7 +28,6 @@ public class GameView{
     public GameView(){
         this.boardView = new BoardView();
     }
-
 
 
     public void setMyUsername(String myUsername) {
@@ -47,21 +45,13 @@ public class GameView{
     public Color getMyColor() {
         return myColor;
     }
-    
-    public int getMyIndex() {
-        return myIndex;
-    }
 
-    public void setMyIndex(int myIndex) {
-        this.myIndex = myIndex;
+    public void setMyGod(GodName godChosen){
+        this.myGod  = godChosen;
     }
 
     public GodName getMyGod() {
         return myGod;
-    }
-
-    public void setMyGod(GodName godChosen){
-        this.myGod  = godChosen;
     }
 
     public void setNumberOfPlayers(int numberOfPlayers) {
@@ -109,8 +99,7 @@ public class GameView{
     }
 
 
-
-    public void update(CurrentScene currentScene) {
+    public void updateMoment(CurrentScene currentScene) {
         this.currentScene = currentScene;
     }
 
