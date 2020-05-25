@@ -353,6 +353,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param color of the client
      */
     void sendConnectionAccepted(String username, Color color){
+
         VisitableInformation visitableInformation = new VisitableInformation();
         visitableInformation.setUsername(username);
         visitableInformation.setColor(color);
