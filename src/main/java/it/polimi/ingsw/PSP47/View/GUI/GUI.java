@@ -10,10 +10,18 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -54,7 +62,7 @@ public class GUI extends Application implements View {
         root = fxmlLoader.load();
         scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/CSS/background.css").toExternalForm());
-        primaryStage.setResizable(true);
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Santorini");
         primaryStage.show();
@@ -109,8 +117,8 @@ public class GUI extends Application implements View {
     @Override
     public void askFirstConnection() {
         Platform.runLater(() -> {
-        StartController startController = setLayout(scene, "/FXML/startPane.fxml");
-        startController.addViewListener(networkHandler);
+            StartController startController = setLayout(scene, "/FXML/startPane.fxml");
+            startController.addViewListener(networkHandler);
         });
     }
 
@@ -121,9 +129,8 @@ public class GUI extends Application implements View {
     @Override
     public void askNumberOfPlayers() {
         Platform.runLater(() -> {
-        ChoosePlayersController choosePlayersController = setLayout(scene,"/FXML/choosePlayers.fxml");
-        choosePlayersController.addViewListener(networkHandler);
-
+            ChoosePlayersController choosePlayersController = setLayout(scene,"/FXML/choosePlayers.fxml");
+            choosePlayersController.addViewListener(networkHandler);
         });
     }
 
@@ -134,17 +141,17 @@ public class GUI extends Application implements View {
     @Override
     public void challengerWillChooseThreeGods(ArrayList<String> usernames) {
         Platform.runLater(() -> {
-        primaryStage.setWidth(1100);
-        primaryStage.setHeight(800);
-        ChallengerController chooseCardsController = setLayout(scene, "/FXML/challenger.fxml");
-        chooseCardsController.addViewListener(networkHandler);
-        chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());
-        chooseCardsController.setFirstPlayer(usernames.get(0));
-        chooseCardsController.setSecondPlayer(usernames.get(1));
-        if (usernames.size() == 3)
-            chooseCardsController.setThirdPlayer(usernames.get(2));
-        else
-            chooseCardsController.setThirdPlayer(null);
+            primaryStage.setWidth(1100);
+            primaryStage.setHeight(800);
+            ChallengerController chooseCardsController = setLayout(scene, "/FXML/challenger.fxml");
+            chooseCardsController.addViewListener(networkHandler);
+            chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());
+            chooseCardsController.setFirstPlayer(usernames.get(0));
+            chooseCardsController.setSecondPlayer(usernames.get(1));
+            if (usernames.size() == 3)
+                chooseCardsController.setThirdPlayer(usernames.get(2));
+            else
+                chooseCardsController.setThirdPlayer(null);
         });
     }
 
@@ -190,11 +197,18 @@ public class GUI extends Application implements View {
      */
     @Override
     public void showImportantMessage(String text) {
-        Platform.runLater(() -> {
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-            a.setContentText(text);
-            a.show();
-        });
+        if (text.split("\n")[0].equals("Wait for the other players to connect.")){
+            Platform.runLater(() -> {
+                setLayout(scene, "/FXML/waitingPane.fxml");
+            });
+        }
+        else {
+            Platform.runLater(() -> {
+                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                a.setContentText(text);
+                a.show();
+            });
+        }
     }
 
     /**
@@ -203,23 +217,129 @@ public class GUI extends Application implements View {
      */
     @Override
     public void theWinnerIs(String usernameWinner) {
-        //Platform.runLater(()->{
-        primaryStage.setWidth(1100);
-        primaryStage.setHeight(800);
-        WinningAdviceController winningAdviceController = setLayout(scene, "/FXML/winningAdvice.fxml");
-        winningAdviceController.addViewListener(networkHandler);
-        //});
+        if (gameView.getMyUsername().equals(usernameWinner))
+            showIAmTheWinner();
+        else
+            showWhoIsTheWinner(usernameWinner);
     }
-
+    
+    private void showIAmTheWinner(){
+        Platform.runLater(()->{
+            try {
+                Stage winnerStage = prepareFinalStage();
+                
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/FXML/winningAdvice.fxml"));
+                BorderPane root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                root.setPrefHeight(scene.heightProperty().getValue());
+                root.setPrefWidth(scene.widthProperty().getValue());
+//                ImageView imageView = (ImageView) root.getLeft();
+//                imageView.setFitHeight(root.getHeight());
+//                imageView = (ImageView) root.getRight();
+//                imageView.setFitHeight(root.getHeight());
+//                BorderPane borderPane = (BorderPane) root.getCenter();
+//                borderPane.heightProperty().isEqualTo(root.heightProperty());
+                winnerStage.setScene(scene);
+                winnerStage.setResizable(false);
+            
+                winnerStage.setTitle("You won!");
+                winnerStage.initModality(Modality.APPLICATION_MODAL);
+                winnerStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    
+    private void showWhoIsTheWinner(String usernameWinner){
+        Platform.runLater(()->{
+            try {
+                Stage winnerStage = prepareFinalStage();
+    
+                //TODO chiedere se a loro piace usare questi due settings
+                winnerStage.setX(Screen.getPrimary().getBounds().getMinX());
+                winnerStage.setY(Screen.getPrimary().getBounds().getMinY());
+            
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/FXML/losingWithWinner.fxml"));
+                BorderPane root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                root.setPrefHeight(scene.heightProperty().getValue());
+                root.setPrefWidth(scene.widthProperty().getValue());
+//                ImageView imageView = (ImageView) root.getLeft();
+//                imageView.setFitHeight(root.getHeight());
+//                imageView = (ImageView) root.getRight();
+//                imageView.setFitHeight(root.getHeight());
+//                BorderPane borderPane = (BorderPane) root.getCenter();
+//                borderPane.heightProperty().isEqualTo(root.heightProperty());
+                Text text = (Text) ((BorderPane)((BorderPane)root.getCenter()).getTop()).getCenter();
+                text.setText("I am sorry.\n" +usernameWinner+ " won.");
+                text.setTextAlignment(TextAlignment.CENTER);
+                
+                winnerStage.setScene(scene);
+                winnerStage.setResizable(false);
+            
+                winnerStage.setTitle("You won!");
+                winnerStage.initModality(Modality.APPLICATION_MODAL);
+                winnerStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    
     /**
      * This method loads the scene where a loser is declared.
      */
     @Override
     public void theLoserIs() {
-        primaryStage.setWidth(1100);
-        primaryStage.setHeight(800);
-        LosingAdviceController losingAdviceController = setLayout(scene, "/FXML/losingAdvice.fxml");
-        losingAdviceController.addViewListener(networkHandler);
+        Platform.runLater(()-> {
+            try {
+                Stage loserStage = prepareFinalStage();
+                
+                //TODO chiedere se a loro piace usare questi due settings
+                loserStage.setX(Screen.getPrimary().getBounds().getMinX());
+                loserStage.setY(Screen.getPrimary().getBounds().getMinY());
+                
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/FXML/losingWithoutWinner.fxml"));
+                BorderPane root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                root.setPrefHeight(scene.heightProperty().getValue());
+                root.setPrefWidth(scene.widthProperty().getValue());
+//                ImageView imageView = (ImageView) root.getLeft();
+//                imageView.setFitHeight(root.getHeight());
+//                imageView = (ImageView) root.getRight();
+//                imageView.setFitHeight(root.getHeight());
+//                BorderPane borderPane = (BorderPane) root.getCenter();
+//                borderPane.heightProperty().isEqualTo(root.heightProperty());
+                loserStage.setScene(scene);
+                loserStage.setResizable(false);
+                
+                loserStage.setTitle("I am sorry...");
+                loserStage.initModality(Modality.APPLICATION_MODAL);
+                loserStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    
+    private Stage prepareFinalStage(){
+        Stage stage = new Stage();
+        double screenHeight = Screen.getPrimary().getBounds().getHeight();
+        double screenWidth = Screen.getPrimary().getBounds().getWidth();
+        if (screenHeight < screenWidth) {
+            stage.setHeight(screenHeight/2);
+            stage.setWidth(screenHeight*0.75);
+        }
+        else {
+            stage.setHeight(screenWidth/2);
+            stage.setWidth(screenWidth*0.75);
+        }
+        
+        return stage;
     }
 
     @Override
@@ -248,14 +368,14 @@ public class GUI extends Application implements View {
     @Override
     public void showGame() {
         Platform.runLater(()-> {
-            primaryStage.setWidth(1100);
-            primaryStage.setHeight(800);
+            primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
+            primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
             duringGameController = setLayout(scene, "/FXML/boardDuringGame.fxml");
-            primaryStage.setHeight(700);
             gameView.update(CurrentScene.WAIT); //new current scene
             duringGameController.setGameView(gameView);
             duringGameController.addViewListener(networkHandler);
             duringGameController.changeText();
+            primaryStage.setResizable(true);
             start = true;
         });
     }
