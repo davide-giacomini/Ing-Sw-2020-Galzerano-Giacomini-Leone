@@ -27,13 +27,9 @@ public class WinningAdviceController extends ViewObservable {
     }
     
     @FXML
-    void playAgain(MouseEvent event) {
-        //TODO implementare il ricominciare del gioco
-    }
-    
-    @FXML
     void quit(MouseEvent event) {
         notifyEndConnection();
+        System.exit(0);
     }
     
 }

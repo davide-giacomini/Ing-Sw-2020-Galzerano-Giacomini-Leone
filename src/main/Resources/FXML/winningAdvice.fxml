@@ -6,7 +6,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -29,40 +28,7 @@
    <center>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="337.0" prefWidth="259.0" BorderPane.alignment="CENTER">
          <children>
-            <BorderPane prefHeight="104.0" prefWidth="259.0">
-               <left>
-                  <StackPane BorderPane.alignment="CENTER">
-                     <children>
-                        <ImageView fx:id="imageButtonPlayAgain" fitHeight="38.0" fitWidth="109.0" onMouseClicked="#playAgain" onMouseEntered="#mouseEntered" onMouseExited="#mouseExited" pickOnBounds="true">
-                           <image>
-                              <Image url="@../Images/labelbutton_modeselect.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAY AGAIN" textAlignment="CENTER" wrappingWidth="100.5367546081543">
-                           <font>
-                              <Font name="System Bold Italic" size="15.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </StackPane>
-               </left>
-               <right>
-                  <StackPane BorderPane.alignment="CENTER">
-                     <children>
-                        <ImageView fx:id="imageButtonQuit" fitHeight="38.0" fitWidth="109.0" onMouseClicked="#quit" onMouseEntered="#mouseEntered" onMouseExited="#mouseExited" pickOnBounds="true">
-                           <image>
-                              <Image url="@../Images/labelbutton_modeselect.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="QUIT" textAlignment="CENTER" wrappingWidth="87.03811454772949">
-                           <font>
-                              <Font name="System Bold Italic" size="15.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </StackPane>
-               </right>
-            </BorderPane>
+            <BorderPane prefHeight="104.0" prefWidth="259.0" />
             <BorderPane prefHeight="111.0" prefWidth="259.0">
                <center>
                   <Text fill="#ff8500" strokeType="OUTSIDE" strokeWidth="0.0" text="YOU WON !!!" textAlignment="CENTER" BorderPane.alignment="CENTER">
