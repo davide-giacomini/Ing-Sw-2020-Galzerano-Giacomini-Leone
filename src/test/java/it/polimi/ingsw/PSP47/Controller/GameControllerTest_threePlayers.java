@@ -141,7 +141,7 @@ public class GameControllerTest_threePlayers {
         rowsAndColumns = new int[]{0, 1, 2, 3};
         controller.setWorkers(rowsAndColumns);
 
-        controller.removeLosingPlayer();
+        controller.removeLosingPlayer("Arianna");
 
         assertTrue(controller.getGame().isActive());
         for (int i=0; i<controller.getNumberOfPlayers(); i++) {
@@ -172,7 +172,7 @@ public class GameControllerTest_threePlayers {
         controller.setWorkers(rowsAndColumns);
 
         controller.setIndexOfCurrentPlayer(2);
-        controller.removeLosingPlayer();
+        controller.removeLosingPlayer("Arianna");
 
         assertTrue(controller.getGame().isActive());
         assertEquals(2, controller.getNumberOfPlayers());

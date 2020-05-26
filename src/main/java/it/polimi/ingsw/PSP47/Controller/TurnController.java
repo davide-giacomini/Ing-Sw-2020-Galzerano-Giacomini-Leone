@@ -35,7 +35,7 @@ public class TurnController {
      */
     void startTurn() {
         if (player.isLoosing()) {
-            controller.removeLosingPlayer();
+            controller.removeLosingPlayer(player.getUsername());
             return;
         }
         views.get(indexOfCurrentPlayer).sendWhichWorker();
@@ -94,7 +94,7 @@ public class TurnController {
             player.setLoosing(true);
         }
         if (player.isLoosing()) {
-            controller.removeLosingPlayer();
+            controller.removeLosingPlayer(player.getUsername());
             return;
         }
         switch (action) {
@@ -108,7 +108,7 @@ public class TurnController {
                 buildDome(direction);
                 break;
             case QUIT:
-                controller.removeLosingPlayer();
+                controller.removeLosingPlayer(player.getUsername());
                 break;
             case END:
                 if (!turn.validateEndTurn()) {

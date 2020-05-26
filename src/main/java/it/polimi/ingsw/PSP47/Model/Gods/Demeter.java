@@ -20,6 +20,7 @@ public class Demeter extends God {
         MAX_MOVEMENTS = 1;
         MIN_MOVEMENTS = 1;
         canAlwaysBuildDome = false;
+        threePlayersGame = true;
     }
 
 

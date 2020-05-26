@@ -17,6 +17,7 @@ public abstract class God {
     protected int MAX_MOVEMENTS;
     protected int MAX_BUILDINGS;
     protected boolean canAlwaysBuildDome;
+    protected boolean threePlayersGame;
     protected Player player;
     protected String name;
     
@@ -57,7 +58,13 @@ public abstract class God {
     public boolean canAlwaysBuildDome() {
         return canAlwaysBuildDome;
     }
-    
+
+    /**
+     * @return if the card is available in a three players game
+     */
+    public boolean threePlayersGame() {
+        return threePlayersGame;
+    }
 
     /**
      * This method moves a {@link Worker} from a {@link Slot} to another, towards the destination specified.

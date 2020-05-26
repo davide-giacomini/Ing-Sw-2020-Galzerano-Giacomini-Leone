@@ -78,14 +78,14 @@ public class GameController implements VirtualViewListener {
      */
     private void startController() {
          orderViews();
-         int index = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
+         indexOfCurrentPlayer = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
         for (VirtualView view : views) {
             view.sendNumberOfPlayers(numberOfPlayers);
         }
         ArrayList<String> usernames = new ArrayList<>();
         for (VirtualView view : views)
             usernames.add(view.getUsername());
-         views.get(index).sendChallenger(usernames);
+         views.get(indexOfCurrentPlayer).sendChallenger(usernames);
     }
 
     /**
@@ -93,6 +93,21 @@ public class GameController implements VirtualViewListener {
      * @param gods list of chosen gods.
      */
     public void setGods(ArrayList<GodName> gods, String chosenPlayer) {
+        for (GodName god : gods) {
+            try {
+                if (game.getNumberOfPlayers() == 3 && !chooseGod(god, getGame().getPlayer(indexOfCurrentPlayer)).threePlayersGame()) {
+                    String textError = "You cannot choose a god which is not available in a three players game";
+                    views.get(indexOfCurrentPlayer).sendError(textError);
+                    ArrayList<String> usernames = new ArrayList<>();
+                    for (VirtualView view : views)
+                        usernames.add(view.getUsername());
+                    views.get(indexOfCurrentPlayer).sendChallenger(usernames);
+                    return;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         this.chosenPlayer = chosenPlayer;
         game.setGods(gods);
         game.putRandomAtLastPosition();
@@ -324,14 +339,17 @@ public class GameController implements VirtualViewListener {
      * This method deletes a losing player from the game and notifies all the players.
      * If the players were just two, it also declares the winner and ends the game.
      */
-    void removeLosingPlayer() {
-        views.get(indexOfCurrentPlayer).sendImportant("", MessageType.LOSING);
+    void removeLosingPlayer(String username) {
 
         if (game.getNumberOfPlayers() == 2) {
             incrementIndex();
             endGame(game.getPlayer(indexOfCurrentPlayer).getUsername());
         }
         else {
+            for (VirtualView view : views) {
+                view.sendImportant(username, MessageType.LOSING);
+            }
+
             if (game.getPlayer(indexOfCurrentPlayer).getGod().getName().equals("Athena")) {
                 for (int i = 0; i < game.getNumberOfPlayers(); i++) {
                     game.getPlayer(i).setCannotMoveUp(false);
@@ -356,9 +374,8 @@ public class GameController implements VirtualViewListener {
     void endGame(String username) {
         game.setActive(false);
         for (VirtualView view : views) {
-            view.sendImportant( username , MessageType.WINNING);
+            view.sendImportant(username, MessageType.WINNING);
         }
-        views.get(indexOfCurrentPlayer).sendWinningAdvice();
     }
 
     /**

@@ -221,7 +221,7 @@ public class GameControllerTest_twoPlayers {
         rowsAndColumns = new int[]{2, 2, 3, 3};
         controller.setWorkers(rowsAndColumns);
 
-        controller.removeLosingPlayer();
+        controller.removeLosingPlayer("Monica");
 
         assertFalse(controller.getGame().isActive());
     }
