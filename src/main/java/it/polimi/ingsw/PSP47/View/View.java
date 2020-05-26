@@ -56,11 +56,6 @@ public interface View  {
     void showPublicInformation();
 
     /**
-     * this method calls the print support that prints the updated board of the game
-     */
-    void showCurrentBoard();
-
-    /**
      * Shows a message of Error or of Warning
      * @param text tho display
      */

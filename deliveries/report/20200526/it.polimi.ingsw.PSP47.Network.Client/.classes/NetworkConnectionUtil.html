@@ -1,0 +1,106 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NetworkConnectionUtil</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Network.Client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NetworkConnectionUtil (it.polimi.ingsw.PSP47.Network.Client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NetworkConnectionUtil</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Network.Client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.Server;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.View.View;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.io.IOException;
+<i>7</i>&nbsp;import java.net.Socket;
+<i>8</i>&nbsp;
+<b class="nc"><i>9</i>&nbsp;public class NetworkConnectionUtil {</b>
+<i>10</i>&nbsp;    public static NetworkHandler setConnection(View view, String ipAddress) throws IOException{
+<i>11</i>&nbsp;        NetworkHandler networkHandler;
+<i>12</i>&nbsp;        
+<i>13</i>&nbsp;        // open a connection with the server
+<i>14</i>&nbsp;        Socket serverSocket;
+<b class="nc"><i>15</i>&nbsp;        serverSocket = new Socket(ipAddress, Server.SOCKET_PORT);</b>
+<i>16</i>&nbsp;    
+<b class="nc"><i>17</i>&nbsp;        networkHandler = new NetworkHandler(view , serverSocket);</b>
+<i>18</i>&nbsp;        
+<b class="nc"><i>19</i>&nbsp;        new Thread(networkHandler).start();</b>
+<i>20</i>&nbsp;        
+<b class="nc"><i>21</i>&nbsp;        return networkHandler;</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 16:32</div>
+</div>
+</body>
+</html>

@@ -10,10 +10,10 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -47,6 +47,15 @@ public class GUI extends Application implements View {
 
     private boolean start = false;
 
+    public void setNetworkHandler(NetworkHandler networkHandler) {
+        this.networkHandler = networkHandler;
+    }
+
+    @Override
+    public GameView getGameView() {
+        return gameView;
+    }
+
     /**
      * This method makes the GUI starts running.
      * It load the first scene and creates the gameView.
@@ -56,7 +65,6 @@ public class GUI extends Application implements View {
     @Override
     public void start(Stage primaryStage) throws Exception {
         gameView = new GameView();
-
         this.primaryStage = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/FXML/connectionToServer.fxml"));
@@ -69,7 +77,7 @@ public class GUI extends Application implements View {
         primaryStage.setTitle("Santorini");
         primaryStage.show();
 
-        gameView.update(CurrentScene.START);
+        gameView.updateMoment(CurrentScene.START);
 
         ConnectionToServerController connectionToServerController = fxmlLoader.getController();
         connectionToServerController.setGui(this);
@@ -84,10 +92,6 @@ public class GUI extends Application implements View {
         });
     }
 
-    public void setNetworkHandler(NetworkHandler networkHandler) {
-        this.networkHandler = networkHandler;
-    }
-
     /**
      * This method is used to change the layout of the current scene, loading another FXML file.
      * @param scene the scene that must be changed.
@@ -100,7 +104,6 @@ public class GUI extends Application implements View {
         loader.setLocation(GUI.class.getResource(path));
 
         Parent root;
-
         try {
             root = loader.load();
             scene.setRoot(root);
@@ -145,6 +148,7 @@ public class GUI extends Application implements View {
         Platform.runLater(() -> {
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
+
             ChallengerController chooseCardsController = setLayout(scene, "/FXML/challenger.fxml");
             chooseCardsController.addViewListener(networkHandler);
             chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());
@@ -167,21 +171,12 @@ public class GUI extends Application implements View {
         Platform.runLater(() -> {
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
+
             ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
             chooseCardController.addViewListener(networkHandler);
             chooseCardController.setAvailableGods(godsChosen);
 
         });
-
-    }
-
-    @Override
-    public GameView getGameView() {
-        return gameView;
-    }
-
-    @Override
-    public void showCurrentBoard() {
 
     }
 
@@ -319,7 +314,6 @@ public class GUI extends Application implements View {
        // System.exit(0); decide how to handle the final part
     }
 
-
     /**
      * method implemented in order to display the same board but with the different slot that has just been updated from the model
      * @param slot is the slot that has been changed
@@ -327,7 +321,7 @@ public class GUI extends Application implements View {
     @Override
     public void showNewBoard(Slot slot) {
         Platform.runLater(()-> {
-            gameView.update(CurrentScene.WAIT); //new current scene
+            gameView.updateMoment(CurrentScene.WAIT); //new current scene
             duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.changeSlot(slot);
         });
@@ -342,8 +336,9 @@ public class GUI extends Application implements View {
         Platform.runLater(()-> {
             primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
             primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
+
             duringGameController = setLayout(scene, "/FXML/boardDuringGame.fxml");
-            gameView.update(CurrentScene.WAIT); //new current scene
+            gameView.updateMoment(CurrentScene.WAIT); //new current scene
             duringGameController.setGameView(gameView);
             duringGameController.addViewListener(networkHandler);
             duringGameController.changeText();
@@ -358,7 +353,8 @@ public class GUI extends Application implements View {
     @Override
     public void askWhichWorkerToUse() {
         Platform.runLater(() -> {
-            gameView.update(CurrentScene.ASK_WHICH_WORKER); //new current scene
+            gameView.updateMoment(CurrentScene.ASK_WHICH_WORKER); //new current scene
+
             duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.resetRowsAndColumns();
             duringGameController.changeText();
@@ -371,7 +367,8 @@ public class GUI extends Application implements View {
     @Override
     public void askWhereToPositionWorkers() {
         Platform.runLater(() -> {
-            gameView.update(CurrentScene.ASK_INITIAL_POSITION);//new current scene
+            gameView.updateMoment(CurrentScene.ASK_INITIAL_POSITION);//new current scene
+
             duringGameController.setGameView(gameView);//maybe can be deleted, not sure because it gave problems
             duringGameController.resetRowsAndColumns();
             duringGameController.setUsernames(gameView.getUsernames());
@@ -390,12 +387,10 @@ public class GUI extends Application implements View {
             if(!start) {
                 primaryStage.setWidth(600);
                 primaryStage.setHeight(450);
+
                 StartController startController = setLayout(scene, "/FXML/waitingPane.fxml"); //now instead of alert I show waiting Pane made by Moni :)
-                /*Alert a = new Alert(Alert.AlertType.WARNING);
-                a.setContentText("It's " + usernameOnTurn + "'s turn. You can't do anything until it's your turn.");
-                a.show();*/
             }else {
-                gameView.update(CurrentScene.WAIT);//new current scene
+                gameView.updateMoment(CurrentScene.WAIT);//new current scene
                 duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
                 duringGameController.changeText();
             }
@@ -408,7 +403,8 @@ public class GUI extends Application implements View {
     @Override
     public void askAction() {
         Platform.runLater(() -> {
-            gameView.update(CurrentScene.CHOOSE_ACTION); //new current scene
+            gameView.updateMoment(CurrentScene.CHOOSE_ACTION); //new current scene
+
             duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.changeText();
         });
@@ -421,6 +417,7 @@ public class GUI extends Application implements View {
     public void showPublicInformation() {
         Platform.runLater(() -> {
             duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
+
             duringGameController.setUsernames(gameView.getUsernames());
             duringGameController.setColors(gameView.getColors());
             duringGameController.setGods(gameView.getGods());
