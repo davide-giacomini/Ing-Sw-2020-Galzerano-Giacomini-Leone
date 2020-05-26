@@ -357,7 +357,7 @@ public class GameController implements VirtualViewListener {
             }
             game.getPlayer(indexOfCurrentPlayer).deleteWorkers();
             game.removePlayer(game.getPlayer(indexOfCurrentPlayer));
-            views.get(indexOfCurrentPlayer).sendLosingAdvice();
+            views.get(indexOfCurrentPlayer).youAreOutTheGame(false);
             views.get(indexOfCurrentPlayer).removeVirtualViewListener(this);
             views.remove(views.get(indexOfCurrentPlayer));
 
@@ -375,6 +375,7 @@ public class GameController implements VirtualViewListener {
         game.setActive(false);
         for (VirtualView view : views) {
             view.sendImportant(username, MessageType.WINNING);
+            view.youAreOutTheGame(true);
         }
     }
 

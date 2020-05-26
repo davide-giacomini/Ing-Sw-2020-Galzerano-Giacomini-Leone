@@ -13,7 +13,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -37,6 +47,15 @@ public class GUI extends Application implements View {
 
     private boolean start = false;
 
+    public void setNetworkHandler(NetworkHandler networkHandler) {
+        this.networkHandler = networkHandler;
+    }
+
+    @Override
+    public GameView getGameView() {
+        return gameView;
+    }
+
     /**
      * This method makes the GUI starts running.
      * It load the first scene and creates the gameView.
@@ -46,7 +65,6 @@ public class GUI extends Application implements View {
     @Override
     public void start(Stage primaryStage) throws Exception {
         gameView = new GameView();
-
         this.primaryStage = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/FXML/connectionToServer.fxml"));
@@ -54,12 +72,12 @@ public class GUI extends Application implements View {
         root = fxmlLoader.load();
         scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/CSS/background.css").toExternalForm());
-        primaryStage.setResizable(true);
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Santorini");
         primaryStage.show();
 
-        gameView.update(CurrentScene.START);
+        gameView.updateMoment(CurrentScene.START);
 
         ConnectionToServerController connectionToServerController = fxmlLoader.getController();
         connectionToServerController.setGui(this);
@@ -74,10 +92,6 @@ public class GUI extends Application implements View {
         });
     }
 
-    public void setNetworkHandler(NetworkHandler networkHandler) {
-        this.networkHandler = networkHandler;
-    }
-
     /**
      * This method is used to change the layout of the current scene, loading another FXML file.
      * @param scene the scene that must be changed.
@@ -90,7 +104,6 @@ public class GUI extends Application implements View {
         loader.setLocation(GUI.class.getResource(path));
 
         Parent root;
-
         try {
             root = loader.load();
             scene.setRoot(root);
@@ -109,8 +122,8 @@ public class GUI extends Application implements View {
     @Override
     public void askFirstConnection() {
         Platform.runLater(() -> {
-        StartController startController = setLayout(scene, "/FXML/startPane.fxml");
-        startController.addViewListener(networkHandler);
+            StartController startController = setLayout(scene, "/FXML/startPane.fxml");
+            startController.addViewListener(networkHandler);
         });
     }
 
@@ -121,9 +134,8 @@ public class GUI extends Application implements View {
     @Override
     public void askNumberOfPlayers() {
         Platform.runLater(() -> {
-        ChoosePlayersController choosePlayersController = setLayout(scene,"/FXML/choosePlayers.fxml");
-        choosePlayersController.addViewListener(networkHandler);
-
+            ChoosePlayersController choosePlayersController = setLayout(scene,"/FXML/choosePlayers.fxml");
+            choosePlayersController.addViewListener(networkHandler);
         });
     }
 
@@ -134,17 +146,18 @@ public class GUI extends Application implements View {
     @Override
     public void challengerWillChooseThreeGods(ArrayList<String> usernames) {
         Platform.runLater(() -> {
-        primaryStage.setWidth(1100);
-        primaryStage.setHeight(800);
-        ChallengerController chooseCardsController = setLayout(scene, "/FXML/challenger.fxml");
-        chooseCardsController.addViewListener(networkHandler);
-        chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());
-        chooseCardsController.setFirstPlayer(usernames.get(0));
-        chooseCardsController.setSecondPlayer(usernames.get(1));
-        if (usernames.size() == 3)
-            chooseCardsController.setThirdPlayer(usernames.get(2));
-        else
-            chooseCardsController.setThirdPlayer(null);
+            primaryStage.setWidth(1100);
+            primaryStage.setHeight(800);
+
+            ChallengerController chooseCardsController = setLayout(scene, "/FXML/challenger.fxml");
+            chooseCardsController.addViewListener(networkHandler);
+            chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());
+            chooseCardsController.setFirstPlayer(usernames.get(0));
+            chooseCardsController.setSecondPlayer(usernames.get(1));
+            if (usernames.size() == 3)
+                chooseCardsController.setThirdPlayer(usernames.get(2));
+            else
+                chooseCardsController.setThirdPlayer(null);
         });
     }
 
@@ -158,21 +171,12 @@ public class GUI extends Application implements View {
         Platform.runLater(() -> {
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
+
             ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
             chooseCardController.addViewListener(networkHandler);
             chooseCardController.setAvailableGods(godsChosen);
 
         });
-
-    }
-
-    @Override
-    public GameView getGameView() {
-        return gameView;
-    }
-
-    @Override
-    public void showCurrentBoard() {
 
     }
 
@@ -195,11 +199,18 @@ public class GUI extends Application implements View {
      */
     @Override
     public void showImportantMessage(String text) {
-        Platform.runLater(() -> {
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-            a.setContentText(text);
-            a.show();
-        });
+        if (text.split("\n")[0].equals("Wait for the other players to connect.")){
+            Platform.runLater(() -> {
+                setLayout(scene, "/FXML/waitingPane.fxml");
+            });
+        }
+        else {
+            Platform.runLater(() -> {
+                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                a.setContentText(text);
+                a.show();
+            });
+        }
     }
 
     /**
@@ -208,30 +219,100 @@ public class GUI extends Application implements View {
      */
     @Override
     public void theWinnerIs(String usernameWinner) {
-        //Platform.runLater(()->{
-        primaryStage.setWidth(1100);
-        primaryStage.setHeight(800);
-        WinningAdviceController winningAdviceController = setLayout(scene, "/FXML/winningAdvice.fxml");
-        winningAdviceController.addViewListener(networkHandler);
-        //});
+        if (gameView.getMyUsername().equals(usernameWinner))
+            showIAmTheWinner();
+        else
+            showWhoIsTheWinner(usernameWinner);
     }
-
+    
+    private void showIAmTheWinner(){
+        Platform.runLater(()->{
+            try {
+                Stage winnerStage = new Stage();
+                winnerStage.setHeight(400);
+                winnerStage.setWidth(600);
+                
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/FXML/winningAdvice.fxml"));
+                Scene scene = new Scene(fxmlLoader.load());
+                
+                winnerStage.setScene(scene);
+                winnerStage.setResizable(false);
+            
+                winnerStage.setTitle("You won!");
+                winnerStage.initModality(Modality.APPLICATION_MODAL);
+                winnerStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    
+    private void showWhoIsTheWinner(String usernameWinner){
+        Platform.runLater(()->{
+            try {
+                Stage winnerStage = new Stage();
+                winnerStage.setHeight(400);
+                winnerStage.setWidth(600);
+    
+                winnerStage.setX(Screen.getPrimary().getBounds().getMinX());
+                winnerStage.setY(Screen.getPrimary().getBounds().getMinY());
+            
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/FXML/losingWithWinner.fxml"));
+                AnchorPane rootAnchorPane = fxmlLoader.load();
+                Scene scene = new Scene(rootAnchorPane);
+                
+                BorderPane borderPane = (BorderPane) rootAnchorPane.getChildren().get(2);
+                Text text = (Text) ((BorderPane)((BorderPane)borderPane.getCenter()).getTop()).getCenter();
+                text.setText("I am sorry.\n" +usernameWinner+ " won.");
+                
+                winnerStage.setScene(scene);
+                winnerStage.setResizable(false);
+            
+                winnerStage.setTitle("I am sorry...");
+                winnerStage.initModality(Modality.APPLICATION_MODAL);
+                winnerStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    
     /**
      * This method loads the scene where a loser is declared.
      */
     @Override
     public void theLoserIs() {
-        primaryStage.setWidth(1100);
-        primaryStage.setHeight(800);
-        LosingAdviceController losingAdviceController = setLayout(scene, "/FXML/losingAdvice.fxml");
-        losingAdviceController.addViewListener(networkHandler);
+        Platform.runLater(()-> {
+            try {
+                Stage loserStage = new Stage();
+                loserStage.setHeight(400);
+                loserStage.setWidth(600);
+                
+                loserStage.setX(Screen.getPrimary().getBounds().getMinX());
+                loserStage.setY(Screen.getPrimary().getBounds().getMinY());
+                
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/FXML/losingWithoutWinner.fxml"));
+                Scene scene = new Scene(fxmlLoader.load());
+                
+                loserStage.setScene(scene);
+                loserStage.setResizable(false);
+                
+                loserStage.setTitle("I am sorry...");
+                loserStage.initModality(Modality.APPLICATION_MODAL);
+                loserStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
     public void showEnd() {
        // System.exit(0); decide how to handle the final part
     }
-
 
     /**
      * method implemented in order to display the same board but with the different slot that has just been updated from the model
@@ -240,7 +321,7 @@ public class GUI extends Application implements View {
     @Override
     public void showNewBoard(Slot slot) {
         Platform.runLater(()-> {
-            gameView.update(CurrentScene.WAIT); //new current scene
+            gameView.updateMoment(CurrentScene.WAIT); //new current scene
             duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.changeSlot(slot);
         });
@@ -253,14 +334,15 @@ public class GUI extends Application implements View {
     @Override
     public void showGame() {
         Platform.runLater(()-> {
-            primaryStage.setWidth(1100);
-            primaryStage.setHeight(800);
+            primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
+            primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
+
             duringGameController = setLayout(scene, "/FXML/boardDuringGame.fxml");
-            primaryStage.setHeight(700);
-            gameView.update(CurrentScene.WAIT); //new current scene
+            gameView.updateMoment(CurrentScene.WAIT); //new current scene
             duringGameController.setGameView(gameView);
             duringGameController.addViewListener(networkHandler);
             duringGameController.changeText();
+            primaryStage.setResizable(true);
             start = true;
         });
     }
@@ -271,7 +353,8 @@ public class GUI extends Application implements View {
     @Override
     public void askWhichWorkerToUse() {
         Platform.runLater(() -> {
-            gameView.update(CurrentScene.ASK_WHICH_WORKER); //new current scene
+            gameView.updateMoment(CurrentScene.ASK_WHICH_WORKER); //new current scene
+
             duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.resetRowsAndColumns();
             duringGameController.changeText();
@@ -284,7 +367,8 @@ public class GUI extends Application implements View {
     @Override
     public void askWhereToPositionWorkers() {
         Platform.runLater(() -> {
-            gameView.update(CurrentScene.ASK_INITIAL_POSITION);//new current scene
+            gameView.updateMoment(CurrentScene.ASK_INITIAL_POSITION);//new current scene
+
             duringGameController.setGameView(gameView);//maybe can be deleted, not sure because it gave problems
             duringGameController.resetRowsAndColumns();
             duringGameController.setUsernames(gameView.getUsernames());
@@ -303,12 +387,10 @@ public class GUI extends Application implements View {
             if(!start) {
                 primaryStage.setWidth(600);
                 primaryStage.setHeight(450);
+
                 StartController startController = setLayout(scene, "/FXML/waitingPane.fxml"); //now instead of alert I show waiting Pane made by Moni :)
-                /*Alert a = new Alert(Alert.AlertType.WARNING);
-                a.setContentText("It's " + usernameOnTurn + "'s turn. You can't do anything until it's your turn.");
-                a.show();*/
             }else {
-                gameView.update(CurrentScene.WAIT);//new current scene
+                gameView.updateMoment(CurrentScene.WAIT);//new current scene
                 duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
                 duringGameController.changeText();
             }
@@ -321,7 +403,8 @@ public class GUI extends Application implements View {
     @Override
     public void askAction() {
         Platform.runLater(() -> {
-            gameView.update(CurrentScene.CHOOSE_ACTION); //new current scene
+            gameView.updateMoment(CurrentScene.CHOOSE_ACTION); //new current scene
+
             duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.changeText();
         });
@@ -334,6 +417,7 @@ public class GUI extends Application implements View {
     public void showPublicInformation() {
         Platform.runLater(() -> {
             duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
+
             duringGameController.setUsernames(gameView.getUsernames());
             duringGameController.setColors(gameView.getColors());
             duringGameController.setGods(gameView.getGods());

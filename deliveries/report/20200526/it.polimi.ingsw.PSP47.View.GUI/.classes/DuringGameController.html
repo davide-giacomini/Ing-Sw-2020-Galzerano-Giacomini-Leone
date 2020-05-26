@@ -1,0 +1,534 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DuringGameController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.View.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DuringGameController (it.polimi.ingsw.PSP47.View.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DuringGameController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 194)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.View.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.*;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Slot;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.View.GameView;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.View.ViewObservable;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableActionAndDirection;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableInitialPositions;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableRowsAndColumns;
+<i>10</i>&nbsp;import javafx.collections.ObservableList;
+<i>11</i>&nbsp;import javafx.fxml.FXML;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import javafx.geometry.HPos;
+<i>14</i>&nbsp;import javafx.geometry.Pos;
+<i>15</i>&nbsp;import javafx.geometry.VPos;
+<i>16</i>&nbsp;import javafx.scene.Node;
+<i>17</i>&nbsp;import javafx.scene.control.Alert;
+<i>18</i>&nbsp;import javafx.scene.control.Button;
+<i>19</i>&nbsp;import javafx.scene.control.TextArea;
+<i>20</i>&nbsp;import javafx.scene.image.Image;
+<i>21</i>&nbsp;import javafx.scene.image.ImageView;
+<i>22</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>23</i>&nbsp;import javafx.scene.layout.*;
+<i>24</i>&nbsp;import javafx.scene.text.Text;
+<i>25</i>&nbsp;import java.util.ArrayList;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;/**
+<i>28</i>&nbsp; * This class is used to separate from the Gui class the logic of the game, based on which moment we are in the game, it
+<i>29</i>&nbsp; * displays different texts to give instructions and reacts to the user inputs differently
+<i>30</i>&nbsp; * from the Gui it receives the GameView, in which all information about the game and current moment are stored
+<i>31</i>&nbsp; */
+<b class="nc"><i>32</i>&nbsp;public class DuringGameController extends ViewObservable{</b>
+<i>33</i>&nbsp;
+<b class="nc"><i>34</i>&nbsp;    private ArrayList&lt;String&gt; usernames= new ArrayList&lt;&gt;(3); // 3 arrays used for the dislay of publi info</b>
+<b class="nc"><i>35</i>&nbsp;    private ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(3);</b>
+<b class="nc"><i>36</i>&nbsp;    private ArrayList &lt;GodName&gt; gods = new ArrayList&lt;&gt;(3);</b>
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    private GameView gameView; // gives info about the game saved in the client
+<i>39</i>&nbsp;    private Action action; //used to save the action chosen by the player
+<i>40</i>&nbsp;
+<b class="nc"><i>41</i>&nbsp;    private int[] newRowAndColumn = new int[4]; //used for the positions of the workers that will be sent in messages</b>
+<b class="nc"><i>42</i>&nbsp;    private int[] workerRowAndColumn = new int[2];</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    @FXML
+<i>45</i>&nbsp;    private GridPane gridPane;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    @FXML
+<i>48</i>&nbsp;    private ArrayList&lt;Pane&gt; slots;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    @FXML
+<i>51</i>&nbsp;    private Button moveButton;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    @FXML
+<i>54</i>&nbsp;    private Button buildButton;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    @FXML
+<i>57</i>&nbsp;    private Button buildDomeButton;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    @FXML
+<i>60</i>&nbsp;    private Button endButton;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    @FXML
+<i>63</i>&nbsp;    private Button quitButton;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    @FXML
+<i>66</i>&nbsp;    private Text commandText;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    @FXML
+<i>69</i>&nbsp;    private TextArea firstPlayerInfo;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    @FXML
+<i>72</i>&nbsp;    private TextArea secondPlayerInfo;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    @FXML
+<i>75</i>&nbsp;    private TextArea thirdPlayerInfo;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * in the initialize method the based on the moment in which we are in the game the text to display
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    void changeText() {
+<b class="nc"><i>82</i>&nbsp;        if (gameView.getCurrentScene() == CurrentScene.ASK_INITIAL_POSITION){</b>
+<b class="nc"><i>83</i>&nbsp;            commandText.setText(&quot;Choose where to position worker :&quot;);</b>
+<b class="nc"><i>84</i>&nbsp;        }else if(gameView.getCurrentScene() == CurrentScene.ASK_WHICH_WORKER){</b>
+<b class="nc"><i>85</i>&nbsp;            commandText.setText(&quot;Choose the worker you want to use :&quot;);</b>
+<b class="nc"><i>86</i>&nbsp;        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION){</b>
+<b class="nc"><i>87</i>&nbsp;            commandText.setText(&quot;Choose the action you want between the buttons :&quot;);</b>
+<b class="nc"><i>88</i>&nbsp;        }else if (gameView.getCurrentScene() == CurrentScene.WAIT){</b>
+<b class="nc"><i>89</i>&nbsp;            commandText.setText(&quot;WAIT&quot;);</b>
+<i>90</i>&nbsp;        }
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * method used only when the gui has received the request to ask which worker to use or where to position it
+<i>95</i>&nbsp;     * the parameters are resetted in order to be then filled with the correct values of the clicked slot
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    void resetRowsAndColumns(){
+<b class="nc"><i>98</i>&nbsp;        for (int i = 0; i &lt; 4; i++) {</b>
+<b class="nc"><i>99</i>&nbsp;            newRowAndColumn[i] = -1; //for the row+column+row+column of the two inital positions of the workers</b>
+<i>100</i>&nbsp;        }
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;        workerRowAndColumn[0]= -1; //row and column of the position of the worker the user wants to use</b>
+<b class="nc"><i>103</i>&nbsp;        workerRowAndColumn[1]= -1;</b>
+<i>104</i>&nbsp;    }
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    /**
+<i>107</i>&nbsp;     * method that handles the click in two ways : 1. you are allowed to click the button and in this case the moment has to change since now the user has to click a slot
+<i>108</i>&nbsp;     * 2. you are not allowed to click so I show you an alert
+<i>109</i>&nbsp;     * @param event is the input click of the user
+<i>110</i>&nbsp;     */
+<i>111</i>&nbsp;    @FXML
+<i>112</i>&nbsp;    void OnMoveClick(MouseEvent event) {
+<b class="nc"><i>113</i>&nbsp;        if (gameView.getCurrentScene() == CurrentScene.WAIT){</b>
+<b class="nc"><i>114</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>115</i>&nbsp;            a.setContentText(&quot;Please wait for your Turn!&quot;);</b>
+<b class="nc"><i>116</i>&nbsp;            a.show();</b>
+<b class="nc"><i>117</i>&nbsp;        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION){</b>
+<b class="nc"><i>118</i>&nbsp;            action = Action.MOVE;</b>
+<b class="nc"><i>119</i>&nbsp;            gameView.updateMoment(CurrentScene.ACTION_CHOSEN);</b>
+<b class="nc"><i>120</i>&nbsp;            commandText.setText(&quot;Now click on the slot where you want to move:&quot;);</b>
+<i>121</i>&nbsp;        }//TODO add other cases with text
+<i>122</i>&nbsp;    }
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    /**
+<i>125</i>&nbsp;     * method that handles the click in two ways : 1. you are allowed to click the button and in this case the moment has to change since now the user has to click a slot
+<i>126</i>&nbsp;     * 2. you are not allowed to click so I show you an alert
+<i>127</i>&nbsp;     * @param event is the input click of the user
+<i>128</i>&nbsp;     */
+<i>129</i>&nbsp;    @FXML
+<i>130</i>&nbsp;    void OnBuildClick(MouseEvent event) {
+<b class="nc"><i>131</i>&nbsp;        if (gameView.getCurrentScene() == CurrentScene.WAIT){</b>
+<b class="nc"><i>132</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>133</i>&nbsp;            a.setContentText(&quot;Please wait for your Turn!&quot;);</b>
+<b class="nc"><i>134</i>&nbsp;            a.show();</b>
+<b class="nc"><i>135</i>&nbsp;        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {</b>
+<b class="nc"><i>136</i>&nbsp;            action = Action.BUILD;</b>
+<b class="nc"><i>137</i>&nbsp;            gameView.updateMoment(CurrentScene.ACTION_CHOSEN);</b>
+<b class="nc"><i>138</i>&nbsp;            commandText.setText(&quot;Now click on the slot where you want to build:&quot;);</b>
+<i>139</i>&nbsp;        }
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * method that handles the click in two ways : 1. you are allowed to click the button and in this case the moment has to change since now the user has to click a slot
+<i>144</i>&nbsp;     * 2. you are not allowed to click so I show you an alert
+<i>145</i>&nbsp;     * @param event is the input click of the user
+<i>146</i>&nbsp;     */
+<i>147</i>&nbsp;    @FXML
+<i>148</i>&nbsp;    void OnBuildDomeClick(MouseEvent event) {
+<b class="nc"><i>149</i>&nbsp;        if (gameView.getCurrentScene() == CurrentScene.WAIT){</b>
+<b class="nc"><i>150</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>151</i>&nbsp;            a.setContentText(&quot;Please wait for your Turn!&quot;);</b>
+<b class="nc"><i>152</i>&nbsp;            a.show();</b>
+<b class="nc"><i>153</i>&nbsp;        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {</b>
+<b class="nc"><i>154</i>&nbsp;            action = Action.BUILDDOME;</b>
+<b class="nc"><i>155</i>&nbsp;            gameView.updateMoment(CurrentScene.ACTION_CHOSEN);</b>
+<b class="nc"><i>156</i>&nbsp;            commandText.setText(&quot;Now click on the slot where you want to build the Dome:&quot;);</b>
+<i>157</i>&nbsp;        }
+<i>158</i>&nbsp;    }
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    /**
+<i>161</i>&nbsp;     * method that handles the click in two ways : 1. you are allowed to click the button and in this case the message is sent since I dont have to click on
+<i>162</i>&nbsp;     * the gridPane
+<i>163</i>&nbsp;     * 2. you are not allowed to click so I show you an alert
+<i>164</i>&nbsp;     * @param event is the input click of the user
+<i>165</i>&nbsp;     */
+<i>166</i>&nbsp;    @FXML
+<i>167</i>&nbsp;    void OnEndClick(MouseEvent event) {
+<b class="nc"><i>168</i>&nbsp;        if (gameView.getCurrentScene() == CurrentScene.WAIT) {</b>
+<b class="nc"><i>169</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>170</i>&nbsp;            a.setContentText(&quot;Please wait for your Turn!&quot;);</b>
+<b class="nc"><i>171</i>&nbsp;            a.show();</b>
+<b class="nc"><i>172</i>&nbsp;        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {</b>
+<b class="nc"><i>173</i>&nbsp;            action = Action.END;</b>
+<b class="nc"><i>174</i>&nbsp;            VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();</b>
+<b class="nc"><i>175</i>&nbsp;            visitableActionAndDirection.setAction(action);</b>
+<b class="nc"><i>176</i>&nbsp;            notifyViewListener(visitableActionAndDirection);</b>
+<b class="nc"><i>177</i>&nbsp;            commandText.setText(&quot;You asked to end your turn&quot;);</b>
+<b class="nc"><i>178</i>&nbsp;            gameView.updateMoment(CurrentScene.WAIT);</b>
+<i>179</i>&nbsp;        }
+<i>180</i>&nbsp;    }
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * This method notifies the Network Handler that it has to close itself
+<i>184</i>&nbsp;     * @param event
+<i>185</i>&nbsp;     */
+<i>186</i>&nbsp;    @FXML
+<i>187</i>&nbsp;    void OnQuitClick(MouseEvent event) {
+<b class="nc"><i>188</i>&nbsp;        notifyEndConnection();</b>
+<b class="nc"><i>189</i>&nbsp;        System.exit(0); //added because the GUI , as application with its own thread, has to be shut too</b>
+<i>190</i>&nbsp;    }
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    /**
+<i>193</i>&nbsp;     * method that depending on the moment(current scene) handles the click on the grid differently
+<i>194</i>&nbsp;     */
+<i>195</i>&nbsp;    @FXML
+<i>196</i>&nbsp;    void GridClick(MouseEvent event) {
+<i>197</i>&nbsp;
+<b class="nc"><i>198</i>&nbsp;        Node source = (Node)event.getSource() ; // gets the pane clicked</b>
+<b class="nc"><i>199</i>&nbsp;        Integer colIndex = GridPane.getColumnIndex(source); //column adn row of the pane clicked</b>
+<b class="nc"><i>200</i>&nbsp;        Integer rowIndex = GridPane.getRowIndex(source);</b>
+<b class="nc"><i>201</i>&nbsp;        System.out.printf(&quot;Mouse entered cell [%d, %d]%n&quot;, colIndex, rowIndex);</b>
+<i>202</i>&nbsp;
+<b class="nc"><i>203</i>&nbsp;        if (gameView.getCurrentScene() == CurrentScene.ASK_INITIAL_POSITION) //the click is accepted twice before of sending the initial positions of the 2 workers</b>
+<b class="nc"><i>204</i>&nbsp;            selectSlotAndNotify(rowIndex, colIndex);</b>
+<b class="nc"><i>205</i>&nbsp;        else if (gameView.getCurrentScene() == CurrentScene.ASK_WHICH_WORKER){ //the click is accepted once when I choose the worker</b>
+<b class="nc"><i>206</i>&nbsp;            chooseWorkerToUse(rowIndex,colIndex);</b>
+<b class="nc"><i>207</i>&nbsp;        }else if(gameView.getCurrentScene() == CurrentScene.ACTION_CHOSEN){ //the action button was clicked and after clicking on the grid the message can be created and sent</b>
+<b class="nc"><i>208</i>&nbsp;            VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();</b>
+<b class="nc"><i>209</i>&nbsp;            visitableActionAndDirection.setAction(action);</b>
+<b class="nc"><i>210</i>&nbsp;            visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(workerRowAndColumn[0],workerRowAndColumn[1], rowIndex,colIndex));</b>
+<b class="nc"><i>211</i>&nbsp;            notifyViewListener(visitableActionAndDirection);</b>
+<b class="nc"><i>212</i>&nbsp;            commandText.setText(&quot;WAIT&quot;); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server</b>
+<b class="nc"><i>213</i>&nbsp;            gameView.updateMoment(CurrentScene.WAIT);</b>
+<b class="nc"><i>214</i>&nbsp;        }else if (gameView.getCurrentScene() == CurrentScene.WAIT ){ //if I am in this moment I cannot click</b>
+<b class="nc"><i>215</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>216</i>&nbsp;            a.setContentText(&quot;Please wait for your Turn!&quot;);</b>
+<b class="nc"><i>217</i>&nbsp;            a.show();</b>
+<i>218</i>&nbsp;        }
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    }
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    /**
+<i>223</i>&nbsp;     * method used to send the inital positions of the two workers
+<i>224</i>&nbsp;     * @param row of the pane clicked in the gridPane
+<i>225</i>&nbsp;     * @param column of the pane clicked in the gridPane
+<i>226</i>&nbsp;     */
+<i>227</i>&nbsp;    private void selectSlotAndNotify(int row, int column) {
+<i>228</i>&nbsp;        int i;
+<b class="nc"><i>229</i>&nbsp;        for (i = 0; i &lt; 4; i++) {</b>
+<b class="nc"><i>230</i>&nbsp;            if ( newRowAndColumn[i] == -1 ) {</b>
+<b class="nc"><i>231</i>&nbsp;                newRowAndColumn[i] = row ;</b>
+<b class="nc"><i>232</i>&nbsp;                newRowAndColumn[i +1] = column;</b>
+<b class="nc"><i>233</i>&nbsp;                break;</b>
+<i>234</i>&nbsp;            }
+<i>235</i>&nbsp;        }
+<b class="nc"><i>236</i>&nbsp;        if (i == 2) {</b>
+<b class="nc"><i>237</i>&nbsp;            VisitableInitialPositions visitableInitialPositions = new VisitableInitialPositions(); //create message at the second click</b>
+<b class="nc"><i>238</i>&nbsp;            visitableInitialPositions.setRowsAndColumns(newRowAndColumn);</b>
+<b class="nc"><i>239</i>&nbsp;            notifyViewListener(visitableInitialPositions);</b>
+<b class="nc"><i>240</i>&nbsp;            commandText.setText(&quot;WAIT&quot;);</b>
+<b class="nc"><i>241</i>&nbsp;            gameView.updateMoment(CurrentScene.WAIT);</b>
+<i>242</i>&nbsp;        }
+<i>243</i>&nbsp;    }
+<i>244</i>&nbsp;
+<i>245</i>&nbsp;    /**
+<i>246</i>&nbsp;     *This method is used to set row and column of the pane clicked that will be sent in an array to the sever
+<i>247</i>&nbsp;     * @param row of the pane
+<i>248</i>&nbsp;     * @param column of the pane
+<i>249</i>&nbsp;     */
+<i>250</i>&nbsp;    private void chooseWorkerToUse(int row, int column) {
+<i>251</i>&nbsp;        //add opacity to indicate the worker chosen TODO
+<b class="nc"><i>252</i>&nbsp;        workerRowAndColumn[0] = row ;</b>
+<b class="nc"><i>253</i>&nbsp;        workerRowAndColumn[1] = column;</b>
+<i>254</i>&nbsp;
+<b class="nc"><i>255</i>&nbsp;        VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();</b>
+<b class="nc"><i>256</i>&nbsp;        visitableRowsAndColumns.setRowsAndColumns(workerRowAndColumn);</b>
+<b class="nc"><i>257</i>&nbsp;        notifyViewListener(visitableRowsAndColumns);</b>
+<b class="nc"><i>258</i>&nbsp;        commandText.setText(&quot;WAIT&quot;);</b>
+<b class="nc"><i>259</i>&nbsp;        gameView.updateMoment(CurrentScene.WAIT);</b>
+<i>260</i>&nbsp;
+<i>261</i>&nbsp;    }
+<i>262</i>&nbsp;
+<i>263</i>&nbsp;    public void setUsernames(ArrayList&lt;String&gt; usernames) {
+<b class="nc"><i>264</i>&nbsp;        this.usernames = usernames;</b>
+<i>265</i>&nbsp;    }
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;    public void setColors(ArrayList&lt;Color&gt; colors) {
+<b class="nc"><i>268</i>&nbsp;        this.colors = colors;</b>
+<i>269</i>&nbsp;    }
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    public void setGods(ArrayList&lt;GodName&gt; gods) {
+<b class="nc"><i>272</i>&nbsp;        this.gods = gods;</b>
+<i>273</i>&nbsp;    }
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    /**
+<i>276</i>&nbsp;     * method used when an updated slot arrives; It displays only the change in the specific slot, it adds worker and also all levels with addLevels function
+<i>277</i>&nbsp;     * by using images
+<i>278</i>&nbsp;     * @param slot is the clot that has been changed
+<i>279</i>&nbsp;     */
+<i>280</i>&nbsp;    public void changeSlot(Slot slot){
+<b class="nc"><i>281</i>&nbsp;        Pane pane = (Pane) getNodeByRowColumnIndex(slot.getRow(), slot.getColumn(), gridPane); //I get the pane that corresponds to the row and column  received by the server</b>
+<i>282</i>&nbsp;        //pane.setEffect(new DropShadow());
+<b class="nc"><i>283</i>&nbsp;        pane.getChildren().clear(); //clean what was in the pane before and recreate everything</b>
+<i>284</i>&nbsp;
+<b class="nc"><i>285</i>&nbsp;        GridPane grid = new GridPane(); //gridPane created to always divide the pane into 4 parts</b>
+<i>286</i>&nbsp;        //grid.setGridLinesVisible(true);
+<b class="nc"><i>287</i>&nbsp;        final int numCols = 1 ;</b>
+<b class="nc"><i>288</i>&nbsp;        final int numRows = 4 ;</b>
+<b class="nc"><i>289</i>&nbsp;        for (int i = 0; i &lt; numCols; i++) {</b>
+<b class="nc"><i>290</i>&nbsp;            ColumnConstraints colConst = new ColumnConstraints();</b>
+<b class="nc"><i>291</i>&nbsp;            colConst.setPercentWidth(100.0 / numCols); //sets the width of the columns all equal to 1/4 of the total width of the gridpane</b>
+<b class="nc"><i>292</i>&nbsp;            colConst.setHalignment(HPos.CENTER); //centers the insertions of images in the columns</b>
+<b class="nc"><i>293</i>&nbsp;            grid.getColumnConstraints().add(colConst);</b>
+<i>294</i>&nbsp;        }
+<b class="nc"><i>295</i>&nbsp;        for (int i = 0; i &lt; numRows; i++) {</b>
+<b class="nc"><i>296</i>&nbsp;            RowConstraints rowConst = new RowConstraints();</b>
+<b class="nc"><i>297</i>&nbsp;            rowConst.setPercentHeight(100.0 / numRows);//sets the height of the columns all equal to 1/4 of the total height of the gridpane</b>
+<b class="nc"><i>298</i>&nbsp;            rowConst.setValignment(VPos.CENTER);  //centers the insertions of images in the row</b>
+<b class="nc"><i>299</i>&nbsp;            grid.getRowConstraints().add(rowConst);</b>
+<i>300</i>&nbsp;        }
+<b class="nc"><i>301</i>&nbsp;        grid.prefWidthProperty().bind(pane.widthProperty()); //associates the grid width to the one of the bigger pane (slot)</b>
+<b class="nc"><i>302</i>&nbsp;        grid.prefHeightProperty().bind(pane.heightProperty());//associates the grid height to the one of the bigger pane (slot)</b>
+<b class="nc"><i>303</i>&nbsp;        pane.getChildren().add(grid); //adds grid as son of the pane</b>
+<b class="nc"><i>304</i>&nbsp;        grid.setAlignment(Pos.CENTER); //not sure if necessary for alignment</b>
+<i>305</i>&nbsp;
+<i>306</i>&nbsp;
+<b class="nc"><i>307</i>&nbsp;        int levels = addLevels(grid,pane, slot.getLevel()); //add images for levels</b>
+<i>308</i>&nbsp;
+<b class="nc"><i>309</i>&nbsp;        if (slot.isWorkerOnSlot()){ //add worker image</b>
+<i>310</i>&nbsp;
+<b class="nc"><i>311</i>&nbsp;            Image worker = new Image(getImageWorkerFromColor(slot.getWorkerColor()));</b>
+<b class="nc"><i>312</i>&nbsp;            ImageView workerView = new ImageView(worker);</b>
+<b class="nc"><i>313</i>&nbsp;            workerView.setPreserveRatio(true); //to keep the ratio and matìke it look nice</b>
+<b class="nc"><i>314</i>&nbsp;            workerView.fitWidthProperty().bind(pane.widthProperty());  //also the dimensions of the image have to be dimensioned based on the pane otherwhise they will grow as big as they want</b>
+<b class="nc"><i>315</i>&nbsp;            workerView.fitHeightProperty().bind(pane.widthProperty().divide(4));</b>
+<b class="nc"><i>316</i>&nbsp;            grid.add(workerView,0,levels);</b>
+<b class="nc"><i>317</i>&nbsp;            if(slot.getWorkerColor() == gameView.getMyColor()) {</b>
+<b class="nc"><i>318</i>&nbsp;                workerRowAndColumn[0] = slot.getRow(); //since a worker has been moved here, this is the worker used in the turn, I reset this parameters used for the next action</b>
+<b class="nc"><i>319</i>&nbsp;                workerRowAndColumn[1] = slot.getColumn();</b>
+<i>320</i>&nbsp;            }
+<i>321</i>&nbsp;        }
+<i>322</i>&nbsp;    }
+<i>323</i>&nbsp;
+<i>324</i>&nbsp;    /**
+<i>325</i>&nbsp;     * method that gets th worker image based on the color of the worker that is in the slot
+<i>326</i>&nbsp;     * @param workerColor is the color of the worker
+<i>327</i>&nbsp;     * @return image of the worker
+<i>328</i>&nbsp;     */
+<i>329</i>&nbsp;    private String getImageWorkerFromColor(Color workerColor) {
+<b class="nc"><i>330</i>&nbsp;        if(workerColor== Color.BLUE)</b>
+<b class="nc"><i>331</i>&nbsp;            return &quot;/Images/female_blue.png&quot;;</b>
+<b class="nc"><i>332</i>&nbsp;        else if (workerColor== Color.RED)</b>
+<b class="nc"><i>333</i>&nbsp;           return &quot;/Images/female_red.png&quot;;</b>
+<b class="nc"><i>334</i>&nbsp;        else if (workerColor== Color.YELLOW)</b>
+<b class="nc"><i>335</i>&nbsp;           return &quot;/Images/female_yellow.png&quot;;</b>
+<b class="nc"><i>336</i>&nbsp;        else if (workerColor== Color.GREEN)</b>
+<b class="nc"><i>337</i>&nbsp;           return &quot;/Images/female_green.png&quot;;</b>
+<b class="nc"><i>338</i>&nbsp;        else if (workerColor== Color.PURPLE)</b>
+<b class="nc"><i>339</i>&nbsp;           return &quot;/Images/female_purple.png&quot;;</b>
+<b class="nc"><i>340</i>&nbsp;        else if (workerColor== Color.CYAN)</b>
+<b class="nc"><i>341</i>&nbsp;           return &quot;/Images/female_cyan.png&quot;;</b>
+<i>342</i>&nbsp;        else //(workerColor== Color.WHITE)
+<b class="nc"><i>343</i>&nbsp;           return &quot;/Images/female_white.png&quot;;</b>
+<i>344</i>&nbsp;    }
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;    /**
+<i>347</i>&nbsp;     * method used to get the pane from the gridPane from its row and column
+<i>348</i>&nbsp;     * @param row of the slot that I need
+<i>349</i>&nbsp;     * @param column of the slot that I need
+<i>350</i>&nbsp;     * @param gridPane for the graphic of the board
+<i>351</i>&nbsp;     * @return
+<i>352</i>&nbsp;     */
+<i>353</i>&nbsp;    public Node getNodeByRowColumnIndex (final int row, final int column, GridPane gridPane) {
+<b class="nc"><i>354</i>&nbsp;        Node result = null;</b>
+<b class="nc"><i>355</i>&nbsp;        ObservableList&lt;Node&gt; childrens = gridPane.getChildren();</b>
+<i>356</i>&nbsp;
+<b class="nc"><i>357</i>&nbsp;        for (Node node : childrens) {</b>
+<b class="nc"><i>358</i>&nbsp;            if(GridPane.getRowIndex(node) == row &amp;&amp; GridPane.getColumnIndex(node) == column) {</b>
+<b class="nc"><i>359</i>&nbsp;                result = node;</b>
+<b class="nc"><i>360</i>&nbsp;                break;</b>
+<i>361</i>&nbsp;            }
+<b class="nc"><i>362</i>&nbsp;        }</b>
+<i>363</i>&nbsp;
+<b class="nc"><i>364</i>&nbsp;        return result;</b>
+<i>365</i>&nbsp;    }
+<i>366</i>&nbsp;
+<i>367</i>&nbsp;    /**
+<i>368</i>&nbsp;     * method used to add the public information in the scene ( they arrive after the scene has been displayed)
+<i>369</i>&nbsp;     */
+<i>370</i>&nbsp;    public void setPublicInformation(){
+<b class="nc"><i>371</i>&nbsp;        firstPlayerInfo.appendText(usernames.get(0)+&quot;\n&quot;+ colors.get(0)+&quot;\n&quot;+ gods.get(0));</b>
+<b class="nc"><i>372</i>&nbsp;        secondPlayerInfo.appendText(usernames.get(1)+&quot;\n&quot;+ colors.get(1)+&quot;\n&quot;+ gods.get(1));</b>
+<b class="nc"><i>373</i>&nbsp;        if (usernames.size()==3)</b>
+<b class="nc"><i>374</i>&nbsp;            thirdPlayerInfo.appendText(usernames.get(2)+&quot;\n&quot;+ colors.get(2)+&quot;\n&quot;+ gods.get(2));</b>
+<i>375</i>&nbsp;    }
+<i>376</i>&nbsp;
+<i>377</i>&nbsp;    /**
+<i>378</i>&nbsp;     * Adds images which represent the levels in the little GridPane of the slot correctly
+<i>379</i>&nbsp;     * @param gridPane which has the images for levels and workers
+<i>380</i>&nbsp;     * @param pane which represents the slot
+<i>381</i>&nbsp;     * @param level level of the slot that has been updated
+<i>382</i>&nbsp;     * @return
+<i>383</i>&nbsp;     */
+<i>384</i>&nbsp;    public int addLevels(GridPane gridPane, Pane pane, Level level){
+<b class="nc"><i>385</i>&nbsp;        int levels = 3;</b>
+<i>386</i>&nbsp;
+<b class="nc"><i>387</i>&nbsp;        if (level == Level.ATLAS_DOME){ //for now the dome of atlas is added at the buttom</b>
+<b class="nc"><i>388</i>&nbsp;            Image levelAtlas = new Image(&quot;/Images/dome.png&quot;);</b>
+<b class="nc"><i>389</i>&nbsp;            ImageView levelAtlasView = new ImageView(levelAtlas);</b>
+<b class="nc"><i>390</i>&nbsp;            levelAtlasView.setPreserveRatio(true);</b>
+<b class="nc"><i>391</i>&nbsp;            levelAtlasView.fitWidthProperty().bind(pane.widthProperty());</b>
+<b class="nc"><i>392</i>&nbsp;            levelAtlasView.fitHeightProperty().bind(pane.widthProperty().divide(4));</b>
+<b class="nc"><i>393</i>&nbsp;            gridPane.add(levelAtlasView, 0, 3);</b>
+<b class="nc"><i>394</i>&nbsp;            return levels;</b>
+<i>395</i>&nbsp;        }
+<i>396</i>&nbsp;
+<b class="nc"><i>397</i>&nbsp;        if(level.ordinal() &gt;= Level.LEVEL1.ordinal()) { // I put &gt;= since the level1 has to be added also when the level is 2 and same for the other levels</b>
+<b class="nc"><i>398</i>&nbsp;            Image levelOne = new Image(&quot;/Images/level1_1_light.png&quot;);</b>
+<b class="nc"><i>399</i>&nbsp;            ImageView levelOneView = new ImageView(levelOne);</b>
+<b class="nc"><i>400</i>&nbsp;            levelOneView.setPreserveRatio(true);</b>
+<b class="nc"><i>401</i>&nbsp;            levelOneView.fitWidthProperty().bind(pane.widthProperty());</b>
+<b class="nc"><i>402</i>&nbsp;            levelOneView.fitHeightProperty().bind(pane.widthProperty().divide(4));</b>
+<b class="nc"><i>403</i>&nbsp;            gridPane.add(levelOneView, 0, 3);</b>
+<b class="nc"><i>404</i>&nbsp;            levels--;</b>
+<i>405</i>&nbsp;        }
+<i>406</i>&nbsp;
+<b class="nc"><i>407</i>&nbsp;        if(level.ordinal() &gt;= Level.LEVEL2.ordinal()) {</b>
+<b class="nc"><i>408</i>&nbsp;            Image levelTwo = new Image(&quot;/Images/level2_1_light.png&quot;);</b>
+<b class="nc"><i>409</i>&nbsp;            ImageView levelTwoView = new ImageView(levelTwo);</b>
+<b class="nc"><i>410</i>&nbsp;            levelTwoView.setPreserveRatio(true);</b>
+<b class="nc"><i>411</i>&nbsp;            levelTwoView.fitWidthProperty().bind(pane.widthProperty());</b>
+<b class="nc"><i>412</i>&nbsp;            levelTwoView.fitHeightProperty().bind(pane.widthProperty().divide(4));</b>
+<b class="nc"><i>413</i>&nbsp;            gridPane.add(levelTwoView, 0, 2);</b>
+<b class="nc"><i>414</i>&nbsp;            levels--;</b>
+<i>415</i>&nbsp;        }
+<i>416</i>&nbsp;
+<b class="nc"><i>417</i>&nbsp;        if(level.ordinal() &gt;= Level.LEVEL3.ordinal()){</b>
+<b class="nc"><i>418</i>&nbsp;            Image levelThree = new Image(&quot;/Images/level3_light.png&quot;);</b>
+<b class="nc"><i>419</i>&nbsp;            ImageView levelThreeView = new ImageView(levelThree);</b>
+<b class="nc"><i>420</i>&nbsp;            levelThreeView.setPreserveRatio(true);</b>
+<b class="nc"><i>421</i>&nbsp;            levelThreeView.fitWidthProperty().bind(pane.widthProperty());</b>
+<b class="nc"><i>422</i>&nbsp;            levelThreeView.fitHeightProperty().bind(pane.widthProperty().divide(4));</b>
+<b class="nc"><i>423</i>&nbsp;            gridPane.add(levelThreeView, 0, 1);</b>
+<b class="nc"><i>424</i>&nbsp;            levels--;</b>
+<i>425</i>&nbsp;
+<i>426</i>&nbsp;
+<i>427</i>&nbsp;        }
+<i>428</i>&nbsp;
+<b class="nc"><i>429</i>&nbsp;        if ( level.ordinal() &gt;= Level.DOME.ordinal()){</b>
+<b class="nc"><i>430</i>&nbsp;            Image levelDome = new Image(&quot;/Images/dome_light.png&quot;);</b>
+<b class="nc"><i>431</i>&nbsp;            ImageView levelDomeView = new ImageView(levelDome);</b>
+<b class="nc"><i>432</i>&nbsp;            levelDomeView.setPreserveRatio(true);</b>
+<b class="nc"><i>433</i>&nbsp;            levelDomeView.fitWidthProperty().bind(pane.widthProperty());</b>
+<b class="nc"><i>434</i>&nbsp;            levelDomeView.fitHeightProperty().bind(pane.widthProperty().divide(4));</b>
+<b class="nc"><i>435</i>&nbsp;            gridPane.add(levelDomeView, 0, 0);</b>
+<b class="nc"><i>436</i>&nbsp;            levels--;</b>
+<i>437</i>&nbsp;
+<i>438</i>&nbsp;        }
+<i>439</i>&nbsp;
+<b class="nc"><i>440</i>&nbsp;        return levels;</b>
+<i>441</i>&nbsp;
+<i>442</i>&nbsp;    }
+<i>443</i>&nbsp;
+<i>444</i>&nbsp;    public GameView getGameView() {
+<b class="nc"><i>445</i>&nbsp;        return gameView;</b>
+<i>446</i>&nbsp;    }
+<i>447</i>&nbsp;
+<i>448</i>&nbsp;    public void setGameView(GameView gameView) {
+<b class="nc"><i>449</i>&nbsp;        this.gameView = gameView;</b>
+<i>450</i>&nbsp;    }
+<i>451</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 16:33</div>
+</div>
+</body>
+</html>

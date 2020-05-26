@@ -58,10 +58,11 @@ public abstract class ClientHandlerObservable {
      * It notifies that the game is over for this clientHandler.
      *
      * @param clientHandler the clientHandler for whom the game is over.
+     * @param endGame if the game is ended.
      */
-    public void notifyGameOver(ClientHandler clientHandler){
+    public void notifyClientHandlerGameOver(ClientHandler clientHandler, boolean endGame){
         for (ClientHandlerListener clientHandlerListener : clientHandlerListeners) {
-            clientHandlerListener.clientHandlerGameOver(clientHandler);
+            clientHandlerListener.clientHandlerGameOver(clientHandler, endGame);
         }
     }
 }

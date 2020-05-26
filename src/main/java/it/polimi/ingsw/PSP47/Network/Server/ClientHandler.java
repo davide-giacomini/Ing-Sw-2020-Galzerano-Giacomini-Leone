@@ -208,14 +208,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     }
     
     /**
-     * It sends a message to the client to warn them that the first player hasn't chosen the game's parameters yet
-     * and so they have to wait.
-     */
-    void warnFirstPlayerIsChoosing(){
-        send(new ErrorMessage("Wait for the first player to choose the game's parameters."));
-    }
-    
-    /**
      * It sends a message to the client to ask them again the username and color, because the previous ones
      * submitted were not different from the other players already added to the game.
      *
@@ -224,31 +216,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     void askAgainParameters(String wrongParameter){
         send(new WrongParameters("An other players chose your " + wrongParameter + ".\n" +
                 "Please try with another."));
-    }
-    
-    /**
-     * It sends a message to the client to warn them that the game is already started because other players have
-     * been added before them.
-     * It ends the game and the connection.
-     *
-     */
-    void notifyGameStartedWithoutYou(){
-        send(new ConnectionFailed("The game is already started.\nTry another time."));
-        
-        endConnection();
-    }
-    
-    /**
-     * It sends a message to the client to advise them that the first player, who had to choose the game's parameters,
-     * suddenly disconnected and the game cannot be set.
-     * It ends the game and the connection.
-     *
-     */
-    void notifyFirstClientDisconnected(){
-        send(new ConnectionFailed("The first player disconnected and the game cannot be set.\n"+
-                "Please try another time."));
-    
-        endConnection();
     }
     
     /**
@@ -277,8 +244,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     /**
      * This method handles a game over.
      */
-    void gameOver(){
-        notifyGameOver(this);
+    void gameOver(boolean endGame){
+        notifyClientHandlerGameOver(this, endGame);
         endConnection();
     }
 
@@ -360,7 +327,6 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param text the String with the advice that must be sent.
      */
     void sendImportant(String text, MessageType messageType) {
-
         ImportantMessage message = new ImportantMessage(text);
         message.setMessageType(messageType);
         send(message);

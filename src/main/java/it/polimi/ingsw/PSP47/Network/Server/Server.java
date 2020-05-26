@@ -14,7 +14,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 //TODO chiedere per synchronized
@@ -30,6 +29,8 @@ public class Server implements ClientHandlerListener {
     public final static int SOCKET_PORT = 7777;
     private final ServerSocket serverSocket;
     private final ArrayList<GameServer> games = new ArrayList<>();
+    String username;
+    Color color;
     
     /**
      * It creates the server socket to connect with the clients.
@@ -70,8 +71,8 @@ public class Server implements ClientHandlerListener {
     
         synchronized (this) {
             VisitableInformation firstConnectionMessage = (VisitableInformation) message.getContent();
-            String username = firstConnectionMessage.getUsername();
-            Color color = firstConnectionMessage.getColor();
+            username = firstConnectionMessage.getUsername();
+            color = firstConnectionMessage.getColor();
             game = null;
         
             // Get the GameServer which contains the clientHandler
@@ -89,7 +90,8 @@ public class Server implements ClientHandlerListener {
         if (wrongParameter != null) {
             clientHandler.askAgainParameters(wrongParameter);
             return;
-        }
+        } else
+            clientHandler.sendConnectionAccepted(username, color);
         
         boolean gameReady;
         synchronized (this) {
@@ -99,7 +101,7 @@ public class Server implements ClientHandlerListener {
     
         if (!gameReady) {
             String waitMessage = "Wait for the other players to connect.\n" +
-                    "The game will start as soon as there are " + game.getPlayersNumber() + " players.";
+                    "The game will start as soon as there are " + game.getMaxPlayersNumber() + " players.";
             
             clientHandler.sendImportant(waitMessage, MessageType.IMPORTANT);
             return;
@@ -121,7 +123,7 @@ public class Server implements ClientHandlerListener {
     
         synchronized (this) {
             for (GameServer game : games) {
-                if (!game.isFull() && !game.isStarted() && playersNumberChosen == game.getPlayersNumber()) {
+                if (!game.isFull() && !game.isStarted() && playersNumberChosen == game.getMaxPlayersNumber()) {
                     game.addClientHandler(clientHandler);
                     clientHandlerAdded = true;
                 }
@@ -153,8 +155,8 @@ public class Server implements ClientHandlerListener {
             // Iterates over the game to find the clientHandler
             for (GameServer game: games) {
                 if (game.containsClientHandler(clientHandler)) {
-                    // If the game isn't started yet, the clientHandler can exit silently
-                    if (!game.isStarted())
+                    // If the game isn't started yet or the game is ended, the clientHandler can exit silently
+                    if (!game.isStarted() || game.isEnded())
                         game.removeClientHandler(clientHandler);
                     // If the game is already started, the username is saved and the clientHandler is removed.
                     // Then, outside the synchronized block, the other players will be notified
@@ -170,6 +172,9 @@ public class Server implements ClientHandlerListener {
                             game.removeClientHandler(opponentClientHandler);
                         }
                     }
+                    
+                    if (game.getPlayersNumber()==0)
+                        games.remove(game);
                     
                     break;
                 }
@@ -187,11 +192,13 @@ public class Server implements ClientHandlerListener {
      * This method removes a client handler when the game is over.
      *
      * @param clientHandler game over for this clientHandler.
+     * @param endGame if the game is ended
      */
-    public synchronized void clientHandlerGameOver(ClientHandler clientHandler) {
+    public synchronized void clientHandlerGameOver(ClientHandler clientHandler, boolean endGame) {
         for (GameServer game: games) {
             if (game.containsClientHandler(clientHandler)) {
                 game.removeClientHandler(clientHandler);
+                game.setEnded(endGame);
                 break;
             }
         }
@@ -220,6 +227,6 @@ public class Server implements ClientHandlerListener {
         }
         
         System.out.println("Game " + game.toString() + " started.");
-        new GameController(game.getPlayersNumber(), mapUserColor, mapUserVirtualView);
+        new GameController(game.getMaxPlayersNumber(), mapUserColor, mapUserVirtualView);
     }
 }

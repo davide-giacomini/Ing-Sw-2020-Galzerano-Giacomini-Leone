@@ -35,6 +35,7 @@ public interface ClientHandlerListener {
      * This method handles the end of the game of the {@link ClientHandler specified}.
      *
      * @param clientHandler the clientHandler
+     * @param endGame if the game is ended.
      */
-    void clientHandlerGameOver(ClientHandler clientHandler);
+    void clientHandlerGameOver(ClientHandler clientHandler, boolean endGame);
 }

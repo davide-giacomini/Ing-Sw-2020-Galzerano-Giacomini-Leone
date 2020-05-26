@@ -8,16 +8,17 @@ import java.util.*;
  * TODO javadoc
  */
 class GameServer {
-    private final int playersNumber;
+    private final int maxPlayersNumber;
     private final HashMap<ClientHandler, PlayerParameters> clientHandlers = new HashMap<>();
     private boolean started;
+    private boolean ended = false;
     
-    GameServer(int playersNumber) {
-        this.playersNumber = playersNumber;
+    GameServer(int maxPlayersNumber) {
+        this.maxPlayersNumber = maxPlayersNumber;
     }
     
-    int getPlayersNumber() {
-        return playersNumber;
+    int getMaxPlayersNumber() {
+        return maxPlayersNumber;
     }
     
     public boolean isStarted() {
@@ -26,6 +27,18 @@ class GameServer {
     
     public void setStarted(boolean started) {
         this.started = started;
+    }
+    
+    public boolean isEnded() {
+        return ended;
+    }
+    
+    public void setEnded(boolean ended) {
+        this.ended = ended;
+    }
+    
+    public int getPlayersNumber() {
+        return clientHandlers.size();
     }
     
     HashMap<ClientHandler, PlayerParameters> getClientHandlers(){
@@ -57,7 +70,7 @@ class GameServer {
      * @return true if it is full, false otherwise.
      */
     boolean isFull(){
-        return clientHandlers.size()==playersNumber;
+        return clientHandlers.size()== maxPlayersNumber;
     }
     
     /**
