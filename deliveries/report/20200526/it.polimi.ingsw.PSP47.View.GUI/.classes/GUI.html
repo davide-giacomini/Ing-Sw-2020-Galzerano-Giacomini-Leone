@@ -1,0 +1,537 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GUI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.View.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GUI (it.polimi.ingsw.PSP47.View.GUI)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 40)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 164)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GUI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 42)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 168)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.View.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Slot;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.View.GameView;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.View.View;
+<i>9</i>&nbsp;import javafx.application.Application;
+<i>10</i>&nbsp;import javafx.application.Platform;
+<i>11</i>&nbsp;import javafx.event.EventHandler;
+<i>12</i>&nbsp;import javafx.fxml.FXMLLoader;
+<i>13</i>&nbsp;import javafx.scene.Parent;
+<i>14</i>&nbsp;import javafx.scene.Scene;
+<i>15</i>&nbsp;import javafx.scene.control.Alert;
+<i>16</i>&nbsp;import javafx.scene.layout.BorderPane;
+<i>17</i>&nbsp;import javafx.scene.image.ImageView;
+<i>18</i>&nbsp;import javafx.scene.layout.AnchorPane;
+<i>19</i>&nbsp;import javafx.scene.layout.BorderPane;
+<i>20</i>&nbsp;import javafx.scene.layout.Region;
+<i>21</i>&nbsp;import javafx.scene.layout.VBox;
+<i>22</i>&nbsp;import javafx.scene.text.Font;
+<i>23</i>&nbsp;import javafx.scene.text.Text;
+<i>24</i>&nbsp;import javafx.scene.text.TextAlignment;
+<i>25</i>&nbsp;import javafx.stage.Modality;
+<i>26</i>&nbsp;import javafx.stage.Screen;
+<i>27</i>&nbsp;import javafx.stage.Stage;
+<i>28</i>&nbsp;import javafx.stage.WindowEvent;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;import java.io.IOException;
+<i>31</i>&nbsp;import java.util.ArrayList;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;/**
+<i>34</i>&nbsp; * This class is used to change what the user will see and updates the current scene (//TODO maybe move it in the messageHandler)
+<i>35</i>&nbsp; * It is only used for the graphic part, which means display and change of scene layout //TODO Check where to delete platform.runLater (ari tried and everything broke)
+<i>36</i>&nbsp; */
+<b class="nc"><i>37</i>&nbsp;public class GUI extends Application implements View {</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    private NetworkHandler networkHandler;
+<i>40</i>&nbsp;    private GameView gameView;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    private Stage primaryStage;
+<i>43</i>&nbsp;    private Scene scene;
+<i>44</i>&nbsp;    private Parent root;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    private DuringGameController duringGameController;
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;    private boolean start = false;</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    public void setNetworkHandler(NetworkHandler networkHandler) {
+<b class="nc"><i>51</i>&nbsp;        this.networkHandler = networkHandler;</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    @Override
+<i>55</i>&nbsp;    public GameView getGameView() {
+<b class="nc"><i>56</i>&nbsp;        return gameView;</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * This method makes the GUI starts running.
+<i>61</i>&nbsp;     * It load the first scene and creates the gameView.
+<i>62</i>&nbsp;     * @param primaryStage the Stage that will be used during the game.
+<i>63</i>&nbsp;     * @throws Exception if there are some I/O troubles.
+<i>64</i>&nbsp;     */
+<i>65</i>&nbsp;    @Override
+<i>66</i>&nbsp;    public void start(Stage primaryStage) throws Exception {
+<b class="nc"><i>67</i>&nbsp;        gameView = new GameView();</b>
+<b class="nc"><i>68</i>&nbsp;        this.primaryStage = primaryStage;</b>
+<b class="nc"><i>69</i>&nbsp;        FXMLLoader fxmlLoader = new FXMLLoader();</b>
+<b class="nc"><i>70</i>&nbsp;        fxmlLoader.setLocation(getClass().getResource(&quot;/FXML/connectionToServer.fxml&quot;));</b>
+<b class="nc"><i>71</i>&nbsp;        Font.loadFont(getClass().getResourceAsStream(&quot;Fonts/savoye.ttf&quot;), 30);</b>
+<b class="nc"><i>72</i>&nbsp;        root = fxmlLoader.load();</b>
+<b class="nc"><i>73</i>&nbsp;        scene = new Scene(root);</b>
+<b class="nc"><i>74</i>&nbsp;        scene.getStylesheets().add(getClass().getResource(&quot;/CSS/background.css&quot;).toExternalForm());</b>
+<b class="nc"><i>75</i>&nbsp;        primaryStage.setResizable(false);</b>
+<b class="nc"><i>76</i>&nbsp;        primaryStage.setScene(scene);</b>
+<b class="nc"><i>77</i>&nbsp;        primaryStage.setTitle(&quot;Santorini&quot;);</b>
+<b class="nc"><i>78</i>&nbsp;        primaryStage.show();</b>
+<i>79</i>&nbsp;
+<b class="nc"><i>80</i>&nbsp;        gameView.updateMoment(CurrentScene.START);</b>
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;        ConnectionToServerController connectionToServerController = fxmlLoader.getController();</b>
+<b class="nc"><i>83</i>&nbsp;        connectionToServerController.setGui(this);</b>
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;        primaryStage.setOnCloseRequest(new EventHandler&lt;&gt;() {</b>
+<i>86</i>&nbsp;            @Override
+<i>87</i>&nbsp;            public void handle(WindowEvent windowEvent) {
+<b class="nc"><i>88</i>&nbsp;                if(networkHandler!=null)</b>
+<b class="nc"><i>89</i>&nbsp;                    networkHandler.endConnection();</b>
+<b class="nc"><i>90</i>&nbsp;                System.exit(0);</b>
+<i>91</i>&nbsp;            }
+<i>92</i>&nbsp;        });
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * This method is used to change the layout of the current scene, loading another FXML file.
+<i>97</i>&nbsp;     * @param scene the scene that must be changed.
+<i>98</i>&nbsp;     * @param path the path of the file that has to be loaded.
+<i>99</i>&nbsp;     * @param &lt;T&gt; the controller of the new scene.
+<i>100</i>&nbsp;     * @return the controller of the new scene.
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    private &lt;T&gt; T setLayout(Scene scene, String path) {
+<b class="nc"><i>103</i>&nbsp;        FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>104</i>&nbsp;        loader.setLocation(GUI.class.getResource(path));</b>
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;        Parent root;
+<i>107</i>&nbsp;        try {
+<b class="nc"><i>108</i>&nbsp;            root = loader.load();</b>
+<b class="nc"><i>109</i>&nbsp;            scene.setRoot(root);</b>
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;
+<b class="nc"><i>112</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>113</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>114</i>&nbsp;        }</b>
+<b class="nc"><i>115</i>&nbsp;        return loader.getController();</b>
+<i>116</i>&nbsp;    }
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;    /**
+<i>119</i>&nbsp;     * This method loads the scene where username and color are asked and add the
+<i>120</i>&nbsp;     * networkHandler as a listener.
+<i>121</i>&nbsp;     */
+<i>122</i>&nbsp;    @Override
+<i>123</i>&nbsp;    public void askFirstConnection() {
+<b class="nc"><i>124</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>125</i>&nbsp;            StartController startController = setLayout(scene, &quot;/FXML/startPane.fxml&quot;);</b>
+<b class="nc"><i>126</i>&nbsp;            startController.addViewListener(networkHandler);</b>
+<i>127</i>&nbsp;        });
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /**
+<i>131</i>&nbsp;     * This method loads the scene where the number of players is asked and add the
+<i>132</i>&nbsp;     * networkHandler as a listener.
+<i>133</i>&nbsp;     */
+<i>134</i>&nbsp;    @Override
+<i>135</i>&nbsp;    public void askNumberOfPlayers() {
+<b class="nc"><i>136</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>137</i>&nbsp;            ChoosePlayersController choosePlayersController = setLayout(scene,&quot;/FXML/choosePlayers.fxml&quot;);</b>
+<b class="nc"><i>138</i>&nbsp;            choosePlayersController.addViewListener(networkHandler);</b>
+<i>139</i>&nbsp;        });
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * This method loads the scene where the Challenger is asked to choose the gods and the first player of the game.
+<i>144</i>&nbsp;     * @param usernames the list of players in the game.
+<i>145</i>&nbsp;     */
+<i>146</i>&nbsp;    @Override
+<i>147</i>&nbsp;    public void challengerWillChooseThreeGods(ArrayList&lt;String&gt; usernames) {
+<b class="nc"><i>148</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>149</i>&nbsp;            primaryStage.setWidth(1100);</b>
+<b class="nc"><i>150</i>&nbsp;            primaryStage.setHeight(800);</b>
+<i>151</i>&nbsp;
+<b class="nc"><i>152</i>&nbsp;            ChallengerController chooseCardsController = setLayout(scene, &quot;/FXML/challenger.fxml&quot;);</b>
+<b class="nc"><i>153</i>&nbsp;            chooseCardsController.addViewListener(networkHandler);</b>
+<b class="nc"><i>154</i>&nbsp;            chooseCardsController.setNumberOfPlayers(gameView.getNumberOfPlayers());</b>
+<b class="nc"><i>155</i>&nbsp;            chooseCardsController.setFirstPlayer(usernames.get(0));</b>
+<b class="nc"><i>156</i>&nbsp;            chooseCardsController.setSecondPlayer(usernames.get(1));</b>
+<b class="nc"><i>157</i>&nbsp;            if (usernames.size() == 3)</b>
+<b class="nc"><i>158</i>&nbsp;                chooseCardsController.setThirdPlayer(usernames.get(2));</b>
+<i>159</i>&nbsp;            else
+<b class="nc"><i>160</i>&nbsp;                chooseCardsController.setThirdPlayer(null);</b>
+<i>161</i>&nbsp;        });
+<i>162</i>&nbsp;    }
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    /**
+<i>165</i>&nbsp;     * This method loads the scene where the player has to choose the god&#39;s power that will use
+<i>166</i>&nbsp;     * during the game.
+<i>167</i>&nbsp;     * @param godsChosen is the array of the available gods (chosen by the challenger)
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    @Override
+<i>170</i>&nbsp;    public void chooseYourGod(ArrayList&lt;GodName&gt; godsChosen) {
+<b class="nc"><i>171</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>172</i>&nbsp;            primaryStage.setWidth(1100);</b>
+<b class="nc"><i>173</i>&nbsp;            primaryStage.setHeight(800);</b>
+<i>174</i>&nbsp;
+<b class="nc"><i>175</i>&nbsp;            ChooseCardController chooseCardController = setLayout(scene, &quot;/FXML/chooseCard.fxml&quot;);</b>
+<b class="nc"><i>176</i>&nbsp;            chooseCardController.addViewListener(networkHandler);</b>
+<b class="nc"><i>177</i>&nbsp;            chooseCardController.setAvailableGods(godsChosen);</b>
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;        });
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    }
+<i>182</i>&nbsp;
+<i>183</i>&nbsp;    /**
+<i>184</i>&nbsp;     * This method loads an Alert pane with an error message.
+<i>185</i>&nbsp;     * @param text the content of the error message.
+<i>186</i>&nbsp;     */
+<i>187</i>&nbsp;    @Override
+<i>188</i>&nbsp;    public void showErrorMessage(String text) {
+<b class="nc"><i>189</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>190</i>&nbsp;            Alert a = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc"><i>191</i>&nbsp;            a.setContentText(text);</b>
+<b class="nc"><i>192</i>&nbsp;            a.show();</b>
+<i>193</i>&nbsp;        });
+<i>194</i>&nbsp;    }
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    /**
+<i>197</i>&nbsp;     * This method loads an Alert pane with an information about the game.
+<i>198</i>&nbsp;     * @param text the content of the information.
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    @Override
+<i>201</i>&nbsp;    public void showImportantMessage(String text) {
+<b class="nc"><i>202</i>&nbsp;        if (text.split(&quot;\n&quot;)[0].equals(&quot;Wait for the other players to connect.&quot;)){</b>
+<b class="nc"><i>203</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>204</i>&nbsp;                setLayout(scene, &quot;/FXML/waitingPane.fxml&quot;);</b>
+<i>205</i>&nbsp;            });
+<i>206</i>&nbsp;        }
+<i>207</i>&nbsp;        else {
+<b class="nc"><i>208</i>&nbsp;            Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>209</i>&nbsp;                Alert a = new Alert(Alert.AlertType.INFORMATION);</b>
+<b class="nc"><i>210</i>&nbsp;                a.setContentText(text);</b>
+<b class="nc"><i>211</i>&nbsp;                a.show();</b>
+<i>212</i>&nbsp;            });
+<i>213</i>&nbsp;        }
+<i>214</i>&nbsp;    }
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    /**
+<i>217</i>&nbsp;     * This method loads the scene where the winner is declared and the game ends.
+<i>218</i>&nbsp;     * @param usernameWinner is the username of the winner.
+<i>219</i>&nbsp;     */
+<i>220</i>&nbsp;    @Override
+<i>221</i>&nbsp;    public void theWinnerIs(String usernameWinner) {
+<b class="nc"><i>222</i>&nbsp;        if (gameView.getMyUsername().equals(usernameWinner))</b>
+<b class="nc"><i>223</i>&nbsp;            showIAmTheWinner();</b>
+<i>224</i>&nbsp;        else
+<b class="nc"><i>225</i>&nbsp;            showWhoIsTheWinner(usernameWinner);</b>
+<i>226</i>&nbsp;    }
+<i>227</i>&nbsp;    
+<i>228</i>&nbsp;    private void showIAmTheWinner(){
+<b class="nc"><i>229</i>&nbsp;        Platform.runLater(()-&gt;{</b>
+<i>230</i>&nbsp;            try {
+<b class="nc"><i>231</i>&nbsp;                Stage winnerStage = new Stage();</b>
+<b class="nc"><i>232</i>&nbsp;                winnerStage.setHeight(400);</b>
+<b class="nc"><i>233</i>&nbsp;                winnerStage.setWidth(600);</b>
+<i>234</i>&nbsp;                
+<b class="nc"><i>235</i>&nbsp;                FXMLLoader fxmlLoader = new FXMLLoader();</b>
+<b class="nc"><i>236</i>&nbsp;                fxmlLoader.setLocation(getClass().getResource(&quot;/FXML/winningAdvice.fxml&quot;));</b>
+<b class="nc"><i>237</i>&nbsp;                Scene scene = new Scene(fxmlLoader.load());</b>
+<i>238</i>&nbsp;                
+<b class="nc"><i>239</i>&nbsp;                winnerStage.setScene(scene);</b>
+<b class="nc"><i>240</i>&nbsp;                winnerStage.setResizable(false);</b>
+<i>241</i>&nbsp;            
+<b class="nc"><i>242</i>&nbsp;                winnerStage.setTitle(&quot;You won!&quot;);</b>
+<b class="nc"><i>243</i>&nbsp;                winnerStage.initModality(Modality.APPLICATION_MODAL);</b>
+<b class="nc"><i>244</i>&nbsp;                winnerStage.show();</b>
+<b class="nc"><i>245</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>246</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>247</i>&nbsp;            }</b>
+<i>248</i>&nbsp;        });
+<i>249</i>&nbsp;    }
+<i>250</i>&nbsp;    
+<i>251</i>&nbsp;    private void showWhoIsTheWinner(String usernameWinner){
+<b class="nc"><i>252</i>&nbsp;        Platform.runLater(()-&gt;{</b>
+<i>253</i>&nbsp;            try {
+<b class="nc"><i>254</i>&nbsp;                Stage winnerStage = new Stage();</b>
+<b class="nc"><i>255</i>&nbsp;                winnerStage.setHeight(400);</b>
+<b class="nc"><i>256</i>&nbsp;                winnerStage.setWidth(600);</b>
+<i>257</i>&nbsp;    
+<b class="nc"><i>258</i>&nbsp;                winnerStage.setX(Screen.getPrimary().getBounds().getMinX());</b>
+<b class="nc"><i>259</i>&nbsp;                winnerStage.setY(Screen.getPrimary().getBounds().getMinY());</b>
+<i>260</i>&nbsp;            
+<b class="nc"><i>261</i>&nbsp;                FXMLLoader fxmlLoader = new FXMLLoader();</b>
+<b class="nc"><i>262</i>&nbsp;                fxmlLoader.setLocation(getClass().getResource(&quot;/FXML/losingWithWinner.fxml&quot;));</b>
+<b class="nc"><i>263</i>&nbsp;                AnchorPane rootAnchorPane = fxmlLoader.load();</b>
+<b class="nc"><i>264</i>&nbsp;                Scene scene = new Scene(rootAnchorPane);</b>
+<i>265</i>&nbsp;                
+<b class="nc"><i>266</i>&nbsp;                BorderPane borderPane = (BorderPane) rootAnchorPane.getChildren().get(2);</b>
+<b class="nc"><i>267</i>&nbsp;                Text text = (Text) ((BorderPane)((BorderPane)borderPane.getCenter()).getTop()).getCenter();</b>
+<b class="nc"><i>268</i>&nbsp;                text.setText(&quot;I am sorry.\n&quot; +usernameWinner+ &quot; won.&quot;);</b>
+<i>269</i>&nbsp;                
+<b class="nc"><i>270</i>&nbsp;                winnerStage.setScene(scene);</b>
+<b class="nc"><i>271</i>&nbsp;                winnerStage.setResizable(false);</b>
+<i>272</i>&nbsp;            
+<b class="nc"><i>273</i>&nbsp;                winnerStage.setTitle(&quot;I am sorry...&quot;);</b>
+<b class="nc"><i>274</i>&nbsp;                winnerStage.initModality(Modality.APPLICATION_MODAL);</b>
+<b class="nc"><i>275</i>&nbsp;                winnerStage.show();</b>
+<b class="nc"><i>276</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>277</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>278</i>&nbsp;            }</b>
+<i>279</i>&nbsp;        });
+<i>280</i>&nbsp;    }
+<i>281</i>&nbsp;    
+<i>282</i>&nbsp;    /**
+<i>283</i>&nbsp;     * This method loads the scene where a loser is declared.
+<i>284</i>&nbsp;     */
+<i>285</i>&nbsp;    @Override
+<i>286</i>&nbsp;    public void theLoserIs() {
+<b class="nc"><i>287</i>&nbsp;        Platform.runLater(()-&gt; {</b>
+<i>288</i>&nbsp;            try {
+<b class="nc"><i>289</i>&nbsp;                Stage loserStage = new Stage();</b>
+<b class="nc"><i>290</i>&nbsp;                loserStage.setHeight(400);</b>
+<b class="nc"><i>291</i>&nbsp;                loserStage.setWidth(600);</b>
+<i>292</i>&nbsp;                
+<b class="nc"><i>293</i>&nbsp;                loserStage.setX(Screen.getPrimary().getBounds().getMinX());</b>
+<b class="nc"><i>294</i>&nbsp;                loserStage.setY(Screen.getPrimary().getBounds().getMinY());</b>
+<i>295</i>&nbsp;                
+<b class="nc"><i>296</i>&nbsp;                FXMLLoader fxmlLoader = new FXMLLoader();</b>
+<b class="nc"><i>297</i>&nbsp;                fxmlLoader.setLocation(getClass().getResource(&quot;/FXML/losingWithoutWinner.fxml&quot;));</b>
+<b class="nc"><i>298</i>&nbsp;                Scene scene = new Scene(fxmlLoader.load());</b>
+<i>299</i>&nbsp;                
+<b class="nc"><i>300</i>&nbsp;                loserStage.setScene(scene);</b>
+<b class="nc"><i>301</i>&nbsp;                loserStage.setResizable(false);</b>
+<i>302</i>&nbsp;                
+<b class="nc"><i>303</i>&nbsp;                loserStage.setTitle(&quot;I am sorry...&quot;);</b>
+<b class="nc"><i>304</i>&nbsp;                loserStage.initModality(Modality.APPLICATION_MODAL);</b>
+<b class="nc"><i>305</i>&nbsp;                loserStage.show();</b>
+<b class="nc"><i>306</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>307</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>308</i>&nbsp;            }</b>
+<i>309</i>&nbsp;        });
+<i>310</i>&nbsp;    }
+<i>311</i>&nbsp;
+<i>312</i>&nbsp;    @Override
+<i>313</i>&nbsp;    public void showEnd() {
+<i>314</i>&nbsp;       // System.exit(0); decide how to handle the final part
+<i>315</i>&nbsp;    }
+<i>316</i>&nbsp;
+<i>317</i>&nbsp;    /**
+<i>318</i>&nbsp;     * method implemented in order to display the same board but with the different slot that has just been updated from the model
+<i>319</i>&nbsp;     * @param slot is the slot that has been changed
+<i>320</i>&nbsp;     */
+<i>321</i>&nbsp;    @Override
+<i>322</i>&nbsp;    public void showNewBoard(Slot slot) {
+<b class="nc"><i>323</i>&nbsp;        Platform.runLater(()-&gt; {</b>
+<b class="nc"><i>324</i>&nbsp;            gameView.updateMoment(CurrentScene.WAIT); //new current scene</b>
+<b class="nc"><i>325</i>&nbsp;            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems</b>
+<b class="nc"><i>326</i>&nbsp;            duringGameController.changeSlot(slot);</b>
+<i>327</i>&nbsp;        });
+<i>328</i>&nbsp;    }
+<i>329</i>&nbsp;
+<i>330</i>&nbsp;    /**
+<i>331</i>&nbsp;     * method used to set the main scene, when the scene with the board is set, the default moment is wait
+<i>332</i>&nbsp;     * the public information are displayed
+<i>333</i>&nbsp;     */
+<i>334</i>&nbsp;    @Override
+<i>335</i>&nbsp;    public void showGame() {
+<b class="nc"><i>336</i>&nbsp;        Platform.runLater(()-&gt; {</b>
+<b class="nc"><i>337</i>&nbsp;            primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());</b>
+<b class="nc"><i>338</i>&nbsp;            primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());</b>
+<i>339</i>&nbsp;
+<b class="nc"><i>340</i>&nbsp;            duringGameController = setLayout(scene, &quot;/FXML/boardDuringGame.fxml&quot;);</b>
+<b class="nc"><i>341</i>&nbsp;            gameView.updateMoment(CurrentScene.WAIT); //new current scene</b>
+<b class="nc"><i>342</i>&nbsp;            duringGameController.setGameView(gameView);</b>
+<b class="nc"><i>343</i>&nbsp;            duringGameController.addViewListener(networkHandler);</b>
+<b class="nc"><i>344</i>&nbsp;            duringGameController.changeText();</b>
+<b class="nc"><i>345</i>&nbsp;            primaryStage.setResizable(true);</b>
+<b class="nc"><i>346</i>&nbsp;            start = true;</b>
+<i>347</i>&nbsp;        });
+<i>348</i>&nbsp;    }
+<i>349</i>&nbsp;
+<i>350</i>&nbsp;    /**
+<i>351</i>&nbsp;     * method that sets a the moment in which the gui expects the worker to use, in order to allow the main controller to handle the click differently
+<i>352</i>&nbsp;     */
+<i>353</i>&nbsp;    @Override
+<i>354</i>&nbsp;    public void askWhichWorkerToUse() {
+<b class="nc"><i>355</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>356</i>&nbsp;            gameView.updateMoment(CurrentScene.ASK_WHICH_WORKER); //new current scene</b>
+<i>357</i>&nbsp;
+<b class="nc"><i>358</i>&nbsp;            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems</b>
+<b class="nc"><i>359</i>&nbsp;            duringGameController.resetRowsAndColumns();</b>
+<b class="nc"><i>360</i>&nbsp;            duringGameController.changeText();</b>
+<i>361</i>&nbsp;        });
+<i>362</i>&nbsp;    }
+<i>363</i>&nbsp;
+<i>364</i>&nbsp;    /**
+<i>365</i>&nbsp;     * method that sets method at the moment (current scene) in which the gui expects two positions for the initial workers, in order to allow the main controller to handle the click differently
+<i>366</i>&nbsp;     */
+<i>367</i>&nbsp;    @Override
+<i>368</i>&nbsp;    public void askWhereToPositionWorkers() {
+<b class="nc"><i>369</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>370</i>&nbsp;            gameView.updateMoment(CurrentScene.ASK_INITIAL_POSITION);//new current scene</b>
+<i>371</i>&nbsp;
+<b class="nc"><i>372</i>&nbsp;            duringGameController.setGameView(gameView);//maybe can be deleted, not sure because it gave problems</b>
+<b class="nc"><i>373</i>&nbsp;            duringGameController.resetRowsAndColumns();</b>
+<b class="nc"><i>374</i>&nbsp;            duringGameController.setUsernames(gameView.getUsernames());</b>
+<b class="nc"><i>375</i>&nbsp;            duringGameController.setColors(gameView.getColors());</b>
+<b class="nc"><i>376</i>&nbsp;            duringGameController.setGods(gameView.getGods());</b>
+<b class="nc"><i>377</i>&nbsp;            duringGameController.changeText();</b>
+<i>378</i>&nbsp;        });
+<i>379</i>&nbsp;    }
+<i>380</i>&nbsp;
+<i>381</i>&nbsp;    /**
+<i>382</i>&nbsp;     * method that if the game hasn&#39;t started informs the user with an alert to wait, otherwise it sets the wait moment in main scene
+<i>383</i>&nbsp;     */
+<i>384</i>&nbsp;    @Override
+<i>385</i>&nbsp;    public void othersTurn(String usernameOnTurn) {
+<b class="nc"><i>386</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>387</i>&nbsp;            if(!start) {</b>
+<b class="nc"><i>388</i>&nbsp;                primaryStage.setWidth(600);</b>
+<b class="nc"><i>389</i>&nbsp;                primaryStage.setHeight(450);</b>
+<i>390</i>&nbsp;
+<b class="nc"><i>391</i>&nbsp;                StartController startController = setLayout(scene, &quot;/FXML/waitingPane.fxml&quot;); //now instead of alert I show waiting Pane made by Moni :)</b>
+<b class="nc"><i>392</i>&nbsp;            }else {</b>
+<b class="nc"><i>393</i>&nbsp;                gameView.updateMoment(CurrentScene.WAIT);//new current scene</b>
+<b class="nc"><i>394</i>&nbsp;                duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems</b>
+<b class="nc"><i>395</i>&nbsp;                duringGameController.changeText();</b>
+<i>396</i>&nbsp;            }
+<i>397</i>&nbsp;        });
+<i>398</i>&nbsp;    }
+<i>399</i>&nbsp;
+<i>400</i>&nbsp;    /**
+<i>401</i>&nbsp;     * method that indicates to the DuringGameController with the new moment set that it has to wait for action + slot
+<i>402</i>&nbsp;     */
+<i>403</i>&nbsp;    @Override
+<i>404</i>&nbsp;    public void askAction() {
+<b class="nc"><i>405</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>406</i>&nbsp;            gameView.updateMoment(CurrentScene.CHOOSE_ACTION); //new current scene</b>
+<i>407</i>&nbsp;
+<b class="nc"><i>408</i>&nbsp;            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems</b>
+<b class="nc"><i>409</i>&nbsp;            duringGameController.changeText();</b>
+<i>410</i>&nbsp;        });
+<i>411</i>&nbsp;    }
+<i>412</i>&nbsp;
+<i>413</i>&nbsp;    /**
+<i>414</i>&nbsp;     * gives the informations to the duringGameController to set them in the lateral part of the scene
+<i>415</i>&nbsp;     */
+<i>416</i>&nbsp;    @Override
+<i>417</i>&nbsp;    public void showPublicInformation() {
+<b class="nc"><i>418</i>&nbsp;        Platform.runLater(() -&gt; {</b>
+<b class="nc"><i>419</i>&nbsp;            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems</b>
+<i>420</i>&nbsp;
+<b class="nc"><i>421</i>&nbsp;            duringGameController.setUsernames(gameView.getUsernames());</b>
+<b class="nc"><i>422</i>&nbsp;            duringGameController.setColors(gameView.getColors());</b>
+<b class="nc"><i>423</i>&nbsp;            duringGameController.setGods(gameView.getGods());</b>
+<b class="nc"><i>424</i>&nbsp;            duringGameController.setPublicInformation();</b>
+<i>425</i>&nbsp;        });
+<i>426</i>&nbsp;    }
+<i>427</i>&nbsp;
+<i>428</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 16:33</div>
+</div>
+</body>
+</html>

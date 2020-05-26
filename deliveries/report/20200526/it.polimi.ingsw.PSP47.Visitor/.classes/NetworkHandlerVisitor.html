@@ -1,0 +1,178 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NetworkHandlerVisitor</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Visitor</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NetworkHandlerVisitor (it.polimi.ingsw.PSP47.Visitor)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NetworkHandlerVisitor</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Visitor;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Message.*;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; *  This class implements the Visitor interface referred to the Visitor pattern.
+<i>8</i>&nbsp; *  In this way, every time the NetworkHandler calls an update, he knows exactly
+<i>9</i>&nbsp; *  what to do thanks to the Visitable class which is passed in.
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public class NetworkHandlerVisitor implements Visitor {
+<i>12</i>&nbsp;    private NetworkHandler networkHandler;
+<i>13</i>&nbsp;
+<b class="nc"><i>14</i>&nbsp;    public NetworkHandlerVisitor(NetworkHandler networkHandler) {</b>
+<b class="nc"><i>15</i>&nbsp;        this.networkHandler = networkHandler;</b>
+<i>16</i>&nbsp;    }
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * This method sends server side the action chosen by the player.
+<i>20</i>&nbsp;     * @param actionAndDirection a Visitable class that represents the action chosen.
+<i>21</i>&nbsp;     */
+<i>22</i>&nbsp;    @Override
+<i>23</i>&nbsp;    public void visit(VisitableActionAndDirection actionAndDirection) {
+<i>24</i>&nbsp;
+<b class="nc"><i>25</i>&nbsp;        ChooseAction newMessage = new ChooseAction(actionAndDirection);</b>
+<b class="nc"><i>26</i>&nbsp;        networkHandler.send(newMessage);</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * This method sends server side the god chosen by the player.
+<i>31</i>&nbsp;     * @param god a Visitable class that represents the god chosen by the player.
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    @Override
+<i>34</i>&nbsp;    public void visit(VisitableGod god) {
+<b class="nc"><i>35</i>&nbsp;        GodChosen newMessage = new GodChosen(god);</b>
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;        networkHandler.send(newMessage);</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * This method sends server side the username and color chosen by a player.
+<i>43</i>&nbsp;     * @param information a Visitable class that represents username and color that have been chosen.
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    @Override
+<i>46</i>&nbsp;    public void visit(VisitableInformation information) {
+<b class="nc"><i>47</i>&nbsp;        FirstConnection newMessage = new FirstConnection(information);</b>
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;        networkHandler.send(newMessage);</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     * This method sends server side the list of gods chosen by the challenger.
+<i>54</i>&nbsp;     * @param listOfGods a Visitable class that represents the list of god chosen.
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    @Override
+<i>57</i>&nbsp;    public void visit(VisitableListOfGods listOfGods) {
+<b class="nc"><i>58</i>&nbsp;        ListOfGods newMessage = new ListOfGods(listOfGods);</b>
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;        networkHandler.send(newMessage);</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /**
+<i>65</i>&nbsp;     * This method sends server side the position of the worker that the player chose to use during the turn.
+<i>66</i>&nbsp;     * @param rowsAndColumns a Visitable class that represents the position of the worker.
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;    @Override
+<i>69</i>&nbsp;    public void visit(VisitableRowsAndColumns rowsAndColumns) {
+<b class="nc"><i>70</i>&nbsp;        ChooseWorkerByPosition newMessage = new ChooseWorkerByPosition(rowsAndColumns);</b>
+<i>71</i>&nbsp;
+<b class="nc"><i>72</i>&nbsp;        networkHandler.send(newMessage);</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * This method sends server side the number of players of the current game.
+<i>78</i>&nbsp;     * @param number a Visitable class that represents the number of players.
+<i>79</i>&nbsp;     */
+<i>80</i>&nbsp;    @Override
+<i>81</i>&nbsp;    public void visit(VisitableInt number) {
+<b class="nc"><i>82</i>&nbsp;        networkHandler.send(new RequestPlayersNumber(number));</b>
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * This method sends server side the position of both workers during the setup of the game.
+<i>87</i>&nbsp;     * @param visitableInitialPositions a Visitable class that represents the positions of the workers.
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    @Override
+<i>90</i>&nbsp;    public void visit(VisitableInitialPositions visitableInitialPositions) {
+<b class="nc"><i>91</i>&nbsp;        networkHandler.send(new AskWorkersPosition(visitableInitialPositions));</b>
+<i>92</i>&nbsp;    }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 16:33</div>
+</div>
+</body>
+</html>

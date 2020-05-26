@@ -1,0 +1,174 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Direction</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Enumerations</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Direction (it.polimi.ingsw.PSP47.Enumerations)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Direction</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    31,8%
+  </span>
+  <span class="absValue">
+    (14/ 44)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Enumerations;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Slot;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * Enumeration which represents the possible direction that can be chosen by a player.
+<i>7</i>&nbsp; */
+<b class="fc"><i>8</i>&nbsp;public enum Direction {</b>
+<i>9</i>&nbsp;
+<b class="fc"><i>10</i>&nbsp;    LEFT (0),</b>
+<b class="fc"><i>11</i>&nbsp;    LEFTUP (1),</b>
+<b class="fc"><i>12</i>&nbsp;    UP (2),</b>
+<b class="fc"><i>13</i>&nbsp;    RIGHTUP (3),</b>
+<b class="fc"><i>14</i>&nbsp;    RIGHT (4),</b>
+<b class="fc"><i>15</i>&nbsp;    RIGHTDOWN (5),</b>
+<b class="fc"><i>16</i>&nbsp;    DOWN (6),</b>
+<b class="fc"><i>17</i>&nbsp;    LEFTDOWN (7),</b>
+<b class="fc"><i>18</i>&nbsp;    HERE(8), //only available for zeus</b>
+<b class="fc"><i>19</i>&nbsp;    WRONGDIRECTION(9);</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    private final int move;
+<b class="fc"><i>22</i>&nbsp;    Direction(int move) {</b>
+<b class="fc"><i>23</i>&nbsp;        this.move = move;</b>
+<b class="fc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * method used to convert strings into enum
+<i>28</i>&nbsp;     * @param name is the name as a string of the color/item
+<i>29</i>&nbsp;     * @return enum of the Direction
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    public static Direction getDirectionByName(String name)  {
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;
+<b class="nc"><i>34</i>&nbsp;        switch (name.toUpperCase()) {</b>
+<i>35</i>&nbsp;            case &quot;LEFT&quot; :
+<b class="nc"><i>36</i>&nbsp;                return LEFT;</b>
+<i>37</i>&nbsp;            case &quot;LEFTUP&quot; :
+<b class="nc"><i>38</i>&nbsp;                return LEFTUP;</b>
+<i>39</i>&nbsp;            case &quot;UP&quot; :
+<b class="nc"><i>40</i>&nbsp;                return UP ;</b>
+<i>41</i>&nbsp;            case  &quot;RIGHTUP&quot; :
+<b class="nc"><i>42</i>&nbsp;                return RIGHTUP ;</b>
+<i>43</i>&nbsp;             case  &quot;RIGHT&quot; :
+<b class="nc"><i>44</i>&nbsp;                return RIGHT ;</b>
+<i>45</i>&nbsp;             case  &quot;RIGHTDOWN&quot; :
+<b class="nc"><i>46</i>&nbsp;                return RIGHTDOWN ;</b>
+<i>47</i>&nbsp;             case  &quot;DOWN&quot; :
+<b class="nc"><i>48</i>&nbsp;                return DOWN ;</b>
+<i>49</i>&nbsp;             case  &quot;LEFTDOWN&quot; :
+<b class="nc"><i>50</i>&nbsp;                return LEFTDOWN ;</b>
+<i>51</i>&nbsp;             case  &quot;HERE&quot; :
+<b class="nc"><i>52</i>&nbsp;                return HERE ;</b>
+<i>53</i>&nbsp;            default :
+<b class="nc"><i>54</i>&nbsp;                return WRONGDIRECTION;</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;        }
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * method used to convert two slots into the direction for this movement
+<i>61</i>&nbsp;     * @param originRow is the row of the slot where the worker was at the origin
+<i>62</i>&nbsp;     * @param originColumn is the column of the slot where the worker was at the origin
+<i>63</i>&nbsp;     * @param destinationRow is the row of the slot where the worker was at the destination
+<i>64</i>&nbsp;     * @param destinationColumn is the column of the slot where the worker was at the destionation
+<i>65</i>&nbsp;     * @return
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public static Direction getDirectionGivenSlots( int originRow, int originColumn ,int destinationRow, int destinationColumn ){
+<i>68</i>&nbsp;
+<b class="nc"><i>69</i>&nbsp;        if (originRow-destinationRow == 0 &amp;&amp; originColumn - destinationColumn == 0)</b>
+<b class="nc"><i>70</i>&nbsp;            return HERE;</b>
+<b class="nc"><i>71</i>&nbsp;        else if (originRow-destinationRow == 1 &amp;&amp; originColumn - destinationColumn == 1)</b>
+<b class="nc"><i>72</i>&nbsp;            return LEFTUP;</b>
+<b class="nc"><i>73</i>&nbsp;        else if (originRow-destinationRow == 0 &amp;&amp; originColumn - destinationColumn == 1)</b>
+<b class="nc"><i>74</i>&nbsp;            return LEFT;</b>
+<b class="nc"><i>75</i>&nbsp;        else if (originRow-destinationRow == 1 &amp;&amp; originColumn - destinationColumn == -1)</b>
+<b class="nc"><i>76</i>&nbsp;            return RIGHTUP;</b>
+<b class="nc"><i>77</i>&nbsp;        else if (originRow-destinationRow == 0 &amp;&amp; originColumn - destinationColumn == -1)</b>
+<b class="nc"><i>78</i>&nbsp;            return RIGHT;</b>
+<b class="nc"><i>79</i>&nbsp;        else if (originRow-destinationRow == -1 &amp;&amp; originColumn - destinationColumn == 1)</b>
+<b class="nc"><i>80</i>&nbsp;            return LEFTDOWN;</b>
+<b class="nc"><i>81</i>&nbsp;        else if (originRow-destinationRow == -1 &amp;&amp; originColumn - destinationColumn == 0)</b>
+<b class="nc"><i>82</i>&nbsp;            return DOWN;</b>
+<b class="nc"><i>83</i>&nbsp;        else if (originRow-destinationRow == -1 &amp;&amp; originColumn - destinationColumn == -1)</b>
+<b class="nc"><i>84</i>&nbsp;            return RIGHTDOWN;</b>
+<b class="nc"><i>85</i>&nbsp;        else if (originRow-destinationRow == 1 &amp;&amp; originColumn - destinationColumn == 0)</b>
+<b class="nc"><i>86</i>&nbsp;            return UP;</b>
+<i>87</i>&nbsp;        else
+<b class="nc"><i>88</i>&nbsp;            return WRONGDIRECTION;</b>
+<i>89</i>&nbsp;    }
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 16:33</div>
+</div>
+</body>
+</html>
