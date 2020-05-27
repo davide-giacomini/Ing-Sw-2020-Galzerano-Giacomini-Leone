@@ -12,8 +12,5 @@
         <module name="SantoriniProject" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Ing-Sw-2020-Galzerano-Giacomini-Leone" target="9" />
-    </bytecodeTargetLevel>
   </component>
 </project>

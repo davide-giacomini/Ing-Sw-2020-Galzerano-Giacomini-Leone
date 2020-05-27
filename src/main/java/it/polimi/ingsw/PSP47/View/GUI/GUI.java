@@ -14,14 +14,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -334,8 +329,8 @@ public class GUI extends Application implements View {
     @Override
     public void showGame() {
         Platform.runLater(()-> {
-            primaryStage.setHeight(1100);
-            primaryStage.setWidth(800);
+            primaryStage.setWidth(1100);
+            primaryStage.setHeight(800);
 
             duringGameController = setLayout(scene, "/FXML/boardDuringGame.fxml");
             gameView.updateMoment(CurrentScene.WAIT); //new current scene
