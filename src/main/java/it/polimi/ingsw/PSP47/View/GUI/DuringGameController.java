@@ -45,35 +45,89 @@ public class DuringGameController extends ViewObservable{
     private GridPane gridPane;
 
     @FXML
-    private ArrayList<Pane> slots;
-
-    @FXML
-    private Button moveButton;
-
-    @FXML
-    private Button buildButton;
-
-    @FXML
-    private Button buildDomeButton;
-
-    @FXML
-    private Button endButton;
-
-    @FXML
-    private Button quitButton;
-
-    @FXML
     private Text commandText;
 
     @FXML
-    private TextArea firstPlayerInfo;
+    private ImageView endButton;
 
     @FXML
-    private TextArea secondPlayerInfo;
+    private ImageView moveButton;
 
     @FXML
-    private TextArea thirdPlayerInfo;
+    private ImageView buildButton;
 
+    @FXML
+    private ImageView buildDomeButton;
+
+    @FXML
+    private ImageView quitButton;
+
+    @FXML
+    private Text first_username;
+
+    @FXML
+    private ImageView first_god;
+
+    @FXML
+    private ImageView first_color;
+
+    @FXML
+    private Text second_username;
+
+    @FXML
+    private ImageView second_god;
+
+    @FXML
+    private ImageView second_color;
+
+    @FXML
+    private StackPane third_name;
+
+    @FXML
+    private Text third_username;
+
+    @FXML
+    private StackPane third_information;
+
+    @FXML
+    private ImageView third_god;
+
+    @FXML
+    private ImageView third_color;
+
+
+    void setPublicInformation() {
+
+        first_username.setText(usernames.get(0));
+        Image godFirst = new Image(getImageGodFromGodName(gods.get(0)));
+        first_god.setImage(godFirst);
+        first_god.setPreserveRatio(true);
+        Image colorFirst = new Image(getImageWorkerFromColor(colors.get(0)));
+        first_color.setImage(colorFirst);
+        first_color.setPreserveRatio(true);
+
+        second_username.setText(usernames.get(1));
+        Image godSecond = new Image(getImageGodFromGodName(gods.get(1)));
+        second_god.setImage(godSecond);
+        second_god.setPreserveRatio(true);
+        Image colorSecond = new Image(getImageWorkerFromColor(colors.get(1)));
+        second_color.setImage(colorSecond);
+        second_color.setPreserveRatio(true);
+
+        if (gameView.getNumberOfPlayers() == 2) {
+            third_information.setVisible(false);
+            third_name.setVisible(false);
+        }
+        else {
+            third_username.setText(usernames.get(2));
+            Image godThird = new Image(getImageGodFromGodName(gods.get(2)));
+            third_god.setImage(godThird);
+            third_god.setPreserveRatio(true);
+            Image colorThird = new Image(getImageWorkerFromColor(colors.get(2)));
+            third_color.setImage(colorThird);
+            third_color.setPreserveRatio(true);
+        }
+    }
 
     /**
      * in the initialize method the based on the moment in which we are in the game the text to display
@@ -343,6 +397,37 @@ public class DuringGameController extends ViewObservable{
            return "/Images/female_white.png";
     }
 
+    private String getImageGodFromGodName(GodName godName) {
+        if (godName == GodName.APOLLO)
+            return "/Images/podiumApollo.png";
+        else if (godName == GodName.ARTEMIS)
+            return "/Images/podiumArtemis.png";
+        else if (godName == GodName.ATHENA)
+            return "/Images/podiumAthena.png";
+        else if (godName == GodName.ATLAS)
+            return "/Images/podiumAtlas.png";
+        else if (godName == GodName.CHRONUS)
+         return "/Images/podiumChronus.png";
+        else if (godName == GodName.DEMETER)
+            return "/Images/podiumDemeter.png";
+        else if (godName == GodName.HEPHAESTUS)
+            return "/Images/podiumHephaestus.png";
+        else if (godName == GodName.HERA)
+            return "/Images/podiumHera.png";
+        else if (godName == GodName.HESTIA)
+            return "/Images/podiumHestia.png";
+        else if (godName == GodName.MINOTAUR)
+            return "/Images/podiumMinotaur.png";
+        else if (godName == GodName.PAN)
+            return "/Images/podiumPan.png";
+        else if (godName == GodName.PROMETHEUS)
+            return "/Images/podiumPrometheus.png";
+        else if (godName == GodName.TRITON)
+            return "/Images/podiumTriton.png";
+        else
+            return "/Images/podiumZeus.png";
+    }
+
     /**
      * method used to get the pane from the gridPane from its row and column
      * @param row of the slot that I need
@@ -364,15 +449,6 @@ public class DuringGameController extends ViewObservable{
         return result;
     }
 
-    /**
-     * method used to add the public information in the scene ( they arrive after the scene has been displayed)
-     */
-    public void setPublicInformation(){
-        firstPlayerInfo.appendText(usernames.get(0)+"\n"+ colors.get(0)+"\n"+ gods.get(0));
-        secondPlayerInfo.appendText(usernames.get(1)+"\n"+ colors.get(1)+"\n"+ gods.get(1));
-        if (usernames.size()==3)
-            thirdPlayerInfo.appendText(usernames.get(2)+"\n"+ colors.get(2)+"\n"+ gods.get(2));
-    }
 
     /**
      * Adds images which represent the levels in the little GridPane of the slot correctly

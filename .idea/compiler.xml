@@ -7,12 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Santorini project" />
+        <module name="Ing-Sw-2020-Galzerano-Giacomini-Leone" />
         <module name="SantoriniProjectLGG" />
         <module name="SantoriniProject" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Ing-Sw-2020-Galzerano-Giacomini-Leone" target="9" />
-    </bytecodeTargetLevel>
   </component>
 </project>

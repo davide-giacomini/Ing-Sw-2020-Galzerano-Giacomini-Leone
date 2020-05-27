@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
@@ -19,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="754.0" styleClass="bodybg" stylesheets="@../CSS/background.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.DuringGameController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" styleClass="bodybg" stylesheets="@../CSS/background.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.DuringGameController">
    <center>
       <StackPane prefHeight="150.0" prefWidth="453.0" BorderPane.alignment="CENTER">
          <children>
@@ -78,19 +73,87 @@
       </StackPane>
    </center>
    <bottom>
-      <Text fx:id="commandText" fill="#2905a8" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your action from the Buttons :" textAlignment="CENTER" BorderPane.alignment="CENTER">
+      <Text fx:id="commandText" fill="#2905a8" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your action from the Buttons :" textAlignment="CENTER" BorderPane.alignment="TOP_CENTER">
          <font>
             <Font name="Cochin Italic" size="29.0" />
-         </font></Text>
+         </font>
+         <BorderPane.margin>
+            <Insets bottom="30.0" />
+         </BorderPane.margin></Text>
    </bottom>
    <left>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="101.0" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="161.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="moveButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#OnMoveClick" text="MOVE" />
-            <Button fx:id="buildButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#OnBuildClick" text="BUILD" />
-            <Button fx:id="buildDomeButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#OnBuildDomeClick" text="BUILD DOME" />
-            <Button fx:id="endButton" mnemonicParsing="false" onMouseClicked="#OnEndClick" text="END" />
-            <Button fx:id="quitButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#OnQuitClick" text="QUIT" />
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="moveButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnMoveClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/cm_btn_green.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" onMouseClicked="#OnMoveClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Move" textAlignment="CENTER" wrappingWidth="73.85005187988281">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="buildButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnBuildClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/cm_btn_green.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" onMouseClicked="#OnBuildClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Build">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="buildDomeButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnBuildDomeClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/cm_btn_green.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" onMouseClicked="#OnBuildDomeClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Build dome">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="endButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnEndClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/cm_btn_coral.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" onMouseClicked="#OnEndClick" strokeType="OUTSIDE" strokeWidth="0.0" text="End">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="quitButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnQuitClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/cm_btn_coral.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" onMouseClicked="#OnQuitClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Quit">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
          </children>
          <BorderPane.margin>
             <Insets left="30.0" />
@@ -101,50 +164,152 @@
       </VBox>
    </left>
    <right>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="627.0" prefWidth="128.0" BorderPane.alignment="CENTER">
          <children>
-            <TitledPane animated="false" text="GAME INFO" textAlignment="CENTER" textFill="#0a0c97" VBox.vgrow="NEVER">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ABOUT PLAYERS" textAlignment="CENTER" wrappingWidth="158.27691650390625">
                <font>
-                  <Font name="Cochin" size="13.0" />
+                  <Font size="28.0" />
                </font>
-            </TitledPane>
-            <TextArea prefHeight="70.0" prefWidth="110.0" promptText="Current turn :" VBox.vgrow="NEVER">
-               <font>
-                  <Font name="Cochin" size="13.0" />
-               </font></TextArea>
-            <TextArea fx:id="firstPlayerInfo" prefHeight="110.0" prefWidth="110.0" promptText="First Player:" VBox.vgrow="NEVER">
-               <font>
-                  <Font name="Cochin" size="13.0" />
-               </font></TextArea>
-            <TextArea fx:id="secondPlayerInfo" prefHeight="110.0" prefWidth="110.0" promptText="Second Player:" VBox.vgrow="NEVER">
-               <font>
-                  <Font name="Cochin" size="13.0" />
-               </font></TextArea>
-            <TextArea fx:id="thirdPlayerInfo" prefHeight="110.0" prefWidth="110.0" promptText="Third Player:" VBox.vgrow="NEVER">
-               <font>
-                  <Font name="Cochin" size="13.0" />
-               </font></TextArea>
-         </children></VBox>
+            </Text>
+            <StackPane alignment="BOTTOM_CENTER" prefHeight="54.0" prefWidth="124.0">
+               <children>
+                  <ImageView fitHeight="45.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/labelbutton_modeselect.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="first_username" strokeType="OUTSIDE" strokeWidth="0.0" text="name_first" textAlignment="CENTER" wrappingWidth="107.07354736328125">
+                     <StackPane.margin>
+                        <Insets bottom="6.0" />
+                     </StackPane.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="69.0" prefWidth="124.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="95.0" prefWidth="177.0">
+                     <children>
+                        <StackPane prefHeight="150.0" prefWidth="50.0">
+                           <children>
+                              <ImageView fitHeight="105.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/clp_frame_gold.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="first_god" fitHeight="64.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </StackPane>
+                        <StackPane prefHeight="53.0" prefWidth="54.0">
+                           <children>
+                              <ImageView fitHeight="94.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/clp_frame_gold.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="first_color" fitHeight="66.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+            <StackPane alignment="BOTTOM_CENTER" prefHeight="47.0" prefWidth="124.0">
+               <children>
+                  <ImageView fitHeight="45.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/labelbutton_modeselect.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="second_username" strokeType="OUTSIDE" strokeWidth="0.0" text="name_second">
+                     <StackPane.margin>
+                        <Insets bottom="5.0" />
+                     </StackPane.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="69.0" prefWidth="124.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="95.0" prefWidth="177.0">
+                     <children>
+                        <StackPane prefHeight="150.0" prefWidth="50.0">
+                           <children>
+                              <ImageView fitHeight="105.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/clp_frame_gold.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="second_god" fitHeight="64.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </StackPane>
+                        <StackPane prefHeight="53.0" prefWidth="54.0">
+                           <children>
+                              <ImageView fitHeight="94.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/clp_frame_gold.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="second_color" fitHeight="66.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+            <StackPane fx:id="third_name" alignment="BOTTOM_CENTER" prefHeight="51.0" prefWidth="124.0">
+               <children>
+                  <ImageView fitHeight="45.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/labelbutton_modeselect.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="third_username" strokeType="OUTSIDE" strokeWidth="0.0" text="name_third">
+                     <StackPane.margin>
+                        <Insets bottom="4.0" />
+                     </StackPane.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <StackPane fx:id="third_information" prefHeight="69.0" prefWidth="124.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="95.0" prefWidth="177.0">
+                     <children>
+                        <StackPane prefHeight="150.0" prefWidth="50.0">
+                           <children>
+                              <ImageView fitHeight="105.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/clp_frame_gold.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="third_god" fitHeight="64.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </StackPane>
+                        <StackPane prefHeight="53.0" prefWidth="54.0">
+                           <children>
+                              <ImageView fitHeight="94.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/clp_frame_gold.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="third_color" fitHeight="66.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+         </children>
+         <BorderPane.margin>
+            <Insets right="50.0" top="110.0" />
+         </BorderPane.margin>
+      </VBox>
    </right>
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
 </BorderPane>
