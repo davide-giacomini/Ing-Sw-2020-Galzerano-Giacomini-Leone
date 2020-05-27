@@ -244,8 +244,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     /**
      * This method handles a game over.
      */
-    void gameOver(){
-        notifyGameOver(this);
+    void gameOver(boolean endGame){
+        notifyClientHandlerGameOver(this, endGame);
         endConnection();
     }
 
