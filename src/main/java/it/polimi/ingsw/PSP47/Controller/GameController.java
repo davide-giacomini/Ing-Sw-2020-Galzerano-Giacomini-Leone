@@ -27,6 +27,7 @@ public class GameController implements VirtualViewListener {
     private String chosenPlayer;
     private ArrayList<VirtualView> views;
     private int indexOfCurrentPlayer;
+    private int indexOfChallenger;
     private TurnController turn;
     private ControllerVisitor controllerVisitor;
 
@@ -78,14 +79,14 @@ public class GameController implements VirtualViewListener {
      */
     private void startController() {
          orderViews();
-         indexOfCurrentPlayer = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
+        indexOfChallenger = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
         for (VirtualView view : views) {
             view.sendNumberOfPlayers(numberOfPlayers);
         }
         ArrayList<String> usernames = new ArrayList<>();
         for (VirtualView view : views)
             usernames.add(view.getUsername());
-         views.get(indexOfCurrentPlayer).sendChallenger(usernames);
+         views.get(indexOfChallenger).sendChallenger(usernames);
     }
 
     /**
@@ -97,11 +98,11 @@ public class GameController implements VirtualViewListener {
             try {
                 if (game.getNumberOfPlayers() == 3 && !chooseGod(god, getGame().getPlayer(indexOfCurrentPlayer)).threePlayersGame()) {
                     String textError = "You cannot choose a god which is not available in a three players game";
-                    views.get(indexOfCurrentPlayer).sendError(textError);
+                    views.get(indexOfChallenger).sendError(textError);
                     ArrayList<String> usernames = new ArrayList<>();
                     for (VirtualView view : views)
                         usernames.add(view.getUsername());
-                    views.get(indexOfCurrentPlayer).sendChallenger(usernames);
+                    views.get(indexOfChallenger).sendChallenger(usernames);
                     return;
                 }
             } catch (IOException e) {

@@ -382,7 +382,7 @@ public class DuringGameController extends ViewObservable{
      * @return
      */
     public int addLevels(GridPane gridPane, Pane pane, Level level){
-        int levels = 3;
+        int levels = 2;
 
         if (level == Level.ATLAS_DOME){ //for now the dome of atlas is added at the buttom
             Image levelAtlas = new Image("/Images/dome.png");
@@ -395,6 +395,7 @@ public class DuringGameController extends ViewObservable{
         }
 
         if(level.ordinal() >= Level.LEVEL1.ordinal()) { // I put >= since the level1 has to be added also when the level is 2 and same for the other levels
+            levels=3;
             Image levelOne = new Image("/Images/level1_1_light.png");
             ImageView levelOneView = new ImageView(levelOne);
             levelOneView.setPreserveRatio(true);

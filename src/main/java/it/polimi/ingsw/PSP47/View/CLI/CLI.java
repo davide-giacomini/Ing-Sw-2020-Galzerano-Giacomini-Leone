@@ -52,7 +52,7 @@ public class CLI extends ViewObservable implements View  {
 
         out.println(AnsiCode.ANSI_CYAN + intro + AnsiCode.ANSI_RESET);
 
-        clearConsole();
+       // clearConsole();
 
         //othersTurn("anna");
         //gameView.setMyUsername("moni");
@@ -115,7 +115,7 @@ public class CLI extends ViewObservable implements View  {
         Color acceptableColor = null;
 
         out.println("Here are the possible workers' colors : ");
-        out.println(AnsiCode.ANSI_BLUE + AnsiCode.ANSI_WORKER + " This is blue");
+        out.println(AnsiCode.ANSI_BLUE + AnsiCode.ANSI_WORKER  + " This is blue");
         out.println(AnsiCode.ANSI_YELLOW + AnsiCode.ANSI_WORKER + " This is yellow");
         out.println(AnsiCode.ANSI_GREEN + AnsiCode.ANSI_WORKER +" This is green");
         out.println(AnsiCode.ANSI_RED + AnsiCode.ANSI_WORKER +" This is red");
@@ -615,7 +615,14 @@ public class CLI extends ViewObservable implements View  {
     public void showNewBoard(Slot slot) {
         printSupport.buildSlot(slot);
         printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);
+        checkClearning();
 
+    }
+
+    //TODO FIX CLEARING OF CONSOLE
+    private void checkClearning() {
+        if (gameView.getCurrentScene()==CurrentScene.WAIT)
+            clearConsole();
     }
 
     @Override

@@ -17,10 +17,10 @@ public class PrintSupport {
     private static final String MIDDLE_FREE_PART_SLOT ="|        |";
 
 
-    private static final String WITH_LEV1_PART_SLOT = "|___" + AnsiCode.ANSI_LEVEL1+ "___|";
-    private static final String WITH_LEV2_PART_SLOT = "|   " + AnsiCode.ANSI_LEVEL2+ "   |";
-    private static final String WITH_LEV3_PART_SLOT = "|   " + AnsiCode.ANSI_LEVEL3 + "   |";
-    private static final String WITH_DOME_PART_SLOT = "|   " + AnsiCode.ANSI_DOME + "   |";
+    private static final String WITH_LEV1_PART_SLOT = "|___"+AnsiCode.ANSI_LEVEL1+ "___|";
+    private static final String WITH_LEV2_PART_SLOT = "|   "+AnsiCode.ANSI_LEVEL2+ "    |";
+    private static final String WITH_LEV3_PART_SLOT = "|   " + AnsiCode.ANSI_LEVEL3+ "   |";
+    private static final String WITH_DOME_PART_SLOT = "|   " + AnsiCode.ANSI_DOME +  "   |";
     private static final String WITH_DOME_ATLAS_PART_SLOT = "|___" + AnsiCode.ANSI_DOME + "___|";
 
     private String[][][] BOARD_PARTS = new String[5][5][5];
@@ -69,7 +69,7 @@ public class PrintSupport {
             }
         }
         out.print("\n");
-        clearConsole(out);
+       // clearConsole(out);
     }
 
     /**

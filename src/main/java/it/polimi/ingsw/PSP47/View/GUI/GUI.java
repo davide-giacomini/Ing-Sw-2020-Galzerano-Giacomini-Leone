@@ -334,8 +334,8 @@ public class GUI extends Application implements View {
     @Override
     public void showGame() {
         Platform.runLater(()-> {
-            primaryStage.setHeight(Screen.getPrimary().getBounds().getHeight());
-            primaryStage.setWidth(Screen.getPrimary().getBounds().getWidth());
+            primaryStage.setHeight(1100);
+            primaryStage.setWidth(800);
 
             duringGameController = setLayout(scene, "/FXML/boardDuringGame.fxml");
             gameView.updateMoment(CurrentScene.WAIT); //new current scene

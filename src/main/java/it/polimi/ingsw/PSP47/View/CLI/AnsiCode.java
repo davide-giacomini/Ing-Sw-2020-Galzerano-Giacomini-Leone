@@ -23,7 +23,7 @@ public class AnsiCode {
         /**
          * Variable used to convert code of the worker symbol
          */
-        static final String ANSI_WORKER = "\u265F";
+        static final String ANSI_WORKER = "\u265F" + "\uFE0E";
 
         static final String ANSI_LEVEL1 = "\u2B1C"+"\uFE0F";
         static final String ANSI_LEVEL2 = "\u25FB" + "\uFE0F";
