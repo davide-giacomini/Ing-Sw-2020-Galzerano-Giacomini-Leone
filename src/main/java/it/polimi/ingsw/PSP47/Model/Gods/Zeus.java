@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.SlotOccupiedException;
 import it.polimi.ingsw.PSP47.Model.Player;
+import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Model.Worker;
 
 /**
@@ -77,6 +78,13 @@ public class Zeus extends God  {
             return checkIfCanBuild(worker);
 
         return false;
+    }
+
+    @Override
+    public boolean checkIfSlotIsOccupied(Slot slot, Direction direction) {
+        if (direction == Direction.HERE)
+            return false;
+        return slot.isWorkerOnSlot();
     }
 
     /**

@@ -111,7 +111,7 @@ public class TurnController {
                 controller.removeLosingPlayer(player.getUsername());
                 break;
             case END:
-                if (!turn.validateEndTurn()) {
+                if (!player.getGod().validateEndTurn()) {
                     String textError = "You're not allowed to end your turn. You have to choose another action";
                     views.get(indexOfCurrentPlayer).sendError(textError);
                     views.get(indexOfCurrentPlayer).sendWhichAction();
@@ -133,16 +133,14 @@ public class TurnController {
             Slot destinationSlot = game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender)));
             String textError = null;
             if (turn.getNumberOfMovements() == player.getGod().getMAX_MOVEMENTS())
-                textError = "You've yet reached the max number of movements in this turn";
-            else if (turn.getNumberOfBuildings() == 1 && !player.getGod().getName().equals("Prometheus")) {
+                textError = "You've already reached the max number of movements in this turn";
+            else if (player.getGod().checkOrderOfActions(Action.MOVE)) {
                 textError = "You have already built in this turn, so you can't move anymore";
             }
             else if (destinationSlot.getLevel() == (Level.DOME) || destinationSlot.getLevel() == (Level.ATLAS_DOME))
                 textError = "This slot contains a dome, you cannot move here";
-            else if (destinationSlot.isWorkerOnSlot()) {
-                if (!(player.getGod().getName().equals("Apollo") || player.getGod().getName().equals("Minotaur"))) {
-                    textError = "This slot contains another worker, you cannot move here";
-                }
+            else if (player.getGod().checkIfSlotIsOccupied(destinationSlot)) {
+                textError = "This slot contains another worker, you cannot move here";
             }
             else if (destinationSlot.getLevel().ordinal() > actualSlot.getLevel().ordinal() && player.cannotMoveUp() ||
                 destinationSlot.getLevel().ordinal() > (actualSlot.getLevel().ordinal() + 1))
@@ -184,14 +182,13 @@ public class TurnController {
             String textError = null;
             Slot destinationSlot = game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender)));
             if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
-                textError = "You've yet reached the max number of buildings in this turn";
+                textError = "You've already reached the max number of buildings in this turn";
             else if (destinationSlot.getLevel() == Level.DOME || destinationSlot.getLevel() == Level.ATLAS_DOME)
-                textError = "This slot yet contains a dome, you cannot build ih this position";
-            else if (destinationSlot.isWorkerOnSlot()) {
-                if (!(player.getGod().getName().equals("Zeus") && direction == Direction.HERE))
-                    textError = "This slot is occupied by a worker, you cannot build here";
+                textError = "This slot already contains a dome, you cannot build ih this position";
+            else if (player.getGod().checkIfSlotIsOccupied(destinationSlot, direction)) {
+                textError = "This slot is occupied by a worker, you cannot build here";
             }
-            else if (turn.getNumberOfMovements() == 0 && !player.getGod().getName().equals("Prometheus"))
+            else if (player.getGod().checkOrderOfActions(Action.BUILD))
                 textError = "You have to move your worker before build";
             if (textError != null) {
                 views.get(indexOfCurrentPlayer).sendError(textError);
@@ -222,14 +219,16 @@ public class TurnController {
             String textError = null;
             Slot destinationSlot = game.getBoard().getNearbySlot(direction, player.getWorkerPosition(player.getWorker(workerGender)));
             turn.setWantsToBuildDome(true);
-            if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
-                textError = "You've yet reached the max number of buildings in this turn";
-            else if (!player.getGod().canAlwaysBuildDome())
+            if (!player.getGod().canAlwaysBuildDome())
                 textError = "You're not allowed to build a dome in this way";
+            else if (turn.getNumberOfBuildings() == player.getGod().getMAX_BUILDINGS())
+                textError = "You've yet reached the max number of buildings in this turn";
             else if (destinationSlot.getLevel() == Level.DOME || destinationSlot.getLevel() == Level.ATLAS_DOME)
-                textError = "This slot yet contains a dome, you cannot build ih this position";
-            else if (destinationSlot.isWorkerOnSlot())
+                textError = "This slot already contains a dome, you cannot build ih this position";
+            else if (player.getGod().checkIfSlotIsOccupied(destinationSlot))
                 textError = "This slot is occupied by a worker, you cannot build here";
+            else if (player.getGod().checkOrderOfActions(Action.BUILDDOME))
+                textError = "You have to move your worker before build";
             if (textError != null) {
                 views.get(indexOfCurrentPlayer).sendError(textError);
                 views.get(indexOfCurrentPlayer).sendWhichAction();

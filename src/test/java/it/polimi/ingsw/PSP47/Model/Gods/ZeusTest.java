@@ -51,13 +51,13 @@ public class ZeusTest {
 
     @Test
     public void build_not_here() throws InvalidMoveException, InvalidDirectionException, InvalidBuildException {
-        assertFalse(player.getTurn().validateEndTurn());
+        assertFalse(player.getGod().validateEndTurn());
         assertTrue(player.getGod().checkIfCanGoOn(player.getWorker(Gender.MALE)));
         turn.executeMove(Direction.RIGHT);
-        assertFalse(player.getTurn().validateEndTurn());
+        assertFalse(player.getGod().validateEndTurn());
         assertTrue(player.getGod().checkIfCanGoOn(player.getWorker(Gender.MALE)));
         turn.executeBuild(Direction.UP);
-        assertTrue(player.getTurn().validateEndTurn());
+        assertTrue(player.getGod().validateEndTurn());
         assertFalse(player.getGod().checkIfCanGoOn(player.getWorker(Gender.MALE)));
         assertEquals(Level.LEVEL1, board.getSlot(2,4).getLevel());
         assertTrue(board.getSlot(3,4).isWorkerOnSlot());

@@ -111,14 +111,6 @@ public class Turn {
             player.setLoosing(true);
     }
 
-    /**
-     * This method checks if a player is allowed to end his turn.
-     * @return true if the turn can be ended, false otherwise.
-     */
-    public boolean validateEndTurn() {
-        return player.getGod().validateEndTurn();
-    }
-
     public Board getBoard() {
         return board;
     }

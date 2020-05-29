@@ -82,8 +82,6 @@ public class PlayerTest {
     @Test
     public void setGod() {
         assertEquals(player.getGodName(), GodName.APOLLO);
-        assertFalse(player.canBuildDome());
-
     }
 
     @Test
@@ -105,32 +103,6 @@ public class PlayerTest {
         assertNotEquals(player.getUsername(), "ARIANNA");
     }
 
-    @Test
-    public void deleteWorker() {
-        player.deleteWorker(player.getWorker(Gender.MALE));
-        assertFalse(player.isLoosing());
-        assertEquals(player.getWorker(Gender.MALE),null);
-
-        player.deleteWorker(player.getWorker(Gender.FEMALE));
-        assertTrue(player.isLoosing());
-    }
-
-    @Test
-    public void deleteWorker_firstFemale() {
-        player.deleteWorker(player.getWorker(Gender.FEMALE));
-        assertFalse(player.isLoosing());
-        assertEquals(player.getWorker(Gender.FEMALE),null);
-
-        player.deleteWorker(player.getWorker(Gender.MALE));
-        assertTrue(player.isLoosing());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void deleteWorker_NullPointerException() {
-        player.deleteWorker(player.getWorker(Gender.MALE));
-        player.deleteWorker(player.getWorker(Gender.MALE));
-
-    }
 
     ///TODO modify check
     /*@Test

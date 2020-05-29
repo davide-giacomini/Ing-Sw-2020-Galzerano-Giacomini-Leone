@@ -52,10 +52,10 @@ public class TritonTest {
     @Test ()
     public void move_not_in_perimeter_slot() throws InvalidMoveException, InvalidDirectionException, InvalidBuildException {
         turn.executeMove(Direction.LEFTUP);
-        assertFalse(player.getTurn().validateEndTurn());
+        assertFalse(player.getGod().validateEndTurn());
         assertEquals(1, player.getGod().getMAX_MOVEMENTS());
         turn.executeBuild(Direction.RIGHT);
-        assertTrue(player.getTurn().validateEndTurn());
+        assertTrue(player.getGod().validateEndTurn());
     }
 
     @Test
@@ -67,10 +67,10 @@ public class TritonTest {
         assertEquals(3, player.getGod().getMAX_MOVEMENTS());
         turn.executeMove(Direction.LEFT);
         assertEquals(3, player.getGod().getMAX_MOVEMENTS());
-        assertFalse(player.getTurn().validateEndTurn());
+        assertFalse(player.getGod().validateEndTurn());
         assertTrue(player.getGod().checkIfCanGoOn(player.getWorker(Gender.FEMALE)));
         turn.executeBuild(Direction.LEFT);
-        assertTrue(player.getTurn().validateEndTurn());
+        assertTrue(player.getGod().validateEndTurn());
         assertFalse(player.getGod().checkIfCanGoOn(player.getWorker(Gender.FEMALE)));
     }
 
