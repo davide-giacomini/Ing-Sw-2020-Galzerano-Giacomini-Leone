@@ -5,11 +5,9 @@ import it.polimi.ingsw.PSP47.Model.*;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
-import it.polimi.ingsw.PSP47.Model.Gods.Athena;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class TurnController {
 
@@ -151,19 +149,11 @@ public class TurnController {
                 return;
             }
             turn.executeMove(direction);
-            if (player.isWinning() && !(heraWinCondition(player.getWorker(workerGender)))) {
+            if (game.checkWinningCondition(player.getWorker(workerGender), player)) {
                 controller.endGame(player.getUsername());
                 return;
             }
-            //TODO davide dice a moni -> questo settaggio di Athena secondo me va lasciato nel model com'era prima
-            if (player.getGod().getName().equals("Athena")) {
-                boolean moveUp = ((Athena)player.getGod()).isMoveUp();
-                for (int i = 0; i<game.getNumberOfPlayers(); i++) {
-                    if (game.getPlayer(i) != null && game.getPlayer(i) != player) {
-                        game.getPlayer(i).setCannotMoveUp(moveUp);
-                    }
-                }
-            }
+            game.checkIfPlayersCanMoveUp(player);
             views.get(indexOfCurrentPlayer).sendWhichAction();
         } catch (InvalidDirectionException | InvalidMoveException | IndexOutOfBoundsException e) {
             String textError = e.getMessage();
@@ -197,8 +187,8 @@ public class TurnController {
                 return;
             }
             turn.executeBuild(direction);
-            if (game.getBoard().getCountDomes() == 5 && chronusPlayer() != null) {
-                controller.endGame(Objects.requireNonNull(chronusPlayer()).getUsername());
+            if (game.checkWinningCondition() != null) {
+                controller.endGame(game.checkWinningCondition().getUsername());
                 return;
             }
             views.get(indexOfCurrentPlayer).sendWhichAction();
@@ -244,42 +234,15 @@ public class TurnController {
         }
     }
 
-    /**
-     * This method controls if the worker that has been playing currently is in a perimeter slot and if
-     * in this game there is a player who is using Hera's power.
-     * That's because in this case even if a player reached the third level he cannot win.
-     * @param currentWorker the worker who is actually moving.
-     * @return if the worker is on a perimeter slot and if Hera is in the game.
-     */
-    boolean heraWinCondition(Worker currentWorker){
-        boolean thereIsHera = false;
-        for(Player player : game.getPlayers()){
-            if (player.getGod().getName().equals("Hera")) {
-                thereIsHera = true;
-                break;
-            }
-        }
-        return currentWorker.getSlot().isPerimeterSlot() && !currentWorker.getPlayer().getGod().getName().equals("Hera") && thereIsHera ;
-    }
-
-    /**
-     * This method controls if there is a player who is using Chronus' power.
-     * @return the instance of the player.
-     */
-    Player chronusPlayer() {
-        for (int i = 0; i<game.getNumberOfPlayers(); i++) {
-            if (game.getPlayer(i).getGod().getName().equals("Chronus")) {
-                return player;
-            }
-        }
-        return null;
-    }
-
     Gender getWorkerGender() {
         return workerGender;
     }
 
     Turn getTurn() {
         return turn;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
