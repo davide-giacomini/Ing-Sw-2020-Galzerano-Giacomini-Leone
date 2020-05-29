@@ -53,11 +53,11 @@ public class HestiaTest {
         turn.executeMove(Direction.UP);
         assertTrue(player.getGod().checkIfCanGoOn(player.getWorker(Gender.FEMALE)));
         turn.executeBuild(Direction.UP);
-        assertTrue(turn.validateEndTurn());
+        assertTrue(player.getGod().validateEndTurn());
         assertTrue(player.getGod().checkIfCanGoOn(player.getWorker(Gender.FEMALE)));
         turn.executeBuild(Direction.DOWN);
         assertTrue(player.getGod().checkIfCanGoOn(player.getWorker(Gender.FEMALE)));
-        assertTrue(turn.validateEndTurn());
+        assertTrue(player.getGod().validateEndTurn());
         assertEquals(Level.GROUND, board.getSlot(4,4).getLevel());
         assertEquals(1, turn.getNumberOfBuildings());
     }
@@ -68,10 +68,10 @@ public class HestiaTest {
         assertTrue(player.getGod().checkIfCanGoOn(player.getWorker(Gender.FEMALE)));
         turn.executeBuild(Direction.UP);
         assertTrue(player.getGod().checkIfCanGoOn(player.getWorker(Gender.FEMALE)));
-        assertTrue(turn.validateEndTurn());
+        assertTrue(player.getGod().validateEndTurn());
         turn.executeBuild(Direction.LEFT);
         assertFalse(player.getGod().checkIfCanGoOn(player.getWorker(Gender.FEMALE)));
-        assertTrue(turn.validateEndTurn());
+        assertTrue(player.getGod().validateEndTurn());
         assertEquals(Level.LEVEL1, board.getSlot(3,2).getLevel());
         assertEquals(Level.LEVEL1, board.getSlot(2,3).getLevel());
         assertEquals(2, turn.getNumberOfBuildings());

@@ -160,6 +160,8 @@ public class GameController implements VirtualViewListener {
      * @throws IOException if the god is not one of the enumeration.
      */
     private God chooseGod(GodName god, Player player) throws IOException {
+        //TODO da davide -> puoi farlo anche all'interno dell'enum secondo me, e forse sarebbe meglio
+        // chiamandolo magari getGod oppure enumToGod... non so
         switch (god) {
             case PAN: return new Pan(player, "Pan");
             case ATLAS: return new Atlas(player, "Atlas");

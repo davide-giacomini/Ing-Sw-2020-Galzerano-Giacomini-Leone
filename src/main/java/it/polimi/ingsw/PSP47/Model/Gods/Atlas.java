@@ -36,7 +36,7 @@ public class Atlas extends God {
             throw new InvalidBuildException("Order of movements incorrect");
         }
 
-        if (player.getTurn().wantsToBuildDome() && player.canBuildDome()) {
+        if (player.getTurn().wantsToBuildDome()) {
             try {
                 worker.buildDome(direction);
             } catch (SlotOccupiedException e) {

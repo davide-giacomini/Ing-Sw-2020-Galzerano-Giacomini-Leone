@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
+import it.polimi.ingsw.PSP47.Enumerations.Action;
 import it.polimi.ingsw.PSP47.Model.Board;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Model.Exceptions.*;
@@ -68,7 +69,7 @@ public class Prometheus extends God {
      * @param direction specifies the slot where to build
      * @param worker one of the player's workers
      * @throws IndexOutOfBoundsException if the {@link Slot} where to build is outside the {@link Board}
-     * @throws InvalidMoveException if the move is not permitted.
+     * @throws InvalidBuildException if the build is not permitted.
      */
     @Override
     public void build(Direction direction, Worker worker)
@@ -115,6 +116,17 @@ public class Prometheus extends God {
         return false;
     }
 
+    public boolean checkOrderOfActions(Action action) {
+        if (action == Action.MOVE) {
+            return false;
+        }
+        else if (action == Action.BUILD) {
+            if (moveThenBuild && player.getTurn().getNumberOfBuildings() == 1)
+                return true;
+        }
+        return false;
+    }
+
     /**
      * This method checks if the player has completed a turn or if he still have to do some actions.
      * @return true if he can end his turn, false otherwise.
@@ -134,7 +146,7 @@ public class Prometheus extends God {
      * It isn't callable by the interface {@link God}, because it's a Prometheus' personal field.
      * @return true if Prometheus is obligated to do a normal turn (because he moved before having built).
      */
-    public boolean moveThenBuild() {
+    boolean moveThenBuild() {
         return moveThenBuild;
     }
 }

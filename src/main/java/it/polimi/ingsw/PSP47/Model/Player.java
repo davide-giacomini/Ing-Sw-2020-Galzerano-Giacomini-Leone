@@ -16,14 +16,13 @@ public class Player {
     /**
      * Number of workers a player has got.
      */
-    public final int WORKERS_NUMBER = 2;
+    private final int WORKERS_NUMBER = 2;
     private String username;
     private Worker[] workers;
     private Color color;
     private boolean isWinning;
     private boolean isLoosing;
     private boolean cannotMoveUp;
-    private boolean canBuildDome;
     private God god;
     private GodName godName;
     private Turn turn;
@@ -84,11 +83,6 @@ public class Player {
     public void setGod(God god) {
         this.god = god;
         this.godName = GodName.getGodsNameByName(god.getName());
-        this.canBuildDome = god.canAlwaysBuildDome();
-    }
-
-    public boolean canBuildDome() {
-        return canBuildDome;
     }
 
     public God getGod() {
@@ -109,27 +103,6 @@ public class Player {
     
     public String getUsername(){
         return username;
-    }
-    
-    /**
-     * This method delete a worker of the player.
-     * If player's workers become zero, the player loose.
-     *
-     * @param worker the worker to be deleted
-     */
-    public void deleteWorker (Worker worker) {
-        if (worker == null)
-            throw new NullPointerException("The worker chosen to be deleted doesn't exist.");
-        workers[worker.getGender().ordinal()] = null;
-        
-        boolean isLoosing = true;
-        for (Worker w : workers) {
-            if (w != null) {
-                isLoosing = false;
-            }
-        }
-        
-        this.isLoosing = isLoosing;
     }
     
     /**

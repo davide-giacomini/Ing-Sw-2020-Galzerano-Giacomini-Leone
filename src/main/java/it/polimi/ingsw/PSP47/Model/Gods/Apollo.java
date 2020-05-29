@@ -120,6 +120,11 @@ public class Apollo extends God {
         return false;
     }
 
+    @Override
+    public boolean checkIfSlotIsOccupied(Slot slot) {
+        return false;
+    }
+
     /**
      * This method checks if the player has completed a turn or if he still have to do some actions.
      * @return true if he can end his turn, false otherwise.

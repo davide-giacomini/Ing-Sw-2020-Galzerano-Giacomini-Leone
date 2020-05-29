@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
-import it.polimi.ingsw.PSP47.Model.Board;
+import it.polimi.ingsw.PSP47.Enumerations.Action;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Model.Exceptions.*;
 import it.polimi.ingsw.PSP47.Model.Player;
@@ -195,6 +195,43 @@ public abstract class God {
      * @return true if the worker can go on, false otherwise.
      */
     public abstract boolean checkIfCanGoOn (Worker worker);
+
+    //TODO ovverridata da Apollo e Minotaur che ritornano sempre false
+    public boolean checkIfSlotIsOccupied(Slot slot) {
+        return slot.isWorkerOnSlot();
+    }
+
+    //TODO overridata da Zeus che se riceve direzione "here" ritorna false
+    // Davide -> non si può fare anche qui un ckeck senza direzione?
+    /**
+     * This method checks if the slot is occupied. It's useful for building.
+     *
+     * @param slot the slot to be checked.
+     * @param direction the direction where to build with respect to the previous slot.
+     * @return true if the slot is occupied, false otherwise.
+     */
+    public boolean checkIfSlotIsOccupied(Slot slot, Direction direction) {
+        return slot.isWorkerOnSlot();
+    }
+
+    //TODO overridata da Prometheus che ha più casistiche
+    /**
+     * It returns true if the order of actions is uncorrected, false otherwise.
+     *
+     * @param action the action to compute.
+     * @return true if the order of actions is uncorrected, false otherwise.
+     */
+    public boolean checkOrderOfActions(Action action) {
+        if (action == Action.MOVE) {
+            if (player.getTurn().getNumberOfBuildings() > 0)
+                return true;
+        }
+        else if (action == Action.BUILD || action == Action.BUILDDOME) {
+            if (player.getTurn().getNumberOfMovements() == 0)
+                return true;
+        }
+        return false;
+    }
     
     /**
      * This method control if the player can end his turn. If the player is winning, it returns true.

@@ -128,7 +128,6 @@ public class AtlasTest {
         otherWorker.setSlot(board.getSlot(1,1));
         turn.executeMove(Direction.DOWN);
         turn.wantsToBuildDome();
-        player.canBuildDome();
         turn.executeBuild(Direction.RIGHT);
     }
 
