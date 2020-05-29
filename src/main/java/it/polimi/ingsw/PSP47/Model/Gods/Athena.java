@@ -86,6 +86,7 @@ public class Athena extends God{
         return moveUp;
     }
 
+    //TODO metodo inutile, ci si può accedere direttamente
     private void setMoveUp(boolean moveUp) {
         this.moveUp = moveUp;
     }

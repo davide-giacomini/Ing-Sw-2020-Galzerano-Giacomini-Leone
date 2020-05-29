@@ -155,6 +155,7 @@ public class TurnController {
                 controller.endGame(player.getUsername());
                 return;
             }
+            //TODO davide dice a moni -> questo settaggio di Athena secondo me va lasciato nel model com'era prima
             if (player.getGod().getName().equals("Athena")) {
                 boolean moveUp = ((Athena)player.getGod()).isMoveUp();
                 for (int i = 0; i<game.getNumberOfPlayers(); i++) {

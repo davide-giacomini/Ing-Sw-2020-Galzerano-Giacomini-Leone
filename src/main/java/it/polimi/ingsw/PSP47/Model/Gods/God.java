@@ -202,11 +202,25 @@ public abstract class God {
     }
 
     //TODO overridata da Zeus che se riceve direzione "here" ritorna false
+    // Davide -> non si può fare anche qui un ckeck senza direzione?
+    /**
+     * This method checks if the slot is occupied. It's useful for building.
+     *
+     * @param slot the slot to be checked.
+     * @param direction the direction where to build with respect to the previous slot.
+     * @return true if the slot is occupied, false otherwise.
+     */
     public boolean checkIfSlotIsOccupied(Slot slot, Direction direction) {
         return slot.isWorkerOnSlot();
     }
 
     //TODO overridata da Prometheus che ha più casistiche
+    /**
+     * It returns true if the order of actions is uncorrected, false otherwise.
+     *
+     * @param action the action to compute.
+     * @return true if the order of actions is uncorrected, false otherwise.
+     */
     public boolean checkOrderOfActions(Action action) {
         if (action == Action.MOVE) {
             if (player.getTurn().getNumberOfBuildings() > 0)
@@ -218,7 +232,7 @@ public abstract class God {
         }
         return false;
     }
-    
+
     /**
      * This method control if the player can end his turn. If the player is winning, it returns true.
      * @return true if the player can end his turn.
