@@ -96,7 +96,7 @@ public class HeraTest {
         turnController.executeAction(Action.MOVE, Direction.DOWN);
 
         assertTrue(playerMonica.isWinning());
-        assertTrue(turnController.heraWinCondition(playerMonica.getWorker(turnController.getWorkerGender())));
+        assertFalse(turnController.getGame().checkWinningCondition(playerMonica.getWorker(turnController.getWorkerGender()), playerMonica));
         assertEquals(2, controller.getGame().getNumberOfPlayers());
         assertTrue(controller.getGame().isActive());
     }
@@ -134,7 +134,7 @@ public class HeraTest {
         turnController.executeAction(Action.MOVE, Direction.DOWN);
 
         assertTrue(playerArianna.isWinning());
-        assertFalse(turnController.heraWinCondition(playerArianna.getWorker(turnController.getWorkerGender())));
+        assertFalse(turnController.getGame().checkWinningCondition(playerArianna.getWorker(turnController.getWorkerGender()), playerMonica));
         assertFalse(controller.getGame().isActive());
 
     }
@@ -172,7 +172,7 @@ public class HeraTest {
         turnController.executeAction(Action.MOVE, Direction.RIGHT);
 
         assertTrue(playerMonica.isWinning());
-        assertFalse(turnController.heraWinCondition(playerMonica.getWorker(turnController.getWorkerGender())));
+        assertTrue(turnController.getGame().checkWinningCondition(playerMonica.getWorker(turnController.getWorkerGender()), playerMonica));
         assertFalse(controller.getGame().isActive());
 
     }

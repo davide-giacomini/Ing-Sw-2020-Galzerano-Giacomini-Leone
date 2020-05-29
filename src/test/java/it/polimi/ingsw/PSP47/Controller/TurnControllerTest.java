@@ -308,7 +308,7 @@ public class TurnControllerTest {
     @Test
     public void chronusPlayer_test() {
         Player chronusPlayer;
-        chronusPlayer = turnController.chronusPlayer();
+        chronusPlayer = turnController.getGame().checkWinningCondition();
         assertNull(chronusPlayer);
     }
 }

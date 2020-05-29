@@ -1,9 +1,9 @@
 package it.polimi.ingsw.PSP47.Model;
 
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
+import it.polimi.ingsw.PSP47.Model.Gods.Athena;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * This class contains all the elements of a game.
@@ -14,7 +14,7 @@ public class Game {
     private int numberOfPlayers;
     private Player randomPlayer;
     private ArrayList<GodName> gods;
-    private ArrayList<Player> players ;
+    private ArrayList<Player> players;
 
     public Game(int numberOfPlayers) {
         this.isActive = true;
@@ -140,5 +140,69 @@ public class Game {
         players.remove(player);
     }
 
+    /**
+     * This method checks if the player who has just moved is Athena.
+     * If he is and if he has just moved up, he makes move up impossible to all the other players.
+     * If he hasn't moved up, the other players can.
+     * Otherwise, it does nothing.
+     * @param player the player who has just moved.
+     */
+    public void checkIfPlayersCanMoveUp(Player player) {
+        if (player.getGod().getName().equals("Athena")) {
+            boolean moveUp = ((Athena)player.getGod()).isMoveUp();
+            for (int i = 0; i<numberOfPlayers; i++) {
+                if (getPlayer(i) != null && getPlayer(i) != player) {
+                    getPlayer(i).setCannotMoveUp(moveUp);
+                }
+            }
+        }
+    }
+
+    /**
+     * This method is called after every move.
+     * It checks if a player has just won the game.
+     * There are two cases: if there is a player with the Hera card there is another control in addition to
+     * check if the player has just move up in a third level.
+     * In fact, to win he must also not be on a perimeter slot of be Hera.
+     * @param currentWorker the worker that do the winning move.
+     * @param currentPlayer the player who has just moved.
+     * @return true if the player has won, false otherwise.
+     */
+    public boolean checkWinningCondition(Worker currentWorker, Player currentPlayer) {
+        Player heraPlayer = checkIfTheGodIsPresent(GodName.HERA);
+        if (heraPlayer != null)
+            return (currentPlayer.isWinning() && !(currentWorker.getSlot().isPerimeterSlot() && !(currentPlayer == heraPlayer)));
+        else
+            return currentPlayer.isWinning();
+    }
+
+    /**
+     * This method is called after every build.
+     * It checks if a player has just won the game.
+     * It happens if there is a player with the Chronus card and if there are five complete towers on the board.
+     * @return the player who has won, null if no one won.
+     */
+    public Player checkWinningCondition() {
+        Player chronusPlayer = checkIfTheGodIsPresent(GodName.CHRONUS);
+        if (chronusPlayer != null && board.getCountDomes() == 5)
+            return chronusPlayer;
+        else
+            return null;
+    }
+
+    /**
+     * This method checks if a god is present in the game and returns its player.
+     * Otherwise, it returns null.
+     * @param godName the god that must be checked
+     * @return the player who has the god, null if there isn't.
+     */
+    private Player checkIfTheGodIsPresent(GodName godName) {
+        for(Player playerToCheck : players){
+            if (playerToCheck.getGod().getName().equals(godName.getGod())) {
+                return playerToCheck;
+            }
+        }
+        return null;
+    }
 }
 

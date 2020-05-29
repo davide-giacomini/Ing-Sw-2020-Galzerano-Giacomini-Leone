@@ -178,11 +178,5 @@ public class ChronusTest {
         assertFalse(controller.getGame().isActive());
     }
 
-    @Test
-    public void chronusPlayer_test() {
-        Player chronusPlayer;
-        chronusPlayer = turnController.chronusPlayer();
-        assertEquals(playerMonica, chronusPlayer);
-    }
 
 }

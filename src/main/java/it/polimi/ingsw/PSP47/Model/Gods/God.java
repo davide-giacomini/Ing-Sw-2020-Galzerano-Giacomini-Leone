@@ -232,7 +232,7 @@ public abstract class God {
         }
         return false;
     }
-    
+
     /**
      * This method control if the player can end his turn. If the player is winning, it returns true.
      * @return true if the player can end his turn.

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Enumerations which represents all the available gods.
  */
 public enum GodName implements Serializable {
-    APOLLO (""),
+    APOLLO ("Apollo"),
     ARTEMIS ("Arthemis"),
     ATHENA ("Athena"),
     ATLAS ("Atlas"),
