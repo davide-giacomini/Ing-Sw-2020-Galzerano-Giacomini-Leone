@@ -84,6 +84,8 @@ public interface View  {
      */
     void othersTurn(String usernameOnTurn);
 
+    void whileOthersTurn(String changes);
+
     /**
      * This method show the final byebye of the game
      */

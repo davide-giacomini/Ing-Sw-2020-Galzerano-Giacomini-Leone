@@ -139,7 +139,7 @@ public class GUI extends Application implements View {
      * @param usernames the list of players in the game.
      */
     @Override
-    public void challengerWillChooseThreeGods(ArrayList<String> usernames) {
+    public void challengerWillChooseThreeGods(ArrayList<String> usernames) { //TODO Ari voleva cambiarlo
         Platform.runLater(() -> {
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
@@ -317,7 +317,6 @@ public class GUI extends Application implements View {
     public void showNewBoard(Slot slot) {
         Platform.runLater(()-> {
             gameView.updateMoment(CurrentScene.WAIT); //new current scene
-            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.changeSlot(slot);
         });
     }
@@ -349,8 +348,6 @@ public class GUI extends Application implements View {
     public void askWhichWorkerToUse() {
         Platform.runLater(() -> {
             gameView.updateMoment(CurrentScene.ASK_WHICH_WORKER); //new current scene
-
-            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.resetRowsAndColumns();
             duringGameController.changeText();
         });
@@ -363,8 +360,6 @@ public class GUI extends Application implements View {
     public void askWhereToPositionWorkers() {
         Platform.runLater(() -> {
             gameView.updateMoment(CurrentScene.ASK_INITIAL_POSITION);//new current scene
-
-            duringGameController.setGameView(gameView);//maybe can be deleted, not sure because it gave problems
             duringGameController.resetRowsAndColumns();
             duringGameController.setUsernames(gameView.getUsernames());
             duringGameController.setColors(gameView.getColors());
@@ -386,7 +381,6 @@ public class GUI extends Application implements View {
                 StartController startController = setLayout(scene, "/FXML/waitingPane.fxml"); //now instead of alert I show waiting Pane made by Moni :)
             }else {
                 gameView.updateMoment(CurrentScene.WAIT);//new current scene
-                duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
                 duringGameController.changeText();
             }
         });
@@ -399,8 +393,6 @@ public class GUI extends Application implements View {
     public void askAction() {
         Platform.runLater(() -> {
             gameView.updateMoment(CurrentScene.CHOOSE_ACTION); //new current scene
-
-            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
             duringGameController.changeText();
         });
     }
@@ -411,8 +403,6 @@ public class GUI extends Application implements View {
     @Override
     public void showPublicInformation() {
         Platform.runLater(() -> {
-            duringGameController.setGameView(gameView); //maybe can be deleted, not sure because it gave problems
-
             duringGameController.setUsernames(gameView.getUsernames());
             duringGameController.setColors(gameView.getColors());
             duringGameController.setGods(gameView.getGods());
@@ -420,4 +410,8 @@ public class GUI extends Application implements View {
         });
     }
 
+    @Override
+    public void whileOthersTurn(String changes) {
+
+    }
 }

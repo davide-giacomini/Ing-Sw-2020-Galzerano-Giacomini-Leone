@@ -73,6 +73,7 @@ public class TurnController {
             views.get(indexOfCurrentPlayer).sendError(textError);
         }
         turn.setWorkerGender(workerGender);
+        controller.sendAnAdviceDuringTurn(player.getUsername() + " has just chosen which worker to use");
         views.get(indexOfCurrentPlayer).sendWhichAction();
     }
 
@@ -164,6 +165,7 @@ public class TurnController {
                     }
                 }
             }
+            controller.sendAnAdviceDuringTurn(player.getUsername() + " has just executed the action MOVE! ");
             views.get(indexOfCurrentPlayer).sendWhichAction();
         } catch (InvalidDirectionException | InvalidMoveException | IndexOutOfBoundsException e) {
             String textError = e.getMessage();
@@ -201,6 +203,7 @@ public class TurnController {
                 controller.endGame(Objects.requireNonNull(chronusPlayer()).getUsername());
                 return;
             }
+            controller.sendAnAdviceDuringTurn(player.getUsername() + " has just executed the action BUILD! ");
             views.get(indexOfCurrentPlayer).sendWhichAction();
         } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
             String textError = e.getMessage();
@@ -236,6 +239,7 @@ public class TurnController {
                 return;
             }
             turn.executeBuild(direction);
+            controller.sendAnAdviceDuringTurn(player.getUsername() + " has just executed the action BUILD DOME! ");
             views.get(indexOfCurrentPlayer).sendWhichAction();
         } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
             String textError = e.getMessage();
@@ -282,4 +286,6 @@ public class TurnController {
     Turn getTurn() {
         return turn;
     }
+
+
 }

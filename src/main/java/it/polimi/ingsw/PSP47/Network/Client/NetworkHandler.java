@@ -233,6 +233,9 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.getGameView().getBoardView().setSlot(slot);
                     view.showNewBoard(slot);
                     break;
+                case WHILE_NOT_YOUR_TURN:
+                    String changes = ((ImportantMessage) message).getText();
+                     view.whileOthersTurn(changes);
 
             }
         }

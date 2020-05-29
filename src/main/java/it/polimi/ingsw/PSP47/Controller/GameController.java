@@ -215,7 +215,7 @@ public class GameController implements VirtualViewListener {
             game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
             Worker chosenWorkerFemale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
             game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
-
+            sendAnAdviceDuringTurn("The workers have been initially set");
             incrementIndex();
             if(indexOfCurrentPlayer == 0) {
                 turn = new TurnController(views, game, indexOfCurrentPlayer, this);
@@ -424,6 +424,14 @@ public class GameController implements VirtualViewListener {
 
     public void setIndexOfCurrentPlayer(int indexOfCurrentPlayer) {
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
+    }
+
+
+    //added here because it is used by both controllers //TODO maybe move it into the turnController
+    void sendAnAdviceDuringTurn(String changes){
+        for (VirtualView view : views) {
+            view.sendImportant( changes , MessageType.WHILE_NOT_YOUR_TURN);
+        }
     }
 
 }

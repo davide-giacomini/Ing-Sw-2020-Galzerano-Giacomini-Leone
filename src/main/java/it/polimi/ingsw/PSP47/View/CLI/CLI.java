@@ -89,7 +89,7 @@ public class CLI extends ViewObservable implements View  {
 
         do {
 
-            out.println("\nInsert your Username and press " + AnsiCode.ANSI_ENTER_KEY + " : ");
+            out.println("Insert your Username and press " + AnsiCode.ANSI_ENTER_KEY + " : ");
 
 
             if (in.hasNextLine()){
@@ -474,6 +474,20 @@ public class CLI extends ViewObservable implements View  {
     }
 
     @Override
+    public void whileOthersTurn(String changes) {
+        if (!gameView.isTurn()) {
+            clearConsole();
+            printSupport.printDotSequence(out);
+            out.println(changes + "\n\n");
+            printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);
+        }else{
+            clearConsole();
+            printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);
+        }
+
+    }
+
+    @Override
     public GameView getGameView() {
         return gameView;
     }
@@ -519,7 +533,8 @@ public class CLI extends ViewObservable implements View  {
      */
     @Override
     public void askAction(){
-        out.println("Here are the possible actions:  move direction  /  build direction  /  buildDome direction / end / quit ");
+
+        out.println("\n\nHere are the possible actions:  move direction  /  build direction  /  buildDome direction / end / quit ");
         out.println("The available directions are : "+ Arrays.toString(Direction.values())+ "\n");
 
 
@@ -559,7 +574,6 @@ public class CLI extends ViewObservable implements View  {
         visitableActionAndDirection.setDirection(directionInserted);
         notifyViewListener(visitableActionAndDirection);
 
-        clearConsole();
     }
 
     /**
@@ -614,8 +628,6 @@ public class CLI extends ViewObservable implements View  {
     @Override
     public void showNewBoard(Slot slot) {
         printSupport.buildSlot(slot);
-        printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);
-        checkClearning();
 
     }
 
