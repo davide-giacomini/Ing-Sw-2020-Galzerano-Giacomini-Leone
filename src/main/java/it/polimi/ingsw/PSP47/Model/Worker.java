@@ -16,7 +16,7 @@ public class Worker {
      * Variable which represents a female. It's useful to call the female worker through the player's array.
      */
     public final static int FEMALE = 1;
-    private Player player;
+    private final Player player;
     private final Color color;
     private final Gender gender;
     private Slot slot;
@@ -79,6 +79,8 @@ public class Worker {
     public boolean move (Direction direction)
             throws InvalidMoveException, IndexOutOfBoundsException, SlotOccupiedException {
 
+        //TODO la direzione viene direttamente controllata nella VIEW, e nel caso sia sbagliata viene passata WRONG_DIRECTION.
+        // si può quini togliere questo check? Togliendolo, togliamo l'eccezione.
         checkDirection(direction);
 
         Slot destinationSlot;
@@ -86,8 +88,10 @@ public class Worker {
             destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, slot);
         }
         catch (InvalidDirectionException e){
+            //TODO questo non so se si può togliere
             throw new InvalidMoveException("Invalid direction of the getNearBySlot.");
         }
+        //TODO questi due if vengono già controllati nel controller: si possono togliere?
         if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
         if (destinationSlot.getLevel().ordinal() - slot.getLevel().ordinal()>1)
             throw new InvalidMoveException("Level unreachable");
@@ -104,7 +108,9 @@ public class Worker {
      */
     public void build (Direction direction)
             throws IndexOutOfBoundsException, SlotOccupiedException, InvalidBuildException {
-
+    
+        //TODO la direzione viene direttamente controllata nella VIEW, e nel caso sia sbagliata viene passata WRONG_DIRECTION.
+        // si può quini togliere questo check? Togliendolo, togliamo l'eccezione.
         checkDirection(direction);
         
         Slot destinationSlot;
@@ -112,20 +118,28 @@ public class Worker {
             destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, slot);
         }
         catch (InvalidDirectionException e){
+            //TODO questo non so se si può togliere
             throw new InvalidBuildException("Invalid direction for the destination slot");
         }
+        //TODO questo if viene già controllato nel controller: si può togliere?
         if(destinationSlot.isOccupied()) throw new SlotOccupiedException();
+        
         Level levelToUpdate;
         levelToUpdate = destinationSlot.getLevel();
         switch (levelToUpdate) {
-            case LEVEL3: destinationSlot.setLevel(Level.DOME);
-                 player.getTurn().getBoard().incrementCountDomes();
-            break;
-            case LEVEL2: destinationSlot.setLevel(Level.LEVEL3);
-            break;
-            case LEVEL1: destinationSlot.setLevel(Level.LEVEL2);
-            break;
-            case GROUND: destinationSlot.setLevel(Level.LEVEL1);
+            case LEVEL3:
+                destinationSlot.setLevel(Level.DOME);
+                player.getTurn().getBoard().incrementCountDomes();
+                break;
+            case LEVEL2:
+                destinationSlot.setLevel(Level.LEVEL3);
+                break;
+            case LEVEL1:
+                destinationSlot.setLevel(Level.LEVEL2);
+                break;
+            case GROUND:
+                destinationSlot.setLevel(Level.LEVEL1);
+                break;
         }
     }
 
@@ -133,7 +147,10 @@ public class Worker {
         checkDirection(direction);
 
         Slot destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, slot);
+        
+        //TODO da togliere questa eccezione
         if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
+        
         if (destinationSlot.getLevel() == Level.LEVEL3)
             destinationSlot.setLevel(Level.DOME);
         else

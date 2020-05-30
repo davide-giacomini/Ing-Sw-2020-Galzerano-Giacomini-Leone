@@ -10,7 +10,7 @@ import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
 public class ConnectionAccepted extends VisitableMessage{
     private static final long serialVersionUID = -7614194884802773262L;
 
-    private VisitableInformation usernameAndColor;
+    private final VisitableInformation usernameAndColor;
 
     public ConnectionAccepted(VisitableInformation usernameAndColor) {
         this.usernameAndColor=usernameAndColor;

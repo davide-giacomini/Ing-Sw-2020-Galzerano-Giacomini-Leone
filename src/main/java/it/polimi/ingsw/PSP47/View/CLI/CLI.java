@@ -205,7 +205,7 @@ public class CLI extends ViewObservable implements View  {
             } catch (NumberFormatException e) {
                 printSupport.printError(out);
                 out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
-                newRowAndColumn[0] = 9000;
+                newRowAndColumn[0] = 9000;  //TODO ahahahah ari il 9000 mi è piaciuto
             }
 
         }while (newRowAndColumn[0] == 9000);
@@ -582,13 +582,13 @@ public class CLI extends ViewObservable implements View  {
     @Override
     public void showPublicInformation(){
         ArrayList<String> usernames ;
-         ArrayList<Color> colors ;
-         ArrayList <GodName> gods ;
+        ArrayList<Color> colors ;
+        ArrayList <GodName> gods ;
 
         usernames = gameView.getUsernames();
         colors = gameView.getColors();
         gods = gameView.getGods();
-       printSupport.printUsersAndColorsAndGods(usernames, colors, gods, gameView.getNumberOfPlayers(), out);
+        printSupport.printUsersAndColorsAndGods(usernames, colors, gods, gameView.getNumberOfPlayers(), out);
 
         clearConsole();
     }

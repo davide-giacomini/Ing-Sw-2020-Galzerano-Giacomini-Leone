@@ -11,12 +11,12 @@ import java.util.ArrayList;
 
 public class TurnController {
 
-    private GameController controller;
-    private ArrayList<VirtualView> views;
-    private Game game;
-    private int indexOfCurrentPlayer;
-    private Turn turn;
-    private Player player;
+    private final GameController controller;
+    private final ArrayList<VirtualView> views;
+    private final Game game;
+    private final int indexOfCurrentPlayer;
+    private final Turn turn;
+    private final Player player;
     private Gender workerGender;
 
     public TurnController(ArrayList<VirtualView> views, Game game, int indexOfCurrentPlayer, GameController controller) {
@@ -37,13 +37,14 @@ public class TurnController {
             return;
         }
         views.get(indexOfCurrentPlayer).sendWhichWorker();
-        controller.sendAnAdvice();
+        controller.sendWhoseIsTheTurn();
     }
 
     /**
-     * This method set the workerGender that the player chose to use in this turn.
+     * This method sets the workerGender chosen by the player for this turn.
      * If he selected a slot where there isn't one of his workers, the controller asks again.
      * If he selected a paralyzed worker, the controller forced him to use the other one sending him an advice.
+     *
      * @param position the coordinates of the slot where is located the chosen worker.
      */
     public void setWorkerGender(int[] position) {
@@ -52,7 +53,7 @@ public class TurnController {
         if (row > 4 || row < 0 || column > 4 || column < 0) {
             String errorText = "You have select a value that is out of range.";
             views.get(indexOfCurrentPlayer).sendError(errorText);
-            views.get(indexOfCurrentPlayer).sendSetWorkers();
+            views.get(indexOfCurrentPlayer).sendWhichAction();
             return;
         }
         if (game.getBoard().getSlot(row,column).getWorker() == null || game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
@@ -106,7 +107,7 @@ public class TurnController {
             case BUILDDOME:
                 buildDome(direction);
                 break;
-            case QUIT:
+            case QUIT:  //TODO serve ancora?
                 controller.removeLosingPlayer(player.getUsername());
                 break;
             case END:
@@ -116,7 +117,7 @@ public class TurnController {
                     views.get(indexOfCurrentPlayer).sendWhichAction();
                     return;
                 }
-                controller.turn();
+                controller.changeTurn();
         }
     }
 
@@ -138,12 +139,12 @@ public class TurnController {
             }
             else if (destinationSlot.getLevel() == (Level.DOME) || destinationSlot.getLevel() == (Level.ATLAS_DOME))
                 textError = "This slot contains a dome, you cannot move here";
-            else if (player.getGod().checkIfSlotIsOccupied(destinationSlot))
+            else if (player.getGod().checkIfAWorkerIsOnSlot(destinationSlot))
                 textError = "This slot contains another worker, you cannot move here";
-            else if (destinationSlot.getLevel().ordinal() > actualSlot.getLevel().ordinal() && player.cannotMoveUp())
-                textError = "During this turn your player is unable to move up. Try to move up on the next turn";
             else if (destinationSlot.getLevel().ordinal() > (actualSlot.getLevel().ordinal() + 1))
                 textError = "This slot is unreachable, its level is too high";
+            else if (destinationSlot.getLevel().ordinal() > actualSlot.getLevel().ordinal() && player.cannotMoveUp())
+                textError = "During this turn your player is unable to move up. Try to move up on the next turn";
             if (textError != null) {
                 views.get(indexOfCurrentPlayer).sendError(textError);
                 views.get(indexOfCurrentPlayer).sendWhichAction();
@@ -178,11 +179,11 @@ public class TurnController {
                 textError = "You've already reached the max number of buildings in this turn";
             else if (destinationSlot.getLevel() == Level.DOME || destinationSlot.getLevel() == Level.ATLAS_DOME)
                 textError = "This slot already contains a dome, you cannot build ih this position";
-            else if (player.getGod().checkIfSlotIsOccupied(destinationSlot, direction)) {
+            else if (player.getGod().checkIfAWorkerIsOnSlot(destinationSlot, direction)) {
                 textError = "This slot is occupied by a worker, you cannot build here";
             }
             else if (player.getGod().checkOrderOfActions(Action.BUILD))
-                textError = "You have to move your worker before build";
+                textError = "You have to move your worker before building";
             if (textError != null) {
                 views.get(indexOfCurrentPlayer).sendError(textError);
                 views.get(indexOfCurrentPlayer).sendWhichAction();
@@ -219,7 +220,7 @@ public class TurnController {
                 textError = "You've yet reached the max number of buildings in this turn";
             else if (destinationSlot.getLevel() == Level.DOME || destinationSlot.getLevel() == Level.ATLAS_DOME)
                 textError = "This slot already contains a dome, you cannot build ih this position";
-            else if (player.getGod().checkIfSlotIsOccupied(destinationSlot))
+            else if (player.getGod().checkIfAWorkerIsOnSlot(destinationSlot))
                 textError = "This slot is occupied by a worker, you cannot build here";
             else if (player.getGod().checkOrderOfActions(Action.BUILDDOME))
                 textError = "You have to move your worker before build";
@@ -246,7 +247,7 @@ public class TurnController {
         return turn;
     }
 
-    public Game getGame() {
+    Game getGame() {
         return game;
     }
 

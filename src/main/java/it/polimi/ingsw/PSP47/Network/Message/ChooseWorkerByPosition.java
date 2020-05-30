@@ -16,6 +16,10 @@ public class ChooseWorkerByPosition extends VisitableMessage {
         this.rowsAndColumns=rowsAndColumns;
         this.messageType=MessageType.CHOOSE_WORKER;
     }
+    
+    public ChooseWorkerByPosition(){
+        this.messageType=MessageType.CHOOSE_WORKER;
+    }
 
     @Override
     public Visitable getContent() {

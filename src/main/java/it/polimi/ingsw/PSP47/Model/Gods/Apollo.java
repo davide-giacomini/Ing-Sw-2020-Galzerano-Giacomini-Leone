@@ -60,6 +60,25 @@ public class Apollo extends God {
             else
                 throw new InvalidMoveException("Slot occupied");
         }
+    
+        //TODO nuovo codice
+        /*int previousLevel = worker.getSlot().getLevel().ordinal();
+        Worker opponentWorker = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot()).getWorker();
+        Slot previousSlot = worker.getSlot();
+    
+        // if there is actually an opponent worker on the destination slot
+        if (opponentWorker!=null && opponentWorker.getColor()!=worker.getColor()) {
+            // manually move player's worker in the destination slot
+            Slot opponentWorkerSlot = opponentWorker.getSlot();
+            opponentWorkerSlot.setWorker(null);
+            worker.setSlot(opponentWorkerSlot);
+            previousSlot.setWorker(null);
+            opponentWorker.setSlot(previousSlot);
+            int nextLevel = worker.getSlot().getLevel().ordinal();
+            return nextLevel-previousLevel>0 && worker.getSlot().getLevel()==Level.LEVEL3;
+        }
+        else
+            return worker.move(direction);*/
     }
 
     /**
@@ -127,7 +146,7 @@ public class Apollo extends God {
      * @return always false.
      */
     @Override
-    public boolean checkIfSlotIsOccupied(Slot slot) {
+    public boolean checkIfAWorkerIsOnSlot(Slot slot) {
         return false;
     }
 

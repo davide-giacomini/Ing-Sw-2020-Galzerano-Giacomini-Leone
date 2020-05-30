@@ -46,7 +46,7 @@ public class DuringGameController extends ViewObservable{
 
     @FXML
     private Text commandText;
-
+//TODO togliere tutti gli attributi inutili
     @FXML
     private ImageView endButton;
 
@@ -134,14 +134,21 @@ public class DuringGameController extends ViewObservable{
      */
     void changeText() {
         if (gameView.getCurrentScene() == CurrentScene.ASK_INITIAL_POSITION){
-            commandText.setText("Choose where to position worker :");
+            commandText.setText("Choose where to position your workers by clicking on the slot :");
         }else if(gameView.getCurrentScene() == CurrentScene.ASK_WHICH_WORKER){
-            commandText.setText("Choose the worker you want to use :");
+            commandText.setText("Choose the worker you want to use by clicking on it :");
         }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION){
-            commandText.setText("Choose the action you want between the buttons :");
+            commandText.setText("Choose an action between the buttons :");
         }else if (gameView.getCurrentScene() == CurrentScene.WAIT){
             commandText.setText("WAIT");
         }
+        //TODO il text farlo un po' più carino
+    }
+    
+    //TODO ho aggiunto questo metodo perché lo username non veniva sfruttato
+    void changeText(String username){
+        if (gameView.getCurrentScene() == CurrentScene.WAIT)
+            commandText.setText("WAIT! It's " + username + "'s turn.");
     }
 
     /**
@@ -150,7 +157,7 @@ public class DuringGameController extends ViewObservable{
      */
     void resetRowsAndColumns(){
         for (int i = 0; i < 4; i++) {
-            newRowAndColumn[i] = -1; //for the row+column+row+column of the two inital positions of the workers
+            newRowAndColumn[i] = -1; //for the row+column+row+column of the two initial positions of the workers
         }
 
         workerRowAndColumn[0]= -1; //row and column of the position of the worker the user wants to use
@@ -165,13 +172,14 @@ public class DuringGameController extends ViewObservable{
     @FXML
     void OnMoveClick(MouseEvent event) {
         if (gameView.getCurrentScene() == CurrentScene.WAIT){
+            //TODO non mandare un alert
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
             a.show();
         }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION){
             action = Action.MOVE;
             gameView.updateMoment(CurrentScene.ACTION_CHOSEN);
-            commandText.setText("Now click on the slot where you want to move:");
+            commandText.setText("Now click on the slot where you want to move.");
         }//TODO add other cases with text
     }
 
@@ -263,9 +271,10 @@ public class DuringGameController extends ViewObservable{
             visitableActionAndDirection.setAction(action);
             visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(workerRowAndColumn[0],workerRowAndColumn[1], rowIndex,colIndex));
             notifyViewListener(visitableActionAndDirection);
-            commandText.setText("WAIT"); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
             gameView.updateMoment(CurrentScene.WAIT);
+            changeText(); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
         }else if (gameView.getCurrentScene() == CurrentScene.WAIT ){ //if I am in this moment I cannot click
+            //TODO davide -> io questo lo cambierei in un non alert ma poi vediamo
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
             a.show();
@@ -291,8 +300,10 @@ public class DuringGameController extends ViewObservable{
             VisitableInitialPositions visitableInitialPositions = new VisitableInitialPositions(); //create message at the second click
             visitableInitialPositions.setRowsAndColumns(newRowAndColumn);
             notifyViewListener(visitableInitialPositions);
-            commandText.setText("WAIT");
+            //TODO qua invece di far così sarebbe comodo mandare il turno del tizio,
+            // dato che effettivamente per la cli viene mandato
             gameView.updateMoment(CurrentScene.WAIT);
+            changeText();
         }
     }
 
@@ -309,8 +320,10 @@ public class DuringGameController extends ViewObservable{
         VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
         visitableRowsAndColumns.setRowsAndColumns(workerRowAndColumn);
         notifyViewListener(visitableRowsAndColumns);
-        commandText.setText("WAIT");
+        //TODO qua invece di far così sarebbe comodo mandare il turno del tizio,
+        // dato che effettivamente per la cli viene mandato
         gameView.updateMoment(CurrentScene.WAIT);
+        changeText();
 
     }
 
@@ -381,51 +394,34 @@ public class DuringGameController extends ViewObservable{
      * @return image of the worker
      */
     private String getImageWorkerFromColor(Color workerColor) {
-        if(workerColor== Color.BLUE)
-            return "/Images/female_blue.png";
-        else if (workerColor== Color.RED)
-           return "/Images/female_red.png";
-        else if (workerColor== Color.YELLOW)
-           return "/Images/female_yellow.png";
-        else if (workerColor== Color.GREEN)
-           return "/Images/female_green.png";
-        else if (workerColor== Color.PURPLE)
-           return "/Images/female_purple.png";
-        else if (workerColor== Color.CYAN)
-           return "/Images/female_cyan.png";
-        else //(workerColor== Color.WHITE)
-           return "/Images/female_white.png";
+        switch (workerColor){
+            case BLUE: return "/Images/female_blue.png";
+            case RED: return "/Images/female_red.png";
+            case YELLOW: return "/Images/female_yellow.png";
+            case GREEN: return "/Images/female_green.png";
+            case PURPLE: return "/Images/female_purple.png";
+            case CYAN: return "/Images/female_cyan.png";
+            default: return "/Images/female_white.png"; //WHITE
+        }
     }
 
     private String getImageGodFromGodName(GodName godName) {
-        if (godName == GodName.APOLLO)
-            return "/Images/podiumApollo.png";
-        else if (godName == GodName.ARTEMIS)
-            return "/Images/podiumArtemis.png";
-        else if (godName == GodName.ATHENA)
-            return "/Images/podiumAthena.png";
-        else if (godName == GodName.ATLAS)
-            return "/Images/podiumAtlas.png";
-        else if (godName == GodName.CHRONUS)
-         return "/Images/podiumChronus.png";
-        else if (godName == GodName.DEMETER)
-            return "/Images/podiumDemeter.png";
-        else if (godName == GodName.HEPHAESTUS)
-            return "/Images/podiumHephaestus.png";
-        else if (godName == GodName.HERA)
-            return "/Images/podiumHera.png";
-        else if (godName == GodName.HESTIA)
-            return "/Images/podiumHestia.png";
-        else if (godName == GodName.MINOTAUR)
-            return "/Images/podiumMinotaur.png";
-        else if (godName == GodName.PAN)
-            return "/Images/podiumPan.png";
-        else if (godName == GodName.PROMETHEUS)
-            return "/Images/podiumPrometheus.png";
-        else if (godName == GodName.TRITON)
-            return "/Images/podiumTriton.png";
-        else
-            return "/Images/podiumZeus.png";
+        switch (godName){
+            case APOLLO: return "/Images/podiumApollo.png";
+            case ARTEMIS: return "/Images/podiumArtemis.png";
+            case ATHENA: return "/Images/podiumAthena.png";
+            case ATLAS: return "/Images/podiumAtlas.png";
+            case CHRONUS: return "/Images/podiumChronus.png";
+            case DEMETER: return "/Images/podiumDemeter.png";
+            case HEPHAESTUS: return "/Images/podiumHephaestus.png";
+            case HERA: return "/Images/podiumHera.png";
+            case HESTIA: return "/Images/podiumHestia.png";
+            case MINOTAUR: return "/Images/podiumMinotaur.png";
+            case PAN: return "/Images/podiumPan.png";
+            case PROMETHEUS: return "/Images/podiumPrometheus.png";
+            case TRITON: return "/Images/podiumTriton.png";
+            default: return "/Images/podiumZeus.png";   // ZEUS
+        }
     }
 
     /**

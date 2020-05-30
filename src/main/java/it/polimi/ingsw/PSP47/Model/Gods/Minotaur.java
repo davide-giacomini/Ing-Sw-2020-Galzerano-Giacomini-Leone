@@ -126,7 +126,7 @@ public class Minotaur extends God {
      * @return always false.
      */
     @Override
-    public boolean checkIfSlotIsOccupied(Slot slot) {
+    public boolean checkIfAWorkerIsOnSlot(Slot slot) {
         return false;
     }
 

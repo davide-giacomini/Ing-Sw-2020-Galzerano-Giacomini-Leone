@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class YouAreTheChallenger extends Message{
 
-    private ArrayList<String> usernames;
+    private final ArrayList<String> usernames;
 
     private static final long serialVersionUID = -2204871958919107480L;
 
