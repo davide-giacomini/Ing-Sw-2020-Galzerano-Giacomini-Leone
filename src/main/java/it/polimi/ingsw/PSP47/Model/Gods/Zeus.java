@@ -80,6 +80,14 @@ public class Zeus extends God  {
         return false;
     }
 
+    /**
+     * This method checks if the slot is occupied by a worker.
+     * It always return false if the direction is HERE as Zeus is able to build over himself.
+     * The other directions have to be checked.
+     * @param slot the slot that has to be checked.
+     * @param direction the direction to be checked.
+     * @return true if the slot is occupied by a worker, false otherwise (or if the direction is HERE).
+     */
     @Override
     public boolean checkIfSlotIsOccupied(Slot slot, Direction direction) {
         if (direction == Direction.HERE)

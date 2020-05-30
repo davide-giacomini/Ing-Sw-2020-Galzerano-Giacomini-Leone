@@ -30,14 +30,12 @@ public class Prometheus extends God {
      * @param direction where the worker wants to move to.
      * @param worker the {@link Player}'s {@link Worker} to be moved.
      * @return true if the worker moved voluntarily up on the third level, false otherwise
-     * @throws InvalidDirectionException if the switch-else of {@link Board#getNearbySlot(Direction, Slot)} enters
-     * the default case. It shouldn't happen.
      * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
      * @throws InvalidMoveException if the move is not permitted.
      */
     @Override
     public boolean move(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
+            throws IndexOutOfBoundsException, InvalidMoveException {
         int numberOfBuildings = player.getTurn().getNumberOfBuildings();
 
         if (numberOfBuildings==0) {
@@ -48,20 +46,14 @@ public class Prometheus extends God {
                 throw new InvalidMoveException("Slot occupied");
             }
         }
-        else if (numberOfBuildings==1){
+        else{
             moveThenBuild = false;
-            // if the destination slot is higher than the current slot
-            if (worker.getSlot().getLevel().ordinal() < player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot()).getLevel().ordinal())
-                throw new InvalidMoveException("Since you built before moving, you cannot go up");
-            else {
                 try {
                     return worker.move(direction);
                 } catch (SlotOccupiedException e) {
                     throw new InvalidMoveException("Slot occupied");
                 }
             }
-        }
-        else throw new InvalidMoveException("Order of movements not correct");
     }
     
     /**
@@ -81,6 +73,8 @@ public class Prometheus extends God {
         if (numberOfBuildings==1 && moveThenBuild)  throw new InvalidBuildException("Order of movements not correct");
 
         try {
+            if (numberOfMovements == 0)
+                player.setCannotMoveUp(true);
             worker.build(direction);
         } catch (SlotOccupiedException e) {
             throw new InvalidBuildException("Slot occupied");
@@ -93,6 +87,7 @@ public class Prometheus extends God {
     @Override
     public void resetParameters() {
         moveThenBuild = false;
+        player.setCannotMoveUp(false);
     }
 
 
@@ -116,6 +111,13 @@ public class Prometheus extends God {
         return false;
     }
 
+    /**
+     * This method checks if the order of the actions is correct.
+     * If the player wants to move there is anything to control, as he can move both before and after build.
+     * If the player wants to build, must be checked if he has built before moving or not.
+     * @param action the action to control.
+     * @return false is the order is correct, true otherwise.
+     */
     public boolean checkOrderOfActions(Action action) {
         if (action == Action.MOVE) {
             return false;

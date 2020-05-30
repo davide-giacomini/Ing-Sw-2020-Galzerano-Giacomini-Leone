@@ -138,11 +138,11 @@ public class TurnController {
             }
             else if (destinationSlot.getLevel() == (Level.DOME) || destinationSlot.getLevel() == (Level.ATLAS_DOME))
                 textError = "This slot contains a dome, you cannot move here";
-            else if (player.getGod().checkIfSlotIsOccupied(destinationSlot)) {
+            else if (player.getGod().checkIfSlotIsOccupied(destinationSlot))
                 textError = "This slot contains another worker, you cannot move here";
-            }
-            else if (destinationSlot.getLevel().ordinal() > actualSlot.getLevel().ordinal() && player.cannotMoveUp() ||
-                destinationSlot.getLevel().ordinal() > (actualSlot.getLevel().ordinal() + 1))
+            else if (destinationSlot.getLevel().ordinal() > actualSlot.getLevel().ordinal() && player.cannotMoveUp())
+                textError = "During this turn your player is unable to move up. Try to move up on the next turn";
+            else if (destinationSlot.getLevel().ordinal() > (actualSlot.getLevel().ordinal() + 1))
                 textError = "This slot is unreachable, its level is too high";
             if (textError != null) {
                 views.get(indexOfCurrentPlayer).sendError(textError);

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
-import it.polimi.ingsw.PSP47.Model.Board;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Model.Exceptions.*;
 import it.polimi.ingsw.PSP47.Model.Player;

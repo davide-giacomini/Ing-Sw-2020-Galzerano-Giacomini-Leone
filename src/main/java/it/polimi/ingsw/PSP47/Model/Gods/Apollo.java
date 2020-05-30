@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
-import it.polimi.ingsw.PSP47.Model.Board;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Enumerations.Level;
 import it.polimi.ingsw.PSP47.Model.Exceptions.*;
@@ -120,6 +119,13 @@ public class Apollo extends God {
         return false;
     }
 
+    /**
+     * This method checks if the slot is occupied by a worker.
+     * It always return false as even if there is a worker on the slot, Apollo
+     * can switch with him, so there is no need to check.
+     * @param slot the slot that has to be checked
+     * @return always false.
+     */
     @Override
     public boolean checkIfSlotIsOccupied(Slot slot) {
         return false;

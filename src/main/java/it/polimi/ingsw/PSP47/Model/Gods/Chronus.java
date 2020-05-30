@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP47.Model.Gods;
 
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
-import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.SlotOccupiedException;
 import it.polimi.ingsw.PSP47.Model.Player;
@@ -36,8 +35,6 @@ public class Chronus extends God  {
      */
     @Override
     public boolean move(Direction direction, Worker worker) throws IndexOutOfBoundsException, InvalidMoveException{
-
-        boolean winCondition = false;
 
         if (player.getTurn().getBoard().getCountDomes() == 5)
             return true;

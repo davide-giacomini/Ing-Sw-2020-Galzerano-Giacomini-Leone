@@ -196,13 +196,16 @@ public abstract class God {
      */
     public abstract boolean checkIfCanGoOn (Worker worker);
 
-    //TODO ovverridata da Apollo e Minotaur che ritornano sempre false
+    /**
+     * This method checks if the slot is occupied by a worker.
+     * @param slot the slot that has to be checked
+     * @return true if the slot is occupied by a worker, false otherwise.
+     */
     public boolean checkIfSlotIsOccupied(Slot slot) {
         return slot.isWorkerOnSlot();
     }
 
-    //TODO overridata da Zeus che se riceve direzione "here" ritorna false
-    // Davide -> non si può fare anche qui un ckeck senza direzione?
+    //TODO Davide -> non si può fare anche qui un ckeck senza direzione?
     /**
      * This method checks if the slot is occupied. It's useful for building.
      *
@@ -214,7 +217,6 @@ public abstract class God {
         return slot.isWorkerOnSlot();
     }
 
-    //TODO overridata da Prometheus che ha più casistiche
     /**
      * It returns true if the order of actions is uncorrected, false otherwise.
      *
@@ -234,7 +236,7 @@ public abstract class God {
     }
 
     /**
-     * This method control if the player can end his turn. If the player is winning, it returns true.
+     * This method controls if the player can end his turn. If the player is winning, it returns true.
      * @return true if the player can end his turn.
      */
     public abstract boolean validateEndTurn();
