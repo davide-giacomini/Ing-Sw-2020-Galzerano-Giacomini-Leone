@@ -66,8 +66,8 @@ public class GameTest {
     public void putRandomInLastPosition_WhenHeWasFirst_twoPlayers() {
         Player p2 = new Player("Moni", Color.RED);
         game.addPlayer(p2);
-        game.setRandomPlayer(player);
-        game.putRandomAtLastPosition();
+        game.setChallenger(player);
+        game.putChallengerAtLastPosition();
         assertEquals(player, game.getPlayer(1));
     }
 
@@ -75,8 +75,8 @@ public class GameTest {
     public void putRandomInLastPosition_WhenHeWasAlreadyHere_twoPlayers() {
         Player p2 = new Player("Moni", Color.RED);
         game.addPlayer(p2);
-        game.setRandomPlayer(p2);
-        game.putRandomAtLastPosition();
+        game.setChallenger(p2);
+        game.putChallengerAtLastPosition();
         assertEquals(p2, game.getPlayer(1));
     }
 
@@ -87,8 +87,8 @@ public class GameTest {
         game.addPlayer(p2);
         Player p3 = new Player("David", Color.CYAN);
         game.addPlayer(p3);
-        game.setRandomPlayer(player);
-        game.putRandomAtLastPosition();
+        game.setChallenger(player);
+        game.putChallengerAtLastPosition();
         assertEquals(player, game.getPlayer(2));
     }
 
@@ -100,8 +100,8 @@ public class GameTest {
         Player p3 = new Player("David", Color.CYAN);
         game.addPlayer(p3);
         int size = game.getPlayers().size();
-        game.setRandomPlayer(p3);
-        game.putRandomAtLastPosition();
+        game.setChallenger(p3);
+        game.putChallengerAtLastPosition();
         assertEquals(p3, game.getPlayer(2));
     }
 
@@ -112,9 +112,9 @@ public class GameTest {
         game.addPlayer(p2);
         Player p3 = new Player("David", Color.CYAN);
         game.addPlayer(p3);
-        game.setRandomPlayer(p2);
-        assertEquals(p2, game.getRandomPlayer());
-        game.putRandomAtLastPosition();
+        game.setChallenger(p2);
+        assertEquals(p2, game.getChallenger());
+        game.putChallengerAtLastPosition();
         assertEquals(p2, game.getPlayer(2));
     }
 

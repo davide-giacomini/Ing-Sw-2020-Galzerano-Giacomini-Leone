@@ -12,10 +12,13 @@ public class ChooseAction extends VisitableMessage {
     private static final long serialVersionUID = 7394766692151121241L;
 
     private VisitableActionAndDirection actionAndDirection;
-
-
+    
     public ChooseAction(VisitableActionAndDirection actionAndDirection) {
         this.actionAndDirection = actionAndDirection;
+        this.messageType=MessageType.CHOOSE_ACTION;
+    }
+    
+    public ChooseAction(){
         this.messageType=MessageType.CHOOSE_ACTION;
     }
 
@@ -23,6 +26,4 @@ public class ChooseAction extends VisitableMessage {
     public Visitable getContent() {
         return actionAndDirection;
     }
-
-
 }

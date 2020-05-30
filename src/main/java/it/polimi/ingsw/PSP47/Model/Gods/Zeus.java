@@ -89,7 +89,7 @@ public class Zeus extends God  {
      * @return true if the slot is occupied by a worker, false otherwise (or if the direction is HERE).
      */
     @Override
-    public boolean checkIfSlotIsOccupied(Slot slot, Direction direction) {
+    public boolean checkIfAWorkerIsOnSlot(Slot slot, Direction direction) {
         if (direction == Direction.HERE)
             return false;
         return slot.isWorkerOnSlot();
