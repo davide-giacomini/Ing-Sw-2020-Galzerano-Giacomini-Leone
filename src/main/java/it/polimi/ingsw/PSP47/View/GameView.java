@@ -98,7 +98,6 @@ public class GameView{
         return currentScene;
     }
 
-
     public void updateMoment(CurrentScene currentScene) {
         this.currentScene = currentScene;
     }

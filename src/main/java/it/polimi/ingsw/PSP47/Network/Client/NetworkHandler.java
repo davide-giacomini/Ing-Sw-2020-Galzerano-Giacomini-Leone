@@ -220,11 +220,9 @@ public class NetworkHandler implements Runnable, ViewListener {
                     break;
                 case PUBLIC_INFORMATION:
                     PublicInformation messageInfo = (PublicInformation) message;
-
                     view.getGameView().setUsernames(messageInfo.getUsernames());
                     view.getGameView().setColors(messageInfo.getColors());
                     view.getGameView().setGods(((PublicInformation) message).getGodNames());
-
                     view.showPublicInformation();
                     break;
                 case UPDATE_SLOT:

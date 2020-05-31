@@ -16,7 +16,6 @@ public class AnsiCode {
         /**
          * Variable to Reset the game
          */
-        static final String ANSI_CLEARLINE = "\33[1A\33[2K";
         static final String ANSI_CLEARCONSOLE = "\033[H\033[2J";
         static final String ANSI_RESET = "\u001B[0m";
 
@@ -60,7 +59,6 @@ public class AnsiCode {
                         case "WHITE" :
                                 return ANSI_WHITE ;
                         default :
-                                //throw  new AnsiCodeException ();
                                 return ANSI_WRONG;
 
                 }

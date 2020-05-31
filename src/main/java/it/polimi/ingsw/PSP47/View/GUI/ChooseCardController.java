@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
+import it.polimi.ingsw.PSP47.View.GameView;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableGod;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 public class ChooseCardController extends ViewObservable {
 
     private ArrayList<GodName> availableGods = new ArrayList<>();
+    private GameView gameView;
 
     @FXML
     private AnchorPane mainPane;
@@ -312,6 +314,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.APOLLO)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.APOLLO);
+            gameView.setMyGod(GodName.APOLLO);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -327,6 +330,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.ARTEMIS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.ARTEMIS);
+            gameView.setMyGod(GodName.ARTEMIS);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -342,6 +346,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.ATHENA)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.ATHENA);
+            gameView.setMyGod(GodName.ATHENA);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -357,6 +362,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.ATLAS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.ATLAS);
+            gameView.setMyGod(GodName.ATLAS);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -372,6 +378,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.CHRONUS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.CHRONUS);
+            gameView.setMyGod(GodName.CHRONUS);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -387,6 +394,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.DEMETER)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.DEMETER);
+            gameView.setMyGod(GodName.DEMETER);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -402,6 +410,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.HEPHAESTUS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.HEPHAESTUS);
+            gameView.setMyGod(GodName.HEPHAESTUS);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -417,6 +426,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.HERA)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.HERA);
+            gameView.setMyGod(GodName.HERA);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -432,6 +442,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.HESTIA)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.HESTIA);
+            gameView.setMyGod(GodName.HESTIA);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -447,6 +458,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.MINOTAUR)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.MINOTAUR);
+            gameView.setMyGod(GodName.MINOTAUR);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -462,6 +474,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.PAN)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.PAN);
+            gameView.setMyGod(GodName.PAN);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -477,6 +490,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.PROMETHEUS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.PROMETHEUS);
+            gameView.setMyGod(GodName.PROMETHEUS);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -492,6 +506,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.TRITON)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.TRITON);
+            gameView.setMyGod(GodName.TRITON);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -507,6 +522,7 @@ public class ChooseCardController extends ViewObservable {
         if (availableGods.contains(GodName.ZEUS)) {
             VisitableGod visitableGod = new VisitableGod();
             visitableGod.setGodName(GodName.ZEUS);
+            gameView.setMyGod(GodName.ZEUS);
             notifyViewListener(visitableGod);
             disableAll();
         }
@@ -523,4 +539,7 @@ public class ChooseCardController extends ViewObservable {
         mainPane.setDisable(true);
     }
 
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
+    }
 }

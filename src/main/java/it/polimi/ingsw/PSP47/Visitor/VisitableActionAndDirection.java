@@ -3,8 +3,6 @@ package it.polimi.ingsw.PSP47.Visitor;
 import it.polimi.ingsw.PSP47.Enumerations.Action;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 
-import java.util.Dictionary;
-
 /**
  * This class implements the Visitable interface of the Visitor pattern.
  * It represents a turn action.

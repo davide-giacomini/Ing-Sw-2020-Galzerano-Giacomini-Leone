@@ -170,7 +170,7 @@ public class GUI extends Application implements View {
             ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
             chooseCardController.addViewListener(networkHandler);
             chooseCardController.setAvailableGods(godsChosen);
-
+            chooseCardController.setGameView(gameView);
         });
 
     }
@@ -214,19 +214,18 @@ public class GUI extends Application implements View {
      */
     @Override
     public void theWinnerIs(String usernameWinner) {
+        Stage winnerStage = new Stage();
+        winnerStage.setHeight(400);
+        winnerStage.setWidth(600);
         if (gameView.getMyUsername().equals(usernameWinner))
-            showIAmTheWinner();
+            showIAmTheWinner(winnerStage);
         else
-            showWhoIsTheWinner(usernameWinner);
+            showWhoIsTheWinner(usernameWinner, winnerStage);
     }
     
-    private void showIAmTheWinner(){
+    private void showIAmTheWinner(Stage winnerStage){
         Platform.runLater(()->{
             try {
-                Stage winnerStage = new Stage();
-                winnerStage.setHeight(400);
-                winnerStage.setWidth(600);
-                
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/FXML/winningAdvice.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
@@ -243,13 +242,9 @@ public class GUI extends Application implements View {
         });
     }
     
-    private void showWhoIsTheWinner(String usernameWinner){
+    private void showWhoIsTheWinner(String usernameWinner, Stage winnerStage){
         Platform.runLater(()->{
             try {
-                Stage winnerStage = new Stage();
-                winnerStage.setHeight(400);
-                winnerStage.setWidth(600);
-    
                 winnerStage.setX(Screen.getPrimary().getBounds().getMinX());
                 winnerStage.setY(Screen.getPrimary().getBounds().getMinY());
             
@@ -336,6 +331,7 @@ public class GUI extends Application implements View {
             duringGameController.setGameView(gameView);
             duringGameController.addViewListener(networkHandler);
             duringGameController.changeText();
+            duringGameController.displayBuildDome();
             primaryStage.setResizable(true);
             start = true;
         });
@@ -361,9 +357,6 @@ public class GUI extends Application implements View {
         Platform.runLater(() -> {
             gameView.updateMoment(CurrentScene.ASK_INITIAL_POSITION);//new current scene
             duringGameController.resetRowsAndColumns();
-            duringGameController.setUsernames(gameView.getUsernames());
-            duringGameController.setColors(gameView.getColors());
-            duringGameController.setGods(gameView.getGods());
             duringGameController.changeText();
         });
     }
@@ -403,9 +396,6 @@ public class GUI extends Application implements View {
     @Override
     public void showPublicInformation() {
         Platform.runLater(() -> {
-            duringGameController.setUsernames(gameView.getUsernames());
-            duringGameController.setColors(gameView.getColors());
-            duringGameController.setGods(gameView.getGods());
             duringGameController.setPublicInformation();
         });
     }
