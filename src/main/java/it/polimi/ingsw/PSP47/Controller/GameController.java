@@ -5,10 +5,8 @@ import it.polimi.ingsw.PSP47.Enumerations.Gender;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Enumerations.MessageType;
 import it.polimi.ingsw.PSP47.Model.*;
-import it.polimi.ingsw.PSP47.Model.Gods.*;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualViewListener;
-import it.polimi.ingsw.PSP47.Visitor.ControllerVisitor;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
 
 import java.io.IOException;
@@ -51,7 +49,7 @@ public class GameController implements VirtualViewListener {
             setView(virtualView);
             virtualView.addVirtualViewListener(this);
         }
-        game.setRandomPlayer(chooseRandomPlayer());
+        game.setChallenger(chooseChallenger());
         startController();
     }
 
@@ -63,30 +61,34 @@ public class GameController implements VirtualViewListener {
      * This method choose a random player who will decide which gods can be used in the game and the order of the players in a round.
      * @return the instance of the chosen player
      */
-     private Player chooseRandomPlayer(){
+     private Player chooseChallenger(){
         ArrayList<Player> players = game.getPlayers();
-        Player randomPlayer;
+        Player challenger;
         Random rand = new Random();
 
-        randomPlayer = players.get(rand.nextInt(numberOfPlayers));
-        game.setRandomPlayer(randomPlayer);
-        game.putRandomAtLastPosition();
-        return randomPlayer;
+        challenger = players.get(rand.nextInt(numberOfPlayers));
+        game.setChallenger(challenger);
+        game.putChallengerAtLastPosition();
+        return challenger;
     }
 
     /**
      * This method is the first method which is launched in the constructor to make the game start.
      */
     private void startController() {
-         orderViews();
-        indexOfChallenger = game.getPlayers().indexOf(game.getPlayer(game.getRandomPlayer().getUsername()));
+        orderViews();
+        indexOfChallenger = game.getPlayers().indexOf(game.getPlayer(game.getChallenger().getUsername()));
         for (VirtualView view : views) {
+            // This sending is useful to set in the client the number of players (it doesn't advice the players)
             view.sendNumberOfPlayers(numberOfPlayers);
         }
         ArrayList<String> usernames = new ArrayList<>();
         for (VirtualView view : views)
             usernames.add(view.getUsername());
-         views.get(indexOfChallenger).sendChallenger(usernames);
+        
+        // Here the interaction between controller and client begins.
+        // The challenger is sent the list of usernames of the other players, to choose who will begin
+        views.get(indexOfChallenger).sendChallenger(usernames);
     }
 
     /**
@@ -96,12 +98,15 @@ public class GameController implements VirtualViewListener {
     public void setGods(ArrayList<GodName> gods, String chosenPlayer) {
         for (GodName god : gods) {
             try {
-                if (game.getNumberOfPlayers() == 3 && !chooseGod(god, getGame().getPlayer(indexOfCurrentPlayer)).threePlayersGame()) {
+                if (game.getNumberOfPlayers() == 3 && !god.chooseGod(god, getGame().getPlayer(indexOfCurrentPlayer)).threePlayersGame()) {
+                    //TODO testare questo caso
                     String textError = "You cannot choose a god which is not available in a three players game";
                     views.get(indexOfChallenger).sendError(textError);
+                    //TODO mettere un metodo in virtualview che ritorni direttamente tutti gli usernames
                     ArrayList<String> usernames = new ArrayList<>();
                     for (VirtualView view : views)
                         usernames.add(view.getUsername());
+                    // Here the challenger is sent the list of usernames of the other players, to choose who will begin
                     views.get(indexOfChallenger).sendChallenger(usernames);
                     return;
                 }
@@ -111,11 +116,11 @@ public class GameController implements VirtualViewListener {
         }
         this.chosenPlayer = chosenPlayer;
         game.setGods(gods);
-        game.putRandomAtLastPosition();
+        game.putChallengerAtLastPosition();
         orderViews();
         ArrayList<GodName> godsList = new ArrayList<>(gods);
         views.get(indexOfCurrentPlayer).sendGodsList(godsList);
-        sendAnAdvice();
+        sendWhoseIsTheTurn();
     }
 
     /**
@@ -132,52 +137,26 @@ public class GameController implements VirtualViewListener {
             return;
         }
         try {
-            game.getPlayer(indexOfCurrentPlayer).setGod(chooseGod(god, game.getPlayer(indexOfCurrentPlayer)));
+            game.getPlayer(indexOfCurrentPlayer).setGod(god.chooseGod(god, game.getPlayer(indexOfCurrentPlayer)));
         } catch (IOException e) {
             views.get(indexOfCurrentPlayer).sendError("Try again, there were some troubles in the conversion.");
             ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
         }
+        //TODO davide -> sarebbe meglio non eliminare il dio dalla lista degli dei del gioco secondo me...
+        // non so se sia concettualmente corretto. Funzionare funziona, ma la lista di dei è la lista degli dei...
+        // se no si potrebbe creare una lista di dei DISPONIBILI magari. Che ne dici moni?
         game.getGods().remove(god);
         incrementIndex();
         if (indexOfCurrentPlayer == 0) {
-        for (VirtualView view : views)
-            view.sendImportant(null, MessageType.START_GAME);
-        startGame();
+            for (VirtualView view : views)
+                view.sendImportant(null, MessageType.START_GAME); //TODO questo sarebbe meglio renderlo come un altro messaggio, non mi piace il null
+            startGame();
         }
         else {
             ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
-            sendAnAdvice();
-        }
-    }
-
-    /**
-     * This method convert the enumeration into the corrispondent class.
-     * @param god the god that has to be converted
-     * @param player the player who chose this god
-     * @return the converted god
-     * @throws IOException if the god is not one of the enumeration.
-     */
-    private God chooseGod(GodName god, Player player) throws IOException {
-        //TODO da davide -> puoi farlo anche all'interno dell'enum secondo me, e forse sarebbe meglio
-        // chiamandolo magari getGod oppure enumToGod... non so
-        switch (god) {
-            case PAN: return new Pan(player, "Pan");
-            case ATLAS: return new Atlas(player, "Atlas");
-            case APOLLO: return new Apollo(player, "Apollo");
-            case ATHENA: return new Athena(player, "Athena");
-            case ARTEMIS: return new Artemis(player, "Artemis");
-            case DEMETER: return new Demeter(player, "Demeter");
-            case MINOTAUR: return new Minotaur(player, "Minotaur");
-            case HEPHAESTUS: return new Hephaestus(player, "Hephaestus");
-            case PROMETHEUS: return new Prometheus(player, "Prometheus");
-            case HERA: return new Hera(player, "Hera");
-            case ZEUS: return new Zeus(player, "Zeus");
-            case HESTIA: return new Hestia(player, "Hestia");
-            case TRITON: return new Triton(player, "Triton");
-            case CHRONUS: return new Chronus(player, "Chronus");
-            default: throw new IOException();
+            sendWhoseIsTheTurn();
         }
     }
 
@@ -215,6 +194,7 @@ public class GameController implements VirtualViewListener {
             game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
             Worker chosenWorkerFemale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
             game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
+            //TODO questo lo toglierei... e anche la corrispondenza nella cli toglierei
             sendAnAdviceDuringTurn("The workers have been initially set");
             incrementIndex();
             if(indexOfCurrentPlayer == 0) {
@@ -223,7 +203,7 @@ public class GameController implements VirtualViewListener {
             }
             else {
                 views.get(indexOfCurrentPlayer).sendSetWorkers();
-                sendAnAdvice();
+                sendWhoseIsTheTurn();
             }
         }
 
@@ -256,7 +236,7 @@ public class GameController implements VirtualViewListener {
         }
 
         views.get(indexOfCurrentPlayer).sendSetWorkers();
-        sendAnAdvice();
+        sendWhoseIsTheTurn();
     }
 
     /**
@@ -295,7 +275,7 @@ public class GameController implements VirtualViewListener {
     /**
      * This method create a new turn of the game and makes it start.
      */
-    public void turn() {
+    public void changeTurn() {
         incrementIndex();
         turn = new TurnController(views, game, indexOfCurrentPlayer, this);
         turn.startTurn();
@@ -331,7 +311,7 @@ public class GameController implements VirtualViewListener {
      * This method sends an advice to all the players, except for the one who is playing,
      * to inform them about who is playing in the current turn.
      */
-    void sendAnAdvice() {
+    void sendWhoseIsTheTurn() {
         for (VirtualView view : views) {
             if (!(view.getUsername().equals(views.get(indexOfCurrentPlayer).getUsername())))
                 view.sendImportant( views.get(indexOfCurrentPlayer).getUsername() , MessageType.TURN);
@@ -353,6 +333,8 @@ public class GameController implements VirtualViewListener {
                 view.sendImportant(username, MessageType.LOSING);
             }
 
+            //TODO non c'è un modo di evitare di controllare che sia Athena?
+            // dai che se sistemiamo questa cosa poi è tecnicamente perfetto
             if (game.getPlayer(indexOfCurrentPlayer).getGod().getName().equals("Athena")) {
                 for (int i = 0; i < game.getNumberOfPlayers(); i++) {
                     game.getPlayer(i).setCannotMoveUp(false);
@@ -360,7 +342,7 @@ public class GameController implements VirtualViewListener {
             }
             game.getPlayer(indexOfCurrentPlayer).deleteWorkers();
             game.removePlayer(game.getPlayer(indexOfCurrentPlayer));
-            views.get(indexOfCurrentPlayer).youAreOutTheGame(false);
+            views.get(indexOfCurrentPlayer).sendYouAreOutOfTheGame(false);
             views.get(indexOfCurrentPlayer).removeVirtualViewListener(this);
             views.remove(views.get(indexOfCurrentPlayer));
 
@@ -378,7 +360,7 @@ public class GameController implements VirtualViewListener {
         game.setActive(false);
         for (VirtualView view : views) {
             view.sendImportant(username, MessageType.WINNING);
-            view.youAreOutTheGame(true);
+            view.sendYouAreOutOfTheGame(true);
         }
     }
 
@@ -430,6 +412,7 @@ public class GameController implements VirtualViewListener {
     //added here because it is used by both controllers //TODO maybe move it into the turnController
     void sendAnAdviceDuringTurn(String changes){
         for (VirtualView view : views) {
+            //TODO non dovrebbe inviare questa cosa solo agli altri e non a sé stesso?
             view.sendImportant( changes , MessageType.WHILE_NOT_YOUR_TURN);
         }
     }

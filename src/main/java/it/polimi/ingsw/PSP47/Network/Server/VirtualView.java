@@ -13,9 +13,9 @@ import java.util.ArrayList;
  * There is one for each player.
  */
 public class VirtualView extends VirtualViewObservable implements SlotListener {
-    private ClientHandler clientHandler;
+    private final ClientHandler clientHandler;
     private final String username;
-    private final it.polimi.ingsw.PSP47.Enumerations.Color color;
+    private final Color color;
     
     public VirtualView (String username, Color color, ClientHandler clientHandler){
         this.username = username;
@@ -27,7 +27,7 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
         return username;
     }
     
-    public it.polimi.ingsw.PSP47.Enumerations.Color getColor() {
+    public Color getColor() {
         return color;
     }
 
@@ -79,7 +79,7 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     /**
      * This method sends the request of the initial position of the workers.
      */
-    public void sendSetWorkers()  {
+    public void sendSetWorkers()  { //TODO cambio nome? boh vediamo
         clientHandler.sendAskWorkersPosition();
     }
 
@@ -118,7 +118,7 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     /**
      * This method sends the player who has lost.
      */
-    public void youAreOutTheGame(boolean endGame) {
+    public void sendYouAreOutOfTheGame(boolean endGame) {
         clientHandler.gameOver(endGame);
     }
 }

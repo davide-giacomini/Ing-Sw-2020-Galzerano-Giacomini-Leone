@@ -136,6 +136,7 @@ public class Player {
             throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
         int previousLevel = worker.getSlot().getLevel().ordinal();
         int wishedLevel = turn.getBoard().getNearbySlot(direction, worker.getSlot()).getLevel().ordinal();
+        //TODO questo controllo si può togliere e quindi anche l'eccezione?
         if (cannotMoveUp && wishedLevel > previousLevel) {
             throw new InvalidMoveException("Level not reachable");
         }

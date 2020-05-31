@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP47.Model.Gods;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
-import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.SlotOccupiedException;
 import it.polimi.ingsw.PSP47.Model.Player;
 import it.polimi.ingsw.PSP47.Model.Slot;

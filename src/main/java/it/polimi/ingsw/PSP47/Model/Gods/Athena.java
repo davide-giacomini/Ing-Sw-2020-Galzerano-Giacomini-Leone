@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP47.Model.Gods;
 
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Model.Exceptions.*;
-import it.polimi.ingsw.PSP47.Model.Game;
 import it.polimi.ingsw.PSP47.Model.Player;
 import it.polimi.ingsw.PSP47.Model.Worker;
 
@@ -44,9 +43,9 @@ public class Athena extends God{
         }
         int actualLevel = worker.getSlot().getLevel().ordinal();
         if (actualLevel>initialLevel)
-            setMoveUp(true);
+            moveUp = true;
         else
-            setMoveUp(false);
+            moveUp = false;
         return winCondition;
     }
 
@@ -81,13 +80,8 @@ public class Athena extends God{
                 || numberOfMovements >= MIN_MOVEMENTS && player.isWinning();
     }
 
-
     public boolean isMoveUp() {
         return moveUp;
     }
 
-    //TODO metodo inutile, ci si può accedere direttamente
-    private void setMoveUp(boolean moveUp) {
-        this.moveUp = moveUp;
-    }
 }

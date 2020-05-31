@@ -12,7 +12,7 @@ public class Game {
     private boolean isActive;
     private final Board board;
     private int numberOfPlayers;
-    private Player randomPlayer;
+    private Player challenger;
     private ArrayList<GodName> gods;
     private ArrayList<Player> players;
 
@@ -35,12 +35,12 @@ public class Game {
         this.gods = gods;
     }
 
-    public Player getRandomPlayer() {
-        return randomPlayer;
+    public Player getChallenger() {
+        return challenger;
     }
 
-    public void setRandomPlayer(Player randomPlayer) {
-        this.randomPlayer = randomPlayer;
+    public void setChallenger(Player challenger) {
+        this.challenger = challenger;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -70,26 +70,26 @@ public class Game {
     }
 
     /**
-     * This method put the randomPlayer in the last position.
+     * This method put the challenger in the last position.
      */
-    public void putRandomAtLastPosition() {
+    public void putChallengerAtLastPosition() {
         int index = 3;
         for (int i=0; i<numberOfPlayers; i++) {
-            if (players.get(i) == randomPlayer)
+            if (players.get(i) == challenger)
                 index = i;
         }
         if (index == 0 && numberOfPlayers == 2) {
             players.set(0, players.get(1));
-            players.set(1, randomPlayer);
+            players.set(1, challenger);
         }
         else if (index == 0 && numberOfPlayers == 3) {
             players.set(0, players.get(1));
             players.set(1, players.get(2));
-            players.set(2, randomPlayer);
+            players.set(2, challenger);
         }
         else if (index == 1 && numberOfPlayers == 3) {
             players.set(1,players.get(2));
-            players.set(2,randomPlayer);
+            players.set(2, challenger);
         }
     }
 
@@ -171,10 +171,11 @@ public class Game {
     public boolean checkWinningCondition(Worker currentWorker, Player currentPlayer) {
         Player heraPlayer = checkIfTheGodIsPresent(GodName.HERA);
         if (heraPlayer != null)
-            return (currentPlayer.isWinning() && !(currentWorker.getSlot().isPerimeterSlot() && !(currentPlayer == heraPlayer)));
+            return currentPlayer.isWinning() && !(currentWorker.getSlot().isPerimeterSlot() && !(currentPlayer == heraPlayer));
         else
             return currentPlayer.isWinning();
     }
+    //TODO davide -> questo secondo me bisognerebbe spostarlo nella classe Player, o addirittura nel Worker
 
     /**
      * This method is called after every build.

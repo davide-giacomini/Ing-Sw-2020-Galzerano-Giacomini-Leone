@@ -6,6 +6,9 @@ import it.polimi.ingsw.PSP47.Enumerations.GodName;
 
 import java.util.ArrayList;
 
+//TODO togliere tutti i getter e setter che non sono importanti.
+// Per "turn" si intende myTurn?
+
 /**
  * This class stores in the client some basic information of the model that the view needs in order to
  *interact with the user

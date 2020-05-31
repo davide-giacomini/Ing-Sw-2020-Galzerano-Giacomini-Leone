@@ -3,8 +3,6 @@ package it.polimi.ingsw.PSP47.Controller;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.Gender;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
-import it.polimi.ingsw.PSP47.Model.Gods.God;
-import it.polimi.ingsw.PSP47.Model.Player;
 import it.polimi.ingsw.PSP47.Network.Server.ClientHandler;
 import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 import org.junit.After;
@@ -16,9 +14,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -59,7 +55,7 @@ public class GameControllerTest_twoPlayers {
 
     @Test
     public void startController(){
-        assertEquals(controller.getGame().getRandomPlayer(), controller.getGame().getPlayer(numberOfPlayers - 1));
+        assertEquals(controller.getGame().getChallenger(), controller.getGame().getPlayer(numberOfPlayers - 1));
         assertEquals(controller.getNumberOfPlayers(),2);
         for (int i=0; i<numberOfPlayers; i++) {
             assertEquals(controller.getViews().get(i).getUsername(), controller.getGame().getPlayer(i).getUsername());
@@ -84,7 +80,7 @@ public class GameControllerTest_twoPlayers {
 
         controller.setGod(GodName.TRITON);
 
-        assertEquals(GodName.TRITON, controller.getGame().getRandomPlayer().getGodName());
+        assertEquals(GodName.TRITON, controller.getGame().getChallenger().getGodName());
         assertEquals(0, controller.getGame().getGods().size());
         assertEquals(0, controller.getIndexOfCurrentPlayer());
 
