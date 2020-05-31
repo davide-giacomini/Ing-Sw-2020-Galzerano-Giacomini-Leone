@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Message.*;
 import it.polimi.ingsw.PSP47.View.ViewListener;
 import it.polimi.ingsw.PSP47.View.View;
-import it.polimi.ingsw.PSP47.Visitor.NetworkHandlerVisitor;
 import it.polimi.ingsw.PSP47.Visitor.Visitable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInformation;
 import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
@@ -231,9 +230,9 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.getGameView().getBoardView().setSlot(slot);
                     view.showNewBoard(slot);
                     break;
-                case WHILE_NOT_YOUR_TURN:
+                case DURING_TURN:
                     String changes = ((ImportantMessage) message).getText();
-                     view.whileOthersTurn(changes);
+                    view.whileOnTurn(changes);
 
             }
         }

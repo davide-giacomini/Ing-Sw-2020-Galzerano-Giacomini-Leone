@@ -286,8 +286,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * @param godNames the god chose from each client
      */
     void sendPublicInformation(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> godNames)  {
-        PublicInformation message = new PublicInformation(usernames,colors,godNames);
-        send(message);
+        send(new PublicInformation(usernames,colors,godNames));
     }
 
     /**
@@ -310,7 +309,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * This method sends a message to the client to ask the initial position of his workers.
      */
     void sendAskWorkersPosition() {
-        send(new AskWorkersPosition(null));
+        send(new AskWorkersPosition());
     }
 
     /**
@@ -336,14 +335,14 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
      * This method sends a message to the client to ask which worker he wants to use, asking the slot he is on.
      */
     void sendWhichWorker() {
-        send(new ChooseWorkerByPosition(null));
+        send(new ChooseWorkerByPosition());
     }
 
     /**
      * This method sends a message to the client to ask which action he wants to do next.
      */
     void sendAction() {
-        send(new ChooseAction(null));
+        send(new ChooseAction());
     }
 
 

@@ -141,6 +141,7 @@ public class GUI extends Application implements View {
     @Override
     public void challengerWillChooseThreeGods(ArrayList<String> usernames) { //TODO Ari voleva cambiarlo
         Platform.runLater(() -> {
+            // TODO modifico la grandezza perché è troppo grande
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
 
@@ -164,6 +165,7 @@ public class GUI extends Application implements View {
     @Override
     public void chooseYourGod(ArrayList<GodName> godsChosen) {
         Platform.runLater(() -> {
+            // TODO modifico la grandezza perché è troppo grande
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
 
@@ -194,6 +196,7 @@ public class GUI extends Application implements View {
      */
     @Override
     public void showImportantMessage(String text) {
+        //TODO modificare stammerda
         if (text.split("\n")[0].equals("Wait for the other players to connect.")){
             Platform.runLater(() -> {
                 setLayout(scene, "/FXML/waitingPane.fxml");
@@ -371,10 +374,10 @@ public class GUI extends Application implements View {
                 primaryStage.setWidth(600);
                 primaryStage.setHeight(450);
 
-                StartController startController = setLayout(scene, "/FXML/waitingPane.fxml"); //now instead of alert I show waiting Pane made by Moni :)
+                setLayout(scene, "/FXML/waitingPane.fxml"); //now instead of alert I show waiting Pane made by Moni :)
             }else {
                 gameView.updateMoment(CurrentScene.WAIT);//new current scene
-                duringGameController.changeText();
+                //duringGameController.changeText(usernameOnTurn);
             }
         });
     }
@@ -401,7 +404,7 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void whileOthersTurn(String changes) {
+    public void whileOnTurn(String changes) {
 
     }
 }

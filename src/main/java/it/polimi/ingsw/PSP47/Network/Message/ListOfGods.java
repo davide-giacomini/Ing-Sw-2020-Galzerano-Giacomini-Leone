@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class ListOfGods extends VisitableMessage {
     private static final long serialVersionUID = 5244974574544564271L;
-    private VisitableListOfGods listOfGods;
+    private final VisitableListOfGods listOfGods;
 
     public ListOfGods(VisitableListOfGods listOfGods) {
         this.listOfGods=listOfGods;

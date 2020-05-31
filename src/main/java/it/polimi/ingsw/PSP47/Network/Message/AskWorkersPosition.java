@@ -16,6 +16,10 @@ public class AskWorkersPosition extends VisitableMessage{
         this.rowsAndColumns = rowsAndColumns;
         this.messageType = MessageType.ASK_WORKER_POSITION;
     }
+    
+    public AskWorkersPosition(){
+        this.messageType = MessageType.ASK_WORKER_POSITION;
+    }
 
     @Override
     public Visitable getContent() {

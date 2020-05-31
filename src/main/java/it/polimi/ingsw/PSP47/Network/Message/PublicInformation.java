@@ -17,27 +17,15 @@ import java.util.ArrayList;
 public class PublicInformation extends Message{
 
     private static final long serialVersionUID = 2261428338933766010L;
-    private ArrayList<String> usernames;
-    private ArrayList<Color> colors;
-    private ArrayList<GodName> godNames;
+    private final ArrayList<String> usernames;
+    private final ArrayList<Color> colors;
+    private final ArrayList<GodName> godNames;
 
     public PublicInformation(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> godNames) {
         this.usernames = usernames;
         this.colors = colors;
         this.godNames = godNames;
         this.messageType=MessageType.PUBLIC_INFORMATION;
-    }
-
-    public void setUsernames(ArrayList<String> usernames) {
-        this.usernames = usernames;
-    }
-
-    public void setColors(ArrayList<Color> colors) {
-        this.colors = colors;
-    }
-
-    public void setGodNames(ArrayList<GodName> godNames) {
-        this.godNames = godNames;
     }
 
     public ArrayList<String> getUsernames() {

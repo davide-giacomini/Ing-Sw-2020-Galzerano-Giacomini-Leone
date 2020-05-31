@@ -84,7 +84,9 @@ public interface View  {
      */
     void othersTurn(String usernameOnTurn);
 
-    void whileOthersTurn(String changes);
+    //TODO questo lo toglierei perché tanto gli worker vengono visivamente aggiornati e poi nella gui non viene
+    // manco overridato. Anche l'avviso che parte dal controller toglierei, e di conseguenza il typeMessage corrispondente
+    void whileOnTurn(String changes);
 
     /**
      * This method show the final byebye of the game

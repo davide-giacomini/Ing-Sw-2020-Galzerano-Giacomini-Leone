@@ -566,7 +566,7 @@ public class ChallengerController extends ViewObservable {
      */
     private boolean checkIfYetChose() {
         if (godNames.size() == numberOfPlayers) {
-            godPower.setText("You have yet choose enough cards, you can't select another one");
+            godPower.setText("You have already chose enough cards, you can't select another one");
             return true;
         }
         return false;

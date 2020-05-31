@@ -108,6 +108,7 @@ public abstract class God {
      * Reset all the additional eventual parameters of the god.
      * It has to be called inside the god and it's not necessary for every god.
      */
+    //TODO c'è un modo migliore per farlo?
     public void resetParameters() {}
     
     /**
@@ -137,7 +138,7 @@ public abstract class God {
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
      * @return true if it's possible to move in normal conditions, false otherwise.
      */
-    protected boolean checkIfCanMoveInNormalConditions(Worker worker) {
+    protected final boolean checkIfCanMoveInNormalConditions(Worker worker) {
         for (Direction direction : Direction.values()) {
             try {
                 // If the direction is out of the board, jump to the catch
@@ -170,7 +171,7 @@ public abstract class God {
      * @return true if it's possible to build in normal conditions, false otherwise.
      * @param worker {@link Player}'s {@link Worker} selected to be checked.
      */
-    protected boolean checkIfCanBuildInNormalConditions(Worker worker) {
+    protected final boolean checkIfCanBuildInNormalConditions(Worker worker) {
         for (Direction direction: Direction.values()){
             try {
                 // If the direction is out of the board, jump to the catch
@@ -187,22 +188,27 @@ public abstract class God {
         return false;
     }
 
+    //TODO davide -> si può evitare che il codice overridato venga duplicato?
     /**
      * This method checks, using {@link #checkIfCanBuild(Worker)}, {@link #checkIfCanMove(Worker)},
      * {@link #checkIfCanBuildInNormalConditions(Worker)} and {@link #checkIfCanMoveInNormalConditions(Worker)}, can
-     * understand if the worker chosen can go on or they are eliminated.
+     * understand if the worker chosen can go on doing something or they're blocked.
+     *
      * @param worker the worker chosen to be checked.
      * @return true if the worker can go on, false otherwise.
      */
     public abstract boolean checkIfCanGoOn (Worker worker);
 
-    //TODO ovverridata da Apollo e Minotaur che ritornano sempre false
-    public boolean checkIfSlotIsOccupied(Slot slot) {
+    /**
+     * This method checks if the slot is occupied by a worker.
+     * @param slot the slot that has to be checked
+     * @return true if the slot is occupied by a worker, false otherwise.
+     */
+    public boolean checkIfAWorkerIsOnSlot(Slot slot) {
         return slot.isWorkerOnSlot();
     }
 
-    //TODO overridata da Zeus che se riceve direzione "here" ritorna false
-    // Davide -> non si può fare anche qui un ckeck senza direzione?
+    //TODO Davide -> non si può fare anche qui un ckeck senza direzione?
     /**
      * This method checks if the slot is occupied. It's useful for building.
      *
@@ -210,11 +216,10 @@ public abstract class God {
      * @param direction the direction where to build with respect to the previous slot.
      * @return true if the slot is occupied, false otherwise.
      */
-    public boolean checkIfSlotIsOccupied(Slot slot, Direction direction) {
+    public boolean checkIfAWorkerIsOnSlot(Slot slot, Direction direction) {
         return slot.isWorkerOnSlot();
     }
 
-    //TODO overridata da Prometheus che ha più casistiche
     /**
      * It returns true if the order of actions is uncorrected, false otherwise.
      *
@@ -234,7 +239,7 @@ public abstract class God {
     }
 
     /**
-     * This method control if the player can end his turn. If the player is winning, it returns true.
+     * This method controls if the player can end his turn. If the player is winning, it returns true.
      * @return true if the player can end his turn.
      */
     public abstract boolean validateEndTurn();
@@ -245,6 +250,4 @@ public abstract class God {
     public String getName() {
         return name;
     }
-
-
 }

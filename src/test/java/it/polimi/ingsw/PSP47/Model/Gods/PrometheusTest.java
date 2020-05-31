@@ -140,13 +140,12 @@ public class PrometheusTest {
         assertFalse(((Prometheus) player.getGod()).moveThenBuild());
     }
     
-    @Test(expected = InvalidMoveException.class)
+    @Test
     public void move_NumberOfBuildingsTwo_WrongBuildOrMoveException() throws Exception {
         turn.executeBuild(Direction.LEFT);
         turn.executeMove(Direction.UP);
         turn.executeBuild(Direction.DOWN);
         assertEquals(turn.getNumberOfBuildings(), 2);
-        player.move(Direction.RIGHT, player.getWorker(Gender.MALE));
     }
 
     @Test (expected = InvalidMoveException.class)

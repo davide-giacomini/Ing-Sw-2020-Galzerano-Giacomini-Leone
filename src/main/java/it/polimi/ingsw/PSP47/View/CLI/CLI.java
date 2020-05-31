@@ -182,7 +182,7 @@ public class CLI extends ViewObservable implements View  {
             } catch (NumberFormatException e) {
                 printSupport.printError(out);
                 out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
-                newRowAndColumn[0] = 9000;
+                newRowAndColumn[0] = 9000;  //TODO ahahahah ari il 9000 mi è piaciuto
             }
 
         }while (newRowAndColumn[0] == 9000);
@@ -443,7 +443,7 @@ public class CLI extends ViewObservable implements View  {
     }
 
     @Override
-    public void whileOthersTurn(String changes) {
+    public void whileOnTurn(String changes) {
         if (!gameView.isTurn()) {
             clearConsole();
             out.println(changes + "\n\n");

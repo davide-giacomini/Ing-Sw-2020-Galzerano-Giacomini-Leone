@@ -4,15 +4,12 @@ import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableInt;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 
 /**
  * This class is the controller of the choosePlayers.fxml scene.
@@ -60,17 +57,6 @@ public class ChoosePlayersController extends ViewObservable {
         notifyViewListener(visitableInt);
         doneText.setDisable(true);
         doneButton.setDisable(true);
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(GUI.class.getResource("/FXML/waitingPane.fxml"));
-        Parent root;
-
-        try {
-            root = loader.load();
-            mainPane.getScene().setRoot(root);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

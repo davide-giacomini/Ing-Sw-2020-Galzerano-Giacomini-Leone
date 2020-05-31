@@ -118,8 +118,15 @@ public class Minotaur extends God {
         return false;
     }
 
+    /**
+     * This method checks if the slot is occupied by a worker.
+     * It always return false as even if there is a worker on the slot, Minotaur
+     * can push him on the next slot, so there is no need to check.
+     * @param slot the slot that has to be checked
+     * @return always false.
+     */
     @Override
-    public boolean checkIfSlotIsOccupied(Slot slot) {
+    public boolean checkIfAWorkerIsOnSlot(Slot slot) {
         return false;
     }
 
