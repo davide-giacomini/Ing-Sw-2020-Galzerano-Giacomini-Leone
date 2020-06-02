@@ -215,22 +215,23 @@ public class GUI extends Application implements View {
      */
     @Override
     public void theWinnerIs(String usernameWinner) {
-        Stage winnerStage = new Stage();
-        winnerStage.setHeight(450);
-        winnerStage.setWidth(600);
-        winnerStage.setTitle("Game over");
-        
         Platform.runLater(()-> {
             try {
+                //TODO capire perché devo creare lo stage dentro il runlater
+                Stage winnerStage = new Stage();
+                winnerStage.setHeight(450);
+                winnerStage.setWidth(600);
+                winnerStage.setTitle("Game over");
+
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/FXML/winningAdvice.fxml"));
                 AnchorPane rootAnchorPane = fxmlLoader.load();
                 Scene scene = new Scene(rootAnchorPane);
-                
+
                 String nameWinnerGod = gameView.getGodByUsername(usernameWinner);
                 ImageView imageView = (ImageView) rootAnchorPane.getChildren().get(5);
                 imageView.setImage(new Image("Images/Podium/podium-characters-"+nameWinnerGod+".png"));
-        
+
                 if (gameView.getMyUsername().equals(usernameWinner)) {
                     Text text = (Text) rootAnchorPane.getChildren().get(6);
                     text.setText("CONGRATULATIONS!\nYou won!");
@@ -238,16 +239,16 @@ public class GUI extends Application implements View {
                 else {
                     winnerStage.setX(Screen.getPrimary().getBounds().getMinX());
                     winnerStage.setY(Screen.getPrimary().getBounds().getMinY());
-                    
+
                     Text text = (Text) rootAnchorPane.getChildren().get(6);
                     text.setText("GAME OVER.\n" +usernameWinner+ " won.");
                 }
-    
+
                 winnerStage.setScene(scene);
                 winnerStage.setResizable(false);
                 winnerStage.initModality(Modality.APPLICATION_MODAL);
                 winnerStage.show();
-                
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -259,12 +260,12 @@ public class GUI extends Application implements View {
      */
     @Override
     public void theLoserIs() {
-        Stage loserStage = new Stage();
-        loserStage.setHeight(450);
-        loserStage.setWidth(600);
-        loserStage.setTitle("Game over");
-        
         Platform.runLater(()-> {
+            Stage loserStage = new Stage();
+            loserStage.setHeight(450);
+            loserStage.setWidth(600);
+            loserStage.setTitle("Game over");
+
             try {
                 loserStage.setX(Screen.getPrimary().getBounds().getMinX());
                 loserStage.setY(Screen.getPrimary().getBounds().getMinY());
@@ -273,13 +274,13 @@ public class GUI extends Application implements View {
                 fxmlLoader.setLocation(getClass().getResource("/FXML/losingAdvice.fxml"));
                 AnchorPane rootAnchorPane = fxmlLoader.load();
                 Scene scene = new Scene(rootAnchorPane);
-                
+
                 Text text = (Text) rootAnchorPane.getChildren().get(3);
                 text.setText("GAME OVER!\nYou lost.");
                 
                 loserStage.setScene(scene);
                 loserStage.setResizable(false);
-                
+
                 loserStage.initModality(Modality.APPLICATION_MODAL);
                 loserStage.show();
             } catch (IOException e) {
