@@ -173,7 +173,7 @@ public class GameController implements VirtualViewListener {
             if (row1 > 4 || row1 < 0 || row2 > 4 || row2 < 0 || column1 > 4 || column1 < 0 || column2 > 4 || column2 < 0) {
                String errorText = "One of the values you chose is out of range";
                 views.get(indexOfCurrentPlayer).sendError(errorText);
-                views.get(indexOfCurrentPlayer).sendSetWorkers();
+                views.get(indexOfCurrentPlayer).sendAskWorkersPosition();
                 return;
             }
             Slot slot1 = game.getBoard().getSlot(row1, column1);
@@ -181,13 +181,13 @@ public class GameController implements VirtualViewListener {
             if (slot1 == slot2) {
                 String errorText = "You must choose two different slots";
                 views.get(indexOfCurrentPlayer).sendError(errorText);
-                views.get(indexOfCurrentPlayer).sendSetWorkers();
+                views.get(indexOfCurrentPlayer).sendAskWorkersPosition();
                 return;
             }
             if (slot1.isOccupied() || slot2.isOccupied()) {
                 String errorText = "One of these slots has been already chosen";
                 views.get(indexOfCurrentPlayer).sendError(errorText);
-                views.get(indexOfCurrentPlayer).sendSetWorkers();
+                views.get(indexOfCurrentPlayer).sendAskWorkersPosition();
                 return;
             }
             Worker chosenWorkerMale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);
@@ -202,7 +202,7 @@ public class GameController implements VirtualViewListener {
                 turn.startTurn();
             }
             else {
-                views.get(indexOfCurrentPlayer).sendSetWorkers();
+                views.get(indexOfCurrentPlayer).sendAskWorkersPosition();
                 sendWhoseIsTheTurn();
             }
         }
@@ -235,7 +235,7 @@ public class GameController implements VirtualViewListener {
             view.sendPublicInformation(usernames, colors, godNames);
         }
 
-        views.get(indexOfCurrentPlayer).sendSetWorkers();
+        views.get(indexOfCurrentPlayer).sendAskWorkersPosition();
         sendWhoseIsTheTurn();
     }
 

@@ -1,56 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Rectangle2D?>
+<?import java.net.URL?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" styleClass="bodybg" stylesheets="@../CSS/background.css" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="400.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.topAnchor="0.0">
+        <ImageView fitHeight="451.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.topAnchor="0.0">
+            <image>
+                <Image url="@../Images/ps_curtain_left.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="451.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+            <image>
+                <Image url="@../Images/ps_curtain_right.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="183.0" layoutY="234.0" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
          <image>
-            <Image url="@../Images/ps_curtain_left.png" />
+            <Image url="@../Images/Podium/podium_gold.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="400.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+        <ImageView fitHeight="85.0" fitWidth="146.0" layoutX="221.0" layoutY="70.0" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="54.0">
          <image>
-            <Image url="@../Images/ps_curtain_right.png" />
+            <Image url="@../Images/Podium/podium.png" />
          </image>
       </ImageView>
-      <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <bottom>
-            <BorderPane BorderPane.alignment="CENTER">
-               <center>
-                  <ImageView fitHeight="145.0" fitWidth="161.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/trophy_large.png" />
-                     </image>
-                     <viewport>
-                        <Rectangle2D minX="12.0" minY="34.0" width="33.0" />
-                     </viewport>
-                     <BorderPane.margin>
-                        <Insets bottom="50.0" />
-                     </BorderPane.margin>
-                  </ImageView>
-               </center>
-            </BorderPane>
-         </bottom>
-         <center>
-            <BorderPane prefHeight="111.0" prefWidth="259.0" BorderPane.alignment="CENTER">
-               <center>
-                  <Text fill="#ff8500" strokeType="OUTSIDE" strokeWidth="0.0" text="YOU WON !!!" textAlignment="CENTER" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold Italic" size="39.0" />
-                     </font>
-                  </Text>
-               </center>
-            </BorderPane>
-         </center>
-      </BorderPane>
-   </children>
+        <ImageView fitHeight="85.0" fitWidth="146.0" layoutX="66.0" layoutY="283.0" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="400.0">
+         <image>
+            <Image url="@../Images/Podium/podium.png" />
+         </image>
+      </ImageView>
+        <ImageView fitHeight="246.0" fitWidth="251.0" layoutX="180.0" layoutY="66.0" preserveRatio="true" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="179.765625" AnchorPane.topAnchor="66.0">
+            <image>
+                <Image url="@../Images/Podium/podium-characters-Arthemis.png" />
+            </image>
+        </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="430.13670349121094" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="10.0" />
+        </children>
+
+    <stylesheets>
+        <URL value="@../CSS/end.css" />
+    </stylesheets>
 </AnchorPane>

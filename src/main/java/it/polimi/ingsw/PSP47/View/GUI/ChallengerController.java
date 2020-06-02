@@ -10,6 +10,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -537,8 +538,12 @@ public class ChallengerController extends ViewObservable {
     void setThirdPlayer(String thirdPlayer) {
         if (thirdPlayer != null)
             third.setText(thirdPlayer);
-        else
+        else {
             third.setVisible(false);
+            // This is graphically useful to eliminate the hole given by the absence of the third player.
+            AnchorPane.setRightAnchor(mainPane.getChildren().get(5), 220.0);
+            AnchorPane.setLeftAnchor(mainPane.getChildren().get(5), 220.0);
+        }
     }
 
     public void setNumberOfPlayers(int numberOfPlayers) {

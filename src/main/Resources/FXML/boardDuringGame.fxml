@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -11,10 +12,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" styleClass="bodybg" stylesheets="@../CSS/background.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.DuringGameController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.DuringGameController">
    <center>
       <StackPane prefHeight="150.0" prefWidth="453.0" BorderPane.alignment="CENTER">
          <children>
@@ -32,11 +32,11 @@
                 <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                  <RowConstraints maxHeight="135.0" minHeight="56.0" prefHeight="72.99331665039062" vgrow="ALWAYS" />
-                  <RowConstraints maxHeight="134.0" minHeight="55.0" prefHeight="78.1279296875" vgrow="ALWAYS" />
-                <RowConstraints maxHeight="117.0" minHeight="54.0" prefHeight="81.8720703125" vgrow="ALWAYS" />
-                <RowConstraints maxHeight="93.0" minHeight="54.0" prefHeight="68.62960815429688" vgrow="ALWAYS" />
-                <RowConstraints maxHeight="83.37039184570312" minHeight="10.0" prefHeight="83.37039184570312" vgrow="ALWAYS" />
+                 <RowConstraints maxHeight="135.0" minHeight="56.0" prefHeight="72.99331665039062" vgrow="ALWAYS" />
+                 <RowConstraints maxHeight="134.0" minHeight="55.0" prefHeight="78.1279296875" vgrow="ALWAYS" />
+                 <RowConstraints maxHeight="117.0" minHeight="54.0" prefHeight="81.8720703125" vgrow="ALWAYS" />
+                 <RowConstraints maxHeight="93.0" minHeight="54.0" prefHeight="68.62960815429688" vgrow="ALWAYS" />
+                 <RowConstraints maxHeight="83.37039184570312" minHeight="10.0" prefHeight="83.37039184570312" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
                   <Pane onMouseClicked="#GridClick" prefHeight="80.0" prefWidth="77.0" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
@@ -73,13 +73,11 @@
       </StackPane>
    </center>
    <bottom>
-      <Text fx:id="commandText" fill="#2905a8" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your action from the Buttons :" textAlignment="CENTER" BorderPane.alignment="TOP_CENTER">
-         <font>
-            <Font name="Cochin Italic" size="29.0" />
-         </font>
+      <Text fx:id="commandText" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your action from the Buttons :" textAlignment="CENTER" BorderPane.alignment="TOP_CENTER">
          <BorderPane.margin>
-            <Insets bottom="30.0" />
-         </BorderPane.margin></Text>
+            <Insets bottom="50.0" />
+         </BorderPane.margin>
+      </Text>
    </bottom>
    <left>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="161.0" spacing="20.0" BorderPane.alignment="CENTER">
@@ -91,10 +89,7 @@
                         <Image url="@../Images/cm_btn_green.png" />
                      </image>
                   </ImageView>
-                  <Text fill="WHITE" onMouseClicked="#OnMoveClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Move" textAlignment="CENTER" wrappingWidth="73.85005187988281">
-                     <font>
-                        <Font size="27.0" />
-                     </font>
+                  <Text onMouseClicked="#OnMoveClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Move" textAlignment="CENTER" wrappingWidth="73.85005187988281">
                   </Text>
                </children>
             </StackPane>
@@ -105,10 +100,7 @@
                         <Image url="@../Images/cm_btn_green.png" />
                      </image>
                   </ImageView>
-                  <Text fill="WHITE" onMouseClicked="#OnBuildClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Build">
-                     <font>
-                        <Font size="27.0" />
-                     </font>
+                  <Text onMouseClicked="#OnBuildClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Build">
                   </Text>
                </children>
             </StackPane>
@@ -119,10 +111,7 @@
                         <Image url="@../Images/cm_btn_green.png" />
                      </image>
                   </ImageView>
-                  <Text fill="WHITE" onMouseClicked="#OnBuildDomeClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Build dome">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
+                  <Text onMouseClicked="#OnBuildDomeClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Build dome">
                   </Text>
                </children>
             </StackPane>
@@ -133,10 +122,7 @@
                         <Image url="@../Images/cm_btn_coral.png" />
                      </image>
                   </ImageView>
-                  <Text fill="WHITE" onMouseClicked="#OnEndClick" strokeType="OUTSIDE" strokeWidth="0.0" text="End">
-                     <font>
-                        <Font size="27.0" />
-                     </font>
+                  <Text onMouseClicked="#OnEndClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="End">
                   </Text>
                </children>
             </StackPane>
@@ -147,10 +133,7 @@
                         <Image url="@../Images/cm_btn_coral.png" />
                      </image>
                   </ImageView>
-                  <Text fill="WHITE" onMouseClicked="#OnQuitClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Quit">
-                     <font>
-                        <Font size="27.0" />
-                     </font>
+                  <Text onMouseClicked="#OnQuitClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Quit">
                   </Text>
                </children>
             </StackPane>
@@ -167,9 +150,6 @@
       <VBox prefHeight="627.0" prefWidth="128.0" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ABOUT PLAYERS" textAlignment="CENTER" wrappingWidth="158.27691650390625">
-               <font>
-                  <Font size="28.0" />
-               </font>
             </Text>
             <StackPane alignment="BOTTOM_CENTER" prefHeight="54.0" prefWidth="124.0">
                <children>
@@ -178,13 +158,10 @@
                         <Image url="@../Images/labelbutton_modeselect.png" />
                      </image>
                   </ImageView>
-                  <Text fx:id="first_username" strokeType="OUTSIDE" strokeWidth="0.0" text="name_first" textAlignment="CENTER" wrappingWidth="107.07354736328125">
+                  <Text fx:id="first_username" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="name_first" textAlignment="CENTER" wrappingWidth="107.07354736328125">
                      <StackPane.margin>
                         <Insets bottom="6.0" />
                      </StackPane.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
                   </Text>
                </children>
             </StackPane>
@@ -223,13 +200,10 @@
                         <Image url="@../Images/labelbutton_modeselect.png" />
                      </image>
                   </ImageView>
-                  <Text fx:id="second_username" strokeType="OUTSIDE" strokeWidth="0.0" text="name_second">
+                  <Text fx:id="second_username" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="name_second">
                      <StackPane.margin>
                         <Insets bottom="5.0" />
                      </StackPane.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
                   </Text>
                </children>
             </StackPane>
@@ -268,13 +242,10 @@
                         <Image url="@../Images/labelbutton_modeselect.png" />
                      </image>
                   </ImageView>
-                  <Text fx:id="third_username" strokeType="OUTSIDE" strokeWidth="0.0" text="name_third">
+                  <Text fx:id="third_username" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="name_third">
                      <StackPane.margin>
                         <Insets bottom="4.0" />
                      </StackPane.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
                   </Text>
                </children>
             </StackPane>
@@ -312,4 +283,8 @@
          </BorderPane.margin>
       </VBox>
    </right>
+
+   <stylesheets>
+      <URL value="@../CSS/board.css" />
+   </stylesheets>
 </BorderPane>

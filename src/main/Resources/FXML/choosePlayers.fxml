@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="bodybg" stylesheets="@../CSS/background.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ChoosePlayersController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP47.View.GUI.ChoosePlayersController">
    <children>
       <ImageView fitHeight="115.0" fitWidth="322.0" layoutX="154.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="258.0" AnchorPane.leftAnchor="144.0" AnchorPane.rightAnchor="144.0" AnchorPane.topAnchor="27.0">
          <image>
@@ -28,40 +26,33 @@
             <Image url="@../Images/ps_curtain_left.png" />
          </image>
       </ImageView>
-      <Text fill="#020083" layoutX="124.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please, choose the number of players" AnchorPane.bottomAnchor="211.68199920654297" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="123.1099853515625" AnchorPane.topAnchor="158.07799911499023">
-         <font>
-            <Font name="Cochin Italic" size="27.0" />
-         </font>
+      <Text layoutX="78.0" layoutY="164.94921875" strokeType="OUTSIDE" strokeWidth="0.0" text="Please, choose the number of players" textAlignment="CENTER" wrappingWidth="444.12774658203125" AnchorPane.bottomAnchor="232.0" AnchorPane.leftAnchor="78.0" AnchorPane.rightAnchor="78.0" AnchorPane.topAnchor="152.0">
       </Text>
-      <HBox layoutX="130.0" layoutY="189.0" prefHeight="100.0" prefWidth="330.0" spacing="30.0" AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="189.0">
+      <AnchorPane layoutX="190.0" layoutY="218.0" prefHeight="18.0" prefWidth="220.0" AnchorPane.bottomAnchor="164.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="218.0">
          <children>
-            <CheckBox fx:id="two_players" mnemonicParsing="false" onAction="#handleTwoPlayers" text="Two" textFill="#0010a1">
-               <font>
-                  <Font name="Savoye LET Plain:1.0" size="26.0" />
-               </font>
+            <CheckBox fx:id="two_players" mnemonicParsing="false" onAction="#handleTwoPlayers" text="Two" textAlignment="CENTER" AnchorPane.leftAnchor="0.0">
             </CheckBox>
-            <CheckBox fx:id="three_players" mnemonicParsing="false" onAction="#handleThreePlayers" text="Three" textFill="#0010a1">
-               <font>
-                  <Font name="Savoye LET Plain:1.0" size="26.0" />
-               </font>
+            <CheckBox fx:id="three_players" layoutX="75.19999694824219" mnemonicParsing="false" onAction="#handleThreePlayers" text="Three" AnchorPane.rightAnchor="0.0">
             </CheckBox>
          </children>
-         <padding>
-            <Insets left="75.0" top="30.0" />
-         </padding>
-      </HBox>
-      <ImageView fx:id="doneButton" accessibleRole="BUTTON" fitHeight="41.0" fitWidth="171.0" layoutX="215.0" layoutY="289.0" onMouseClicked="#ClickOnDone" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Images/labelbutton_modeselect.png" />
-         </image>
-      </ImageView>
-      <Text fx:id="doneText" fill="WHITE" layoutX="270.0" layoutY="319.0" onMouseClicked="#ClickOnDone" strokeType="OUTSIDE" strokeWidth="0.0" text="Done">
-         <font>
-            <Font name="Cochin Italic" size="32.0" />
-         </font>
-         <effect>
-            <Glow />
-         </effect>
-      </Text>
+      </AnchorPane>
+      <StackPane layoutX="215.0" layoutY="289.0">
+         <children>
+            <ImageView fx:id="doneButton" accessibleRole="BUTTON" fitHeight="41.0" fitWidth="171.0" onMouseClicked="#ClickOnDone" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/labelbutton_modeselect.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="doneText" onMouseClicked="#ClickOnDone" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundBlue" text="Done">
+               <effect>
+                  <Glow />
+               </effect>
+            </Text>
+         </children>
+      </StackPane>
    </children>
+
+   <stylesheets>
+      <URL value="@../CSS/start.css" />
+   </stylesheets>
 </AnchorPane>

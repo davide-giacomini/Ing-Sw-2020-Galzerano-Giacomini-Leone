@@ -1,0 +1,15 @@
+@font-face {
+    font-family: "Ink Blossoms";
+    src: url("/Fonts/Blossoms.ttf");
+}
+
+.root {
+    -fx-background-image: url("/Images/lightblue.png");
+}
+
+Text {
+    -fx-font-family: "Ink Blossoms";
+    -fx-font-size: 3em;
+    -fx-fill: #ff0023;
+    -fx-text-alignment: center;
+}
