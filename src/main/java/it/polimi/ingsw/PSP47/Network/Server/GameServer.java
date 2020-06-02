@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP47.Enumerations.Color;
 import java.util.*;
 
 /**
- * TODO javadoc
+ * This class represents each game saved in the server.
  */
 class GameServer {
     private final int maxPlayersNumber;

@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-//TODO chiedere per synchronized
-
 /**
  * This class wait for connections with clients and handles connections and disconnections, creating or deleting
  * the game.

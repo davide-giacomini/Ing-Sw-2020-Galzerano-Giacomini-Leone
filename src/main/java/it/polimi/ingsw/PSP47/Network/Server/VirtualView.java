@@ -79,7 +79,7 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     /**
      * This method sends the request of the initial position of the workers.
      */
-    public void sendSetWorkers()  { //TODO cambio nome? boh vediamo
+    public void sendAskWorkersPosition()  {
         clientHandler.sendAskWorkersPosition();
     }
 
