@@ -363,7 +363,7 @@ public class GUI extends Application implements View {
                 setLayout(scene, "/FXML/waitingPane.fxml"); //now instead of alert I show waiting Pane made by Moni :)
             }else {
                 gameView.updateMoment(CurrentScene.WAIT);//new current scene
-                //duringGameController.changeText(usernameOnTurn);
+                duringGameController.changeText("WAIT! It's " + usernameOnTurn + "'s turn.");
             }
         });
     }
@@ -389,8 +389,15 @@ public class GUI extends Application implements View {
         });
     }
 
+    /**
+     *This method is used to let the user have more details about what the other player is doing while playing
+     * @param changes indicates what has changed
+     */
     @Override
     public void whileOnTurn(String changes) {
-
+        Platform.runLater(() -> {
+            if(!gameView.isTurn())
+                duringGameController.changeText(changes);
+        });
     }
 }

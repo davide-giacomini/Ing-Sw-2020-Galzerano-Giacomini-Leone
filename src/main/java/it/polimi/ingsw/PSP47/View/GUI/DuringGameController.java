@@ -42,24 +42,9 @@ public class DuringGameController extends ViewObservable{
 
     @FXML
     private Text commandText;
-//TODO togliere tutti gli attributi inutili
-    @FXML
-    private ImageView endButton;
-
-    @FXML
-    private ImageView moveButton;
-
-    @FXML
-    private ImageView buildButton;
-
-    @FXML
-    private ImageView buildDomeButton;
 
     @FXML
     private StackPane buildDomePane;
-
-    @FXML
-    private ImageView quitButton;
 
     @FXML
     private Text first_username;
@@ -150,10 +135,10 @@ public class DuringGameController extends ViewObservable{
     }
 
    //TODO ho aggiunto questo metodo perché lo username non veniva sfruttato
-    /*void changeText(String username){
+    void changeText(String displayedText){
         if (gameView.getCurrentScene() == CurrentScene.WAIT)
-            commandText.setText("WAIT! It's " + username + "'s turn.");
-    }*/
+            commandText.setText(displayedText);
+    }
 
     /**
      * method used only when the gui has received the request to ask which worker to use or where to position it
@@ -263,7 +248,6 @@ public class DuringGameController extends ViewObservable{
         Node source = (Node)event.getSource() ; // gets the pane clicked
         Integer colIndex = GridPane.getColumnIndex(source); //column adn row of the pane clicked
         Integer rowIndex = GridPane.getRowIndex(source);
-        System.out.printf("Mouse entered cell [%d, %d]%n", colIndex, rowIndex);
 
         if (gameView.getCurrentScene() == CurrentScene.ASK_INITIAL_POSITION) //the click is accepted twice before of sending the initial positions of the 2 workers
             selectSlotAndNotify(rowIndex, colIndex);
@@ -276,7 +260,7 @@ public class DuringGameController extends ViewObservable{
             notifyViewListener(visitableActionAndDirection);
             //commandText.setText("WAIT"); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
             gameView.updateMoment(CurrentScene.WAIT);
-            //changeText(); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
+            changeText(); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
         }else if (gameView.getCurrentScene() == CurrentScene.WAIT ){ //if I am in this moment I cannot click
             //TODO davide -> io questo lo cambierei in un non alert ma poi vediamo
             Alert a = new Alert(Alert.AlertType.WARNING);
@@ -308,7 +292,7 @@ public class DuringGameController extends ViewObservable{
             //TODO qua invece di far così sarebbe comodo mandare il turno del tizio,
             // dato che effettivamente per la cli viene mandato
             gameView.updateMoment(CurrentScene.WAIT);
-            //changeText();
+            changeText();
         }
     }
 
@@ -328,7 +312,7 @@ public class DuringGameController extends ViewObservable{
         //TODO qua invece di far così sarebbe comodo mandare il turno del tizio,
         // dato che effettivamente per la cli viene mandato
         gameView.updateMoment(CurrentScene.WAIT);
-        //changeText();
+        changeText();
     }
 
     /**
