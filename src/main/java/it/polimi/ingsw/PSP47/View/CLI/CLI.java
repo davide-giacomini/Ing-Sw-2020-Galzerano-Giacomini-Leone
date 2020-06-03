@@ -40,43 +40,28 @@ public class CLI extends ViewObservable implements View  {
         String intro ="Welcome to the Digital Version of Santorini Board Game, \n" +
                       "programmers:AriannaGalzerano-DavideGiacomini-MonicaLeone\n" +
                       "Before starting please insert the required parameters...\n";
-
          printSupport.printTitle(out) ;
-
         try {
             TimeUnit.MILLISECONDS.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         printSupport.printDotSequence(out);
-
         out.println(AnsiCode.ANSI_CYAN + intro + AnsiCode.ANSI_RESET);
-
-       // clearConsole();
-
-        //othersTurn("anna");
-        //gameView.setMyUsername("moni");
-        //theWinnerIs("moni");
-        //theLoserIs();
-        //showEnd();
-
     }
 
     /**
      * This method is used to ask username and color.
      */
     public void askFirstConnection(){
-
         String username = askUsername();
         Color color= askColorWorkers();
 
-
+        clearConsole();
         VisitableInformation visitableInformation = new VisitableInformation();
         visitableInformation.setUsername(username);
         visitableInformation.setColor(color);
         notifyViewListener(visitableInformation);
-        clearConsole();
-
     }
 
 
@@ -88,12 +73,8 @@ public class CLI extends ViewObservable implements View  {
         String username = null;
 
         do {
-
             out.println("Insert your Username and press " + AnsiCode.ANSI_ENTER_KEY + " : ");
-
-
             if (in.hasNextLine()){
-
                 username = in.nextLine();
                 if(username.equals("")) {
                  printSupport.printError(out);
@@ -113,7 +94,6 @@ public class CLI extends ViewObservable implements View  {
     public Color askColorWorkers() {
         String color = null;
         Color acceptableColor = null;
-
         out.println("Here are the possible workers' colors : ");
         out.println(AnsiCode.ANSI_BLUE + AnsiCode.ANSI_WORKER  + " This is blue");
         out.println(AnsiCode.ANSI_YELLOW + AnsiCode.ANSI_WORKER + " This is yellow");
@@ -125,7 +105,6 @@ public class CLI extends ViewObservable implements View  {
 
         do {
             out.println("Insert the color you prefer :  ");
-
             if (in.hasNextLine()) {
                 color = in.nextLine();
                 acceptableColor = Color.getColorByName(color);
@@ -141,7 +120,6 @@ public class CLI extends ViewObservable implements View  {
         }while (color == null);
 
         clearConsole();
-
         return acceptableColor;
     }
 
@@ -151,7 +129,6 @@ public class CLI extends ViewObservable implements View  {
     public void setConnection () {
         String ipAddress = askServerIpAddress(in);
         NetworkHandler networkHandler;
-
         try {
             networkHandler = NetworkConnectionUtil.setConnection(this, ipAddress);
         } catch (IOException e) {
@@ -160,7 +137,6 @@ public class CLI extends ViewObservable implements View  {
             return;
         }
         out.println("Connected to the address " + ipAddress);
-
         addViewListener(networkHandler);
     }
 
@@ -174,21 +150,22 @@ public class CLI extends ViewObservable implements View  {
         String address;
 
         do {
-
             System.out.println("Insert address : ");
-
             address = scanner.nextLine();
             if(address.equals("")) {
                 System.out.println( "Address not inserted or wrong!\n");
                 address = null;
             }
-
         }while (address== null);
 
+        clearConsole();
         return address;
     }
 
 
+    public void coloredPrint(String text){
+        out.println(AnsiCode.getAnsiByName(gameView.getMyColor().toString()) + text + AnsiCode.ANSI_RESET);
+    }
 
     /**
      * This method asks the user which of the worker he/she wants to use
@@ -222,12 +199,10 @@ public class CLI extends ViewObservable implements View  {
 
         }while (newRowAndColumn[1] == 9000);
 
+        clearConsole();
         VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
         visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);
         notifyViewListener(visitableRowsAndColumns);
-
-
-        clearConsole();
 
     }
 
@@ -289,13 +264,10 @@ public class CLI extends ViewObservable implements View  {
 
                 }while (newRowAndColumn[3] == 9000);
 
+        clearConsole();
         VisitableInitialPositions visitableRowsAndColumns = new VisitableInitialPositions();
         visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);
         notifyViewListener(visitableRowsAndColumns);
-
-        clearConsole();
-
-
     }
 
     /**
@@ -370,7 +342,7 @@ public class CLI extends ViewObservable implements View  {
         out.println("Now you have to choose the first player of the game between ");
 
         for (int j = 0; j<gameView.getNumberOfPlayers(); j++) {
-            out.println(AnsiCode.ANSI_RED + usernames.get(j) + " " + AnsiCode.ANSI_RESET);
+            out.println(AnsiCode.ANSI_GREEN + usernames.get(j) + " " + AnsiCode.ANSI_RESET);
         }
 
         do{
@@ -386,14 +358,11 @@ public class CLI extends ViewObservable implements View  {
             }
         }while (firstPlayer == null);
 
+        clearConsole();
         VisitableListOfGods visitableGods = new VisitableListOfGods();
         visitableGods.setGodNames(godsChosen);
         visitableGods.setChosenPlayer(firstPlayer);
         notifyViewListener(visitableGods);
-
-        clearConsole();
-
-
     }
 
     /**
@@ -430,11 +399,11 @@ public class CLI extends ViewObservable implements View  {
             }
         }while (god == null);
 
+
+        clearConsole();
         VisitableGod visitableGodChosen = new VisitableGod();
         visitableGodChosen.setGodName(godName);
         notifyViewListener(visitableGodChosen);
-
-        clearConsole();
     }
 
 
@@ -474,10 +443,9 @@ public class CLI extends ViewObservable implements View  {
     }
 
     @Override
-    public void whileOthersTurn(String changes) {
+    public void whileOnTurn(String changes) {
         if (!gameView.isTurn()) {
             clearConsole();
-            printSupport.printDotSequence(out);
             out.println(changes + "\n\n");
             printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);
         }else{
@@ -521,11 +489,9 @@ public class CLI extends ViewObservable implements View  {
 
             }while (num < 2 || num > 3);
 
+        clearConsole();
         VisitableInt visitableNumber = new VisitableInt(num);
         notifyViewListener(visitableNumber);
-
-        clearConsole();
-
     }
 
     /**
@@ -553,14 +519,11 @@ public class CLI extends ViewObservable implements View  {
                 if (stringParts.length>1)
                 directionInserted = Direction.getDirectionByName(stringParts[1]);
 
-                if(actionInserted == Action.WRONGACTION)
+                if((actionInserted == Action.WRONGACTION) || (!(actionInserted.equals(Action.END) || actionInserted.equals(Action.QUIT)) && (directionInserted == Direction.WRONGDIRECTION || directionInserted == null)) ||((actionInserted.equals(Action.END) || actionInserted.equals(Action.QUIT)) && stringParts.length >1) || (line.equals(""))){
+                    printSupport.printError(out);
+                    out.println(AnsiCode.ANSI_RED + "Problems in the way you inserted the commands!\n"+ AnsiCode.ANSI_RESET);
                     line = null;
-                else if (!(actionInserted.equals(Action.END) || actionInserted.equals(Action.QUIT)) && (directionInserted == Direction.WRONGDIRECTION || directionInserted == null))
-                    line = null;
-                else if (line.equals(""))
-                    line = null;
-                else if ((actionInserted.equals(Action.END) || actionInserted.equals(Action.QUIT)) && stringParts.length >1)
-                    line = null;
+                }
                 else{
                     ActionAndDirection.add(actionInserted);
                     ActionAndDirection.add(directionInserted);
@@ -573,7 +536,6 @@ public class CLI extends ViewObservable implements View  {
         visitableActionAndDirection.setAction(actionInserted);
         visitableActionAndDirection.setDirection(directionInserted);
         notifyViewListener(visitableActionAndDirection);
-
     }
 
     /**
@@ -589,7 +551,6 @@ public class CLI extends ViewObservable implements View  {
         colors = gameView.getColors();
         gods = gameView.getGods();
         printSupport.printUsersAndColorsAndGods(usernames, colors, gods, gameView.getNumberOfPlayers(), out);
-
         clearConsole();
     }
 
@@ -609,7 +570,6 @@ public class CLI extends ViewObservable implements View  {
      */
     @Override
     public void showImportantMessage(String text) {
-
         out.println(AnsiCode.ANSI_GREEN +text + AnsiCode.ANSI_RESET);
     }
 
@@ -628,13 +588,6 @@ public class CLI extends ViewObservable implements View  {
     @Override
     public void showNewBoard(Slot slot) {
         printSupport.buildSlot(slot);
-
-    }
-
-    //TODO FIX CLEARING OF CONSOLE
-    private void checkClearning() {
-        if (gameView.getCurrentScene()==CurrentScene.WAIT)
-            clearConsole();
     }
 
     @Override

@@ -219,11 +219,9 @@ public class NetworkHandler implements Runnable, ViewListener {
                     break;
                 case PUBLIC_INFORMATION:
                     PublicInformation messageInfo = (PublicInformation) message;
-
                     view.getGameView().setUsernames(messageInfo.getUsernames());
                     view.getGameView().setColors(messageInfo.getColors());
                     view.getGameView().setGods(((PublicInformation) message).getGodNames());
-
                     view.showPublicInformation();
                     break;
                 case UPDATE_SLOT:
@@ -232,9 +230,9 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.getGameView().getBoardView().setSlot(slot);
                     view.showNewBoard(slot);
                     break;
-                case WHILE_NOT_YOUR_TURN:
+                case DURING_TURN:
                     String changes = ((ImportantMessage) message).getText();
-                    view.whileOthersTurn(changes);
+                    view.whileOnTurn(changes);
 
             }
         }

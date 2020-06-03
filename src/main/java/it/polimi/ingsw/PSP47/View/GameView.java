@@ -32,7 +32,12 @@ public class GameView{
         this.boardView = new BoardView();
     }
 
-
+    public String getGodByUsername(String username){
+        int index = usernames.indexOf(username);
+        
+        return gods.get(index).toString();
+    }
+    
     public void setMyUsername(String myUsername) {
         this.myUsername = myUsername;
     }
@@ -100,7 +105,6 @@ public class GameView{
     public CurrentScene getCurrentScene() {
         return currentScene;
     }
-
 
     public void updateMoment(CurrentScene currentScene) {
         this.currentScene = currentScene;

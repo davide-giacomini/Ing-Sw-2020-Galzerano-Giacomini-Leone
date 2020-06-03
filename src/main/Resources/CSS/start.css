@@ -1,0 +1,30 @@
+@font-face {
+    font-family: "Ink Blossoms";
+    src: url("/Fonts/Blossoms.ttf");
+}
+
+.root {
+    -fx-background-image: url("/Images/lightblue.png");
+}
+
+Text {
+    -fx-font-family: "Ink Blossoms";
+    -fx-font-size: 2em;
+    -fx-fill: blue;
+    -fx-text-alignment: center;
+}
+
+CheckBox {
+    -fx-font-family: "Ink Blossoms";
+    -fx-font-size: 2em;
+    -fx-text-fill: blue;
+    -fx-text-alignment: center;
+}
+
+.backgroundBlue {
+    -fx-fill: white;
+}
+
+#welcome {
+    -fx-font-size: 1.8em;
+}

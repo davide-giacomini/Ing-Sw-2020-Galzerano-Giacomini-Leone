@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 public enum GodName implements Serializable {
     APOLLO ("Apollo"),
-    ARTEMIS ("Arthemis"),
+    ARTEMIS ("Arthemis"), //TODO ATTENZIONE! ARTEMIS E' SCRITTA MALE (con la h), MA NON MODIFICATELA! SE LA MODIFICATE, DITEMELO (davide)
     ATHENA ("Athena"),
     ATLAS ("Atlas"),
     DEMETER ("Demeter"),
@@ -23,7 +23,7 @@ public enum GodName implements Serializable {
     HERA("Hera"),
     HESTIA("Hestia"),
     TRITON("Triton"),
-    CHRONUS("Chronus"),
+    CHRONUS("Chronus"), //TODO stessa cosa di artemis.
     ZEUS("Zeus"),
     WRONGGODNAME("");
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="451.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../Images/ps_curtain_left.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="451.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../Images/ps_curtain_right.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="396.0" fitWidth="384.0" layoutX="150.0" layoutY="56.0" preserveRatio="true" AnchorPane.bottomAnchor="0.78399658203125" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="66.0">
+         <image>
+            <Image url="@../Images/Podium/podium-characters-Scylla.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="98.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="402.39996337890625" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0" />
+   </children>
+
+   <stylesheets>
+      <URL value="@../CSS/end.css" />
+   </stylesheets>
+</AnchorPane>

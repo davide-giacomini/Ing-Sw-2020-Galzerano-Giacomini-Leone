@@ -31,10 +31,6 @@ import java.util.ArrayList;
  */
 public class DuringGameController extends ViewObservable{
 
-    private ArrayList<String> usernames= new ArrayList<>(3); // 3 arrays used for the dislay of publi info
-    private ArrayList<Color> colors = new ArrayList<>(3);
-    private ArrayList <GodName> gods = new ArrayList<>(3);
-
     private GameView gameView; // gives info about the game saved in the client
     private Action action; //used to save the action chosen by the player
 
@@ -46,21 +42,9 @@ public class DuringGameController extends ViewObservable{
 
     @FXML
     private Text commandText;
-//TODO togliere tutti gli attributi inutili
-    @FXML
-    private ImageView endButton;
 
     @FXML
-    private ImageView moveButton;
-
-    @FXML
-    private ImageView buildButton;
-
-    @FXML
-    private ImageView buildDomeButton;
-
-    @FXML
-    private ImageView quitButton;
+    private StackPane buildDomePane;
 
     @FXML
     private Text first_username;
@@ -97,20 +81,19 @@ public class DuringGameController extends ViewObservable{
 
 
     void setPublicInformation() {
-
-        first_username.setText(usernames.get(0));
-        Image godFirst = new Image(getImageGodFromGodName(gods.get(0)));
+        first_username.setText(gameView.getUsernames().get(0));
+        Image godFirst = new Image(getImageGodFromGodName(gameView.getGods().get(0)));
         first_god.setImage(godFirst);
         first_god.setPreserveRatio(true);
-        Image colorFirst = new Image(getImageWorkerFromColor(colors.get(0)));
+        Image colorFirst = new Image(getImageWorkerFromColor(gameView.getColors().get(0)));
         first_color.setImage(colorFirst);
         first_color.setPreserveRatio(true);
 
-        second_username.setText(usernames.get(1));
-        Image godSecond = new Image(getImageGodFromGodName(gods.get(1)));
+        second_username.setText(gameView.getUsernames().get(1));
+        Image godSecond = new Image(getImageGodFromGodName(gameView.getGods().get(1)));
         second_god.setImage(godSecond);
         second_god.setPreserveRatio(true);
-        Image colorSecond = new Image(getImageWorkerFromColor(colors.get(1)));
+        Image colorSecond = new Image(getImageWorkerFromColor(gameView.getColors().get(1)));
         second_color.setImage(colorSecond);
         second_color.setPreserveRatio(true);
 
@@ -119,16 +102,22 @@ public class DuringGameController extends ViewObservable{
             third_name.setVisible(false);
         }
         else {
-            third_username.setText(usernames.get(2));
-            Image godThird = new Image(getImageGodFromGodName(gods.get(2)));
+            third_username.setText(gameView.getUsernames().get(2));
+            Image godThird = new Image(getImageGodFromGodName(gameView.getGods().get(2)));
             third_god.setImage(godThird);
             third_god.setPreserveRatio(true);
-            Image colorThird = new Image(getImageWorkerFromColor(colors.get(2)));
+            Image colorThird = new Image(getImageWorkerFromColor(gameView.getColors().get(2)));
             third_color.setImage(colorThird);
             third_color.setPreserveRatio(true);
         }
     }
 
+    void displayBuildDome(){
+        if (!gameView.getMyGod().equals(GodName.ATLAS)){
+            buildDomePane.setVisible(false);
+            buildDomePane.getChildren().removeAll();
+        }
+    }
     /**
      * in the initialize method the based on the moment in which we are in the game the text to display
      */
@@ -144,11 +133,11 @@ public class DuringGameController extends ViewObservable{
         }
         //TODO il text farlo un po' più carino
     }
-    
-    //TODO ho aggiunto questo metodo perché lo username non veniva sfruttato
-    void changeText(String username){
+
+   //TODO ho aggiunto questo metodo perché lo username non veniva sfruttato
+    void changeText(String displayedText){
         if (gameView.getCurrentScene() == CurrentScene.WAIT)
-            commandText.setText("WAIT! It's " + username + "'s turn.");
+            commandText.setText(displayedText);
     }
 
     /**
@@ -159,7 +148,6 @@ public class DuringGameController extends ViewObservable{
         for (int i = 0; i < 4; i++) {
             newRowAndColumn[i] = -1; //for the row+column+row+column of the two initial positions of the workers
         }
-
         workerRowAndColumn[0]= -1; //row and column of the position of the worker the user wants to use
         workerRowAndColumn[1]= -1;
     }
@@ -260,7 +248,6 @@ public class DuringGameController extends ViewObservable{
         Node source = (Node)event.getSource() ; // gets the pane clicked
         Integer colIndex = GridPane.getColumnIndex(source); //column adn row of the pane clicked
         Integer rowIndex = GridPane.getRowIndex(source);
-        System.out.printf("Mouse entered cell [%d, %d]%n", colIndex, rowIndex);
 
         if (gameView.getCurrentScene() == CurrentScene.ASK_INITIAL_POSITION) //the click is accepted twice before of sending the initial positions of the 2 workers
             selectSlotAndNotify(rowIndex, colIndex);
@@ -271,6 +258,7 @@ public class DuringGameController extends ViewObservable{
             visitableActionAndDirection.setAction(action);
             visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(workerRowAndColumn[0],workerRowAndColumn[1], rowIndex,colIndex));
             notifyViewListener(visitableActionAndDirection);
+            //commandText.setText("WAIT"); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
             gameView.updateMoment(CurrentScene.WAIT);
             changeText(); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
         }else if (gameView.getCurrentScene() == CurrentScene.WAIT ){ //if I am in this moment I cannot click
@@ -300,6 +288,7 @@ public class DuringGameController extends ViewObservable{
             VisitableInitialPositions visitableInitialPositions = new VisitableInitialPositions(); //create message at the second click
             visitableInitialPositions.setRowsAndColumns(newRowAndColumn);
             notifyViewListener(visitableInitialPositions);
+            commandText.setText("WAIT");
             //TODO qua invece di far così sarebbe comodo mandare il turno del tizio,
             // dato che effettivamente per la cli viene mandato
             gameView.updateMoment(CurrentScene.WAIT);
@@ -324,19 +313,6 @@ public class DuringGameController extends ViewObservable{
         // dato che effettivamente per la cli viene mandato
         gameView.updateMoment(CurrentScene.WAIT);
         changeText();
-
-    }
-
-    public void setUsernames(ArrayList<String> usernames) {
-        this.usernames = usernames;
-    }
-
-    public void setColors(ArrayList<Color> colors) {
-        this.colors = colors;
-    }
-
-    public void setGods(ArrayList<GodName> gods) {
-        this.gods = gods;
     }
 
     /**
@@ -346,9 +322,10 @@ public class DuringGameController extends ViewObservable{
      */
     public void changeSlot(Slot slot){
         Pane pane = (Pane) getNodeByRowColumnIndex(slot.getRow(), slot.getColumn(), gridPane); //I get the pane that corresponds to the row and column  received by the server
+        //pane.getStylesheets().add("panemargins.css");
+        //pane.setStyle(".panemgs");
         //pane.setEffect(new DropShadow());
         pane.getChildren().clear(); //clean what was in the pane before and recreate everything
-
         GridPane grid = new GridPane(); //gridPane created to always divide the pane into 4 parts
         //grid.setGridLinesVisible(true);
         final int numCols = 1 ;
@@ -369,7 +346,6 @@ public class DuringGameController extends ViewObservable{
         grid.prefHeightProperty().bind(pane.heightProperty());//associates the grid height to the one of the bigger pane (slot)
         pane.getChildren().add(grid); //adds grid as son of the pane
         grid.setAlignment(Pos.CENTER); //not sure if necessary for alignment
-
 
         int levels = addLevels(grid,pane, slot.getLevel()); //add images for levels
 

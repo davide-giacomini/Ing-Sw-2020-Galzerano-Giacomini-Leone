@@ -13,9 +13,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
@@ -62,11 +62,9 @@ public class GUI extends Application implements View {
         gameView = new GameView();
         this.primaryStage = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/FXML/connectionToServer.fxml"));
-        Font.loadFont(getClass().getResourceAsStream("Fonts/savoye.ttf"), 30);
+        fxmlLoader.setLocation(getClass().getResource("/FXML/connectionToServer.fxml"));;
         root = fxmlLoader.load();
         scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/CSS/background.css").toExternalForm());
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Santorini");
@@ -172,7 +170,7 @@ public class GUI extends Application implements View {
             ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
             chooseCardController.addViewListener(networkHandler);
             chooseCardController.setAvailableGods(godsChosen);
-
+            chooseCardController.setGameView(gameView);
         });
 
     }
@@ -217,60 +215,40 @@ public class GUI extends Application implements View {
      */
     @Override
     public void theWinnerIs(String usernameWinner) {
-        if (gameView.getMyUsername().equals(usernameWinner))
-            showIAmTheWinner();
-        else
-            showWhoIsTheWinner(usernameWinner);
-    }
-    
-    private void showIAmTheWinner(){
-        Platform.runLater(()->{
+        Platform.runLater(()-> {
             try {
+                //TODO capire perché devo creare lo stage dentro il runlater
                 Stage winnerStage = new Stage();
-                winnerStage.setHeight(400);
+                winnerStage.setHeight(450);
                 winnerStage.setWidth(600);
-                
+                winnerStage.setTitle("Game over");
+
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/FXML/winningAdvice.fxml"));
-                Scene scene = new Scene(fxmlLoader.load());
-                
-                winnerStage.setScene(scene);
-                winnerStage.setResizable(false);
-            
-                winnerStage.setTitle("You won!");
-                winnerStage.initModality(Modality.APPLICATION_MODAL);
-                winnerStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-    
-    private void showWhoIsTheWinner(String usernameWinner){
-        Platform.runLater(()->{
-            try {
-                Stage winnerStage = new Stage();
-                winnerStage.setHeight(400);
-                winnerStage.setWidth(600);
-    
-                winnerStage.setX(Screen.getPrimary().getBounds().getMinX());
-                winnerStage.setY(Screen.getPrimary().getBounds().getMinY());
-            
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/FXML/losingWithWinner.fxml"));
                 AnchorPane rootAnchorPane = fxmlLoader.load();
                 Scene scene = new Scene(rootAnchorPane);
-                
-                BorderPane borderPane = (BorderPane) rootAnchorPane.getChildren().get(2);
-                Text text = (Text) ((BorderPane)((BorderPane)borderPane.getCenter()).getTop()).getCenter();
-                text.setText("I am sorry.\n" +usernameWinner+ " won.");
-                
+
+                String nameWinnerGod = gameView.getGodByUsername(usernameWinner);
+                ImageView imageView = (ImageView) rootAnchorPane.getChildren().get(5);
+                imageView.setImage(new Image("Images/Podium/podium-characters-"+nameWinnerGod+".png"));
+
+                if (gameView.getMyUsername().equals(usernameWinner)) {
+                    Text text = (Text) rootAnchorPane.getChildren().get(6);
+                    text.setText("CONGRATULATIONS!\nYou won!");
+                }
+                else {
+                    winnerStage.setX(Screen.getPrimary().getBounds().getMinX());
+                    winnerStage.setY(Screen.getPrimary().getBounds().getMinY());
+
+                    Text text = (Text) rootAnchorPane.getChildren().get(6);
+                    text.setText("GAME OVER.\n" +usernameWinner+ " won.");
+                }
+
                 winnerStage.setScene(scene);
                 winnerStage.setResizable(false);
-            
-                winnerStage.setTitle("I am sorry...");
                 winnerStage.initModality(Modality.APPLICATION_MODAL);
                 winnerStage.show();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -283,22 +261,26 @@ public class GUI extends Application implements View {
     @Override
     public void theLoserIs() {
         Platform.runLater(()-> {
+            Stage loserStage = new Stage();
+            loserStage.setHeight(450);
+            loserStage.setWidth(600);
+            loserStage.setTitle("Game over");
+
             try {
-                Stage loserStage = new Stage();
-                loserStage.setHeight(400);
-                loserStage.setWidth(600);
-                
                 loserStage.setX(Screen.getPrimary().getBounds().getMinX());
                 loserStage.setY(Screen.getPrimary().getBounds().getMinY());
                 
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/FXML/losingWithoutWinner.fxml"));
-                Scene scene = new Scene(fxmlLoader.load());
+                fxmlLoader.setLocation(getClass().getResource("/FXML/losingAdvice.fxml"));
+                AnchorPane rootAnchorPane = fxmlLoader.load();
+                Scene scene = new Scene(rootAnchorPane);
+
+                Text text = (Text) rootAnchorPane.getChildren().get(3);
+                text.setText("GAME OVER!\nYou lost.");
                 
                 loserStage.setScene(scene);
                 loserStage.setResizable(false);
-                
-                loserStage.setTitle("I am sorry...");
+
                 loserStage.initModality(Modality.APPLICATION_MODAL);
                 loserStage.show();
             } catch (IOException e) {
@@ -339,6 +321,7 @@ public class GUI extends Application implements View {
             duringGameController.setGameView(gameView);
             duringGameController.addViewListener(networkHandler);
             duringGameController.changeText();
+            duringGameController.displayBuildDome();
             primaryStage.setResizable(true);
             start = true;
         });
@@ -364,9 +347,6 @@ public class GUI extends Application implements View {
         Platform.runLater(() -> {
             gameView.updateMoment(CurrentScene.ASK_INITIAL_POSITION);//new current scene
             duringGameController.resetRowsAndColumns();
-            duringGameController.setUsernames(gameView.getUsernames());
-            duringGameController.setColors(gameView.getColors());
-            duringGameController.setGods(gameView.getGods());
             duringGameController.changeText();
         });
     }
@@ -384,7 +364,7 @@ public class GUI extends Application implements View {
                 setLayout(scene, "/FXML/waitingPane.fxml"); //now instead of alert I show waiting Pane made by Moni :)
             }else {
                 gameView.updateMoment(CurrentScene.WAIT);//new current scene
-                duringGameController.changeText(usernameOnTurn);
+                duringGameController.changeText("WAIT! It's " + usernameOnTurn + "'s turn.");
             }
         });
     }
@@ -406,15 +386,19 @@ public class GUI extends Application implements View {
     @Override
     public void showPublicInformation() {
         Platform.runLater(() -> {
-            duringGameController.setUsernames(gameView.getUsernames());
-            duringGameController.setColors(gameView.getColors());
-            duringGameController.setGods(gameView.getGods());
             duringGameController.setPublicInformation();
         });
     }
 
+    /**
+     *This method is used to let the user have more details about what the other player is doing while playing
+     * @param changes indicates what has changed
+     */
     @Override
-    public void whileOthersTurn(String changes) {
-
+    public void whileOnTurn(String changes) {
+        Platform.runLater(() -> {
+            if(!gameView.isTurn())
+                duringGameController.changeText(changes);
+        });
     }
 }

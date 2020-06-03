@@ -3,19 +3,15 @@ package it.polimi.ingsw.PSP47.View.CLI;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
-import it.polimi.ingsw.PSP47.View.BoardView;
-
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class PrintSupport {
-    private Slot emptySlot = new Slot(0,0);
 
     private static final String UPPER_PART_SLOT = " ________ ";
     private static final String LOWER_FREE_PART_SLOT = "|________|";
     private static final String MIDDLE_FREE_PART_SLOT ="|        |";
-
 
     private static final String WITH_LEV1_PART_SLOT = "|___"+AnsiCode.ANSI_LEVEL1+ "___|";
     private static final String WITH_LEV2_PART_SLOT = "|   "+AnsiCode.ANSI_LEVEL2+ "    |";
@@ -26,7 +22,6 @@ public class PrintSupport {
     private String[][][] BOARD_PARTS = new String[5][5][5];
     private static final String[] EMPTY_PARTS = new String[5];
 
-
     public PrintSupport() {
         EMPTY_PARTS[0]= UPPER_PART_SLOT;
         EMPTY_PARTS[1]= MIDDLE_FREE_PART_SLOT;
@@ -34,7 +29,6 @@ public class PrintSupport {
         EMPTY_PARTS[3]= MIDDLE_FREE_PART_SLOT;
         EMPTY_PARTS[4]= LOWER_FREE_PART_SLOT;
     }
-
 
     /**This method prints an empty board */
     public void createEmptyBoard(){
@@ -44,7 +38,6 @@ public class PrintSupport {
                 }
             }
     }
-
 
     /**
      * This method prints the board created graphically by buildCurrBoard method
@@ -69,16 +62,6 @@ public class PrintSupport {
             }
         }
         out.print("\n");
-       // clearConsole(out);
-    }
-
-    /**
-     * Clears the console
-     */
-    static void clearConsole(PrintStream out) {
-        out.print(AnsiCode.ANSI_CLEARCONSOLE);
-        out.flush();
-
     }
 
     /**
@@ -136,7 +119,6 @@ public class PrintSupport {
         out.print(AnsiCode.ANSI_YELLOW+ wait + AnsiCode.ANSI_RESET);
     }
 
-
     public void printError(PrintStream out){
         String error =
                 "███████╗██████╗ ██████╗  ██████╗ ██████╗     ██╗\n"+
@@ -147,7 +129,6 @@ public class PrintSupport {
                 "╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝    ╚═╝\n";
         out.print(AnsiCode.ANSI_RED+ error + AnsiCode.ANSI_RESET);
     }
-
 
     public void printWin(PrintStream out){
         String win =
@@ -223,9 +204,7 @@ public class PrintSupport {
                 e.printStackTrace();
         }
 
-
         out.print("\n"+ AnsiCode.ANSI_RESET);
-
     }
 
 
@@ -242,7 +221,6 @@ public class PrintSupport {
                        "     ▐░▌     ▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄█░▌     ▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄█░▌ ▄▄▄▄▄▄▄▄▄█░▌     ▐░▌ \n"+
                        "     ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░▌ \n"+
                        "      ▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀       ▀\n";
-
 
         out.print(AnsiCode.ANSI_WHITE+ lost + AnsiCode.ANSI_RESET);
     }
@@ -272,10 +250,6 @@ public class PrintSupport {
 
     public String[][][] getBOARD_PARTS() {
         return BOARD_PARTS;
-    }
-
-    public void setBOARD_PARTS(String[][][] BOARD_PARTS) {
-        this.BOARD_PARTS = BOARD_PARTS;
     }
 
     public void buildSlot(Slot slot){

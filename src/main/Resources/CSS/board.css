@@ -1,3 +1,29 @@
-.bodybg {
+@font-face {
+    font-family: "Ink Blossoms";
+    src: url("/Fonts/Blossoms.ttf");
+}
+
+.root {
     -fx-background-image: url("/Images/WaterBackground.jpg");
 }
+
+Text {
+    -fx-font-family: "Ink Blossoms";
+    -fx-font-size: 2em;
+    -fx-fill: blue;
+    -fx-text-alignment: center;
+}
+
+.backgroundColored {
+    -fx-fill: white;
+}
+
+#errorMessage {
+    -fx-fill: red;
+}
+
+.pane_mgs {
+    -fx-border-color: black;
+    -fx-border-width: 0 0 1 1;
+}
+

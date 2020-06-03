@@ -18,7 +18,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>it.polimi.ingsw.PSP47.Network.Server.StartServer</mainClass>
+                  <mainClass>it.polimi.ingsw.PSP47.Network.Client.Client</mainClass>
                 </transformer>
               </transformers>
               <filters>
