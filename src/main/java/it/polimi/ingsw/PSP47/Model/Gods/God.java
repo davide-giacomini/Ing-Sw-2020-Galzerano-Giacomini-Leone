@@ -197,7 +197,16 @@ public abstract class God {
      * @param worker the worker chosen to be checked.
      * @return true if the worker can go on, false otherwise.
      */
-    public abstract boolean checkIfCanGoOn (Worker worker);
+    public boolean checkIfCanGoOn (Worker worker) {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        if (numberOfMovements==0)
+            return checkIfCanMove(worker);
+        else if (numberOfMovements==1 && numberOfBuildings==0)
+            return checkIfCanBuild(worker);
+        return false;
+    }
 
     /**
      * This method checks if the slot is occupied by a worker.
@@ -240,9 +249,15 @@ public abstract class God {
 
     /**
      * This method controls if the player can end his turn. If the player is winning, it returns true.
-     * @return true if the player can end his turn.
+     * @return true if the player can end his turn, false otherwise.
      */
-    public abstract boolean validateEndTurn();
+    public boolean validateEndTurn() {
+        int numberOfMovements = player.getTurn().getNumberOfMovements();
+        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
+
+        return numberOfBuildings >= MIN_BUILDINGS && numberOfMovements >= MIN_MOVEMENTS
+                || numberOfMovements >= MIN_MOVEMENTS && player.isWinning();
+    }
 
     /**
      * @return the name of the god.

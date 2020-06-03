@@ -15,14 +15,11 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import java.util.ArrayList;
 
 /**
  * This class is used to separate from the Gui class the logic of the game, based on which moment we are in the game, it
@@ -383,20 +380,20 @@ public class DuringGameController extends ViewObservable{
 
     private String getImageGodFromGodName(GodName godName) {
         switch (godName){
-            case APOLLO: return "/Images/podiumApollo.png";
-            case ARTEMIS: return "/Images/podiumArtemis.png";
-            case ATHENA: return "/Images/podiumAthena.png";
-            case ATLAS: return "/Images/podiumAtlas.png";
-            case CHRONUS: return "/Images/podiumChronus.png";
-            case DEMETER: return "/Images/podiumDemeter.png";
-            case HEPHAESTUS: return "/Images/podiumHephaestus.png";
-            case HERA: return "/Images/podiumHera.png";
-            case HESTIA: return "/Images/podiumHestia.png";
-            case MINOTAUR: return "/Images/podiumMinotaur.png";
-            case PAN: return "/Images/podiumPan.png";
-            case PROMETHEUS: return "/Images/podiumPrometheus.png";
-            case TRITON: return "/Images/podiumTriton.png";
-            default: return "/Images/podiumZeus.png";   // ZEUS
+            case APOLLO: return "/Images/Podium/podiumApollo.png";
+            case ARTEMIS: return "/Images/Podium/podiumArtemis.png";
+            case ATHENA: return "/Images/Podium/podiumAthena.png";
+            case ATLAS: return "/Images/Podium/podiumAtlas.png";
+            case CHRONUS: return "/Images/Podium/podiumChronus.png";
+            case DEMETER: return "/Images/Podium/podiumDemeter.png";
+            case HEPHAESTUS: return "/Images/Podium/podiumHephaestus.png";
+            case HERA: return "/Images/Podium/podiumHera.png";
+            case HESTIA: return "/Images/Podium/podiumHestia.png";
+            case MINOTAUR: return "/Images/Podium/podiumMinotaur.png";
+            case PAN: return "/Images/Podium/podiumPan.png";
+            case PROMETHEUS: return "/Images/Podium/podiumPrometheus.png";
+            case TRITON: return "/Images/Podium/podiumTriton.png";
+            default: return "/Images/Podium/podiumZeus.png";   // ZEUS
         }
     }
 

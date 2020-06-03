@@ -9,6 +9,10 @@ import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents the controller of a turn.
+ * The GameController creates a new instance every time a new turn is going on and when it ends the instance is substituted.
+ */
 public class TurnController {
 
     private final GameController controller;

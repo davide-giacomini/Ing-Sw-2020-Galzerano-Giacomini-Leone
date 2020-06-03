@@ -23,7 +23,6 @@ public class Demeter extends God {
         threePlayersGame = true;
     }
 
-
     /**
      * This method allows a second build only if the new slot where to build differs from the old one
      * @param direction specifies the slot where to build
@@ -108,19 +107,7 @@ public class Demeter extends God {
             return checkIfCanBuild(worker);
         if (numberOfMovements==1 && numberOfBuildings==1)
             return checkIfCanBuild(worker);
-        
         return false;
     }
 
-    /**
-     * This method checks if the player has completed a turn or if he still have to do some actions.
-     * @return true if he can end his turn, false otherwise.
-     */
-    @Override
-    public boolean validateEndTurn() {
-        int numberOfMovements = player.getTurn().getNumberOfMovements();
-        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
-    
-        return numberOfBuildings==1 && numberOfMovements==1 || numberOfBuildings==2 && numberOfMovements==1;
-    }
 }

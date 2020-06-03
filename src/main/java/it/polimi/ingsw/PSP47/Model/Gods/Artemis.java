@@ -121,19 +121,6 @@ public class Artemis extends God {
             return checkIfCanBuild(worker);
         return false;
     }
-
-    /**
-     * This method checks if the player has completed a turn or if he still have to do some actions.
-     * @return true if he can end his turn, false otherwise.
-     */
-    @Override
-    public boolean validateEndTurn() {
-        int numberOfMovements = player.getTurn().getNumberOfMovements();
-        int numberOfBuildings = player.getTurn().getNumberOfBuildings();
-
-        return numberOfBuildings >= MIN_BUILDINGS && numberOfMovements >= MIN_MOVEMENTS
-                || numberOfMovements >= MIN_MOVEMENTS && player.isWinning();
-    }
     
     /**
      * This method check if two directions are opposite: this must be checked as Artemis

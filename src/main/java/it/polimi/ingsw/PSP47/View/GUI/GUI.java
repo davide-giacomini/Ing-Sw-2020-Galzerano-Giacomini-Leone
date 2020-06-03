@@ -170,6 +170,7 @@ public class GUI extends Application implements View {
             ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
             chooseCardController.addViewListener(networkHandler);
             chooseCardController.setAvailableGods(godsChosen);
+            chooseCardController.setLessVisible();
             chooseCardController.setGameView(gameView);
         });
 
@@ -230,7 +231,7 @@ public class GUI extends Application implements View {
 
                 String nameWinnerGod = gameView.getGodByUsername(usernameWinner);
                 ImageView imageView = (ImageView) rootAnchorPane.getChildren().get(5);
-                imageView.setImage(new Image("Images/Podium/podium-characters-"+nameWinnerGod+".png"));
+                imageView.setImage(new Image("Images/Podium/podium"+nameWinnerGod+".png"));
 
                 if (gameView.getMyUsername().equals(usernameWinner)) {
                     Text text = (Text) rootAnchorPane.getChildren().get(6);

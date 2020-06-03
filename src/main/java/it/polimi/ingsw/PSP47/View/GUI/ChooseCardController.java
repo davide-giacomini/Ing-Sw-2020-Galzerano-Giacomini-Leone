@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.VisitableGod;
 import javafx.fxml.FXML;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Shadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -94,6 +95,40 @@ public class ChooseCardController extends ViewObservable {
         Prometheus.setEffect(null);
         Triton.setEffect(null);
         Zeus.setEffect(null);
+    }
+
+    /**
+     * This method set less visible all the cards that are not available in the game.
+     */
+    void setLessVisible() {
+        if (!availableGods.contains(GodName.ATHENA))
+            Athena.setOpacity(0.5);
+        if (!availableGods.contains(GodName.APOLLO))
+            Apollo.setOpacity(0.5);
+        if (!availableGods.contains(GodName.ATLAS))
+            Atlas.setOpacity(0.5);
+        if (!availableGods.contains(GodName.ARTEMIS))
+            Artemis.setOpacity(0.5);
+        if (!availableGods.contains(GodName.HERA))
+            Hera.setOpacity(0.5);
+        if (!availableGods.contains(GodName.HESTIA))
+            Hestia.setOpacity(0.5);
+        if (!availableGods.contains(GodName.HEPHAESTUS))
+            Hephaestus.setOpacity(0.5);
+        if (!availableGods.contains(GodName.MINOTAUR))
+            Minotaur.setOpacity(0.5);
+        if (!availableGods.contains(GodName.PROMETHEUS))
+            Prometheus.setOpacity(0.5);
+        if (!availableGods.contains(GodName.PAN))
+            Pan.setOpacity(0.5);
+        if (!availableGods.contains(GodName.CHRONUS))
+            Chronus.setOpacity(0.5);
+        if (!availableGods.contains(GodName.TRITON))
+            Triton.setOpacity(0.5);
+        if (!availableGods.contains(GodName.ZEUS))
+            Zeus.setOpacity(0.5);
+        if (!availableGods.contains(GodName.DEMETER))
+            Demeter.setOpacity(0.5);
     }
 
     /**
