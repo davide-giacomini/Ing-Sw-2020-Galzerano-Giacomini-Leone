@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP47.Network.Client;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
+import it.polimi.ingsw.PSP47.Enumerations.CurrentMoment;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Message.*;
@@ -141,15 +141,15 @@ public class NetworkHandler implements Runnable, ViewListener {
         public void run() {
             switch (message.getMessageType()) {
                 case FIRST_CONNECTION:
-                    view.getGameView().updateMoment(CurrentScene.START);
+                    view.getGameView().updateMoment(CurrentMoment.START);
                     handleFirstConnection();
                     break;
                 case REQUEST_PLAYERS_NUMBER:
-                    view.getGameView().updateMoment(CurrentScene.CHOOSE_PLAYERS);
+                    view.getGameView().updateMoment(CurrentMoment.CHOOSE_PLAYERS);
                     view.askNumberOfPlayers();
                     break;
                 case WRONG_PARAMETERS:
-                    view.getGameView().updateMoment(CurrentScene.START);
+                    view.getGameView().updateMoment(CurrentMoment.START);
                     view.showErrorMessage(((WrongParameters) message).getErrorMessage());
                     handleFirstConnection();
                     break;
@@ -175,7 +175,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.showImportantMessage(text);
                     break;
                 case LIST_OF_GODS:
-                    view.getGameView().updateMoment(CurrentScene.CHOOSE_CARD);
+                    view.getGameView().updateMoment(CurrentMoment.CHOOSE_CARD);
                     visitable = ((VisitableMessage) message).getContent();
                     VisitableListOfGods visitableGods = (VisitableListOfGods) visitable;
                     ArrayList<GodName> godNames = visitableGods.getGodNames();
@@ -187,20 +187,21 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.getGameView().setNumberOfPlayers(number);
                     break;
                 case CHALLENGER:
-                    view.getGameView().updateMoment(CurrentScene.CHALLENGER);
+                    view.getGameView().updateMoment(CurrentMoment.CHALLENGER);
                     YouAreTheChallenger messageNames = (YouAreTheChallenger) message;
                     ArrayList<String>usernames = messageNames.getUsernames();
                     view.challengerWillChooseThreeGods(usernames);
                     break;
                 case LOSING:
-                    view.getGameView().updateMoment(CurrentScene.LOSE);
+                    view.getGameView().updateMoment(CurrentMoment.LOSE);
                     view.theLoserIs();
                     break;
                 case WINNING:
-                    view.getGameView().updateMoment(CurrentScene.WIN);
+                    view.getGameView().updateMoment(CurrentMoment.WIN);
                     view.theWinnerIs(((ImportantMessage) message).getText());
                     break;
                 case START_GAME:
+                    view.showImportantMessage(((ImportantMessage) message).getText());
                     view.showGame();
                     break;
                 case ASK_WORKER_POSITION:
@@ -210,11 +211,11 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.askAction();
                     break;
                 case CHOOSE_WORKER:
-                    view.getGameView().setTurn(true);
+                    view.getGameView().setMyTurn(true);
                     view.askWhichWorkerToUse();
                     break;
                 case TURN:
-                    view.getGameView().setTurn(false);
+                    view.getGameView().setMyTurn(false);
                     view.othersTurn(((ImportantMessage) message).getText());
                     break;
                 case PUBLIC_INFORMATION:
@@ -232,7 +233,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     break;
                 case DURING_TURN:
                     String changes = ((ImportantMessage) message).getText();
-                    view.whileOnTurn(changes);
+                    view.whileOnGame(changes);
 
             }
         }

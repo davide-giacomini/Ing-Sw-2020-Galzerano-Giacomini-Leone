@@ -35,7 +35,7 @@
       </ImageView>
         <ImageView fitHeight="246.0" fitWidth="251.0" layoutX="180.0" layoutY="66.0" preserveRatio="true" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="179.765625" AnchorPane.topAnchor="66.0">
             <image>
-                <Image url="@../Images/Podium/podium-characters-Arthemis.png" />
+                <Image url="@../Images/Podium/podiumArtemis.png" />
             </image>
         </ImageView>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="430.13670349121094" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="10.0" />

@@ -121,7 +121,7 @@
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Action;
 <i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Action;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.CurrentMoment;
 <i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
 <i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Slot;
 <i>8</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
@@ -146,7 +146,7 @@
 <i>27</i>&nbsp;    private NetworkHandler networkHandler;
 <i>28</i>&nbsp;    private GameView gameView;
 <i>29</i>&nbsp;
-<i>30</i>&nbsp;    private CurrentScene currentScene;
+<i>30</i>&nbsp;    private CurrentScene currentMoment;
 <i>31</i>&nbsp;    private Stage primaryStage;
 <i>32</i>&nbsp;    private Scene scene;
 <i>33</i>&nbsp;    private Parent root;
@@ -172,7 +172,7 @@
 <b class="nc"><i>53</i>&nbsp;        primaryStage.setTitle(&quot;Santorini&quot;);</b>
 <b class="nc"><i>54</i>&nbsp;        primaryStage.show();</b>
 <i>55</i>&nbsp;
-<b class="nc"><i>56</i>&nbsp;        currentScene = CurrentScene.START;</b>
+<b class="nc"><i>56</i>&nbsp;        currentMoment = CurrentScene.START;</b>
 <i>57</i>&nbsp;
 <b class="nc"><i>58</i>&nbsp;        connectionToServerController = fxmlLoader.getController();</b>
 <b class="nc"><i>59</i>&nbsp;        connectionToServerController.setGui(this);</b>
@@ -209,7 +209,7 @@
 <i>90</i>&nbsp;    @Override
 <i>91</i>&nbsp;    public void askFirstConnection() {
 <b class="nc"><i>92</i>&nbsp;        Platform.runLater(() -&gt; {</b>
-<b class="nc"><i>93</i>&nbsp;        currentScene = CurrentScene.START;</b>
+<b class="nc"><i>93</i>&nbsp;        currentMoment = CurrentScene.START;</b>
 <b class="nc"><i>94</i>&nbsp;        StartController startController = setLayout(scene, &quot;/FXML/startPane.fxml&quot;);</b>
 <b class="nc"><i>95</i>&nbsp;        startController.addViewListener(networkHandler);</b>
 <i>96</i>&nbsp;        });
@@ -218,7 +218,7 @@
 <i>99</i>&nbsp;    @Override
 <i>100</i>&nbsp;    public void askNumberOfPlayers() {
 <b class="nc"><i>101</i>&nbsp;        Platform.runLater(() -&gt; {</b>
-<b class="nc"><i>102</i>&nbsp;        currentScene = CurrentScene.CHOOSE_PLAYERS;</b>
+<b class="nc"><i>102</i>&nbsp;        currentMoment = CurrentScene.CHOOSE_PLAYERS;</b>
 <b class="nc"><i>103</i>&nbsp;        ChoosePlayersController choosePlayersController = setLayout(scene,&quot;/FXML/choosePlayers.fxml&quot;);</b>
 <b class="nc"><i>104</i>&nbsp;        choosePlayersController.addViewListener(networkHandler);</b>
 <i>105</i>&nbsp;
@@ -230,7 +230,7 @@
 <i>111</i>&nbsp;    @Override
 <i>112</i>&nbsp;    public void challengerWillChooseThreeGods() {
 <b class="nc"><i>113</i>&nbsp;        Platform.runLater(() -&gt; {</b>
-<b class="nc"><i>114</i>&nbsp;        currentScene = CurrentScene.CHOOSE_CARDS;</b>
+<b class="nc"><i>114</i>&nbsp;        currentMoment = CurrentScene.CHOOSE_CARDS;</b>
 <b class="nc"><i>115</i>&nbsp;        primaryStage.setWidth(1100);</b>
 <b class="nc"><i>116</i>&nbsp;        primaryStage.setHeight(800);</b>
 <b class="nc"><i>117</i>&nbsp;        ChooseCardsController chooseCardsController = setLayout(scene, &quot;/FXML/chooseCards.fxml&quot;);</b>
@@ -242,7 +242,7 @@
 <i>123</i>&nbsp;    @Override
 <i>124</i>&nbsp;    public void chooseYourGod(ArrayList&lt;GodName&gt; godsChosen) {
 <b class="nc"><i>125</i>&nbsp;        Platform.runLater(() -&gt; {</b>
-<b class="nc"><i>126</i>&nbsp;            currentScene = CurrentScene.CHOOSE_CARD;</b>
+<b class="nc"><i>126</i>&nbsp;            currentMoment = CurrentScene.CHOOSE_CARD;</b>
 <b class="nc"><i>127</i>&nbsp;            primaryStage.setWidth(1100);</b>
 <b class="nc"><i>128</i>&nbsp;            primaryStage.setHeight(800);</b>
 <b class="nc"><i>129</i>&nbsp;            ChooseCardController chooseCardController = setLayout(scene, &quot;/FXML/chooseCard.fxml&quot;);</b>
@@ -294,7 +294,7 @@
 <i>175</i>&nbsp;
 <i>176</i>&nbsp;    @Override
 <i>177</i>&nbsp;    public void theWinnerIs(String usernameWinner) {
-<b class="nc"><i>178</i>&nbsp;        currentScene = CurrentScene.WIN;</b>
+<b class="nc"><i>178</i>&nbsp;        currentMoment = CurrentScene.WIN;</b>
 <b class="nc"><i>179</i>&nbsp;        primaryStage.setWidth(1100);</b>
 <b class="nc"><i>180</i>&nbsp;        primaryStage.setHeight(800);</b>
 <b class="nc"><i>181</i>&nbsp;        WinningAdviceController winningAdviceController = setLayout(scene, &quot;/FXML/winningAdvice.fxml&quot;);</b>
@@ -303,7 +303,7 @@
 <i>184</i>&nbsp;
 <i>185</i>&nbsp;    @Override
 <i>186</i>&nbsp;    public void theLoserIs() {
-<b class="nc"><i>187</i>&nbsp;        currentScene = CurrentScene.LOSE;</b>
+<b class="nc"><i>187</i>&nbsp;        currentMoment = CurrentScene.LOSE;</b>
 <b class="nc"><i>188</i>&nbsp;        primaryStage.setWidth(1100);</b>
 <b class="nc"><i>189</i>&nbsp;        primaryStage.setHeight(800);</b>
 <b class="nc"><i>190</i>&nbsp;        LosingAdviceController losingAdviceController = setLayout(scene, &quot;/FXML/losingAdvice.fxml&quot;);</b>
@@ -318,7 +318,7 @@
 <i>199</i>&nbsp;
 <i>200</i>&nbsp;    private String choosePath() {
 <b class="nc"><i>201</i>&nbsp;        String path = &quot;&quot;;</b>
-<b class="nc"><i>202</i>&nbsp;        switch (currentScene) {</b>
+<b class="nc"><i>202</i>&nbsp;        switch (currentMoment) {</b>
 <i>203</i>&nbsp;            case START:
 <b class="nc"><i>204</i>&nbsp;                path = &quot;/FXML/startPane.fxml&quot;;</b>
 <b class="nc"><i>205</i>&nbsp;                break;</b>
@@ -401,7 +401,7 @@
 <b class="nc"><i>282</i>&nbsp;                a.setContentText(&quot;It&#39;s &quot; + usernameOnTurn + &quot;&#39;s turn. You can&#39;t do anything until it&#39;s your turn.&quot;);</b>
 <b class="nc"><i>283</i>&nbsp;                a.show();</b>
 <b class="nc"><i>284</i>&nbsp;            }else {</b>
-<b class="nc"><i>285</i>&nbsp;                currentScene = CurrentScene.SET_WORKERS;</b>
+<b class="nc"><i>285</i>&nbsp;                currentMoment = CurrentScene.SET_WORKERS;</b>
 <b class="nc"><i>286</i>&nbsp;                mainController.setMoment(Action.WAIT);</b>
 <b class="nc"><i>287</i>&nbsp;                mainController.initialize();</b>
 <i>288</i>&nbsp;            }

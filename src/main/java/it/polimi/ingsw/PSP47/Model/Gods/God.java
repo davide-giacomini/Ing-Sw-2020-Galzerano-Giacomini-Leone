@@ -108,7 +108,6 @@ public abstract class God {
      * Reset all the additional eventual parameters of the god.
      * It has to be called inside the god and it's not necessary for every god.
      */
-    //TODO c'è un modo migliore per farlo?
     public void resetParameters() {}
     
     /**
@@ -188,7 +187,6 @@ public abstract class God {
         return false;
     }
 
-    //TODO davide -> si può evitare che il codice overridato venga duplicato?
     /**
      * This method checks, using {@link #checkIfCanBuild(Worker)}, {@link #checkIfCanMove(Worker)},
      * {@link #checkIfCanBuildInNormalConditions(Worker)} and {@link #checkIfCanMoveInNormalConditions(Worker)}, can
@@ -217,7 +215,6 @@ public abstract class God {
         return slot.isWorkerOnSlot();
     }
 
-    //TODO Davide -> non si può fare anche qui un ckeck senza direzione?
     /**
      * This method checks if the slot is occupied. It's useful for building.
      *
@@ -236,14 +233,11 @@ public abstract class God {
      * @return true if the order of actions is uncorrected, false otherwise.
      */
     public boolean checkOrderOfActions(Action action) {
-        if (action == Action.MOVE) {
-            if (player.getTurn().getNumberOfBuildings() > 0)
-                return true;
-        }
-        else if (action == Action.BUILD || action == Action.BUILDDOME) {
-            if (player.getTurn().getNumberOfMovements() == 0)
-                return true;
-        }
+        if (action == Action.MOVE)
+            return player.getTurn().getNumberOfBuildings() > 0;
+        else if (action == Action.BUILD || action == Action.BUILDDOME)
+            return player.getTurn().getNumberOfMovements() == 0;
+
         return false;
     }
 

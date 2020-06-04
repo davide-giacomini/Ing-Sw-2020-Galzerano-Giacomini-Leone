@@ -15,8 +15,6 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
-//TODO modificare questa scena in modo da rendere gli dei utilizzabili in chiaro fin da subito
-
 /**
  * This class is the controller of the chooseCard.fxml scene.
  * In this scene the player can choose the god's power that will use during the game.

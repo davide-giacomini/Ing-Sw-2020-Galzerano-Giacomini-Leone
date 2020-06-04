@@ -119,21 +119,19 @@ public class DuringGameController extends ViewObservable{
      * in the initialize method the based on the moment in which we are in the game the text to display
      */
     void changeText() {
-        if (gameView.getCurrentScene() == CurrentScene.ASK_INITIAL_POSITION){
+        if (gameView.getCurrentMoment() == CurrentMoment.ASK_INITIAL_POSITION){
             commandText.setText("Choose where to position your workers by clicking on the slot :");
-        }else if(gameView.getCurrentScene() == CurrentScene.ASK_WHICH_WORKER){
+        }else if(gameView.getCurrentMoment() == CurrentMoment.ASK_WHICH_WORKER){
             commandText.setText("Choose the worker you want to use by clicking on it :");
-        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION){
+        }else if (gameView.getCurrentMoment() == CurrentMoment.CHOOSE_ACTION){
             commandText.setText("Choose an action between the buttons :");
-        }else if (gameView.getCurrentScene() == CurrentScene.WAIT){
+        }else if (gameView.getCurrentMoment() == CurrentMoment.WAIT){
             commandText.setText("WAIT");
         }
-        //TODO il text farlo un po' più carino
     }
 
-   //TODO ho aggiunto questo metodo perché lo username non veniva sfruttato
     void changeText(String displayedText){
-        if (gameView.getCurrentScene() == CurrentScene.WAIT)
+        if (gameView.getCurrentMoment() == CurrentMoment.WAIT)
             commandText.setText(displayedText);
     }
 
@@ -156,14 +154,14 @@ public class DuringGameController extends ViewObservable{
      */
     @FXML
     void OnMoveClick(MouseEvent event) {
-        if (gameView.getCurrentScene() == CurrentScene.WAIT){
+        if (gameView.getCurrentMoment() == CurrentMoment.WAIT){
             //TODO non mandare un alert
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
             a.show();
-        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION){
+        }else if (gameView.getCurrentMoment() == CurrentMoment.CHOOSE_ACTION){
             action = Action.MOVE;
-            gameView.updateMoment(CurrentScene.ACTION_CHOSEN);
+            gameView.updateMoment(CurrentMoment.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to move.");
         }//TODO add other cases with text
     }
@@ -175,13 +173,13 @@ public class DuringGameController extends ViewObservable{
      */
     @FXML
     void OnBuildClick(MouseEvent event) {
-        if (gameView.getCurrentScene() == CurrentScene.WAIT){
+        if (gameView.getCurrentMoment() == CurrentMoment.WAIT){
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
             a.show();
-        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {
+        }else if (gameView.getCurrentMoment() == CurrentMoment.CHOOSE_ACTION) {
             action = Action.BUILD;
-            gameView.updateMoment(CurrentScene.ACTION_CHOSEN);
+            gameView.updateMoment(CurrentMoment.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to build:");
         }
     }
@@ -193,13 +191,13 @@ public class DuringGameController extends ViewObservable{
      */
     @FXML
     void OnBuildDomeClick(MouseEvent event) {
-        if (gameView.getCurrentScene() == CurrentScene.WAIT){
+        if (gameView.getCurrentMoment() == CurrentMoment.WAIT){
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
             a.show();
-        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {
+        }else if (gameView.getCurrentMoment() == CurrentMoment.CHOOSE_ACTION) {
             action = Action.BUILDDOME;
-            gameView.updateMoment(CurrentScene.ACTION_CHOSEN);
+            gameView.updateMoment(CurrentMoment.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to build the Dome:");
         }
     }
@@ -212,17 +210,17 @@ public class DuringGameController extends ViewObservable{
      */
     @FXML
     void OnEndClick(MouseEvent event) {
-        if (gameView.getCurrentScene() == CurrentScene.WAIT) {
+        if (gameView.getCurrentMoment() == CurrentMoment.WAIT) {
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
             a.show();
-        }else if (gameView.getCurrentScene() == CurrentScene.CHOOSE_ACTION) {
+        }else if (gameView.getCurrentMoment() == CurrentMoment.CHOOSE_ACTION) {
             action = Action.END;
             VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();
             visitableActionAndDirection.setAction(action);
             notifyViewListener(visitableActionAndDirection);
             commandText.setText("You asked to end your turn");
-            gameView.updateMoment(CurrentScene.WAIT);
+            gameView.updateMoment(CurrentMoment.WAIT);
         }
     }
 
@@ -246,19 +244,19 @@ public class DuringGameController extends ViewObservable{
         Integer colIndex = GridPane.getColumnIndex(source); //column adn row of the pane clicked
         Integer rowIndex = GridPane.getRowIndex(source);
 
-        if (gameView.getCurrentScene() == CurrentScene.ASK_INITIAL_POSITION) //the click is accepted twice before of sending the initial positions of the 2 workers
+        if (gameView.getCurrentMoment() == CurrentMoment.ASK_INITIAL_POSITION) //the click is accepted twice before of sending the initial positions of the 2 workers
             selectSlotAndNotify(rowIndex, colIndex);
-        else if (gameView.getCurrentScene() == CurrentScene.ASK_WHICH_WORKER){ //the click is accepted once when I choose the worker
+        else if (gameView.getCurrentMoment() == CurrentMoment.ASK_WHICH_WORKER){ //the click is accepted once when I choose the worker
             chooseWorkerToUse(rowIndex,colIndex);
-        }else if(gameView.getCurrentScene() == CurrentScene.ACTION_CHOSEN){ //the action button was clicked and after clicking on the grid the message can be created and sent
+        }else if(gameView.getCurrentMoment() == CurrentMoment.ACTION_CHOSEN){ //the action button was clicked and after clicking on the grid the message can be created and sent
             VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();
             visitableActionAndDirection.setAction(action);
             visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(workerRowAndColumn[0],workerRowAndColumn[1], rowIndex,colIndex));
             notifyViewListener(visitableActionAndDirection);
             //commandText.setText("WAIT"); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
-            gameView.updateMoment(CurrentScene.WAIT);
+            gameView.updateMoment(CurrentMoment.WAIT);
             changeText(); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
-        }else if (gameView.getCurrentScene() == CurrentScene.WAIT ){ //if I am in this moment I cannot click
+        }else if (gameView.getCurrentMoment() == CurrentMoment.WAIT ){ //if I am in this moment I cannot click
             //TODO davide -> io questo lo cambierei in un non alert ma poi vediamo
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
@@ -268,7 +266,7 @@ public class DuringGameController extends ViewObservable{
     }
 
     /**
-     * method used to send the inital positions of the two workers
+     * method used to send the initial positions of the two workers
      * @param row of the pane clicked in the gridPane
      * @param column of the pane clicked in the gridPane
      */
@@ -286,9 +284,7 @@ public class DuringGameController extends ViewObservable{
             visitableInitialPositions.setRowsAndColumns(newRowAndColumn);
             notifyViewListener(visitableInitialPositions);
             commandText.setText("WAIT");
-            //TODO qua invece di far così sarebbe comodo mandare il turno del tizio,
-            // dato che effettivamente per la cli viene mandato
-            gameView.updateMoment(CurrentScene.WAIT);
+            gameView.updateMoment(CurrentMoment.WAIT);
             changeText();
         }
     }
@@ -299,7 +295,7 @@ public class DuringGameController extends ViewObservable{
      * @param column of the pane
      */
     private void chooseWorkerToUse(int row, int column) {
-        //add opacity to indicate the worker chosen TODO
+        //add opacity to indicate the worker chosen
         workerRowAndColumn[0] = row ;
         workerRowAndColumn[1] = column;
 
@@ -308,7 +304,7 @@ public class DuringGameController extends ViewObservable{
         notifyViewListener(visitableRowsAndColumns);
         //TODO qua invece di far così sarebbe comodo mandare il turno del tizio,
         // dato che effettivamente per la cli viene mandato
-        gameView.updateMoment(CurrentScene.WAIT);
+        gameView.updateMoment(CurrentMoment.WAIT);
         changeText();
     }
 

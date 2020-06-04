@@ -1,13 +1,10 @@
 package it.polimi.ingsw.PSP47.View;
 
 import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
+import it.polimi.ingsw.PSP47.Enumerations.CurrentMoment;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 
 import java.util.ArrayList;
-
-//TODO togliere tutti i getter e setter che non sono importanti.
-// Per "turn" si intende myTurn?
 
 /**
  * This class stores in the client some basic information of the model that the view needs in order to
@@ -25,8 +22,8 @@ public class GameView{
     private ArrayList<Color> colors = new ArrayList<Color>();
     private ArrayList <GodName> gods = new ArrayList<GodName>();
 
-    private CurrentScene currentScene;
-    private boolean turn;
+    private CurrentMoment currentMoment;
+    private boolean myTurn;
 
     public GameView(){
         this.boardView = new BoardView();
@@ -74,10 +71,6 @@ public class GameView{
         return boardView;
     }
 
-    public void setBoardView(BoardView boardView) {
-        this.boardView = boardView;
-    }
-
     public void setUsernames(ArrayList<String> usernames) {
         this.usernames = usernames;
     }
@@ -102,19 +95,19 @@ public class GameView{
         return gods;
     }
 
-    public CurrentScene getCurrentScene() {
-        return currentScene;
+    public CurrentMoment getCurrentMoment() {
+        return currentMoment;
     }
 
-    public void updateMoment(CurrentScene currentScene) {
-        this.currentScene = currentScene;
+    public void updateMoment(CurrentMoment currentMoment) {
+        this.currentMoment = currentMoment;
     }
 
-    public boolean isTurn() {
-        return turn;
+    public boolean isMyTurn() {
+        return myTurn;
     }
 
-    public void setTurn(boolean turn) {
-        this.turn = turn;
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
     }
 }

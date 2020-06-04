@@ -13,7 +13,7 @@ public class Game {
     private final Board board;
     private int numberOfPlayers;
     private Player challenger;
-    private ArrayList<GodName> gods;
+    private ArrayList<GodName> gods; //TODO ELIMINARE e spostalo nel gameController come available gods Monichella
     private ArrayList<Player> players;
 
     public Game(int numberOfPlayers) {
@@ -175,7 +175,6 @@ public class Game {
         else
             return currentPlayer.isWinning();
     }
-    //TODO davide -> questo secondo me bisognerebbe spostarlo nella classe Player, o addirittura nel Worker
 
     /**
      * This method is called after every build.

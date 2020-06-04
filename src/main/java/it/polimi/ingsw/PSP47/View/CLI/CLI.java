@@ -182,7 +182,7 @@ public class CLI extends ViewObservable implements View  {
             } catch (NumberFormatException e) {
                 printSupport.printError(out);
                 out.println(AnsiCode.ANSI_RED + "Insert a number !\n"+ AnsiCode.ANSI_RESET);
-                newRowAndColumn[0] = 9000;  //TODO ahahahah ari il 9000 mi è piaciuto
+                newRowAndColumn[0] = 9000;
             }
 
         }while (newRowAndColumn[0] == 9000);
@@ -443,10 +443,10 @@ public class CLI extends ViewObservable implements View  {
     }
 
     @Override
-    public void whileOnTurn(String changes) {
-        if (!gameView.isTurn()) {
+    public void whileOnGame(String changes) {
+        if (!gameView.isMyTurn()) {
             clearConsole();
-            out.println(changes + "\n\n");
+            showImportantMessage(changes + "\n\n");
             printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);
         }else{
             clearConsole();
@@ -508,7 +508,6 @@ public class CLI extends ViewObservable implements View  {
         String[] stringParts ;
         Action actionInserted =null ;
         Direction directionInserted= null;
-        ArrayList<Enum> ActionAndDirection = new ArrayList<>();
         do {
             out.println("Insert action :");
 
@@ -524,9 +523,9 @@ public class CLI extends ViewObservable implements View  {
                     out.println(AnsiCode.ANSI_RED + "Problems in the way you inserted the commands!\n"+ AnsiCode.ANSI_RESET);
                     line = null;
                 }
-                else{
-                    ActionAndDirection.add(actionInserted);
-                    ActionAndDirection.add(directionInserted);
+                else if(actionInserted.equals(Action.QUIT)){
+                    notifyEndConnection();
+                    return;
                 }
             }
 

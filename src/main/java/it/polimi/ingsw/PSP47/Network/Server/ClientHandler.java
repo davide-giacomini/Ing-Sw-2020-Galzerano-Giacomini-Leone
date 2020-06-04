@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 /**
  * This class handles the connection and the communication between the server and a client.
  */

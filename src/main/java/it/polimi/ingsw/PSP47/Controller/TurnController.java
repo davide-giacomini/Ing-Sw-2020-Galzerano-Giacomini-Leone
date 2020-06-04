@@ -76,7 +76,7 @@ public class TurnController {
             views.get(indexOfCurrentPlayer).sendError(textError);
         }
         turn.setWorkerGender(workerGender);
-        controller.sendAnAdviceDuringTurn(player.getUsername() + " has just chosen which worker to use");
+        controller.sendAnAdviceDuringGame(player.getUsername() + " has just chosen which worker to use");
         views.get(indexOfCurrentPlayer).sendWhichAction();
     }
 
@@ -110,9 +110,6 @@ public class TurnController {
                 break;
             case BUILDDOME:
                 buildDome(direction);
-                break;
-            case QUIT:  //TODO serve ancora?
-                controller.removeLosingPlayer(player.getUsername());
                 break;
             case END:
                 if (!player.getGod().validateEndTurn()) {
@@ -160,7 +157,7 @@ public class TurnController {
                 return;
             }
             game.checkIfPlayersCanMoveUp(player);
-            controller.sendAnAdviceDuringTurn(player.getUsername() + " has just executed the action MOVE! ");
+            controller.sendAnAdviceDuringGame(player.getUsername() + " has just executed the action MOVE! ");
             views.get(indexOfCurrentPlayer).sendWhichAction();
         } catch (InvalidDirectionException | InvalidMoveException | IndexOutOfBoundsException e) {
             String textError = e.getMessage();
@@ -198,7 +195,7 @@ public class TurnController {
                 controller.endGame(game.checkWinningCondition().getUsername());
                 return;
             }
-            controller.sendAnAdviceDuringTurn(player.getUsername() + " has just executed the action BUILD! ");
+            controller.sendAnAdviceDuringGame(player.getUsername() + " has just executed the action BUILD! ");
             views.get(indexOfCurrentPlayer).sendWhichAction();
         } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
             String textError = e.getMessage();
@@ -234,7 +231,7 @@ public class TurnController {
                 return;
             }
             turn.executeBuild(direction);
-            controller.sendAnAdviceDuringTurn(player.getUsername() + " has just executed the action BUILD DOME! ");
+            controller.sendAnAdviceDuringGame(player.getUsername() + " has just executed the action BUILD DOME! ");
             views.get(indexOfCurrentPlayer).sendWhichAction();
         } catch (InvalidDirectionException | InvalidBuildException | IndexOutOfBoundsException e) {
             String textError = e.getMessage();

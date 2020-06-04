@@ -74,8 +74,6 @@ public class AthenaTest {
         turn.executeMove(Direction.UP);
         assertTrue(athenaPlayer.getGod().checkIfCanGoOn(athenaWorker));
         assertFalse(athenaPlayer.getGod().validateEndTurn());
-        //assertTrue(secondPlayer.cannotMoveUp()); //TODO ASK MONI
-        //assertTrue(thirdPlayer.cannotMoveUp());
         turn.executeBuild(Direction.DOWN);
         assertFalse(athenaPlayer.isWinning());
         assertFalse(athenaPlayer.getGod().checkIfCanGoOn(athenaWorker));

@@ -75,7 +75,7 @@
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.View;
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Color;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.CurrentMoment;
 <i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
 <i>6</i>&nbsp;
 <i>7</i>&nbsp;import java.util.ArrayList;
@@ -96,7 +96,7 @@
 <b class="nc"><i>22</i>&nbsp;    private ArrayList&lt;Color&gt; colors = new ArrayList&lt;Color&gt;();</b>
 <b class="nc"><i>23</i>&nbsp;    private ArrayList &lt;GodName&gt; gods = new ArrayList&lt;GodName&gt;();</b>
 <i>24</i>&nbsp;
-<i>25</i>&nbsp;    private CurrentScene currentScene;
+<i>25</i>&nbsp;    private CurrentScene currentMoment;
 <i>26</i>&nbsp;    private boolean turn;
 <i>27</i>&nbsp;
 <b class="nc"><i>28</i>&nbsp;    public GameView(){</b>
@@ -169,12 +169,12 @@
 <i>95</i>&nbsp;    }
 <i>96</i>&nbsp;
 <i>97</i>&nbsp;    public CurrentScene getCurrentScene() {
-<b class="nc"><i>98</i>&nbsp;        return currentScene;</b>
+<b class="nc"><i>98</i>&nbsp;        return currentMoment;</b>
 <i>99</i>&nbsp;    }
 <i>100</i>&nbsp;
 <i>101</i>&nbsp;
-<i>102</i>&nbsp;    public void updateMoment(CurrentScene currentScene) {
-<b class="nc"><i>103</i>&nbsp;        this.currentScene = currentScene;</b>
+<i>102</i>&nbsp;    public void updateMoment(CurrentScene currentMoment) {
+<b class="nc"><i>103</i>&nbsp;        this.currentMoment = currentMoment;</b>
 <i>104</i>&nbsp;    }
 <i>105</i>&nbsp;
 <i>106</i>&nbsp;    public boolean isTurn() {

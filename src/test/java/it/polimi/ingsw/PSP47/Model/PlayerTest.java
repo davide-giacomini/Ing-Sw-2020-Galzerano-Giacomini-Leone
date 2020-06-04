@@ -103,15 +103,6 @@ public class PlayerTest {
         assertNotEquals(player.getUsername(), "ARIANNA");
     }
 
-
-    ///TODO modify check
-    /*@Test
-    public void putWorkerOnSlot() {
-      Board board =  game.getBoard();
-        assertTrue(player.putWorkerOnSlot(player.getWorker(Gender.MALE), board.getSlot(1,1)));
-        assertEquals(player.getWorker(Gender.MALE), board.getSlot(1,1).getWorker());
-    }*/
-
     @Test
     public void getWorkerPosition(){
         Board board =  game.getBoard();

@@ -99,10 +99,8 @@ public class GameController implements VirtualViewListener {
         for (GodName god : gods) {
             try {
                 if (game.getNumberOfPlayers() == 3 && !god.chooseGod(god, getGame().getPlayer(indexOfCurrentPlayer)).threePlayersGame()) {
-                    //TODO testare questo caso
                     String textError = "You cannot choose a god which is not available in a three players game";
                     views.get(indexOfChallenger).sendError(textError);
-                    //TODO mettere un metodo in virtualview che ritorni direttamente tutti gli usernames
                     ArrayList<String> usernames = new ArrayList<>();
                     for (VirtualView view : views)
                         usernames.add(view.getUsername());
@@ -143,14 +141,11 @@ public class GameController implements VirtualViewListener {
             ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
         }
-        //TODO davide -> sarebbe meglio non eliminare il dio dalla lista degli dei del gioco secondo me...
-        // non so se sia concettualmente corretto. Funzionare funziona, ma la lista di dei è la lista degli dei...
-        // se no si potrebbe creare una lista di dei DISPONIBILI magari. Che ne dici moni?
         game.getGods().remove(god);
         incrementIndex();
         if (indexOfCurrentPlayer == 0) {
             for (VirtualView view : views)
-                view.sendImportant(null, MessageType.START_GAME); //TODO questo sarebbe meglio renderlo come un altro messaggio, non mi piace il null
+            view.sendImportant("The game is started!", MessageType.START_GAME);
             startGame();
         }
         else {
@@ -194,8 +189,7 @@ public class GameController implements VirtualViewListener {
             game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));
             Worker chosenWorkerFemale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);
             game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));
-            //TODO questo lo toglierei... e anche la corrispondenza nella cli toglierei
-            sendAnAdviceDuringTurn("The workers have been initially set");
+            sendAnAdviceDuringGame("The workers have been initially set");
             incrementIndex();
             if(indexOfCurrentPlayer == 0) {
                 turn = new TurnController(views, game, indexOfCurrentPlayer, this);
@@ -333,8 +327,7 @@ public class GameController implements VirtualViewListener {
                 view.sendImportant(username, MessageType.LOSING);
             }
 
-            //TODO non c'è un modo di evitare di controllare che sia Athena?
-            // dai che se sistemiamo questa cosa poi è tecnicamente perfetto
+            //TODO non c'è un modo di evitare di controllare che sia Athena? Monichella
             if (game.getPlayer(indexOfCurrentPlayer).getGod().getName().equals("Athena")) {
                 for (int i = 0; i < game.getNumberOfPlayers(); i++) {
                     game.getPlayer(i).setCannotMoveUp(false);
@@ -409,10 +402,9 @@ public class GameController implements VirtualViewListener {
     }
 
 
-    //added here because it is used by both controllers //TODO maybe move it into the turnController
-    void sendAnAdviceDuringTurn(String changes){
+    //added here because it is used by both controllers
+    void sendAnAdviceDuringGame(String changes){
         for (VirtualView view : views) {
-            //TODO non dovrebbe inviare questa cosa solo agli altri e non a sé stesso?
             view.sendImportant( changes , MessageType.DURING_TURN);
         }
     }

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP47.View.GUI;
 
-import it.polimi.ingsw.PSP47.Enumerations.CurrentScene;
+import it.polimi.ingsw.PSP47.Enumerations.CurrentMoment;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
@@ -26,8 +26,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * This class is used to change what the user will see and updates the current scene (//TODO maybe move it in the messageHandler)
- * It is only used for the graphic part, which means display and change of scene layout //TODO Check where to delete platform.runLater (ari tried and everything broke)
+ * This class is used to change what the user will see and updates the current scene
+ * It is only used for the graphic part, which means display and change of scene layout
  */
 public class GUI extends Application implements View {
 
@@ -70,7 +70,7 @@ public class GUI extends Application implements View {
         primaryStage.setTitle("Santorini");
         primaryStage.show();
 
-        gameView.updateMoment(CurrentScene.START);
+        gameView.updateMoment(CurrentMoment.START);
 
         ConnectionToServerController connectionToServerController = fxmlLoader.getController();
         connectionToServerController.setGui(this);
@@ -83,6 +83,8 @@ public class GUI extends Application implements View {
                 System.exit(0);
             }
         });
+
+        primaryStage.centerOnScreen();
     }
 
     /**
@@ -137,11 +139,11 @@ public class GUI extends Application implements View {
      * @param usernames the list of players in the game.
      */
     @Override
-    public void challengerWillChooseThreeGods(ArrayList<String> usernames) { //TODO Ari voleva cambiarlo
+    public void challengerWillChooseThreeGods(ArrayList<String> usernames) {
         Platform.runLater(() -> {
-            // TODO modifico la grandezza perché è troppo grande
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
+            primaryStage.centerOnScreen();
 
             ChallengerController chooseCardsController = setLayout(scene, "/FXML/challenger.fxml");
             chooseCardsController.addViewListener(networkHandler);
@@ -163,9 +165,10 @@ public class GUI extends Application implements View {
     @Override
     public void chooseYourGod(ArrayList<GodName> godsChosen) {
         Platform.runLater(() -> {
-            // TODO modifico la grandezza perché è troppo grande
+
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
+            primaryStage.centerOnScreen();
 
             ChooseCardController chooseCardController = setLayout(scene, "/FXML/chooseCard.fxml");
             chooseCardController.addViewListener(networkHandler);
@@ -302,7 +305,7 @@ public class GUI extends Application implements View {
     @Override
     public void showNewBoard(Slot slot) {
         Platform.runLater(()-> {
-            gameView.updateMoment(CurrentScene.WAIT); //new current scene
+            gameView.updateMoment(CurrentMoment.WAIT); //new current scene
             duringGameController.changeSlot(slot);
         });
     }
@@ -316,9 +319,10 @@ public class GUI extends Application implements View {
         Platform.runLater(()-> {
             primaryStage.setWidth(1100);
             primaryStage.setHeight(800);
+            primaryStage.centerOnScreen();
 
             duringGameController = setLayout(scene, "/FXML/boardDuringGame.fxml");
-            gameView.updateMoment(CurrentScene.WAIT); //new current scene
+            gameView.updateMoment(CurrentMoment.WAIT); //new current scene
             duringGameController.setGameView(gameView);
             duringGameController.addViewListener(networkHandler);
             duringGameController.changeText();
@@ -334,7 +338,7 @@ public class GUI extends Application implements View {
     @Override
     public void askWhichWorkerToUse() {
         Platform.runLater(() -> {
-            gameView.updateMoment(CurrentScene.ASK_WHICH_WORKER); //new current scene
+            gameView.updateMoment(CurrentMoment.ASK_WHICH_WORKER); //new current scene
             duringGameController.resetRowsAndColumns();
             duringGameController.changeText();
         });
@@ -346,7 +350,7 @@ public class GUI extends Application implements View {
     @Override
     public void askWhereToPositionWorkers() {
         Platform.runLater(() -> {
-            gameView.updateMoment(CurrentScene.ASK_INITIAL_POSITION);//new current scene
+            gameView.updateMoment(CurrentMoment.ASK_INITIAL_POSITION);//new current scene
             duringGameController.resetRowsAndColumns();
             duringGameController.changeText();
         });
@@ -360,11 +364,11 @@ public class GUI extends Application implements View {
         Platform.runLater(() -> {
             if(!start) {
                 primaryStage.setWidth(600);
-                primaryStage.setHeight(450);
-
+                primaryStage.setHeight(400);
+                primaryStage.centerOnScreen();
                 setLayout(scene, "/FXML/waitingPane.fxml"); //now instead of alert I show waiting Pane made by Moni :)
             }else {
-                gameView.updateMoment(CurrentScene.WAIT);//new current scene
+                gameView.updateMoment(CurrentMoment.WAIT);//new current scene
                 duringGameController.changeText("WAIT! It's " + usernameOnTurn + "'s turn.");
             }
         });
@@ -376,7 +380,7 @@ public class GUI extends Application implements View {
     @Override
     public void askAction() {
         Platform.runLater(() -> {
-            gameView.updateMoment(CurrentScene.CHOOSE_ACTION); //new current scene
+            gameView.updateMoment(CurrentMoment.CHOOSE_ACTION); //new current scene
             duringGameController.changeText();
         });
     }
@@ -396,9 +400,9 @@ public class GUI extends Application implements View {
      * @param changes indicates what has changed
      */
     @Override
-    public void whileOnTurn(String changes) {
+    public void whileOnGame(String changes) {
         Platform.runLater(() -> {
-            if(!gameView.isTurn())
+            if(!gameView.isMyTurn())
                 duringGameController.changeText(changes);
         });
     }
