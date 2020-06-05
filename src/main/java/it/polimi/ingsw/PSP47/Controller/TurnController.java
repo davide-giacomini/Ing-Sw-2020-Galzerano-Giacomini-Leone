@@ -60,8 +60,14 @@ public class TurnController {
             views.get(indexOfCurrentPlayer).sendWhichAction();
             return;
         }
-        if (game.getBoard().getSlot(row,column).getWorker() == null || game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
-            String textError = "Your worker is not there";
+        else if (game.getBoard().getSlot(row,column).getWorker() == null) {
+            String textError = "In the selected slot there isn't any worker";
+            views.get(indexOfCurrentPlayer).sendError(textError);
+            views.get(indexOfCurrentPlayer).sendWhichWorker();
+            return;
+        }
+        else if (game.getBoard().getSlot(row,column).getWorker().getColor() != player.getColor()) {
+            String textError = "In the selected slot there is the worker of another player";
             views.get(indexOfCurrentPlayer).sendError(textError);
             views.get(indexOfCurrentPlayer).sendWhichWorker();
             return;

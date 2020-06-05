@@ -70,18 +70,18 @@ public class GameControllerTest_twoPlayers {
         controller.setGods(gods, "Monica");
 
         for (int i=0; i<numberOfPlayers; i++) {
-            assertEquals(controller.getGame().getGods().get(i), gods.get(i));
+            assertEquals(controller.getAvailableGods().get(i), gods.get(i));
         }
 
         controller.setGod(GodName.ARTEMIS);
         assertEquals(GodName.ARTEMIS, controller.getGame().getPlayer(0).getGodName());
-        assertEquals(1, controller.getGame().getGods().size());
+        assertEquals(1, controller.getAvailableGods().size());
         assertEquals(1, controller.getIndexOfCurrentPlayer());
 
         controller.setGod(GodName.TRITON);
 
         assertEquals(GodName.TRITON, controller.getGame().getChallenger().getGodName());
-        assertEquals(0, controller.getGame().getGods().size());
+        assertEquals(0, controller.getAvailableGods().size());
         assertEquals(0, controller.getIndexOfCurrentPlayer());
 
         for (int i=0; i<numberOfPlayers; i++) {
@@ -96,12 +96,12 @@ public class GameControllerTest_twoPlayers {
         gods.add(GodName.HERA);
         controller.setGods(gods, "Monica");
         for (int i=0; i<numberOfPlayers; i++) {
-            assertEquals(controller.getGame().getGods().get(i), gods.get(i));
+            assertEquals(controller.getAvailableGods().get(i), gods.get(i));
         }
 
         controller.setGod(GodName.WRONGGODNAME);
         assertNull(controller.getGame().getPlayer(0).getGodName());
-        assertEquals(2, controller.getGame().getGods().size());
+        assertEquals(2, controller.getAvailableGods().size());
         assertEquals(0, controller.getIndexOfCurrentPlayer());
     }
 
@@ -112,12 +112,12 @@ public class GameControllerTest_twoPlayers {
         gods.add(GodName.DEMETER);
         controller.setGods(gods, "Monica");
         for (int i=0; i<numberOfPlayers; i++) {
-            assertEquals(controller.getGame().getGods().get(i), gods.get(i));
+            assertEquals(controller.getAvailableGods().get(i), gods.get(i));
         }
 
         controller.setGod(GodName.APOLLO);
         assertNull(controller.getGame().getPlayer(0).getGodName());
-        assertEquals(2, controller.getGame().getGods().size());
+        assertEquals(2, controller.getAvailableGods().size());
         assertEquals(0, controller.getIndexOfCurrentPlayer());
     }
 

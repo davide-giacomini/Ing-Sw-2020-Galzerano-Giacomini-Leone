@@ -23,6 +23,7 @@ public class GameController implements VirtualViewListener {
     private int numberOfPlayers;
     private Game game;
     private String chosenPlayer;
+    private ArrayList<GodName> availableGods;
     private ArrayList<VirtualView> views;
     private int indexOfCurrentPlayer;
     private int indexOfChallenger;
@@ -113,7 +114,7 @@ public class GameController implements VirtualViewListener {
             }
         }
         this.chosenPlayer = chosenPlayer;
-        game.setGods(gods);
+        availableGods = gods;
         game.putChallengerAtLastPosition();
         orderViews();
         ArrayList<GodName> godsList = new ArrayList<>(gods);
@@ -127,10 +128,10 @@ public class GameController implements VirtualViewListener {
      * @param god the chosen god
      */
     public void setGod(GodName god) {
-        if (!game.getGods().contains(god)) {
+        if (!availableGods.contains(god)) {
             String textError = "You cannot choose this god, it's not available";
             views.get(indexOfCurrentPlayer).sendError(textError);
-            ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
+            ArrayList<GodName> godsList = new ArrayList<>(availableGods);
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
             return;
         }
@@ -138,10 +139,10 @@ public class GameController implements VirtualViewListener {
             game.getPlayer(indexOfCurrentPlayer).setGod(god.chooseGod(god, game.getPlayer(indexOfCurrentPlayer)));
         } catch (IOException e) {
             views.get(indexOfCurrentPlayer).sendError("Try again, there were some troubles in the conversion.");
-            ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
+            ArrayList<GodName> godsList = new ArrayList<>(availableGods);
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
         }
-        game.getGods().remove(god);
+        availableGods.remove(god);
         incrementIndex();
         if (indexOfCurrentPlayer == 0) {
             for (VirtualView view : views)
@@ -149,7 +150,7 @@ public class GameController implements VirtualViewListener {
             startGame();
         }
         else {
-            ArrayList<GodName> godsList = new ArrayList<>(game.getGods());
+            ArrayList<GodName> godsList = new ArrayList<>(availableGods);
             views.get(indexOfCurrentPlayer).sendGodsList(godsList);
             sendWhoseIsTheTurn();
         }
@@ -327,12 +328,8 @@ public class GameController implements VirtualViewListener {
                 view.sendImportant(username, MessageType.LOSING);
             }
 
-            //TODO non c'è un modo di evitare di controllare che sia Athena? Monichella
-            if (game.getPlayer(indexOfCurrentPlayer).getGod().getName().equals("Athena")) {
-                for (int i = 0; i < game.getNumberOfPlayers(); i++) {
-                    game.getPlayer(i).setCannotMoveUp(false);
-                }
-            }
+            game.checkWhenPlayerIsDeleted(game.getPlayer(indexOfCurrentPlayer).getGodName());
+
             game.getPlayer(indexOfCurrentPlayer).deleteWorkers();
             game.removePlayer(game.getPlayer(indexOfCurrentPlayer));
             views.get(indexOfCurrentPlayer).sendYouAreOutOfTheGame(false);
@@ -354,6 +351,17 @@ public class GameController implements VirtualViewListener {
         for (VirtualView view : views) {
             view.sendImportant(username, MessageType.WINNING);
             view.sendYouAreOutOfTheGame(true);
+        }
+    }
+
+    /**
+     * This method sends to all the players the information about the evolution of the game,
+     * for example which player has just build, or which player has chosen the worker to use.
+     * @param changes the action which has to be communicated.
+     */
+    void sendAnAdviceDuringGame(String changes){
+        for (VirtualView view : views) {
+            view.sendImportant( changes , MessageType.DURING_TURN);
         }
     }
 
@@ -401,12 +409,7 @@ public class GameController implements VirtualViewListener {
         this.indexOfCurrentPlayer = indexOfCurrentPlayer;
     }
 
-
-    //added here because it is used by both controllers
-    void sendAnAdviceDuringGame(String changes){
-        for (VirtualView view : views) {
-            view.sendImportant( changes , MessageType.DURING_TURN);
-        }
+    public ArrayList<GodName> getAvailableGods() {
+        return availableGods;
     }
-
 }

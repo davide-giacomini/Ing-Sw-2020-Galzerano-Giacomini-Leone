@@ -132,14 +132,4 @@ public class GameTest {
         assertSame(p3, game.getPlayer("David"));
     }
 
-    @Test
-    public void setGods() {
-        ArrayList<GodName> gods = new ArrayList<>(2);
-        gods.add(GodName.APOLLO);
-        gods.add(GodName.PAN);
-        game.setGods(gods);
-        ArrayList<GodName> newGods = game.getGods();
-        assertEquals(gods, newGods);
-    }
-
 }

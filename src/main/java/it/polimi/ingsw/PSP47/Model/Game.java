@@ -13,7 +13,6 @@ public class Game {
     private final Board board;
     private int numberOfPlayers;
     private Player challenger;
-    private ArrayList<GodName> gods; //TODO ELIMINARE e spostalo nel gameController come available gods Monichella
     private ArrayList<Player> players;
 
     public Game(int numberOfPlayers) {
@@ -25,14 +24,6 @@ public class Game {
 
     public void addPlayer(Player player) {
         players.add(player);
-    }
-
-    public ArrayList<GodName> getGods() {
-        return gods;
-    }
-
-    public void setGods(ArrayList<GodName> gods) {
-        this.gods = gods;
     }
 
     public Player getChallenger() {
@@ -203,6 +194,19 @@ public class Game {
             }
         }
         return null;
+    }
+
+    /**
+     * This method checks if there are any parameters which have to be reset if a specific god isn't part of the game anymore.
+     * In fact, if Athena is out of the game, all the players can always move up during their turns.
+     * @param godName the name of the god which has been deleted by the game.
+     */
+    public void checkWhenPlayerIsDeleted(GodName godName) {
+        if (godName == GodName.ATHENA) {
+            for (int i = 0; i < numberOfPlayers; i++) {
+                players.get(i).setCannotMoveUp(false);
+            }
+        }
     }
 }
 
