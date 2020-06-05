@@ -39,31 +39,31 @@
                  <RowConstraints maxHeight="83.37039184570312" minHeight="10.0" prefHeight="83.37039184570312" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
-                  <Pane onMouseClicked="#GridClick" prefHeight="80.0" prefWidth="77.0" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="60.0" prefWidth="53.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
-                  <Pane onMouseClicked="#GridClick" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="80.0" prefWidth="77.0" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="60.0" prefWidth="53.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
+                  <Pane onMouseClicked="#gridClick" onMouseEntered="#lightUp" onMouseExited="#lightDown" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
                </children>
             </GridPane>
          </children>
@@ -84,56 +84,56 @@
          <children>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="moveButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnMoveClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="moveButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onMoveClick" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/cm_btn_green.png" />
                      </image>
                   </ImageView>
-                  <Text onMouseClicked="#OnMoveClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Move" textAlignment="CENTER" wrappingWidth="73.85005187988281">
+                  <Text onMouseClicked="#onMoveClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Move" textAlignment="CENTER" wrappingWidth="73.85005187988281">
                   </Text>
                </children>
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="buildButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnBuildClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="buildButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onBuildClick" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/cm_btn_green.png" />
                      </image>
                   </ImageView>
-                  <Text onMouseClicked="#OnBuildClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Build">
+                  <Text onMouseClicked="#onBuildClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Build">
                   </Text>
                </children>
             </StackPane>
             <StackPane fx:id="buildDomePane" prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="buildDomeButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnBuildDomeClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="buildDomeButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onBuildDomeClick" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/cm_btn_green.png" />
                      </image>
                   </ImageView>
-                  <Text onMouseClicked="#OnBuildDomeClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Build dome">
+                  <Text onMouseClicked="#onBuildDomeClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Build dome">
                   </Text>
                </children>
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="endButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnEndClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="endButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onEndClick" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/cm_btn_coral.png" />
                      </image>
                   </ImageView>
-                  <Text onMouseClicked="#OnEndClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="End">
+                  <Text onMouseClicked="#onEndClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="End">
                   </Text>
                </children>
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="quitButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#OnQuitClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="quitButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onQuitClick" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/cm_btn_coral.png" />
                      </image>
                   </ImageView>
-                  <Text onMouseClicked="#OnQuitClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Quit">
+                  <Text onMouseClicked="#onQuitClick" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundColored" text="Quit">
                   </Text>
                </children>
             </StackPane>

@@ -89,6 +89,10 @@ public class GameController implements VirtualViewListener {
         // Here the interaction between controller and client begins.
         // The challenger is sent the list of usernames of the other players, to choose who will begin
         views.get(indexOfChallenger).sendChallenger(usernames);
+        for (VirtualView view : views) {
+            if (!(view.getUsername().equals(views.get(indexOfChallenger).getUsername())))
+                view.sendImportant( views.get(indexOfChallenger).getUsername() , MessageType.TURN);
+        }
     }
 
     /**
@@ -106,6 +110,10 @@ public class GameController implements VirtualViewListener {
                         usernames.add(view.getUsername());
                     // Here the challenger is sent the list of usernames of the other players, to choose who will begin
                     views.get(indexOfChallenger).sendChallenger(usernames);
+                    for (VirtualView view : views) {
+                        if (!(view.getUsername().equals(views.get(indexOfChallenger).getUsername())))
+                            view.sendImportant( views.get(indexOfChallenger).getUsername() , MessageType.TURN);
+                    }
                     return;
                 }
             } catch (IOException e) {

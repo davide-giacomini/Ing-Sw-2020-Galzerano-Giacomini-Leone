@@ -76,6 +76,8 @@ public class DuringGameController extends ViewObservable{
     @FXML
     private ImageView third_color;
 
+    private ImageView moveIndicatorView;
+
 
     void setPublicInformation() {
         first_username.setText(gameView.getUsernames().get(0));
@@ -153,7 +155,7 @@ public class DuringGameController extends ViewObservable{
      * @param event is the input click of the user
      */
     @FXML
-    void OnMoveClick(MouseEvent event) {
+    void onMoveClick(MouseEvent event) {
         if (gameView.getCurrentMoment() == CurrentMoment.WAIT){
             //TODO non mandare un alert
             Alert a = new Alert(Alert.AlertType.WARNING);
@@ -172,7 +174,7 @@ public class DuringGameController extends ViewObservable{
      * @param event is the input click of the user
      */
     @FXML
-    void OnBuildClick(MouseEvent event) {
+    void onBuildClick(MouseEvent event) {
         if (gameView.getCurrentMoment() == CurrentMoment.WAIT){
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
@@ -190,7 +192,7 @@ public class DuringGameController extends ViewObservable{
      * @param event is the input click of the user
      */
     @FXML
-    void OnBuildDomeClick(MouseEvent event) {
+    void onBuildDomeClick(MouseEvent event) {
         if (gameView.getCurrentMoment() == CurrentMoment.WAIT){
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
@@ -209,7 +211,7 @@ public class DuringGameController extends ViewObservable{
      * @param event is the input click of the user
      */
     @FXML
-    void OnEndClick(MouseEvent event) {
+    void onEndClick(MouseEvent event) {
         if (gameView.getCurrentMoment() == CurrentMoment.WAIT) {
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
@@ -229,7 +231,7 @@ public class DuringGameController extends ViewObservable{
      * @param event
      */
     @FXML
-    void OnQuitClick(MouseEvent event) {
+    void onQuitClick(MouseEvent event) {
         notifyEndConnection();
         System.exit(0); //added because the GUI , as application with its own thread, has to be shut too
     }
@@ -238,7 +240,7 @@ public class DuringGameController extends ViewObservable{
      * method that depending on the moment(current scene) handles the click on the grid differently
      */
     @FXML
-    void GridClick(MouseEvent event) {
+    void gridClick(MouseEvent event) {
 
         Node source = (Node)event.getSource() ; // gets the pane clicked
         Integer colIndex = GridPane.getColumnIndex(source); //column adn row of the pane clicked
@@ -302,8 +304,6 @@ public class DuringGameController extends ViewObservable{
         VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
         visitableRowsAndColumns.setRowsAndColumns(workerRowAndColumn);
         notifyViewListener(visitableRowsAndColumns);
-        //TODO qua invece di far così sarebbe comodo mandare il turno del tizio,
-        // dato che effettivamente per la cli viene mandato
         gameView.updateMoment(CurrentMoment.WAIT);
         changeText();
     }
@@ -489,5 +489,35 @@ public class DuringGameController extends ViewObservable{
 
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
+    }
+
+    /**
+     * This method is used to insert the image of the move indicater when the mouse goes on a pane in order to light it up
+     * @param event indicates when the mouse goes into the pane that will be lighten up
+     */
+    @FXML
+   void lightUp(MouseEvent event){
+        moveIndicatorView = new ImageView();
+        moveIndicatorView.setImage(new Image("Images/playermoveindicator_red.png"));
+        Node source = (Node)event.getSource() ; // gets the pane clicked
+        Integer colIndex = GridPane.getColumnIndex(source); //column and row of the pane clicked
+        Integer rowIndex = GridPane.getRowIndex(source);
+        Pane pane = (Pane) getNodeByRowColumnIndex(rowIndex, colIndex, gridPane);
+        moveIndicatorView.fitWidthProperty().bind(pane.widthProperty());
+        moveIndicatorView.fitHeightProperty().bind(pane.widthProperty());
+        pane.getChildren().add(moveIndicatorView);
+    }
+
+    /**
+     * This method is used to delete the indicator of a movement of the mouse on one of the panes (slots of the board)
+     * @param event indicates when the mouse goes out of the pane that was light up
+     */
+    @FXML
+   void lightDown(MouseEvent event){
+        Node source = (Node)event.getSource() ; // gets the pane clicked
+        Integer colIndex = GridPane.getColumnIndex(source); //column and row of the pane clicked
+        Integer rowIndex = GridPane.getRowIndex(source);
+        Pane pane = (Pane) getNodeByRowColumnIndex(rowIndex, colIndex, gridPane);
+        pane.getChildren().remove(moveIndicatorView);
     }
 }
