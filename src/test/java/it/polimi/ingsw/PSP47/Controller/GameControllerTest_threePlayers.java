@@ -77,22 +77,22 @@ public class GameControllerTest_threePlayers {
         controller.setGods(gods, "Arianna");
 
         for (int i=0; i<numberOfPlayers; i++) {
-            assertEquals(controller.getGame().getGods().get(i), gods.get(i));
+            assertEquals(controller.getAvailableGods().get(i), gods.get(i));
         }
 
         controller.setGod(GodName.PAN);
         assertEquals(GodName.PAN, controller.getGame().getPlayer(0).getGodName());
-        assertEquals(2, controller.getGame().getGods().size());
+        assertEquals(2, controller.getAvailableGods().size());
         assertEquals(1, controller.getIndexOfCurrentPlayer());
 
         controller.setGod(GodName.HERA);
         assertEquals(GodName.HERA, controller.getGame().getPlayer(1).getGodName());
-        assertEquals(1, controller.getGame().getGods().size());
+        assertEquals(1, controller.getAvailableGods().size());
         assertEquals(2, controller.getIndexOfCurrentPlayer());
 
         controller.setGod(GodName.APOLLO);
         assertEquals(GodName.APOLLO, controller.getGame().getChallenger().getGodName());
-        assertEquals(0, controller.getGame().getGods().size());
+        assertEquals(0, controller.getAvailableGods().size());
         assertEquals(0, controller.getIndexOfCurrentPlayer());
 
         for (int i=0; i<numberOfPlayers; i++) {
