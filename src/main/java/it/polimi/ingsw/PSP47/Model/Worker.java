@@ -93,8 +93,6 @@ public class Worker {
         }
         //TODO questi due if vengono già controllati nel controller: si possono togliere?
         if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
-        if (destinationSlot.getLevel().ordinal() - slot.getLevel().ordinal()>1)
-            throw new InvalidMoveException("Level unreachable");
         
         return updatePosition(destinationSlot);
     }
