@@ -296,6 +296,8 @@ public class GUI extends Application implements View {
     @Override
     public void showEnd() {
        // System.exit(0); decide how to handle the final part
+        gameView.updateMoment(CurrentMoment.END);
+        duringGameController.changeText("The game is going to shut down automatically, no action is allowed anymore!");
     }
 
     /**

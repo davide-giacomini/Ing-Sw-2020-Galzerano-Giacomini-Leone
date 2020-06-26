@@ -133,8 +133,13 @@ public class DuringGameController extends ViewObservable{
     }
 
     void changeText(String displayedText){
-        if (gameView.getCurrentMoment() == CurrentMoment.WAIT)
+        if (gameView.getCurrentMoment() == CurrentMoment.WAIT )
             commandText.setText(displayedText);
+        else if (gameView.getCurrentMoment() == CurrentMoment.END){
+            commandText.setText(displayedText);
+            disableEverything();
+        }
+
     }
 
     /**
@@ -157,7 +162,6 @@ public class DuringGameController extends ViewObservable{
     @FXML
     void onMoveClick(MouseEvent event) {
         if (gameView.getCurrentMoment() == CurrentMoment.WAIT){
-            //TODO non mandare un alert
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
             a.show();
@@ -520,4 +524,10 @@ public class DuringGameController extends ViewObservable{
         Pane pane = (Pane) getNodeByRowColumnIndex(rowIndex, colIndex, gridPane);
         pane.getChildren().remove(moveIndicatorView);
     }
+
+    private void disableEverything() {
+        gridPane.setDisable(true);
+        //add others cases
+    }
+
 }

@@ -101,13 +101,14 @@ public class NetworkHandler implements Runnable, ViewListener {
                 }
             }
             catch (IOException e){
-                view.showImportantMessage("We are sorry: " +
-                        "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");
+               //TODO ari ha commentato in questo catch perchè gli alert non voluti alla fine sono causati da queste righe
+                /*view.showImportantMessage("We are sorry: " +
+                        "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");*/
 
                 if (isConnected)
                     endConnection();
 
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             catch (ClassNotFoundException e){
                 view.showErrorMessage("Error in casting during the readObject.");
