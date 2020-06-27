@@ -202,6 +202,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.theWinnerIs(((ImportantMessage) message).getText());
                     break;
                 case START_GAME:
+                    view.getGameView().setStart(true);
                     view.showGame();
                     break;
                 case ASK_WORKER_POSITION:

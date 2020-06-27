@@ -74,10 +74,9 @@ public class Worker {
      * @return true if the worker voluntarily moved up to the level 3, false otherwise
      * @throws IndexOutOfBoundsException if the direction is out of the board.
      * @throws InvalidMoveException if the move is not permitted.
-     * @throws SlotOccupiedException if the destination {@link Slot} is occupied.
      */
     public boolean move (Direction direction)
-            throws InvalidMoveException, IndexOutOfBoundsException, SlotOccupiedException {
+            throws InvalidMoveException, IndexOutOfBoundsException {
 
         checkDirection(direction);
 
@@ -88,21 +87,18 @@ public class Worker {
         catch (InvalidDirectionException e){
             throw new InvalidMoveException("Invalid direction of the getNearBySlot.");
         }
-        //TODO questi due if vengono già controllati nel controller: si possono togliere?
-        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
-        
+
         return updatePosition(destinationSlot);
     }
 
     /**
      * This method builds in the specified direction.
      * @param direction where the worker wants to build to.
-     * @throws SlotOccupiedException if the destination {@link Slot} is occupied.
      * @throws IndexOutOfBoundsException if the destination {@link Slot} is outside the {@link Board}
      * @throws InvalidBuildException if the build is not permitted.
      */
     public void build (Direction direction)
-            throws IndexOutOfBoundsException, SlotOccupiedException, InvalidBuildException {
+            throws IndexOutOfBoundsException, InvalidBuildException {
     
         checkDirection(direction);
         
@@ -111,12 +107,9 @@ public class Worker {
             destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, slot);
         }
         catch (InvalidDirectionException e){
-            //TODO questo non so se si può togliere
             throw new InvalidBuildException("Invalid direction for the destination slot");
         }
-        //TODO questo if viene già controllato nel controller: si può togliere?
-        if(destinationSlot.isOccupied()) throw new SlotOccupiedException();
-        
+
         Level levelToUpdate;
         levelToUpdate = destinationSlot.getLevel();
         switch (levelToUpdate) {
@@ -136,14 +129,11 @@ public class Worker {
         }
     }
 
-    public void buildDome (Direction direction) throws InvalidDirectionException, SlotOccupiedException {
+    public void buildDome (Direction direction) throws InvalidDirectionException {
         checkDirection(direction);
 
         Slot destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, slot);
-        
-        //TODO da togliere questa eccezione
-        if (destinationSlot.isOccupied()) throw new SlotOccupiedException();
-        
+
         if (destinationSlot.getLevel() == Level.LEVEL3)
             destinationSlot.setLevel(Level.DOME);
         else

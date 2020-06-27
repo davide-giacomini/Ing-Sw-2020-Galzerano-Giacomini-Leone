@@ -41,12 +41,8 @@ public class Demeter extends God {
             previousSlot = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot());
         else if (player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot()).equals(previousSlot))
             throw new InvalidBuildException("You are trying to build on the same slot as the previous one");
-    
-        try {
-            worker.build(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidBuildException("Slot occupied");
-        }
+
+        worker.build(direction);
     
     }
 

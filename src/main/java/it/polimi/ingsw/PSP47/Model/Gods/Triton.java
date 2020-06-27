@@ -1,12 +1,8 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
-import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
-import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
-import it.polimi.ingsw.PSP47.Model.Exceptions.SlotOccupiedException;
 import it.polimi.ingsw.PSP47.Model.Player;
-import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Model.Worker;
 
 /**
@@ -43,14 +39,10 @@ public class Triton extends God  {
             throw new InvalidMoveException("Order of movements incorrect");
         }
 
-        try {
-            result = worker.move(direction);
-            if (worker.getSlot().isPerimeterSlot())
-                MAX_MOVEMENTS++;
-            return result;
-        } catch (SlotOccupiedException e) {
-            throw new InvalidMoveException("Slot occupied");
-        }
+        result = worker.move(direction);
+        if (worker.getSlot().isPerimeterSlot())
+            MAX_MOVEMENTS++;
+        return result;
 
     }
 

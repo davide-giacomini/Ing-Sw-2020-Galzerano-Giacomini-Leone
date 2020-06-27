@@ -435,9 +435,13 @@ public class CLI extends ViewObservable implements View  {
      */
     @Override
     public void othersTurn(String usernameOnTurn) {
-        if (usernameOnTurn != null) {
+        if (usernameOnTurn != null && gameView.isStart()) {
             printSupport.printDotSequence(out);
             out.println("It's " + usernameOnTurn + "'s Turn . . . Please Wait ");
+            printSupport.printWait(out);
+        }else if(usernameOnTurn != null){
+            printSupport.printDotSequence(out);
+            out.println(usernameOnTurn);
             printSupport.printWait(out);
         }
     }

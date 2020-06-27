@@ -40,20 +40,14 @@ public class Prometheus extends God {
 
         if (numberOfBuildings==0) {
             moveThenBuild = true;
-            try {
-                return worker.move(direction);
-            } catch (SlotOccupiedException e) {
-                throw new InvalidMoveException("Slot occupied");
-            }
+
+            return worker.move(direction);
+
         }
         else{
             moveThenBuild = false;
-                try {
-                    return worker.move(direction);
-                } catch (SlotOccupiedException e) {
-                    throw new InvalidMoveException("Slot occupied");
-                }
-            }
+            return worker.move(direction);
+        }
     }
     
     /**
@@ -72,13 +66,10 @@ public class Prometheus extends God {
         if (numberOfMovements==0 && numberOfBuildings==1) throw new InvalidBuildException("Order of movements not correct");
         if (numberOfBuildings==1 && moveThenBuild)  throw new InvalidBuildException("Order of movements not correct");
 
-        try {
-            if (numberOfMovements == 0)
-                player.setCannotMoveUp(true);
-            worker.build(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidBuildException("Slot occupied");
-        }
+        if (numberOfMovements == 0)
+            player.setCannotMoveUp(true);
+        worker.build(direction);
+
     }
 
     /**

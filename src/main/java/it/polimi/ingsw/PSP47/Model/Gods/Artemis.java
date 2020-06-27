@@ -44,21 +44,13 @@ public class Artemis extends God {
 
         if (numberOfMovements == 0) {
             firstDirection = direction;
-            try {
-                return worker.move(direction);
-            } catch (SlotOccupiedException e) {
-                throw new InvalidMoveException("Slot occupied");
-            }
+            return worker.move(direction);
         }
         else {
             if (checkOppositeDirection(firstDirection, direction)) {
                 throw new InvalidMoveException("You cannot move back to your first slot");
             }
-            try {
-                return worker.move(direction);
-            } catch (SlotOccupiedException e) {
-                throw new InvalidMoveException("Slot occupied");
-            }
+            return worker.move(direction);
         }
     }
 

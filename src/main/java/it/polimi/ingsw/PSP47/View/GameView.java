@@ -18,6 +18,8 @@ public class GameView{
     private int numberOfPlayers ;
     private BoardView boardView ;
 
+    private boolean start = false;
+
     private ArrayList<String> usernames = new ArrayList<String>();
     private ArrayList<Color> colors = new ArrayList<Color>();
     private ArrayList <GodName> gods = new ArrayList<GodName>();
@@ -109,5 +111,14 @@ public class GameView{
 
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
+    }
+
+
+    public boolean isStart() {
+        return start;
+    }
+
+    public void setStart(boolean start) {
+        this.start = start;
     }
 }

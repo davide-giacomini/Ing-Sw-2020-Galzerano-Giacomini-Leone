@@ -8,7 +8,6 @@ import it.polimi.ingsw.PSP47.Model.*;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
-import it.polimi.ingsw.PSP47.Model.Exceptions.SlotOccupiedException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

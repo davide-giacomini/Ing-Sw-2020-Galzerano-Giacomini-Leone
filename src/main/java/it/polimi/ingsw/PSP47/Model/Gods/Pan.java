@@ -34,11 +34,9 @@ public class Pan extends God{
     public boolean move(Direction direction, Worker worker) throws IndexOutOfBoundsException,  InvalidMoveException {
         int previousLevel = worker.getSlot().getLevel().ordinal();
         boolean winCondition;
-        try {
-            winCondition = worker.move(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidMoveException("Slot occupied");
-        }
+
+        winCondition = worker.move(direction);
+
         int actualLevel = worker.getSlot().getLevel().ordinal();
         return winCondition || (actualLevel - previousLevel < -1);
     }

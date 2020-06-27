@@ -44,11 +44,7 @@ public class Hephaestus extends God {
         else if (!player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot()).equals(doubleBuildSlot) || (worker.getSlot().getLevel().ordinal()== 3) )
             throw new InvalidBuildException("The second build cannot be permitted on a different slot");
 
-        try {
-            worker.build(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidBuildException("Slot occupied");
-        }
+        worker.build(direction);
 
     }
 

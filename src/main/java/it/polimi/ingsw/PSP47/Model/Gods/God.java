@@ -75,13 +75,8 @@ public abstract class God {
      * @throws InvalidDirectionException if there are some troubles of I/O.
      * @throws InvalidMoveException if the move is invalid.
      */
-    public boolean move(Direction direction, Worker worker)
-            throws IndexOutOfBoundsException, InvalidMoveException, InvalidDirectionException {
-        try {
-            return worker.move(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidMoveException("Slot occupied");
-        }
+    public boolean move(Direction direction, Worker worker) throws IndexOutOfBoundsException, InvalidMoveException, InvalidDirectionException {
+        return worker.move(direction);
     }
     
     /**
@@ -94,13 +89,9 @@ public abstract class God {
      */
     public void build(Direction direction, Worker worker)
             throws IndexOutOfBoundsException, InvalidBuildException, InvalidDirectionException {
-        if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
 
-        try {
-            worker.build(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidBuildException("Slot occupied");
-        }
+        worker.build(direction);
+
     }
 
     

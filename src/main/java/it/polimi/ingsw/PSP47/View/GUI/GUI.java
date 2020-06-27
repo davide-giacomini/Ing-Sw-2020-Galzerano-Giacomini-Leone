@@ -40,8 +40,6 @@ public class GUI extends Application implements View {
 
     private DuringGameController duringGameController;
 
-    private boolean start = false;
-
     public void setNetworkHandler(NetworkHandler networkHandler) {
         this.networkHandler = networkHandler;
     }
@@ -321,7 +319,6 @@ public class GUI extends Application implements View {
             duringGameController.changeText();
             duringGameController.displayBuildDome();
             primaryStage.setResizable(true);
-            start = true;
         });
     }
 
@@ -355,7 +352,7 @@ public class GUI extends Application implements View {
     @Override
     public void othersTurn(String usernameOnTurn) {
         Platform.runLater(() -> {
-            if(!start) {
+            if(!gameView.isStart()) {
                 primaryStage.setWidth(600);
                 primaryStage.setHeight(400);
                 primaryStage.centerOnScreen();

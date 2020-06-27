@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP47.Model.Gods;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
-import it.polimi.ingsw.PSP47.Model.Exceptions.SlotOccupiedException;
 import it.polimi.ingsw.PSP47.Model.Player;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Model.Worker;
@@ -40,11 +39,8 @@ public class Hestia extends God {
         if (player.getTurn().getNumberOfBuildings() == 1 && (player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot()).isPerimeterSlot()))
         throw new InvalidBuildException("You are not allowed to build a second time on a perimeter slot!");
 
-        try {
-            worker.build(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidBuildException("Slot occupied");
-        }
+        worker.build(direction);
+
 
     }
 

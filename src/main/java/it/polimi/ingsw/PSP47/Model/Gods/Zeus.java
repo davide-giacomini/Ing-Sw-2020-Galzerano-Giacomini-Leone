@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Enumerations.Level;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidDirectionException;
-import it.polimi.ingsw.PSP47.Model.Exceptions.SlotOccupiedException;
 import it.polimi.ingsw.PSP47.Model.Player;
 import it.polimi.ingsw.PSP47.Model.Slot;
 import it.polimi.ingsw.PSP47.Model.Worker;
@@ -39,9 +38,6 @@ public class Zeus extends God  {
     public void build(Direction direction, Worker worker) throws IndexOutOfBoundsException, InvalidBuildException, InvalidDirectionException {
         if (player.getTurn().getNumberOfMovements() == 0) throw new InvalidBuildException("Order of movements incorrect");
 
-        try {
-            worker.build(direction);
-        } catch (SlotOccupiedException e) {
             if (worker.getSlot() == player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot())){
                 Level levelToUpdate;
                 levelToUpdate = worker.getSlot().getLevel();
@@ -56,9 +52,8 @@ public class Zeus extends God  {
                 }
             }
             else
-            throw new InvalidBuildException("Slot occupied");
+                worker.build(direction);
         }
-    }
 
     /**
      * This method checks if the slot is occupied by a worker.

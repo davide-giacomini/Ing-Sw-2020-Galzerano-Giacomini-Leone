@@ -36,32 +36,35 @@ public class Minotaur extends God {
     public boolean move(Direction direction, Worker worker)
             throws IndexOutOfBoundsException, InvalidDirectionException, InvalidMoveException {
 
-        int previousLevel = worker.getSlot().getLevel().ordinal();
-        try {
-            return worker.move(direction);
-        } catch (SlotOccupiedException e) {
+        Worker opponentWorker = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot()).getWorker();
+
+        // if there is actually an opponent worker on the destination slot
+        if (opponentWorker != null && opponentWorker.getColor() != worker.getColor()) {
             Slot opponentSLot = player.getTurn().getBoard().getNearbySlot(direction, worker.getSlot());
             // the slot in the same direction of the worker. If there is not a slot, the move is not available.
             Slot slotNearOpponentSlot;
             try {
                 slotNearOpponentSlot = player.getTurn().getBoard().getNearbySlot(direction, opponentSLot);
-            } catch (IndexOutOfBoundsException er){
+            } catch (IndexOutOfBoundsException er) {
                 // this exception advises the caller that the slot is occupied and the opponent worker cannot move.
-                throw new InvalidMoveException("Slot occupied");
+                throw new InvalidMoveException("You cannot push an opponent player out of the board.");
             }
-            // the worker set in the destination slot
-            Worker opponentWorker = opponentSLot.getWorker();
-        
+
             // if the slot next to the opponent worker is free and the destination slot is actually occupied by an opponent worker
-            if (opponentWorker!=null && opponentWorker.getColor()!=worker.getColor() && !slotNearOpponentSlot.isOccupied()) {
+            if (!slotNearOpponentSlot.isOccupied()) {
                 // manually move player's worker in the destination slot
                 opponentWorker.updatePosition(slotNearOpponentSlot);
                 return worker.updatePosition(opponentSLot);
             }
             // if there is a dome or a player's worker, the slot is occupied for Apollo too
             else
-                throw new InvalidMoveException("Slot occupied");
+                throw new InvalidMoveException("You cannot push an opponent player on an occupied slot.");
         }
+        else if (opponentWorker != null && opponentWorker.getColor() == worker.getColor()) {
+            throw new InvalidMoveException("You cannot push yourself, you must choose another player's worker.");
+        }
+        else
+            return worker.move(direction);
     }
 
     /**

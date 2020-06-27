@@ -36,16 +36,9 @@ public class Athena extends God{
             throws InvalidMoveException, IndexOutOfBoundsException {
         int initialLevel = worker.getSlot().getLevel().ordinal();
         boolean winCondition;
-        try {
-            winCondition = worker.move(direction);
-        } catch (SlotOccupiedException e) {
-            throw new InvalidMoveException("Slot occupied");
-        }
+        winCondition = worker.move(direction);
         int actualLevel = worker.getSlot().getLevel().ordinal();
-        if (actualLevel>initialLevel)
-            moveUp = true;
-        else
-            moveUp = false;
+        moveUp = actualLevel > initialLevel;
         return winCondition;
     }
 

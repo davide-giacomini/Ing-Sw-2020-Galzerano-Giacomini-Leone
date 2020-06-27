@@ -37,19 +37,10 @@ public class Atlas extends God {
         }
 
         if (player.getTurn().wantsToBuildDome()) {
-            try {
-                worker.buildDome(direction);
-            } catch (SlotOccupiedException e) {
-                throw new InvalidBuildException("Slot occupied");
-            }
+            worker.buildDome(direction);
         }
         else if (!player.getTurn().wantsToBuildDome()) {
-            try {
-                worker.build(direction);
-            } catch (SlotOccupiedException e) {
-                throw new InvalidBuildException("Slot occupied");
-            }
+            worker.build(direction);
         }
-
     }
 }
