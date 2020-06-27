@@ -84,13 +84,6 @@ public class MinotaurTest {
         turn.executeMove(Direction.RIGHT);
     }
 
-    @Test (expected = InvalidMoveException.class)
-    public void move_SlotOccupiedException_becauseOccupied()
-            throws Exception{
-        board.getSlot(2,3).setLevel(Level.DOME);
-        turn.executeMove(Direction.RIGHT);
-    }
-
     @Test
     public void build_IndexOutOfBoundsException_firstBuild() throws Exception{
         maleWorker.setSlot(board.getSlot(4,4));
@@ -99,14 +92,6 @@ public class MinotaurTest {
         board.getSlot(4,3).setLevel(Level.DOME);
 
         assertFalse(player.getGod().checkIfCanMove(maleWorker));
-
-    }
-
-    @Test (expected = InvalidBuildException.class)
-    public void build_SlotOccupiedException()  throws Exception {
-        board.getSlot(1,1).setLevel(Level.DOME);
-        turn.executeMove(Direction.LEFT);
-        turn.executeBuild(Direction.UP);
 
     }
 
@@ -119,7 +104,7 @@ public class MinotaurTest {
     }
 
     @Test
-    public void checkIfCanMove() throws Exception{
+    public void checkIfCanMove() {
         otherWorker.setSlot(board.getSlot(2,1));
         assertTrue(player.getGod().checkIfCanMove(maleWorker));
 

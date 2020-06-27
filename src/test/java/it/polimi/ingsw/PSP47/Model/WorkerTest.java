@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.Direction;
 import it.polimi.ingsw.PSP47.Enumerations.Gender;
 import it.polimi.ingsw.PSP47.Enumerations.Level;
+import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Gods.Artemis;
 import org.junit.After;
 import org.junit.Before;
@@ -82,6 +83,14 @@ public class WorkerTest {
         workerMale.setSlot(board.getSlot(3, 3));
         workerMale.build(Direction.RIGHTDOWN);
         assertEquals(Level.LEVEL1, board.getSlot(4, 4).getLevel());
+    }
+
+    @Test
+    public void build_CorrectInput_CorrectOutput_dome() throws InvalidBuildException {
+        board.getSlot(3,2).setLevel(Level.LEVEL3);
+        workerMale.setSlot(board.getSlot(3,3));
+        workerMale.build(Direction.LEFT);
+        assertEquals(Level.DOME, board.getSlot(3,2).getLevel());
     }
 
    /* @Test (expected = SlotOccupiedException.class)

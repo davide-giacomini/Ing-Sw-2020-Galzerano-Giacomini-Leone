@@ -58,49 +58,5 @@ public class PanTest {
         assertTrue(player.getGod().validateEndTurn());
     }
 
-    @Test (expected = InvalidMoveException.class)
-    public void move_SlotOccupiedException() throws Exception{
-        otherWorker.setSlot(board.getSlot(2,3));
-        turn.executeMove(Direction.UP);
-    }
 
-    @Test (expected = InvalidMoveException.class)
-    public void move_NotReachableLevelException()
-            throws Exception{
-        otherWorker.setSlot(board.getSlot(2,2));
-        otherWorker.build(Direction.RIGHT);
-        otherWorker.build(Direction.RIGHT);
-        turn.executeMove(Direction.UP);
-    }
-
-    //fatto dal controller
-    /*@Test (expected = InvalidMoveException.class)
-    public void move_NoAvailableMovementsException()
-            throws Exception{
-        turn.executeMove(Direction.LEFT);
-        turn.executeMove(Direction.RIGHTUP);
-    }*/
-
-    @Test (expected = InvalidBuildException.class)
-    public void build_SlotOccupiedException()
-            throws Exception{
-        otherWorker.setSlot(board.getSlot(2,2));
-        turn.executeMove(Direction.LEFT);
-        turn.executeBuild(Direction.UP);
-    }
-
-    //fatto dal controller
-    /*@Test (expected = InvalidBuildException.class)
-    public void build_NoAvailableBuildingsException()
-            throws Exception{
-        turn.executeMove(Direction.LEFT);
-        turn.executeBuild(Direction.UP);
-        turn.executeBuild(Direction.DOWN);
-    }*/
-
-    @Test (expected = InvalidBuildException.class)
-    public void build_WrongBuildOrMoveException()
-            throws Exception{
-        turn.executeBuild(Direction.UP);
-    }
 }

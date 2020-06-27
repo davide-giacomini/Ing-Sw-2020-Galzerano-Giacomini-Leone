@@ -80,13 +80,4 @@ public class ZeusTest {
         assertEquals(Level.LEVEL2, board.getSlot(3,2).getLevel());
     }
 
-    @Test (expected = InvalidBuildException.class)
-    public void build_in_an_occupied_slot() throws InvalidMoveException, InvalidDirectionException, InvalidBuildException {
-        secondWorker = secondPlayer.getWorker(Gender.MALE);
-        secondWorker.setSlot(board.getSlot(3,2));
-        turn.executeMove(Direction.UP);
-        turn.executeBuild(Direction.LEFTDOWN);
-        assertEquals(Level.GROUND, board.getSlot(3,2).getLevel());
-    }
-
 }
