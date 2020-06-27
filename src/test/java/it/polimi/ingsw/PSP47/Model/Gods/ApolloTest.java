@@ -93,14 +93,6 @@ public class ApolloTest {
 
     }
 
-    @Test (expected = InvalidMoveException.class)
-    public void move_SlotOccupiedException()  throws Exception {
-        board.getSlot(1,1).setLevel(Level.DOME);
-
-        turn.executeMove(Direction.LEFTUP);
-
-    }
-
         @Test
     public void checkIfCanMove_withCannotMoveUp() throws Exception{
         player.setCannotMoveUp(true);
@@ -130,21 +122,6 @@ public class ApolloTest {
         board.getSlot(4,3).setLevel(Level.DOME);
 
         assertFalse(player.getGod().checkIfCanMove(maleWorker));
-
-    }
-
-    @Test (expected = InvalidBuildException.class)
-    public void build_InvalidBuildException()  throws Exception{
-
-        assertTrue(player.getGod().checkIfCanBuild(maleWorker));
-        turn.executeBuild(Direction.LEFT);
-    }
-
-    @Test (expected = InvalidBuildException.class)
-    public void build_SlotOccupiedException()  throws Exception {
-        board.getSlot(1,1).setLevel(Level.DOME);
-        turn.executeMove(Direction.LEFT);
-        turn.executeBuild(Direction.UP);
 
     }
 

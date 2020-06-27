@@ -80,24 +80,6 @@ public class HephaestusTest {
 
     }
 
-    @Test (expected = InvalidMoveException.class)
-    public void move_SlotOccupiedException() throws Exception {
-        turn.executeMove(Direction.RIGHTDOWN);
-    }
-
-    @Test (expected = InvalidMoveException.class)
-    public void move_NotReachableLevelException() throws  Exception {
-        secondWorker.build(Direction.LEFT);
-        secondWorker.build(Direction.LEFT);
-        turn.executeMove(Direction.DOWN);
-    }
-
-    //fatto dal controller
-   /* @Test (expected = InvalidMoveException.class)
-    public void move_NoAvailableMovementsException() throws  Exception {
-        turn.executeMove(Direction.LEFT);
-        turn.executeMove(Direction.RIGHTUP);
-    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_WrongBuildOrMoveException() throws  Exception{
@@ -111,21 +93,6 @@ public class HephaestusTest {
         turn.executeBuild(Direction.LEFTUP);
     }
 
-    //fatto dal controller
-    /*@Test (expected = InvalidBuildException.class)
-    public void build_NoAvailableBuildingsException() throws  Exception{
-        turn.executeMove(Direction.LEFT);
-        turn.executeBuild(Direction.DOWN);
-        turn.executeBuild(Direction.DOWN);
-        assertFalse(player.getGod().checkIfCanBuild(worker));
-        turn.executeBuild(Direction.DOWN);
-    }*/
-
-    @Test (expected = InvalidBuildException.class)
-    public void build_SlotOccupiedException() throws Exception{
-        turn.executeMove(Direction.DOWN);
-        turn.executeBuild(Direction.RIGHT);
-    }
 
     @Test
     public void checkIfCanBuild_firstBuild_OutputFalse()  throws Exception{

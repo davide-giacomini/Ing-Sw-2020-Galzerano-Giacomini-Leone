@@ -123,12 +123,7 @@ public class PrometheusTest {
         assertTrue(((Prometheus) player.getGod()).moveThenBuild());
         assertEquals(player.getWorker(Gender.MALE), game.getBoard().getSlot(1, 2).getWorker());
     }
-    
-    @Test(expected = InvalidMoveException.class)
-    public void move_NumberOfBuildingsOne_ThrowNotReachableLevelException() throws Exception {
-        turn.executeBuild(Direction.LEFT);
-        turn.executeMove(Direction.RIGHT);
-    }
+
     
     @Test
     public void move_NumberOfBuildingsOne_OutputFalse() throws Exception {
@@ -146,19 +141,6 @@ public class PrometheusTest {
         turn.executeMove(Direction.UP);
         turn.executeBuild(Direction.DOWN);
         assertEquals(turn.getNumberOfBuildings(), 2);
-    }
-
-    @Test (expected = InvalidMoveException.class)
-    public void move_SlotOccupiedException()  throws Exception {
-        turn.executeMove(Direction.LEFTUP);
-
-    }
-
-    @Test (expected = InvalidMoveException.class)
-    public void move_SlotOccupiedException_withFirstBuild()  throws Exception {
-        turn.executeBuild(Direction.LEFT);
-        turn.executeMove(Direction.LEFTUP);
-
     }
     
     @Test
@@ -179,13 +161,7 @@ public class PrometheusTest {
         turn.executeBuild(Direction.DOWN);
         turn.executeBuild(Direction.DOWN);
     }
-    
-    @Test (expected = InvalidBuildException.class)
-    public void build_SlotOccupiedException()  throws Exception {
-        turn.executeMove(Direction.LEFT);
-        turn.executeBuild(Direction.UP);
 
-    }
     
     @Test
     public void resetParameters_correctOutput() throws Exception {

@@ -81,9 +81,4 @@ public class TritonTest {
         turn.executeMove(Direction.UP);
     }
 
-    @Test (expected = InvalidMoveException.class)
-    public void move_in_an_occupied_slot() throws InvalidMoveException, InvalidDirectionException {
-        otherWorker.setSlot(board.getSlot(4,3));
-        turn.executeMove(Direction.LEFT);
-    }
 }

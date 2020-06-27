@@ -257,6 +257,14 @@ public class GameController implements VirtualViewListener {
 
     }
 
+    private void removeView(VirtualView view) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                game.getBoard().getSlot(i, j).removeSlotListener(view);
+            }
+        }
+    }
+
     /**
      * This method order the ArrayList of Virtual Views the same as the players in the Game class.
      * This is because the indexOfCurrentPlayer must refers to the player and to the VirtualView at the same time.
@@ -342,6 +350,7 @@ public class GameController implements VirtualViewListener {
             game.removePlayer(game.getPlayer(indexOfCurrentPlayer));
             views.get(indexOfCurrentPlayer).sendYouAreOutOfTheGame(false);
             views.get(indexOfCurrentPlayer).removeVirtualViewListener(this);
+            removeView(views.get(indexOfCurrentPlayer));
             views.remove(views.get(indexOfCurrentPlayer));
 
             setNumberOfPlayers(2);

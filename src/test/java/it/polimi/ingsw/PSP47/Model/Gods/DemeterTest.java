@@ -84,27 +84,6 @@ public class DemeterTest {
 
     }
 
-    @Test (expected = InvalidMoveException.class)
-    public void move_SlotOccupiedException()
-            throws Exception {
-        turn.executeMove(Direction.RIGHTDOWN);
-    }
-
-    @Test (expected = InvalidMoveException.class)
-    public void move_NotReachableLevelException()
-            throws Exception {
-
-        board.getSlot(4,3).setLevel(Level.LEVEL2);
-        turn.executeMove(Direction.DOWN);
-    }
-
-    //fatto dal controller
-   /* @Test (expected = InvalidMoveException.class)
-    public void move_NoAvailableMovementsException()
-            throws Exception {
-        turn.executeMove(Direction.LEFT);
-        turn.executeMove(Direction.RIGHTUP);
-    }*/
 
     @Test (expected = InvalidBuildException.class)
     public void build_WrongBuildOrMoveException()
@@ -131,12 +110,6 @@ public class DemeterTest {
         turn.executeBuild(Direction.DOWN);
     }
 
-    @Test (expected = InvalidBuildException.class)
-    public void build_SlotOccupiedException()
-            throws Exception {
-        turn.executeMove(Direction.DOWN);
-        turn.executeBuild(Direction.RIGHT);
-    }
 
     @Test
     public void checkIfCanBuild_firstBuild_OutputFalse()

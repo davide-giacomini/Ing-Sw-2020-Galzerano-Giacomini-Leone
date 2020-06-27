@@ -14,6 +14,10 @@ public abstract class SlotObservable {
     public void addSlotListener(SlotListener slotListener){
         slotListeners.add(slotListener);
     }
+
+    public void removeSlotListener(SlotListener slotListener) {
+        slotListeners.remove(slotListener);
+    }
     
     public void removeAll() {
         slotListeners = new ArrayList<>();

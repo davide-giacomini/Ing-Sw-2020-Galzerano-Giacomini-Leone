@@ -76,11 +76,4 @@ public class HestiaTest {
         assertEquals(2, turn.getNumberOfBuildings());
     }
 
-    @Test (expected = InvalidBuildException.class)
-    public void build_in_an_occupied_slot() throws InvalidMoveException, InvalidDirectionException, InvalidBuildException {
-        turn.executeMove(Direction.LEFTUP);
-        turn.executeBuild(Direction.LEFTUP);
-        assertTrue(board.getSlot(2,2).isWorkerOnSlot());
-        assertEquals(Level.GROUND, board.getSlot(2,2).getLevel());
-    }
 }

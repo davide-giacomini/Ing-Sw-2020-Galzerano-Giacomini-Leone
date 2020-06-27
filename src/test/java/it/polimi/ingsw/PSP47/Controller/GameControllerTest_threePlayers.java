@@ -69,6 +69,16 @@ public class GameControllerTest_threePlayers {
     }
 
     @Test
+    public void setGod_with_a_god_not_available() {
+        ArrayList<GodName> gods = new ArrayList<>();
+        gods.add(GodName.CHRONUS);
+        gods.add(GodName.ATHENA);
+        gods.add(GodName.APOLLO);
+        controller.setGods(gods, "Arianna");
+        assertNull(controller.getAvailableGods());
+    }
+
+    @Test
     public void setUp_correct() {
         ArrayList<GodName> gods = new ArrayList<>();
         gods.add(GodName.PAN);

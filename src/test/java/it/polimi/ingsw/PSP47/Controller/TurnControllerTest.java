@@ -92,6 +92,14 @@ public class TurnControllerTest {
     }
 
     @Test
+    public void setWorker_with_a_worker_of_another_player() {
+        int[] rowAndColumn = new int[2];
+        rowAndColumn[1] = 1;
+        turnController.setWorkerGender(rowAndColumn);
+        assertNull(turnController.getWorkerGender());
+    }
+
+    @Test
     public void setWorker_with_his_worker_not_here() {
         int[] rowAndColumn = new int[2];
         rowAndColumn[0] = 4;
@@ -182,6 +190,18 @@ public class TurnControllerTest {
     }
 
     @Test
+    public void executeAction_caseMove_unreachable_slot_when_player_cannotmoveup() {
+        int[] rowAndColumn = new int[2];
+        rowAndColumn[0] = 1;
+        playerMonica.setCannotMoveUp(true);
+        controller.getGame().getBoard().getSlot(2,0).setLevel(Level.LEVEL1);
+        turnController.setWorkerGender(rowAndColumn);
+        turnController.executeAction(Action.MOVE, Direction.DOWN);
+        assertTrue(controller.getGame().getBoard().getSlot(1,0).isWorkerOnSlot());
+        assertEquals(0, turnController.getTurn().getNumberOfMovements());
+    }
+
+    @Test
     public void executeAction_caseMove_unreachable_slot() {
         int[] rowAndColumn = new int[2];
         rowAndColumn[0] = 1;
@@ -232,6 +252,16 @@ public class TurnControllerTest {
         turnController.executeAction(Action.BUILD,Direction.DOWN);
         assertEquals(Level.LEVEL1, controller.getGame().getBoard().getSlot(3,0).getLevel());
         assertEquals(1, turnController.getTurn().getNumberOfBuildings());
+    }
+
+    @Test
+    public void executeAction_caseBuild_order_of_movements_not_correct() {
+        int[] rowAndColumn = new int[2];
+        rowAndColumn[0] = 1;
+        turnController.setWorkerGender(rowAndColumn);
+        turnController.executeAction(Action.BUILD, Direction.DOWN);
+        assertEquals(0, turnController.getTurn().getNumberOfMovements());
+        assertEquals(0, turnController.getTurn().getNumberOfBuildings());
     }
 
     @Test

@@ -93,29 +93,6 @@ public class ArtemisTest {
     }
 
     @Test (expected = InvalidMoveException.class)
-    public void move_SlotOccupiedException()
-            throws Exception {
-        otherWorker.setSlot(board.getSlot(1,2));
-        turn.executeMove(Direction.RIGHT);
-    }
-
-    @Test (expected = InvalidMoveException.class)
-    public void move_SlotOccupiedException_atSecondMove()
-            throws Exception {
-        otherWorker.setSlot(board.getSlot(1,2));
-        turn.executeMove(Direction.DOWN);
-        turn.executeMove(Direction.RIGHTUP);
-
-    }
-
-    @Test (expected = InvalidMoveException.class)
-    public void move_NotReachableLevelException()
-            throws Exception {
-        board.getSlot(1,2).setLevel(Level.DOME);
-        turn.executeMove(Direction.RIGHT);
-    }
-
-    @Test (expected = InvalidMoveException.class)
     public void move_NoAvailableMovementsException()
             throws Exception {
         turn.executeMove(Direction.LEFT);
@@ -144,43 +121,6 @@ public class ArtemisTest {
         assertTrue(player.getGod().validateEndTurn());
         turn.executeMove(Direction.DOWN);
     }
-
-
-    @Test (expected = InvalidBuildException.class)
-    public void build_SlotOccupiedException()
-            throws Exception {
-        otherWorker.setSlot(board.getSlot(2,0));
-        turn.executeMove(Direction.LEFT);
-        turn.executeBuild(Direction.DOWN);
-    }
-
-    //fatto nel controller
-
-   /* @Test (expected = InvalidBuildException.class)
-    public void build_NoAvailableBuildingsException()
-            throws Exception {
-        turn.executeMove(Direction.LEFT);
-        turn.executeBuild(Direction.UP);
-        assertTrue(player.getGod().validateEndTurn());
-        turn.executeBuild(Direction.DOWN);
-    }*/
-
-  /*  @Test (expected = InvalidBuildException.class)
-    public void build_NoAvailableBuildingsException_MoveTwice()
-            throws Exception {
-        turn.executeMove(Direction.LEFT);
-        turn.executeMove(Direction.DOWN);
-        turn.executeBuild(Direction.UP);
-        assertTrue(player.getGod().validateEndTurn());
-        turn.executeBuild(Direction.DOWN);
-    }*/
-
-    @Test (expected = InvalidBuildException.class)
-    public void build_WrongBuildOrMoveException()
-            throws Exception {
-        turn.executeBuild(Direction.UP);
-    }
-
 
     @Test (expected = InvalidMoveException.class)
     public void turn_tryToBackInTheFirst_1()

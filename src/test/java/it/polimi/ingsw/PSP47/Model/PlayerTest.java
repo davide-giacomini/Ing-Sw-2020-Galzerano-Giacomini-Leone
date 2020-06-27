@@ -120,15 +120,6 @@ public class PlayerTest {
         assertEquals(player.getWorker(Gender.MALE), board.getSlot(0,0).getWorker());
     }
 
-    @Test(expected = InvalidMoveException.class)
-    public void move_InvalidMoveException() throws Exception {
-        player.setCannotMoveUp(true);
-        Board board = game.getBoard();
-        player.setGod(new Apollo(player, "Apollo"));
-        board.getSlot(0,0).setLevel(Level.LEVEL1);
-        player.putWorkerOnSlot(player.getWorker(Gender.MALE), board.getSlot(1, 1));
-        player.move(Direction.LEFTUP, player.getWorker(Gender.MALE));
-    }
 
     @Test
     public void deleteWorkers() {
