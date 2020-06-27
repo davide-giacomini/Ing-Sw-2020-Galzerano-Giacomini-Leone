@@ -84,7 +84,7 @@
          <children>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="moveButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onMoveClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="moveButton" fitHeight="65.0" fitWidth="160.0" onMouseClicked="#onMoveClick" pickOnBounds="true">
                      <image>
                         <Image url="@../Images/cm_btn_green.png" />
                      </image>
@@ -95,7 +95,7 @@
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="buildButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onBuildClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="buildButton" fitHeight="65.0" fitWidth="160.0" onMouseClicked="#onBuildClick" pickOnBounds="true">
                      <image>
                         <Image url="@../Images/cm_btn_green.png" />
                      </image>
@@ -106,7 +106,7 @@
             </StackPane>
             <StackPane fx:id="buildDomePane" prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="buildDomeButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onBuildDomeClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="buildDomeButton" fitHeight="65.0" fitWidth="160.0" onMouseClicked="#onBuildDomeClick" pickOnBounds="true">
                      <image>
                         <Image url="@../Images/cm_btn_green.png" />
                      </image>
@@ -117,7 +117,7 @@
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="endButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onEndClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="endButton" fitHeight="65.0" fitWidth="160.0" onMouseClicked="#onEndClick" pickOnBounds="true">
                      <image>
                         <Image url="@../Images/cm_btn_coral.png" />
                      </image>
@@ -128,7 +128,7 @@
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="quitButton" fitHeight="65.0" fitWidth="130.0" onMouseClicked="#onQuitClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="quitButton" fitHeight="65.0" fitWidth="160.0" onMouseClicked="#onQuitClick" pickOnBounds="true">
                      <image>
                         <Image url="@../Images/cm_btn_coral.png" />
                      </image>

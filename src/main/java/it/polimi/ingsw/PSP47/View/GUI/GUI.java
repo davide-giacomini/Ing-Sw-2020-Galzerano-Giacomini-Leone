@@ -260,10 +260,6 @@ public class GUI extends Application implements View {
             loserStage.setTitle("Game over");
 
             try {
-                //TODO AD ari non piace perchè non esce sul angolo della scena ma più in alto
-                loserStage.setX(Screen.getPrimary().getBounds().getMinX());
-                loserStage.setY(Screen.getPrimary().getBounds().getMinY());
-                
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/FXML/losingAdvice.fxml"));
                 AnchorPane rootAnchorPane = fxmlLoader.load();
