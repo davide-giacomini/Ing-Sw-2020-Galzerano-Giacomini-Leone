@@ -198,19 +198,11 @@ public class GUI extends Application implements View {
      */
     @Override
     public void showImportantMessage(String text) {
-        //TODO modificare stammerda
-        if (text.split("\n")[0].equals("Wait for the other players to connect.")){
-            Platform.runLater(() -> {
-                setLayout(scene, "/FXML/waitingPane.fxml");
-            });
-        }
-        else {
-            Platform.runLater(() -> {
-                Alert a = new Alert(Alert.AlertType.INFORMATION);
-                a.setContentText(text);
-                a.show();
-            });
-        }
+        Platform.runLater(() -> {
+            Alert a = new Alert(Alert.AlertType.INFORMATION);
+            a.setContentText(text);
+            a.show();
+        });
     }
 
     /**
@@ -221,7 +213,6 @@ public class GUI extends Application implements View {
     public void theWinnerIs(String usernameWinner) {
         Platform.runLater(()-> {
             try {
-                //TODO capire perché devo creare lo stage dentro il runlater
                 Stage winnerStage = new Stage();
                 winnerStage.setHeight(450);
                 winnerStage.setWidth(600);

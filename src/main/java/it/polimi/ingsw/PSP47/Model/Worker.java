@@ -79,8 +79,6 @@ public class Worker {
     public boolean move (Direction direction)
             throws InvalidMoveException, IndexOutOfBoundsException, SlotOccupiedException {
 
-        //TODO la direzione viene direttamente controllata nella VIEW, e nel caso sia sbagliata viene passata WRONG_DIRECTION.
-        // si può quini togliere questo check? Togliendolo, togliamo l'eccezione.
         checkDirection(direction);
 
         Slot destinationSlot;
@@ -88,7 +86,6 @@ public class Worker {
             destinationSlot = player.getTurn().getBoard().getNearbySlot(direction, slot);
         }
         catch (InvalidDirectionException e){
-            //TODO questo non so se si può togliere
             throw new InvalidMoveException("Invalid direction of the getNearBySlot.");
         }
         //TODO questi due if vengono già controllati nel controller: si possono togliere?
@@ -107,8 +104,6 @@ public class Worker {
     public void build (Direction direction)
             throws IndexOutOfBoundsException, SlotOccupiedException, InvalidBuildException {
     
-        //TODO la direzione viene direttamente controllata nella VIEW, e nel caso sia sbagliata viene passata WRONG_DIRECTION.
-        // si può quini togliere questo check? Togliendolo, togliamo l'eccezione.
         checkDirection(direction);
         
         Slot destinationSlot;

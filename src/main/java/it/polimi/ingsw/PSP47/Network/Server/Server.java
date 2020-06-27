@@ -101,7 +101,7 @@ public class Server implements ClientHandlerListener {
             String waitMessage = "Wait for the other players to connect.\n" +
                     "The game will start as soon as there are " + game.getMaxPlayersNumber() + " players.";
             
-            clientHandler.sendImportant(waitMessage, MessageType.IMPORTANT);
+            clientHandler.sendImportant(waitMessage, MessageType.TURN);
             return;
         }
         

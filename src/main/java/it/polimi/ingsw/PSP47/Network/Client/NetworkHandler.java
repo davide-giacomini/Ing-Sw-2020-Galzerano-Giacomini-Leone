@@ -103,7 +103,7 @@ public class NetworkHandler implements Runnable, ViewListener {
             catch (IOException e){
                //TODO ari ha commentato in questo catch perchè gli alert non voluti alla fine sono causati da queste righe
                 /*view.showImportantMessage("We are sorry: " +
-                        "the server  at the address " + serverSocket.getInetAddress() + " disconnected.");*/
+                        "the server  at the address " + serverSocket.getInetAddress() + " disconnected."); */
 
                 if (isConnected)
                     endConnection();
@@ -202,7 +202,6 @@ public class NetworkHandler implements Runnable, ViewListener {
                     view.theWinnerIs(((ImportantMessage) message).getText());
                     break;
                 case START_GAME:
-                    view.showImportantMessage(((ImportantMessage) message).getText());
                     view.showGame();
                     break;
                 case ASK_WORKER_POSITION:

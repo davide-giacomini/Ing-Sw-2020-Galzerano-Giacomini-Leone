@@ -169,7 +169,7 @@ public class DuringGameController extends ViewObservable{
             action = Action.MOVE;
             gameView.updateMoment(CurrentMoment.ACTION_CHOSEN);
             commandText.setText("Now click on the slot where you want to move.");
-        }//TODO add other cases with text
+        }
     }
 
     /**
@@ -204,7 +204,7 @@ public class DuringGameController extends ViewObservable{
         }else if (gameView.getCurrentMoment() == CurrentMoment.CHOOSE_ACTION) {
             action = Action.BUILDDOME;
             gameView.updateMoment(CurrentMoment.ACTION_CHOSEN);
-            commandText.setText("Now click on the slot where you want to build the Dome:");
+            commandText.setText("Now click on the slot where you want to build the dome:");
         }
     }
 
@@ -232,7 +232,7 @@ public class DuringGameController extends ViewObservable{
 
     /**
      * This method notifies the Network Handler that it has to close itself
-     * @param event
+     * @param event the click on the Quit button
      */
     @FXML
     void onQuitClick(MouseEvent event) {
