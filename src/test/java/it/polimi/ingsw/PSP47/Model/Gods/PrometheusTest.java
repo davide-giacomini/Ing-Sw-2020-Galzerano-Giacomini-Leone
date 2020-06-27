@@ -1,9 +1,6 @@
 package it.polimi.ingsw.PSP47.Model.Gods;
 
-import it.polimi.ingsw.PSP47.Enumerations.Color;
-import it.polimi.ingsw.PSP47.Enumerations.Direction;
-import it.polimi.ingsw.PSP47.Enumerations.Gender;
-import it.polimi.ingsw.PSP47.Enumerations.Level;
+import it.polimi.ingsw.PSP47.Enumerations.*;
 import it.polimi.ingsw.PSP47.Model.Board;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.PSP47.Model.Exceptions.InvalidMoveException;
@@ -129,6 +126,7 @@ public class PrometheusTest {
     public void move_NumberOfBuildingsOne_OutputFalse() throws Exception {
         assertEquals(turn.getNumberOfMovements(), 0);
         assertEquals(turn.getNumberOfBuildings(), 0);
+        assertFalse(player.getGod().checkOrderOfActions(Action.MOVE));
         turn.executeBuild(Direction.LEFT);
         assertEquals(turn.getNumberOfBuildings(), 1);
         assertFalse(player.move(Direction.UP, player.getWorker(Gender.MALE)));
