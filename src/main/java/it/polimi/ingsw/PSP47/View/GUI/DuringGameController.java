@@ -434,7 +434,7 @@ public class DuringGameController extends ViewObservable{
             ImageView levelAtlasView = new ImageView(levelAtlas);
             levelAtlasView.setPreserveRatio(true);
             levelAtlasView.fitWidthProperty().bind(pane.widthProperty());
-            levelAtlasView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            levelAtlasView.fitHeightProperty().bind(pane.heightProperty().divide(4));
             gridPane.add(levelAtlasView, 0, 3);
             return levels;
         }
@@ -445,7 +445,7 @@ public class DuringGameController extends ViewObservable{
             ImageView levelOneView = new ImageView(levelOne);
             levelOneView.setPreserveRatio(true);
             levelOneView.fitWidthProperty().bind(pane.widthProperty());
-            levelOneView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            levelOneView.fitHeightProperty().bind(pane.heightProperty().divide(4));
             gridPane.add(levelOneView, 0, 3);
             levels--;
         }
@@ -455,7 +455,7 @@ public class DuringGameController extends ViewObservable{
             ImageView levelTwoView = new ImageView(levelTwo);
             levelTwoView.setPreserveRatio(true);
             levelTwoView.fitWidthProperty().bind(pane.widthProperty());
-            levelTwoView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            levelTwoView.fitHeightProperty().bind(pane.heightProperty().divide(4));
             gridPane.add(levelTwoView, 0, 2);
             levels--;
         }
@@ -465,7 +465,7 @@ public class DuringGameController extends ViewObservable{
             ImageView levelThreeView = new ImageView(levelThree);
             levelThreeView.setPreserveRatio(true);
             levelThreeView.fitWidthProperty().bind(pane.widthProperty());
-            levelThreeView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            levelThreeView.fitHeightProperty().bind(pane.heightProperty().divide(4));
             gridPane.add(levelThreeView, 0, 1);
             levels--;
 
@@ -477,7 +477,7 @@ public class DuringGameController extends ViewObservable{
             ImageView levelDomeView = new ImageView(levelDome);
             levelDomeView.setPreserveRatio(true);
             levelDomeView.fitWidthProperty().bind(pane.widthProperty());
-            levelDomeView.fitHeightProperty().bind(pane.widthProperty().divide(4));
+            levelDomeView.fitHeightProperty().bind(pane.heightProperty().divide(4));
             gridPane.add(levelDomeView, 0, 0);
             levels--;
 

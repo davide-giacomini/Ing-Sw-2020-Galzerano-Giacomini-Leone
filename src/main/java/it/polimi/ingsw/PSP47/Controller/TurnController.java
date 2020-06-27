@@ -190,7 +190,7 @@ public class TurnController {
                 textError = "This slot is occupied by a worker, you cannot build here";
             }
             else if (player.getGod().checkOrderOfActions(Action.BUILD))
-                textError = "You have to move your worker before building";
+                textError = "You are not allowed to build in this moment of your turn";
             if (textError != null) {
                 views.get(indexOfCurrentPlayer).sendError(textError);
                 views.get(indexOfCurrentPlayer).sendWhichAction();

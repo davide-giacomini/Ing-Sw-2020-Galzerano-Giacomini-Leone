@@ -8,6 +8,7 @@ import it.polimi.ingsw.PSP47.View.GameView;
 import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.*;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -416,7 +417,7 @@ public class CLI extends ViewObservable implements View  {
         if(gameView.getMyUsername().equals(usernameWinner))
             printSupport.printWin(out);
         else {
-            theLoserIs();
+            theLoserIs("");
             showImportantMessage(usernameWinner + " WON.\n\n");
         }
     }
@@ -425,8 +426,13 @@ public class CLI extends ViewObservable implements View  {
      * This method tells the username of the winner
      */
     @Override
-    public void theLoserIs( ){
-        printSupport.printLost(out);
+    public void theLoserIs(String usernameLoser){
+        if (gameView.getMyUsername().equals(usernameLoser)) {
+            printSupport.printLost(out);
+        }else{
+            showImportantMessage(usernameLoser+" has just lost but the Game must go on!\n");
+        }
+
     }
 
     /**

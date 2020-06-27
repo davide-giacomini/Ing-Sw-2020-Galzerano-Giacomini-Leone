@@ -252,7 +252,7 @@ public class GUI extends Application implements View {
      * This method loads the scene where a loser is declared.
      */
     @Override
-    public void theLoserIs() {
+    public void theLoserIs(String usernameLoser) {
         Platform.runLater(()-> {
             Stage loserStage = new Stage();
             loserStage.setHeight(450);
@@ -260,6 +260,7 @@ public class GUI extends Application implements View {
             loserStage.setTitle("Game over");
 
             try {
+                //TODO AD ari non piace perchè non esce sul angolo della scena ma più in alto
                 loserStage.setX(Screen.getPrimary().getBounds().getMinX());
                 loserStage.setY(Screen.getPrimary().getBounds().getMinY());
                 
@@ -267,10 +268,13 @@ public class GUI extends Application implements View {
                 fxmlLoader.setLocation(getClass().getResource("/FXML/losingAdvice.fxml"));
                 AnchorPane rootAnchorPane = fxmlLoader.load();
                 Scene scene = new Scene(rootAnchorPane);
-
-                Text text = (Text) rootAnchorPane.getChildren().get(3);
-                text.setText("GAME OVER!\nYou lost.");
-                
+                if (gameView.getMyUsername().equals(usernameLoser)) {
+                    Text text = (Text) rootAnchorPane.getChildren().get(3);
+                    text.setText("GAME OVER!\nYou lost.");
+                }else{
+                    Text text = (Text) rootAnchorPane.getChildren().get(3);
+                    text.setText(usernameLoser+" has just lost but the Game must go on!");
+                }
                 loserStage.setScene(scene);
                 loserStage.setResizable(false);
 
@@ -286,7 +290,7 @@ public class GUI extends Application implements View {
     public void showEnd() {
        // System.exit(0); decide how to handle the final part
         gameView.updateMoment(CurrentMoment.END);
-        duringGameController.changeText("The game is going to shut down automatically, no action is allowed anymore!");
+        duringGameController.changeText("Game over, no action is allowed anymore!");
     }
 
     /**

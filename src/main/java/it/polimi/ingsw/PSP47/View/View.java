@@ -76,7 +76,7 @@ public interface View  {
     /**
      * This method tells the user that he/she lost
      */
-     void theLoserIs();
+     void theLoserIs(String usernameLoser);
 
     /**
      * This method shows the user that it's someone else turn

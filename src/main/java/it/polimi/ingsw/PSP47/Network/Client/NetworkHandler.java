@@ -195,7 +195,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     break;
                 case LOSING:
                     view.getGameView().updateMoment(CurrentMoment.LOSE);
-                    view.theLoserIs();
+                    view.theLoserIs(((ImportantMessage) message).getText());
                     break;
                 case WINNING:
                     view.getGameView().updateMoment(CurrentMoment.WIN);
