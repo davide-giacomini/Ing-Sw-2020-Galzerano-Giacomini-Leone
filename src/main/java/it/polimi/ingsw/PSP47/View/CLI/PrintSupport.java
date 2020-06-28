@@ -1,5 +1,4 @@
 package it.polimi.ingsw.PSP47.View.CLI;
-
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.GodName;
 import it.polimi.ingsw.PSP47.Model.Slot;
@@ -9,15 +8,15 @@ import java.util.concurrent.TimeUnit;
 
 public class PrintSupport {
 
-    private static final String UPPER_PART_SLOT = " ________ ";
-    private static final String LOWER_FREE_PART_SLOT = "|________|";
+    private static final String UPPER_PART_SLOT =  " ________ ";
+    private static final String LOWER_FREE_PART_SLOT =  "|________|";
     private static final String MIDDLE_FREE_PART_SLOT ="|        |";
 
-    private static final String WITH_LEV1_PART_SLOT = "|___"+AnsiCode.ANSI_LEVEL1+ " ___|";
-    private static final String WITH_LEV2_PART_SLOT = "|   "+AnsiCode.ANSI_LEVEL2+ "    |";
-    private static final String WITH_LEV3_PART_SLOT = "|   " + AnsiCode.ANSI_LEVEL3+ "   |";
-    private static final String WITH_DOME_PART_SLOT = "|   " + AnsiCode.ANSI_DOME +  "   |";
-    private static final String WITH_DOME_ATLAS_PART_SLOT = "|___" + AnsiCode.ANSI_DOME + "___|";
+    private static final String WITH_LEV1_PART_SLOT =  "|___"+AnsiCode.ANSI_LEVEL1+ "___|";
+    private static final String WITH_LEV2_PART_SLOT =  "|   "+AnsiCode.ANSI_LEVEL2+ "    |";
+    private static final String WITH_LEV3_PART_SLOT =  "|   " + AnsiCode.ANSI_LEVEL3+ "   |";
+    private static final String WITH_DOME_PART_SLOT =  "|   " + AnsiCode.ANSI_DOME +  "   |";
+    private static final String WITH_DOME_ATLAS_PART_SLOT =  "|___" + AnsiCode.ANSI_DOME + "___|";
 
     private String[][][] BOARD_PARTS = new String[5][5][5];
     private static final String[] EMPTY_PARTS = new String[5];
@@ -74,7 +73,7 @@ public class PrintSupport {
      */
     public void printUsersAndColorsAndGods(ArrayList<String> usernames, ArrayList<Color> colors, ArrayList<GodName> gods, int numOfPlayers, PrintStream out){
         for (int i = 0 ; i < numOfPlayers; i++ ){
-            out.println( "Name : " + usernames.get(i)+ "; Color : "+ colors.get(i) + "; God : "+ gods.get(i));
+            out.println( AnsiCode.ANSI_GREEN + "Name : " + usernames.get(i)+ "; Color : "+ colors.get(i) + "; God : "+ gods.get(i)+ AnsiCode.ANSI_RESET);
         }
     }
 
@@ -143,67 +142,9 @@ public class PrintSupport {
                     "     ▐░▌     ▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄█░▌     ▐░▌░▌   ▐░▐░▌▐░█▄▄▄▄▄▄▄█░▌▐░▌     ▐░▐░▌\n"+
                     "     ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░░▌     ▐░░▌▐░░░░░░░░░░░▌▐░▌      ▐░░▌\n"+
                     "      ▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀       ▀▀       ▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀        ▀▀\n";
-        String exclamationMark =" ▄\n"+
-                                "▐░▌\n"+
-                                "▐░▌\n"+
-                                "▐░▌\n"+
-                                "▐░▌\n"+
-                                "▐░▌\n"+
-                                "▐░▌\n"+
-                                " ▀ \n"+
-                                " ▄ \n"+
-                                "▐░▌\n"+
-                                " ▀ \n";
-
-        String exclamationMarkSpace =
-                "            ▄\n"+
-                "           ▐░▌\n"+
-                "           ▐░▌\n"+
-                "           ▐░▌\n"+
-                "           ▐░▌\n"+
-                "           ▐░▌\n"+
-                "           ▐░▌\n"+
-                "            ▀ \n"+
-                "            ▄ \n"+
-                "           ▐░▌\n"+
-                "            ▀ \n";
-        String exclamationMarkSpace2 =
-                "                            ▄\n"+
-                "                           ▐░▌\n"+
-                "                           ▐░▌\n"+
-                "                           ▐░▌\n"+
-                "                           ▐░▌\n"+
-                "                           ▐░▌\n"+
-                "                           ▐░▌\n"+
-                "                            ▀ \n"+
-                "                            ▄ \n"+
-                "                           ▐░▌\n"+
-                "                            ▀ \n";
 
 
         out.print(AnsiCode.ANSI_GREEN+ win);
-
-        out.print( exclamationMark);
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException e) {
-                e.printStackTrace();
-        }
-
-        out.print( exclamationMarkSpace);
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException e) {
-                e.printStackTrace();
-        }
-
-        out.print( exclamationMarkSpace2);
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException e) {
-                e.printStackTrace();
-        }
-
         out.print("\n"+ AnsiCode.ANSI_RESET);
     }
 
@@ -222,7 +163,7 @@ public class PrintSupport {
                        "     ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░▌ \n"+
                        "      ▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀       ▀\n";
 
-        out.print(AnsiCode.ANSI_WHITE+ lost + AnsiCode.ANSI_RESET);
+        out.print(AnsiCode.ANSI_WHITE+ lost + "\n" + AnsiCode.ANSI_RESET);
     }
 
     public void printGoodBye(PrintStream out){
@@ -258,8 +199,8 @@ public class PrintSupport {
 
         if ( slot.isWorkerOnSlot() ) {
             String color = AnsiCode.getAnsiByName(slot.getWorkerColor().toString());
-            String WITH_WORKER_LOWER_SLOT = "|___" + color + AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "____|";
-            String WITH_WORKER_PART_SLOT =  "|   " + color + AnsiCode.ANSI_WORKER + AnsiCode.ANSI_RESET + "    |";
+            String WITH_WORKER_LOWER_SLOT = "|___" + color + AnsiCode.ANSI_WORKER +AnsiCode.ANSI_RESET + "____|";
+            String WITH_WORKER_PART_SLOT =  "|   "+color + AnsiCode.ANSI_WORKER +AnsiCode.ANSI_RESET  + "    |";
 
             switch (level){
                 case 0 :

@@ -8,7 +8,6 @@ import it.polimi.ingsw.PSP47.View.GameView;
 import it.polimi.ingsw.PSP47.View.View;
 import it.polimi.ingsw.PSP47.View.ViewObservable;
 import it.polimi.ingsw.PSP47.Visitor.*;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -105,7 +104,7 @@ public class CLI extends ViewObservable implements View  {
         out.println(AnsiCode.ANSI_PURPLE + AnsiCode.ANSI_WORKER + " This is purple" + AnsiCode.ANSI_RESET);
 
         do {
-            out.println("Insert the color you prefer :  ");
+            out.println("\nInsert the color you prefer :  ");
             if (in.hasNextLine()) {
                 color = in.nextLine();
                 acceptableColor = Color.getColorByName(color);
@@ -176,7 +175,7 @@ public class CLI extends ViewObservable implements View  {
         int[] newRowAndColumn = new int[2];
 
         out.println("Insert the slot of the worker you want to use :  ");
-        out.println("Insert Row and press" + AnsiCode.ANSI_ENTER_KEY + ":  ");
+        out.println("Insert Row and press " + AnsiCode.ANSI_ENTER_KEY + " :  ");
         do {
             try {
                 newRowAndColumn[0] = Integer.parseInt(in.nextLine())-1;
@@ -215,7 +214,7 @@ public class CLI extends ViewObservable implements View  {
         int[] newRowAndColumn = new int[4];
 
                 out.println("Choose where to  Initially position your workers :  ");
-                out.println("Worker MALE");
+                out.println("Worker MALE :");
 
                 out.println("Insert Row and press" + AnsiCode.ANSI_ENTER_KEY + ":  ");
                 do {
@@ -229,7 +228,7 @@ public class CLI extends ViewObservable implements View  {
 
                 }while (newRowAndColumn[0] == 9000);
 
-                out.println("Insert Column and press" + AnsiCode.ANSI_ENTER_KEY + ": ");
+                out.println("Insert Column and press " + AnsiCode.ANSI_ENTER_KEY + " : ");
                 do {
                     try {
                         newRowAndColumn[1] = Integer.parseInt(in.nextLine())-1;
@@ -240,8 +239,8 @@ public class CLI extends ViewObservable implements View  {
                     }
 
                 }while (newRowAndColumn[1] == 9000);
-                out.println("Worker FEMALE");
-                out.println("Insert Row and press" + AnsiCode.ANSI_ENTER_KEY + ":  ");
+                out.println("Worker FEMALE :");
+                out.println("Insert Row and press " + AnsiCode.ANSI_ENTER_KEY + " :  ");
                 do {
                     try {
                         newRowAndColumn[2] = Integer.parseInt(in.nextLine())-1;
@@ -253,7 +252,7 @@ public class CLI extends ViewObservable implements View  {
 
                 }while (newRowAndColumn[2] == 9000);
 
-                out.println("Insert Column and press" + AnsiCode.ANSI_ENTER_KEY + ": ");
+                out.println("Insert Column and press " + AnsiCode.ANSI_ENTER_KEY + " : ");
                 do {
                     try {
                         newRowAndColumn[3] = Integer.parseInt(in.nextLine())-1;
@@ -286,37 +285,37 @@ public class CLI extends ViewObservable implements View  {
 
         int i = 0;
 
-        out.println("Hey you! You have been picked as Challenger ");
+        out.println("Hey you! You have been picked as " +AnsiCode.ANSI_GREEN+" Challenger! ");
 
         out.println("Here are the gods and their powers: ");
 
-        out.println("#1 Apollo – You may move your worker onto a space occupied by an opponent’s builder. Their builder will be moved to the space your builder was just on.");
+        out.println(AnsiCode.ANSI_BG_CYAN +"#1 Apollo"+ AnsiCode.ANSI_RESET+ "– You may move your worker onto a space occupied by an opponent’s builder. Their builder will be moved to the space your builder was just on.");
 
-        out.println("#2 Artemis – You may move your builders two spaces but you may not move back to the space you started your turn on.");
+        out.println(AnsiCode.ANSI_BG_CYAN +"#2 Artemis"+ AnsiCode.ANSI_RESET+ " – You may move your builders two spaces but you may not move back to the space you started your turn on.");
 
-        out.println("#3 Athena – If you moved one of your workers up one level on your previous turn, your opponent may not move up a level on their turn.");
+        out.println(AnsiCode.ANSI_BG_CYAN +"#3 Athena"+ AnsiCode.ANSI_RESET+ " – If you moved one of your workers up one level on your previous turn, your opponent may not move up a level on their turn.");
 
-        out.println("#4 Atlas – Your builders can build a dome on any level including the ground.");
+        out.println(AnsiCode.ANSI_BG_CYAN +"#4 Atlas"+ AnsiCode.ANSI_RESET+ " – Your builders can build a dome on any level including the ground.");
 
-        out.println("#5 Demeter – Your builders can build twice on your turn, but may not build twice on the same space.");
+        out.println(AnsiCode.ANSI_BG_CYAN +"#5 Demeter"+ AnsiCode.ANSI_RESET+ " – Your builders can build twice on your turn, but may not build twice on the same space.");
 
-        out.println("#6 Hephaestus – Your builders can build twice on the same space. They may not use this ability to place a dome though.");
+        out.println(AnsiCode.ANSI_BG_CYAN +"#6 Hephaestus"+ AnsiCode.ANSI_RESET+ " – Your builders can build twice on the same space. They may not use this ability to place a dome though.");
 
-        out.println("#7 Minotaur – You may move your builder onto a space occupied by an opponent’s builder if the next space in the same direction is unoccupied. You will push the other player’s builder into the next space in the same direction.");
+        out.println(AnsiCode.ANSI_BG_CYAN +"#7 Minotaur"+ AnsiCode.ANSI_RESET+ " – You may move your builder onto a space occupied by an opponent’s builder if the next space in the same direction is unoccupied. You will push the other player’s builder into the next space in the same direction.");
 
-        out.println("#8 Pan – If one of your builders moves down two spaces in one movement you will automatically win the game.");
+        out.println(AnsiCode.ANSI_BG_CYAN +"#8 Pan"+ AnsiCode.ANSI_RESET+ " – If one of your builders moves down two spaces in one movement you will automatically win the game.");
 
-        out.println("#9 Prometheus – If you don’t move up a level during your turn you may build before and after you move.");
+        out.println(AnsiCode.ANSI_BG_CYAN +"#9 Prometheus"+ AnsiCode.ANSI_RESET+ " – If you don’t move up a level during your turn you may build before and after you move.");
 
-        out.println("#10 Hestia - Your worker may build one additional time. The additional build cannot be on a perimeter space.");
+        out.println(AnsiCode.ANSI_BG_GREEN+ "#10 Hestia"+ AnsiCode.ANSI_RESET+ " - Your worker may build one additional time. The additional build cannot be on a perimeter space.");
 
-        out.println("#11 Hera - An opponent cannot win by moving on to a perimeter space.");
+        out.println(AnsiCode.ANSI_BG_GREEN+ "#11 Hera"+ AnsiCode.ANSI_RESET+ " - An opponent cannot win by moving on to a perimeter space.");
 
-        out.println("#12 Chronus - You also win when there are at least five complete Towers on the board.");
+        out.println(AnsiCode.ANSI_BG_GREEN+"#12 Chronus"+ AnsiCode.ANSI_RESET+ " - You also win when there are at least five complete Towers on the board.");
 
-        out.println("#13 Triton - Each time your Worker moves onto a perimeter space (ground or block), it may immediately move again.");
+        out.println(AnsiCode.ANSI_BG_GREEN+"#13 Triton"+ AnsiCode.ANSI_RESET+ " - Each time your Worker moves onto a perimeter space (ground or block), it may immediately move again.");
 
-        out.println("#14 Zeus - your Worker may build under itself in its current space, forcing it up one level. You do not win by forcing yourself up the 3rd level.");
+        out.println(AnsiCode.ANSI_BG_GREEN+"#14 Zeus"+ AnsiCode.ANSI_RESET+ " - your Worker may build under itself in its current space, forcing it up one level. You do not win by forcing yourself up the 3rd level.");
 
         do {
             out.println("Choose which god you want to add in the list : you can choose " + gameView.getNumberOfPlayers() );

@@ -13,6 +13,10 @@ public class AnsiCode {
         static final String ANSI_WHITE = "\u001B[37m";
         static final String ANSI_ENTER_KEY = "\u21A9";
         static final String ANSI_WRONG = "";
+        //backgrounds
+        static final String ANSI_BLACK = "\u001b[40m";
+        static final String ANSI_BG_CYAN = "\u001b[46m";
+        static final String ANSI_BG_GREEN = "\u001b[42m";
         /**
          * Variable to Reset the game
          */

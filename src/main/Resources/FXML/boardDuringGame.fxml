@@ -151,7 +151,7 @@
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ABOUT PLAYERS" textAlignment="CENTER" wrappingWidth="158.27691650390625">
             </Text>
-            <StackPane alignment="BOTTOM_CENTER" prefHeight="54.0" prefWidth="124.0">
+            <StackPane fx:id="first_name" alignment="BOTTOM_CENTER" prefHeight="54.0" prefWidth="124.0">
                <children>
                   <ImageView fitHeight="45.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -165,7 +165,7 @@
                   </Text>
                </children>
             </StackPane>
-            <StackPane prefHeight="69.0" prefWidth="124.0">
+            <StackPane fx:id="first_information" prefHeight="69.0" prefWidth="124.0">
                <children>
                   <HBox alignment="CENTER" prefHeight="95.0" prefWidth="177.0">
                      <children>
@@ -193,7 +193,7 @@
                   </HBox>
                </children>
             </StackPane>
-            <StackPane alignment="BOTTOM_CENTER" prefHeight="47.0" prefWidth="124.0">
+            <StackPane fx:id="second_name" alignment="BOTTOM_CENTER" prefHeight="47.0" prefWidth="124.0">
                <children>
                   <ImageView fitHeight="45.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -207,7 +207,7 @@
                   </Text>
                </children>
             </StackPane>
-            <StackPane prefHeight="69.0" prefWidth="124.0">
+            <StackPane fx:id="second_information" prefHeight="69.0" prefWidth="124.0">
                <children>
                   <HBox alignment="CENTER" prefHeight="95.0" prefWidth="177.0">
                      <children>

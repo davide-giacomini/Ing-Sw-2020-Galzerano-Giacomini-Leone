@@ -272,6 +272,8 @@ public class GUI extends Application implements View {
                     Text text = (Text) rootAnchorPane.getChildren().get(3);
                     text.setText("GAME OVER!\nYou lost.");
                 }else{
+                    duringGameController.deleteLoserInformation(usernameLoser);
+                    gameView.getUsernames().remove(usernameLoser);
                     Text text = (Text) rootAnchorPane.getChildren().get(3);
                     text.setText(usernameLoser+" has just lost but the Game must go on!");
                 }

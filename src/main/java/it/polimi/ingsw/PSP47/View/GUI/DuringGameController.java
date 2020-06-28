@@ -76,7 +76,20 @@ public class DuringGameController extends ViewObservable{
     @FXML
     private ImageView third_color;
 
+    @FXML
     private ImageView moveIndicatorView;
+
+    @FXML
+    private StackPane first_name;
+
+    @FXML
+    private StackPane first_information;
+
+    @FXML
+    private StackPane second_name;
+
+    @FXML
+    private StackPane second_information;
 
 
     void setPublicInformation() {
@@ -528,6 +541,22 @@ public class DuringGameController extends ViewObservable{
     private void disableEverything() {
         gridPane.setDisable(true);
         //add others cases
+    }
+
+    void deleteLoserInformation(String usernameLoser){
+
+        if (usernameLoser.equals(first_username.getText())) {
+            first_name.setOpacity(0.5);
+            first_information.setOpacity(0.5);
+        }
+        else if (usernameLoser.equals(second_username.getText())){
+            second_name.setOpacity(0.5);
+            second_information.setOpacity(0.5);
+
+        }else if (third_username.getText()!=null && usernameLoser.equals(third_username.getText())){
+           third_name.setOpacity(0.5);
+           third_information.setOpacity(0.5);
+        }
     }
 
 }

@@ -229,7 +229,6 @@ public class NetworkHandler implements Runnable, ViewListener {
                 case UPDATE_SLOT:
                     UpdatedSlot messageSlot = (UpdatedSlot) message;
                     Slot slot = messageSlot.getUpdatedSlot();
-                    view.getGameView().getBoardView().setSlot(slot);
                     view.showNewBoard(slot);
                     break;
                 case DURING_TURN:

@@ -16,7 +16,6 @@ public class GameView{
     private Color myColor;
     private GodName myGod;
     private int numberOfPlayers ;
-    private BoardView boardView ;
 
     private boolean start = false;
 
@@ -28,7 +27,6 @@ public class GameView{
     private boolean myTurn;
 
     public GameView(){
-        this.boardView = new BoardView();
     }
 
     public String getGodByUsername(String username){
@@ -67,10 +65,6 @@ public class GameView{
 
     public int getNumberOfPlayers() {
         return numberOfPlayers;
-    }
-
-    public BoardView getBoardView() {
-        return boardView;
     }
 
     public void setUsernames(ArrayList<String> usernames) {
@@ -112,7 +106,6 @@ public class GameView{
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }
-
 
     public boolean isStart() {
         return start;
