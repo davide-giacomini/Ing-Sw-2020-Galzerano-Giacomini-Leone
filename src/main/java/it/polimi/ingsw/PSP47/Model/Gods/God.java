@@ -28,12 +28,6 @@ public abstract class God {
     }
     
     /**
-     * @return the minimum amount of movements to be done by a god
-     */
-    public int getMIN_MOVEMENTS() {
-        return MIN_MOVEMENTS;
-    }
-    /**
      * @return the minimum amount of buildings to be constructed by a god
      */
     public int getMIN_BUILDINGS() {

@@ -65,6 +65,7 @@ public class ApolloTest {
     public void turn_CorrectInput_CorrectOutput_withoutSpecialMove()  throws Exception{
         assertEquals(player.getGod().getName(), "Apollo");
         assertTrue (player.getGod().checkIfCanMove(maleWorker));
+        assertFalse(player.getGod().checkIfAWorkerIsOnSlot(board.getNearbySlot(Direction.RIGHT,maleWorker.getSlot())));
         turn.executeMove(Direction.RIGHT);
         assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());

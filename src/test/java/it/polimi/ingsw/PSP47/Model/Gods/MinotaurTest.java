@@ -50,6 +50,7 @@ public class MinotaurTest {
     @Test
     public void turn_CorrectInput_CorrectOutput_withoutSpecialMove() throws Exception{
         assertTrue (player.getGod().checkIfCanMove(maleWorker));
+        assertFalse(player.getGod().checkIfAWorkerIsOnSlot(board.getNearbySlot(Direction.RIGHT,maleWorker.getSlot())));
         turn.executeMove(Direction.RIGHT);
         assertTrue(player.getGod().checkIfCanGoOn(maleWorker));
         assertFalse(player.getGod().validateEndTurn());

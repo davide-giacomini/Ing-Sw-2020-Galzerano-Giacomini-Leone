@@ -66,6 +66,7 @@ public class ZeusTest {
     @Test
     public void build_here_level1() throws InvalidMoveException, InvalidDirectionException, InvalidBuildException {
         turn.executeMove(Direction.LEFT);
+        assertFalse(player.getGod().checkIfAWorkerIsOnSlot(maleWorker.getSlot(), Direction.HERE));
         turn.executeBuild(Direction.HERE);
         assertTrue(board.getSlot(3,2).isWorkerOnSlot());
         assertEquals(Level.LEVEL1, board.getSlot(3,2).getLevel());
