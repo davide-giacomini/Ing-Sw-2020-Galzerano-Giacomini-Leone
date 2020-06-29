@@ -39,7 +39,6 @@ public class ConnectionToServerController {
                 label.setTextFill(Color.BLUE);
                 BorderPane.setAlignment(label, Pos.CENTER);
                 internalBorderPane.setBottom(label);
-//                e.printStackTrace();
             }
         }
     }

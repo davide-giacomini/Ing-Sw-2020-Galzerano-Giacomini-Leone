@@ -18,9 +18,6 @@ import javafx.scene.text.Text;
 public class ChoosePlayersController extends ViewObservable {
 
     @FXML
-    private Pane mainPane;
-
-    @FXML
     private Text doneText;
 
     @FXML

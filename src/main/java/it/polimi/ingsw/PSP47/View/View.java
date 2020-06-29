@@ -95,9 +95,16 @@ public interface View  {
      */
     void showEnd();
 
-   void showNewBoard(Slot slot);
+    /**
+     * This method shows the board updated with the new slot that has been modified
+     * @param slot is the modified slot that will replace the old one in the same graphical board
+     */
+    void showNewBoard(Slot slot);
 
-   void showGame();
+    /**
+     * This method is called when all the settings are complete and the game can start
+     */
+    void showGame();
 
 
 }

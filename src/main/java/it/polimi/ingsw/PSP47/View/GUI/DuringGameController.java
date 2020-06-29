@@ -91,7 +91,9 @@ public class DuringGameController extends ViewObservable{
     @FXML
     private StackPane second_information;
 
-
+    /**
+     * This method is used to display on  the right of the scene the information of the players in the game
+     */
     void setPublicInformation() {
         first_username.setText(gameView.getUsernames().get(0));
         Image godFirst = new Image(getImageGodFromGodName(gameView.getGods().get(0)));
@@ -124,14 +126,18 @@ public class DuringGameController extends ViewObservable{
         }
     }
 
+    /**
+     * This method is used to display the special button for building a dome only for the player who chose atlas
+     */
     void displayBuildDome(){
         if (!gameView.getMyGod().equals(GodName.ATLAS)){
             buildDomePane.setVisible(false);
             buildDomePane.getChildren().removeAll();
         }
     }
+
     /**
-     * in the initialize method the based on the moment in which we are in the game the text to display
+     * based on the moment in which we are in the game the text to display
      */
     void changeText() {
         if (gameView.getCurrentMoment() == CurrentMoment.ASK_INITIAL_POSITION){
@@ -314,7 +320,6 @@ public class DuringGameController extends ViewObservable{
      * @param column of the pane
      */
     private void chooseWorkerToUse(int row, int column) {
-        //add opacity to indicate the worker chosen
         workerRowAndColumn[0] = row ;
         workerRowAndColumn[1] = column;
 
@@ -332,9 +337,6 @@ public class DuringGameController extends ViewObservable{
      */
     public void changeSlot(Slot slot){
         Pane pane = (Pane) getNodeByRowColumnIndex(slot.getRow(), slot.getColumn(), gridPane); //I get the pane that corresponds to the row and column  received by the server
-        //pane.getStylesheets().add("panemargins.css");
-        //pane.setStyle(".panemgs");
-        //pane.setEffect(new DropShadow());
         pane.getChildren().clear(); //clean what was in the pane before and recreate everything
         GridPane grid = new GridPane(); //gridPane created to always divide the pane into 4 parts
         //grid.setGridLinesVisible(true);
@@ -363,8 +365,8 @@ public class DuringGameController extends ViewObservable{
 
             Image worker = new Image(getImageWorkerFromColor(slot.getWorkerColor()));
             ImageView workerView = new ImageView(worker);
-            workerView.setPreserveRatio(true); //to keep the ratio and matìke it look nice
-            workerView.fitWidthProperty().bind(pane.widthProperty());  //also the dimensions of the image have to be dimensioned based on the pane otherwhise they will grow as big as they want
+            workerView.setPreserveRatio(true); //to keep the ratio and make it look nice
+            workerView.fitWidthProperty().bind(pane.widthProperty());  //also the sizes of the image have to be dimensioned based on the pane otherwise they will grow as big as they want
             workerView.fitHeightProperty().bind(pane.widthProperty().divide(4));
             grid.add(workerView,0,levels);
             if(slot.getWorkerColor() == gameView.getMyColor()) {
@@ -415,7 +417,7 @@ public class DuringGameController extends ViewObservable{
      * @param row of the slot that I need
      * @param column of the slot that I need
      * @param gridPane for the graphic of the board
-     * @return
+     * @return node in the gridpane that represents the board
      */
     public Node getNodeByRowColumnIndex (final int row, final int column, GridPane gridPane) {
         Node result = null;
@@ -437,7 +439,7 @@ public class DuringGameController extends ViewObservable{
      * @param gridPane which has the images for levels and workers
      * @param pane which represents the slot
      * @param level level of the slot that has been updated
-     * @return
+     * @return which level has just been added in the given pane
      */
     public int addLevels(GridPane gridPane, Pane pane, Level level){
         int levels = 2;
@@ -538,11 +540,18 @@ public class DuringGameController extends ViewObservable{
         pane.getChildren().remove(moveIndicatorView);
     }
 
+    /**
+     * This method disables all the buttons in the scene when the game is finished
+     */
     private void disableEverything() {
         gridPane.setDisable(true);
         //add others cases
     }
 
+    /**
+     * Method used to display with more opacity the information about players who are not in the game anymore
+     * @param usernameLoser is the username of the player who has lost
+     */
     void deleteLoserInformation(String usernameLoser){
 
         if (usernameLoser.equals(first_username.getText())) {

@@ -314,10 +314,6 @@ public class GameController implements VirtualViewListener {
         turn.startTurn();
     }
 
-    public TurnController getTurn() {
-        return turn;
-    }
-
     /**
      * This method sends an advice to all the players, except for the one who is playing,
      * to inform them about who is playing in the current turn.
@@ -428,5 +424,9 @@ public class GameController implements VirtualViewListener {
 
     public ArrayList<GodName> getAvailableGods() {
         return availableGods;
+    }
+
+    public TurnController getTurn() {
+        return turn;
     }
 }
