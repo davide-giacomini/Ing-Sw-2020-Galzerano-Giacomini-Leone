@@ -85,8 +85,11 @@ public class Apollo extends God {
                         return true;
                     }
                 }
-                else //if the dest slot is free do the normal check
-                    return checkIfCanMoveInNormalConditions(worker);
+                else { //if the dest slot is free do the normal check
+                    boolean result = checkIfCanMoveInNormalConditions(worker);
+                    if (result)
+                        return true;
+                }
             }
             catch (IndexOutOfBoundsException e){
                 // just let the "for" continue

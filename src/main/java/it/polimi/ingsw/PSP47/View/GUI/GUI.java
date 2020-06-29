@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +25,7 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * This class is used to change what the user will see and updates the current scene
@@ -225,15 +227,12 @@ public class GUI extends Application implements View {
                 ImageView imageView = (ImageView) rootAnchorPane.getChildren().get(5);
                 imageView.setImage(new Image("Images/Podium/podium"+nameWinnerGod+".png"));
 
+                Text text = (Text) rootAnchorPane.getChildren().get(6);
+
                 if (gameView.getMyUsername().equals(usernameWinner)) {
-                    Text text = (Text) rootAnchorPane.getChildren().get(6);
                     text.setText("CONGRATULATIONS!\nYou won!");
                 }
                 else {
-                    winnerStage.setX(Screen.getPrimary().getBounds().getMinX());
-                    winnerStage.setY(Screen.getPrimary().getBounds().getMinY());
-
-                    Text text = (Text) rootAnchorPane.getChildren().get(6);
                     text.setText("GAME OVER.\n" +usernameWinner+ " won.");
                 }
 
@@ -257,6 +256,7 @@ public class GUI extends Application implements View {
             Stage loserStage = new Stage();
             loserStage.setHeight(450);
             loserStage.setWidth(600);
+            loserStage.centerOnScreen();
             loserStage.setTitle("Game over");
 
             try {
@@ -264,7 +264,7 @@ public class GUI extends Application implements View {
                 fxmlLoader.setLocation(getClass().getResource("/FXML/losingAdvice.fxml"));
                 AnchorPane rootAnchorPane = fxmlLoader.load();
                 Scene scene = new Scene(rootAnchorPane);
-                if (gameView.getMyUsername().equals(usernameLoser)) {
+                if (gameView.getMyUsername()!=null && gameView.getMyUsername().equals(usernameLoser)) {
                     Text text = (Text) rootAnchorPane.getChildren().get(3);
                     text.setText("GAME OVER!\nYou lost.");
                 }else{
@@ -287,8 +287,20 @@ public class GUI extends Application implements View {
     @Override
     public void showEnd() {
        // System.exit(0); decide how to handle the final part
-        gameView.updateMoment(CurrentMoment.END);
-        duringGameController.changeText("Game over, no action is allowed anymore!");
+        Platform.runLater(()-> {
+            if (gameView.isStart()) {
+                gameView.updateMoment(CurrentMoment.END);
+                duringGameController.changeText("Game over, no action is allowed anymore!");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("GAME OVER");
+                alert.setHeaderText("Ops, We are sorry the game cannot continue.");
+
+                alert.showAndWait();
+                System.exit(0);
+
+            }
+        });
     }
 
     /**

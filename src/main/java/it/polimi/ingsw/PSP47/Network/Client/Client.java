@@ -25,7 +25,6 @@ public class Client {
      * connection with the server.
      */
     public void init() {
-        View view;
         
         //initial request of choice between GUI or CLI
         Scanner scanner = new Scanner(System.in);
@@ -36,22 +35,6 @@ public class Client {
             new CLI();
         else if ("GUI".equals(viewChoice.toUpperCase()))
             Application.launch(GUI.class);
-    
-        // open a connection with the server
-        /*Socket serverSocket;
-        try {
-            serverSocket = new Socket(serverIpAddress, Server.SOCKET_PORT);
-        } catch (IOException e) {
-            System.out.println("Server unreachable.");
-            return;
-        }
-        System.out.println("Connected to the address " + serverSocket.getInetAddress());
-    
-         networkHandler = new NetworkHandler(view , serverSocket);
-
-        view.setClient(this);
-        Thread thread = new Thread(networkHandler);
-        thread.start();*/
 
     }
     

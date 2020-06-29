@@ -153,7 +153,9 @@ public class ChallengerController extends ViewObservable {
     @FXML
     void onChronus(MouseEvent event) {
         Chronus.setEffect(new DropShadow());
-        godPower.setText("Chronus - You also win when there are at least five complete Towers on the board.");
+        godPower.setText("Chronus - You also win when there are at least five complete Towers on the board."+
+                "[NOT AVAILABLE IN THREE PLAYERS]");
+
     }
 
     /**

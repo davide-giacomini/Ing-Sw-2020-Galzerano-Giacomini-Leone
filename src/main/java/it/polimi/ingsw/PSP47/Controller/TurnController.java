@@ -57,7 +57,7 @@ public class TurnController {
         if (row > 4 || row < 0 || column > 4 || column < 0) {
             String errorText = "You have select a value that is out of range.";
             views.get(indexOfCurrentPlayer).sendError(errorText);
-            views.get(indexOfCurrentPlayer).sendWhichAction();
+            views.get(indexOfCurrentPlayer).sendWhichWorker();
             return;
         }
         else if (game.getBoard().getSlot(row,column).getWorker() == null) {

@@ -36,7 +36,7 @@ public class ConnectionToServerController {
                 gui.setNetworkHandler(networkHandler);
             } catch (IOException e) {
                 Label label = new Label("Server unreachable.");
-                label.setTextFill(Color.BLUE);
+                label.setTextFill(Color.RED);
                 BorderPane.setAlignment(label, Pos.CENTER);
                 internalBorderPane.setBottom(label);
             }
