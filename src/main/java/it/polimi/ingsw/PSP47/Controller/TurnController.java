@@ -80,6 +80,7 @@ public class TurnController {
                 workerGender = Gender.MALE;
             String textError = "Your worker is blocked. You are forced to use the other one";
             views.get(indexOfCurrentPlayer).sendError(textError);
+            views.get(indexOfCurrentPlayer).sendNewPosition(player.getWorker(workerGender).getSlot().getRow(), player.getWorker(workerGender).getSlot().getColumn());
         }
         turn.setWorkerGender(workerGender);
         controller.sendAnAdviceDuringGame(player.getUsername() + " has just chosen which worker to use");

@@ -32,7 +32,6 @@ public class DuringGameController extends ViewObservable{
     private Action action; //used to save the action chosen by the player
 
     private int[] newRowAndColumn = new int[4]; //used for the positions of the workers that will be sent in messages
-    private int[] workerRowAndColumn = new int[2];
 
     @FXML
     private GridPane gridPane;
@@ -169,8 +168,7 @@ public class DuringGameController extends ViewObservable{
         for (int i = 0; i < 4; i++) {
             newRowAndColumn[i] = -1; //for the row+column+row+column of the two initial positions of the workers
         }
-        workerRowAndColumn[0]= -1; //row and column of the position of the worker the user wants to use
-        workerRowAndColumn[1]= -1;
+        gameView.setMyPosition(-1,-1); //row and column of the position of the worker the user wants to use
     }
 
     /**
@@ -276,7 +274,7 @@ public class DuringGameController extends ViewObservable{
         }else if(gameView.getCurrentMoment() == CurrentMoment.ACTION_CHOSEN){ //the action button was clicked and after clicking on the grid the message can be created and sent
             VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();
             visitableActionAndDirection.setAction(action);
-            visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(workerRowAndColumn[0],workerRowAndColumn[1], rowIndex,colIndex));
+            visitableActionAndDirection.setDirection(Direction.getDirectionGivenSlots(gameView.getMyPosition()[0],gameView.getMyPosition()[1], rowIndex,colIndex));
             notifyViewListener(visitableActionAndDirection);
             //commandText.setText("WAIT"); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
             gameView.updateMoment(CurrentMoment.WAIT);
@@ -320,11 +318,10 @@ public class DuringGameController extends ViewObservable{
      * @param column of the pane
      */
     private void chooseWorkerToUse(int row, int column) {
-        workerRowAndColumn[0] = row ;
-        workerRowAndColumn[1] = column;
+        gameView.setMyPosition(row, column);
 
         VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();
-        visitableRowsAndColumns.setRowsAndColumns(workerRowAndColumn);
+        visitableRowsAndColumns.setRowsAndColumns(gameView.getMyPosition());
         notifyViewListener(visitableRowsAndColumns);
         gameView.updateMoment(CurrentMoment.WAIT);
         changeText();
@@ -370,8 +367,7 @@ public class DuringGameController extends ViewObservable{
             workerView.fitHeightProperty().bind(pane.widthProperty().divide(4));
             grid.add(workerView,0,levels);
             if(slot.getWorkerColor() == gameView.getMyColor()) {
-                workerRowAndColumn[0] = slot.getRow(); //since a worker has been moved here, this is the worker used in the turn, I reset this parameters used for the next action
-                workerRowAndColumn[1] = slot.getColumn();
+                gameView.setMyPosition(slot.getRow(), slot.getColumn()); //since a worker has been moved here, this is the worker used in the turn, I reset this parameters used for the next action
             }
         }
     }
@@ -419,7 +415,7 @@ public class DuringGameController extends ViewObservable{
      * @param gridPane for the graphic of the board
      * @return node in the gridpane that represents the board
      */
-    public Node getNodeByRowColumnIndex (final int row, final int column, GridPane gridPane) {
+    private Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
         Node result = null;
         ObservableList<Node> childrens = gridPane.getChildren();
 
@@ -441,7 +437,7 @@ public class DuringGameController extends ViewObservable{
      * @param level level of the slot that has been updated
      * @return which level has just been added in the given pane
      */
-    public int addLevels(GridPane gridPane, Pane pane, Level level){
+    private int addLevels(GridPane gridPane, Pane pane, Level level){
         int levels = 2;
 
         if (level == Level.ATLAS_DOME){ //for now the dome of atlas is added at the buttom

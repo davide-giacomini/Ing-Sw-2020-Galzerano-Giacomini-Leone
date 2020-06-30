@@ -336,6 +336,7 @@ public class GUI extends Application implements View {
         });
     }
 
+
     /**
      * method that sets a the moment in which the gui expects the worker to use, in order to allow the main controller to handle the click differently
      */

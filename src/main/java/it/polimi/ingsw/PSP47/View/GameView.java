@@ -15,6 +15,7 @@ public class GameView{
     private String myUsername;
     private Color myColor;
     private GodName myGod;
+    private int[] myPosition = new int[2];
     private int numberOfPlayers ;
 
     private boolean start = false;
@@ -113,5 +114,14 @@ public class GameView{
 
     public void setStart(boolean start) {
         this.start = start;
+    }
+
+    public int[] getMyPosition() {
+        return myPosition;
+    }
+
+    public void setMyPosition(int row, int column) {
+        this.myPosition[0] = row;
+        this.myPosition[1] = column;
     }
 }

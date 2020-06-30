@@ -345,6 +345,10 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         send(new ChooseAction());
     }
 
+    void sendRowAndColumn(int row, int column) {
+        NewPosition newPosition = new NewPosition(row, column);
+        send(newPosition);
+    }
 
     /**
      * This method sends a method to the client to set in it his/her color and username.
