@@ -106,5 +106,4 @@ public interface View  {
      */
     void showGame();
 
-
 }

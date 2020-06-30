@@ -121,4 +121,8 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     public void sendYouAreOutOfTheGame(boolean endGame) {
         clientHandler.gameOver(endGame);
     }
+
+    public void sendNewPosition(int row, int column) {
+        clientHandler.sendRowAndColumn(row, column);
+    }
 }

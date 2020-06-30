@@ -211,6 +211,10 @@ public class NetworkHandler implements Runnable, ViewListener {
                 case CHOOSE_ACTION:
                     view.askAction();
                     break;
+                case NEW_POSITION:
+                    NewPosition messageNewPosition = (NewPosition) message;
+                    view.getGameView().setMyPosition(messageNewPosition.getRow(), messageNewPosition.getColumn());
+                    break;
                 case CHOOSE_WORKER:
                     view.getGameView().setMyTurn(true);
                     view.askWhichWorkerToUse();
