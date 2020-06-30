@@ -32,7 +32,7 @@ public class GameView{
     public String getGodByUsername(String username){
         int index = usernames.indexOf(username);
         
-        return gods.get(index).toString();
+        return gods.get(index).toString().toLowerCase();
     }
     
     public void setMyUsername(String myUsername) {

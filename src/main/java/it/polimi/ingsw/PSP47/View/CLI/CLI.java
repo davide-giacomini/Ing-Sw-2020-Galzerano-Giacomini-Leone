@@ -285,7 +285,7 @@ public class CLI extends ViewObservable implements View  {
 
         int i = 0;
 
-        out.println("Hey you! You have been picked as " +AnsiCode.ANSI_GREEN+" Challenger! ");
+        out.println("Hey you! You have been picked as " +AnsiCode.ANSI_GREEN+" Challenger! " + AnsiCode.ANSI_RESET);
 
         out.println("Here are the gods and their powers: ");
 

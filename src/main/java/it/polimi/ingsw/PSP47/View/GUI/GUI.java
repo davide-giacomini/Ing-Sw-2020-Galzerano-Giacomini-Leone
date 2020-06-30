@@ -225,7 +225,7 @@ public class GUI extends Application implements View {
 
                 String nameWinnerGod = gameView.getGodByUsername(usernameWinner);
                 ImageView imageView = (ImageView) rootAnchorPane.getChildren().get(5);
-                imageView.setImage(new Image("Images/Podium/podium"+nameWinnerGod+".png"));
+                imageView.setImage(new Image("Images/Podium/podium-"+nameWinnerGod+".png"));
 
                 Text text = (Text) rootAnchorPane.getChildren().get(6);
 

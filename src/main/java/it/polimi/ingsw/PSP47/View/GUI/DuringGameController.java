@@ -395,20 +395,20 @@ public class DuringGameController extends ViewObservable{
 
     private String getImageGodFromGodName(GodName godName) {
         switch (godName){
-            case APOLLO: return "/Images/Podium/podiumApollo.png";
-            case ARTEMIS: return "/Images/Podium/podiumArtemis.png";
-            case ATHENA: return "/Images/Podium/podiumAthena.png";
-            case ATLAS: return "/Images/Podium/podiumAtlas.png";
-            case CHRONUS: return "/Images/Podium/podiumChronus.png";
-            case DEMETER: return "/Images/Podium/podiumDemeter.png";
-            case HEPHAESTUS: return "/Images/Podium/podiumHephaestus.png";
-            case HERA: return "/Images/Podium/podiumHera.png";
-            case HESTIA: return "/Images/Podium/podiumHestia.png";
-            case MINOTAUR: return "/Images/Podium/podiumMinotaur.png";
-            case PAN: return "/Images/Podium/podiumPan.png";
-            case PROMETHEUS: return "/Images/Podium/podiumPrometheus.png";
-            case TRITON: return "/Images/Podium/podiumTriton.png";
-            default: return "/Images/Podium/podiumZeus.png";   // ZEUS
+            case APOLLO: return "/Images/Podium/podium-apollo.png";
+            case ARTEMIS: return "/Images/Podium/podium-artemis.png";
+            case ATHENA: return "/Images/Podium/podium-athena.png";
+            case ATLAS: return "/Images/Podium/podium-atlas.png";
+            case CHRONUS: return "/Images/Podium/podium-chronus.png";
+            case DEMETER: return "/Images/Podium/podium-demeter.png";
+            case HEPHAESTUS: return "/Images/Podium/podium-hephaestus.png";
+            case HERA: return "/Images/Podium/podium-hera.png";
+            case HESTIA: return "/Images/Podium/podium-hestia.png";
+            case MINOTAUR: return "/Images/Podium/podium-minotaur.png";
+            case PAN: return "/Images/Podium/podium-pan.png";
+            case PROMETHEUS: return "/Images/Podium/podium-prometheus.png";
+            case TRITON: return "/Images/Podium/podium-triton.png";
+            default: return "/Images/Podium/podium-zeus.png";   // ZEUS
         }
     }
 
