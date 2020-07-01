@@ -50,7 +50,7 @@ public class NetworkHandler implements Runnable, ViewListener {
         catch (IOException e){
             System.out.println("Connection failed.");
             endConnection();
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
     
@@ -72,7 +72,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     endConnection();
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         }).start();
@@ -101,10 +101,6 @@ public class NetworkHandler implements Runnable, ViewListener {
                 }
             }
             catch (IOException e){
-               //TODO ari ha commentato in questo catch perchè gli alert non voluti alla fine sono causati da queste righe
-                /*view.showImportantMessage("We are sorry: " +
-                        "the server  at the address " + serverSocket.getInetAddress() + " disconnected."); */
-
                 if (isConnected)
                     endConnection();
 
@@ -116,7 +112,7 @@ public class NetworkHandler implements Runnable, ViewListener {
                 if (isConnected)
                     endConnection();
 
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
 
@@ -258,7 +254,7 @@ public class NetworkHandler implements Runnable, ViewListener {
         } catch (IOException e) {
             System.out.println("Error in the serialization of " + message.toString() + " message.");
             endConnection();
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -275,7 +271,7 @@ public class NetworkHandler implements Runnable, ViewListener {
             serverSocket.close();
         } catch (IOException e) {
             System.out.println("Unable to close the socket of the server " + serverSocket.getInetAddress() + ".");
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 

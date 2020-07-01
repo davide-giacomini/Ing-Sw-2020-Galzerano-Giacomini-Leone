@@ -21,14 +21,16 @@ public class ServerTimer implements Runnable{
     public void run() {
         while (isConnected) {
             try {
-                if (timeMillis > TIME_EXPIRED_MILLIS)
+                if (timeMillis > TIME_EXPIRED_MILLIS) {
                     isConnected = false;
+                    System.err.println("Ping time expired: error in the connection.");
+                }
     
                 Thread.sleep(1);
                 timeMillis++;
             } catch (InterruptedException e) {
                 isConnected = false;
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
         clientHandler.endConnection();

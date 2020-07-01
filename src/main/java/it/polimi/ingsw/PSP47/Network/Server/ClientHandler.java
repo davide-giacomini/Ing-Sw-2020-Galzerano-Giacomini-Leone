@@ -43,9 +43,9 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
             inputClient = new ObjectInputStream(clientSocket.getInputStream());
             outputClient = new ObjectOutputStream(clientSocket.getOutputStream());
         } catch (IOException e) {
-            System.out.println("Creation of the client " + clientSocket.getInetAddress() + " input and output streams failed.");
+            System.err.println("Creation of the client " + clientSocket.getInetAddress() + " input and output streams failed.");
             this.isConnected = false;
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -68,7 +68,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     endConnection();
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         }).start();
@@ -105,14 +105,14 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                 try {
                     clientSocket.close();
                 } catch (IOException ioException) {
-                    ioException.printStackTrace();
+//                    ioException.printStackTrace();
                 }
                 finally {
                     isConnected = false;
                 }
-                System.out.println("Client " + clientSocket.getInetAddress() + " disconnected.");
+                System.err.println("Client " + clientSocket.getInetAddress() + " disconnected.");
                 
-                e.printStackTrace();
+//                e.printStackTrace();
             } catch (IOException e) {
                 System.out.println("Error in the I/O of the client " + clientSocket.getInetAddress() + ":" +
                         " client " + clientSocket.getInetAddress() + " disconnected.");
@@ -123,14 +123,14 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                 try {
                     clientSocket.close();
                 } catch (IOException ioException) {
-                    ioException.printStackTrace();
+//                    ioException.printStackTrace();
                 }
                 finally {
                     isConnected = false;
                 }
-                System.out.println("Client " + clientSocket.getInetAddress() + " disconnected.");
+                System.err.println("Client " + clientSocket.getInetAddress() + " disconnected.");
                 
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
     }
@@ -177,9 +177,9 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
                 outputClient.writeObject(message);
             }
         } catch (IOException e) {
-            System.out.println("Error in the serialization of " + message.toString() + " message.");
+            System.err.println("Error in the serialization of " + message.toString() + " message.");
             endConnection();
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
     
@@ -195,8 +195,8 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
         try {
             clientSocket.close();
         } catch (IOException e) {
-            System.out.println("Unable to close the socket of the client " + clientSocket.getInetAddress() + ".");
-            e.printStackTrace();
+            System.err.println("Unable to close the socket of the client " + clientSocket.getInetAddress() + ".");
+//            e.printStackTrace();
         }
     }
     

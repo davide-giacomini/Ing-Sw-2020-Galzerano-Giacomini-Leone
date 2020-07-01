@@ -21,14 +21,15 @@ public class ClientTimer implements Runnable{
     public void run() {
         while (isConnected) {
             try {
-                if (timeMillis > TIME_EXPIRED_MILLIS)
+                if (timeMillis > TIME_EXPIRED_MILLIS) {
                     isConnected = false;
+                }
             
                 Thread.sleep(1);
                 timeMillis++;
             } catch (InterruptedException e) {
                 isConnected = false;
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
         networkHandler.endConnection();

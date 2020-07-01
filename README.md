@@ -1,5 +1,5 @@
 # Final Project of Software Engineering - a.a. 2019-2020
-![alt text](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/src/main/Resources/Images/MainPicture.png)
+![picture](src/main/Resources/Images/ReadMePicture.jpg)
 
 ## List of participants:
 
@@ -21,8 +21,8 @@ The following documentation includes all the significant documents created to sh
 ### UML
 The following class diagrams are a representation of the design chosen by our group to implement the game, the initial one shows the ideas on which we based the project that shape up in the final UMLs, divided into a general one and some more detailed ones for the most critical parts.
 
-- [UML Initials](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/src/main/deliveries/UML/UMLInitialModel.png)
-- [UML Finals](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/src/main/deliveries/UML/Model_FinalUML.png)
+- [UML Initials](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/UML/UMLInitialModel.png)
+- [UML Finals](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/UML/Model_FinalUML.png)
 
 ### JavaDoc
 The following documentation includes a description of all of the classes and methods implemented, based on the documentation generator for the Java language, which can be read at the following address: [Javadoc](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/src/main/deliveries)
@@ -65,11 +65,11 @@ The client is executed with the command:
 
 For Macos:
 ```
-java -jar client.jar
+java -jar windows_client.jar
 ```
 For Windows:
 ```
-java -jar client.jar
+java -jar mac_client.jar
 ```
 After this line, on the Terminal it is asked to the user to choose between the Command Line Interface and the Graphical User Interface(all the dependencies for JavaFx are included); The user will have to type a word:
 >GUI 
