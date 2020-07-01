@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP47.Network.Server;
 
-
 import it.polimi.ingsw.PSP47.Controller.GameController;
 import it.polimi.ingsw.PSP47.Enumerations.Color;
 import it.polimi.ingsw.PSP47.Enumerations.MessageType;
