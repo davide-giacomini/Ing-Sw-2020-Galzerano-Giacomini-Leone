@@ -588,6 +588,7 @@ public class CLI extends ViewObservable implements View  {
 
     public void showEnd(){
         printSupport.printGoodBye(out);
+        System.exit(0);
     }
 
     @Override
