@@ -244,6 +244,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     
     /**
      * This method handles a game over.
+     * @param endGame true if the game is ended, false otherwise
      */
     void gameOver(boolean endGame){
         notifyClientHandlerGameOver(this, endGame);
@@ -324,6 +325,7 @@ public class ClientHandler extends ClientHandlerObservable implements Runnable{
     /**
      * This method sends a message to the client with a general information.
      * @param text the String with the advice that must be sent.
+     * @param messageType the type of important message that will be sent
      */
     void sendImportant(String text, MessageType messageType) {
         ImportantMessage message = new ImportantMessage(text);

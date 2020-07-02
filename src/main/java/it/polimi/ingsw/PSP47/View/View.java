@@ -75,6 +75,7 @@ public interface View  {
 
     /**
      * This method tells the user that he/she lost
+     * @param usernameLoser is the username of the winner
      */
      void theLoserIs(String usernameLoser);
 

@@ -78,6 +78,7 @@ class GameServer {
      *
      * @param username player's username.
      * @param color player's color.
+     * @param clientHandler the {@link ClientHandler} to whom the color and username are added
      * @return what is equal to the others players. If username and color are different it returns null. Indeed, a
      * null return means that the client can play with these parameters.
      */

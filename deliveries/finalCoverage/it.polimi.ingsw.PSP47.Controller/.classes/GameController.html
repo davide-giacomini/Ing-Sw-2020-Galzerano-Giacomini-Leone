@@ -1,0 +1,515 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameController (it.polimi.ingsw.PSP47.Controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,9%
+  </span>
+  <span class="absValue">
+    (26/ 28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95,8%
+  </span>
+  <span class="absValue">
+    (207/ 216)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Color;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.Gender;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.MessageType;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.Model.*;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.VirtualView;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Server.VirtualViewListener;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.Visitable;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.io.IOException;
+<i>13</i>&nbsp;import java.util.ArrayList;
+<i>14</i>&nbsp;import java.util.HashMap;
+<i>15</i>&nbsp;import java.util.Map;
+<i>16</i>&nbsp;import java.util.Random;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;/**
+<i>19</i>&nbsp; * This class represents the controller of the game. It creates the instance of the game with all its elements
+<i>20</i>&nbsp; * and contains all the methods used to update the model.
+<i>21</i>&nbsp; */
+<i>22</i>&nbsp;public class GameController implements VirtualViewListener {
+<i>23</i>&nbsp;    private int numberOfPlayers;
+<i>24</i>&nbsp;    private Game game;
+<i>25</i>&nbsp;    private String chosenPlayer;
+<i>26</i>&nbsp;    private ArrayList&lt;GodName&gt; availableGods;
+<i>27</i>&nbsp;    private ArrayList&lt;VirtualView&gt; views;
+<i>28</i>&nbsp;    private int indexOfCurrentPlayer;
+<i>29</i>&nbsp;    private int indexOfChallenger;
+<i>30</i>&nbsp;    private TurnController turn;
+<i>31</i>&nbsp;    private ControllerVisitor controllerVisitor;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * This is the constructor of the GameController which creates the game and set the random player who will
+<i>35</i>&nbsp;     * choose the gods that can be used in this game.
+<i>36</i>&nbsp;     * @param numberOfPlayers the number of player of the game which is chosen by the first player who connect.
+<i>37</i>&nbsp;     * @param mapUserColor usernames and colors of each player.
+<i>38</i>&nbsp;     */
+<b class="fc"><i>39</i>&nbsp;    public GameController(int numberOfPlayers, HashMap&lt;String,Color&gt; mapUserColor, HashMap&lt;String, VirtualView&gt; mapUserVirtualView){</b>
+<b class="fc"><i>40</i>&nbsp;        this.numberOfPlayers = numberOfPlayers;</b>
+<b class="fc"><i>41</i>&nbsp;        this.views = new ArrayList&lt;&gt;(numberOfPlayers);</b>
+<b class="fc"><i>42</i>&nbsp;        game = new Game(numberOfPlayers);</b>
+<b class="fc"><i>43</i>&nbsp;        controllerVisitor = new ControllerVisitor(this);</b>
+<b class="fc"><i>44</i>&nbsp;        for(Map.Entry&lt;String,Color&gt; entry : mapUserColor.entrySet()) {</b>
+<b class="fc"><i>45</i>&nbsp;            String username = entry.getKey();</b>
+<b class="fc"><i>46</i>&nbsp;            Color color = entry.getValue();</b>
+<b class="fc"><i>47</i>&nbsp;            game.addPlayer(new Player(username, color));</b>
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;            VirtualView virtualView = mapUserVirtualView.get(username);</b>
+<b class="fc"><i>50</i>&nbsp;            setView(virtualView);</b>
+<b class="fc"><i>51</i>&nbsp;            virtualView.addVirtualViewListener(this);</b>
+<b class="fc"><i>52</i>&nbsp;        }</b>
+<b class="fc"><i>53</i>&nbsp;        game.setChallenger(chooseChallenger());</b>
+<b class="fc"><i>54</i>&nbsp;        startController();</b>
+<b class="fc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    public void setNumberOfPlayers(int numberOfPlayers) {
+<b class="fc"><i>58</i>&nbsp;        this.numberOfPlayers = numberOfPlayers;</b>
+<b class="fc"><i>59</i>&nbsp;    }</b>
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * This method choose a random player who will decide which gods can be used in the game and the order of the players in a round.
+<i>63</i>&nbsp;     * @return the instance of the chosen player
+<i>64</i>&nbsp;     */
+<i>65</i>&nbsp;     private Player chooseChallenger(){
+<b class="fc"><i>66</i>&nbsp;        ArrayList&lt;Player&gt; players = game.getPlayers();</b>
+<i>67</i>&nbsp;        Player challenger;
+<b class="fc"><i>68</i>&nbsp;        Random rand = new Random();</b>
+<i>69</i>&nbsp;
+<b class="fc"><i>70</i>&nbsp;        challenger = players.get(rand.nextInt(numberOfPlayers));</b>
+<b class="fc"><i>71</i>&nbsp;        game.setChallenger(challenger);</b>
+<b class="fc"><i>72</i>&nbsp;        game.putChallengerAtLastPosition();</b>
+<b class="fc"><i>73</i>&nbsp;        return challenger;</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * This method is the first method which is launched in the constructor to make the game start.
+<i>78</i>&nbsp;     */
+<i>79</i>&nbsp;    private void startController() {
+<b class="fc"><i>80</i>&nbsp;        orderViews();</b>
+<b class="fc"><i>81</i>&nbsp;        indexOfChallenger = game.getPlayers().indexOf(game.getPlayer(game.getChallenger().getUsername()));</b>
+<b class="fc"><i>82</i>&nbsp;        for (VirtualView view : views) {</b>
+<i>83</i>&nbsp;            // This sending is useful to set in the client the number of players (it doesn&#39;t advice the players)
+<b class="fc"><i>84</i>&nbsp;            view.sendNumberOfPlayers(numberOfPlayers);</b>
+<b class="fc"><i>85</i>&nbsp;        }</b>
+<b class="fc"><i>86</i>&nbsp;        ArrayList&lt;String&gt; usernames = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>87</i>&nbsp;        for (VirtualView view : views)</b>
+<b class="fc"><i>88</i>&nbsp;            usernames.add(view.getUsername());</b>
+<i>89</i>&nbsp;        
+<i>90</i>&nbsp;        // Here the interaction between controller and client begins.
+<i>91</i>&nbsp;        // The challenger is sent the list of usernames of the other players, to choose who will begin
+<b class="fc"><i>92</i>&nbsp;        views.get(indexOfChallenger).sendChallenger(usernames);</b>
+<b class="fc"><i>93</i>&nbsp;        for (VirtualView view : views) {</b>
+<b class="fc"><i>94</i>&nbsp;            if (!(view.getUsername().equals(views.get(indexOfChallenger).getUsername())))</b>
+<b class="fc"><i>95</i>&nbsp;                view.sendImportant( views.get(indexOfChallenger).getUsername() , MessageType.TURN);</b>
+<b class="fc"><i>96</i>&nbsp;        }</b>
+<b class="fc"><i>97</i>&nbsp;    }</b>
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * Update the model with the gods that will be used in the game.
+<i>101</i>&nbsp;     * @param gods list of chosen gods.
+<i>102</i>&nbsp;     */
+<i>103</i>&nbsp;    public void setGods(ArrayList&lt;GodName&gt; gods, String chosenPlayer) {
+<b class="fc"><i>104</i>&nbsp;        for (GodName god : gods) {</b>
+<i>105</i>&nbsp;            try {
+<b class="fc"><i>106</i>&nbsp;                if (game.getNumberOfPlayers() == 3 &amp;&amp; !god.chooseGod(god, getGame().getPlayer(indexOfCurrentPlayer)).threePlayersGame()) {</b>
+<b class="fc"><i>107</i>&nbsp;                    String textError = &quot;You cannot choose a god which is not available in a three players game&quot;;</b>
+<b class="fc"><i>108</i>&nbsp;                    views.get(indexOfChallenger).sendError(textError);</b>
+<b class="fc"><i>109</i>&nbsp;                    ArrayList&lt;String&gt; usernames = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>110</i>&nbsp;                    for (VirtualView view : views)</b>
+<b class="fc"><i>111</i>&nbsp;                        usernames.add(view.getUsername());</b>
+<i>112</i>&nbsp;                    // Here the challenger is sent the list of usernames of the other players, to choose who will begin
+<b class="fc"><i>113</i>&nbsp;                    views.get(indexOfChallenger).sendChallenger(usernames);</b>
+<b class="fc"><i>114</i>&nbsp;                    for (VirtualView view : views) {</b>
+<b class="fc"><i>115</i>&nbsp;                        if (!(view.getUsername().equals(views.get(indexOfChallenger).getUsername())))</b>
+<b class="fc"><i>116</i>&nbsp;                            view.sendImportant( views.get(indexOfChallenger).getUsername() , MessageType.TURN);</b>
+<b class="fc"><i>117</i>&nbsp;                    }</b>
+<b class="fc"><i>118</i>&nbsp;                    return;</b>
+<i>119</i>&nbsp;                }
+<b class="nc"><i>120</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>121</i>&nbsp;                e.printStackTrace();</b>
+<b class="fc"><i>122</i>&nbsp;            }</b>
+<b class="fc"><i>123</i>&nbsp;        }</b>
+<b class="fc"><i>124</i>&nbsp;        this.chosenPlayer = chosenPlayer;</b>
+<b class="fc"><i>125</i>&nbsp;        availableGods = gods;</b>
+<b class="fc"><i>126</i>&nbsp;        game.putChallengerAtLastPosition();</b>
+<b class="fc"><i>127</i>&nbsp;        orderViews();</b>
+<b class="fc"><i>128</i>&nbsp;        ArrayList&lt;GodName&gt; godsList = new ArrayList&lt;&gt;(gods);</b>
+<b class="fc"><i>129</i>&nbsp;        views.get(indexOfCurrentPlayer).sendGodsList(godsList);</b>
+<b class="fc"><i>130</i>&nbsp;        sendWhoseIsTheTurn();</b>
+<b class="fc"><i>131</i>&nbsp;    }</b>
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    /**
+<i>134</i>&nbsp;     * This method sets the god that has been chosen by a player in his class.
+<i>135</i>&nbsp;     * It also delete this god from the list of available gods.
+<i>136</i>&nbsp;     * @param god the chosen god
+<i>137</i>&nbsp;     */
+<i>138</i>&nbsp;    public void setGod(GodName god) {
+<b class="fc"><i>139</i>&nbsp;        if (!availableGods.contains(god)) {</b>
+<b class="fc"><i>140</i>&nbsp;            String textError = &quot;You cannot choose this god, it&#39;s not available&quot;;</b>
+<b class="fc"><i>141</i>&nbsp;            views.get(indexOfCurrentPlayer).sendError(textError);</b>
+<b class="fc"><i>142</i>&nbsp;            ArrayList&lt;GodName&gt; godsList = new ArrayList&lt;&gt;(availableGods);</b>
+<b class="fc"><i>143</i>&nbsp;            views.get(indexOfCurrentPlayer).sendGodsList(godsList);</b>
+<b class="fc"><i>144</i>&nbsp;            return;</b>
+<i>145</i>&nbsp;        }
+<i>146</i>&nbsp;        try {
+<b class="fc"><i>147</i>&nbsp;            game.getPlayer(indexOfCurrentPlayer).setGod(god.chooseGod(god, game.getPlayer(indexOfCurrentPlayer)));</b>
+<b class="nc"><i>148</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>149</i>&nbsp;            views.get(indexOfCurrentPlayer).sendError(&quot;Try again, there were some troubles in the conversion.&quot;);</b>
+<b class="nc"><i>150</i>&nbsp;            ArrayList&lt;GodName&gt; godsList = new ArrayList&lt;&gt;(availableGods);</b>
+<b class="nc"><i>151</i>&nbsp;            views.get(indexOfCurrentPlayer).sendGodsList(godsList);</b>
+<b class="fc"><i>152</i>&nbsp;        }</b>
+<b class="fc"><i>153</i>&nbsp;        availableGods.remove(god);</b>
+<b class="fc"><i>154</i>&nbsp;        incrementIndex();</b>
+<b class="fc"><i>155</i>&nbsp;        if (indexOfCurrentPlayer == 0) {</b>
+<b class="fc"><i>156</i>&nbsp;            for (VirtualView view : views)</b>
+<b class="fc"><i>157</i>&nbsp;            view.sendImportant(&quot;The game is started!&quot;, MessageType.START_GAME);</b>
+<b class="fc"><i>158</i>&nbsp;            startGame();</b>
+<i>159</i>&nbsp;        }
+<i>160</i>&nbsp;        else {
+<b class="fc"><i>161</i>&nbsp;            ArrayList&lt;GodName&gt; godsList = new ArrayList&lt;&gt;(availableGods);</b>
+<b class="fc"><i>162</i>&nbsp;            views.get(indexOfCurrentPlayer).sendGodsList(godsList);</b>
+<b class="fc"><i>163</i>&nbsp;            sendWhoseIsTheTurn();</b>
+<i>164</i>&nbsp;        }
+<b class="fc"><i>165</i>&nbsp;    }</b>
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;    /**
+<i>168</i>&nbsp;     * This method set both workers into their correspondent slots, checking if they&#39;re already occupied,
+<i>169</i>&nbsp;     * if they are two different slots or if they are out of range. If all these checks are negative
+<i>170</i>&nbsp;     * the slots are setted, otherwise the method sends an error and asks again.
+<i>171</i>&nbsp;     */
+<i>172</i>&nbsp;    public void setWorkers( int[] RowsAndColumns)  {
+<b class="fc"><i>173</i>&nbsp;            int row1 = RowsAndColumns[0];</b>
+<b class="fc"><i>174</i>&nbsp;            int column1 = RowsAndColumns[1];</b>
+<b class="fc"><i>175</i>&nbsp;            int row2 = RowsAndColumns[2];</b>
+<b class="fc"><i>176</i>&nbsp;            int column2 = RowsAndColumns[3];</b>
+<b class="fc"><i>177</i>&nbsp;            if (row1 &gt; 4 || row1 &lt; 0 || row2 &gt; 4 || row2 &lt; 0 || column1 &gt; 4 || column1 &lt; 0 || column2 &gt; 4 || column2 &lt; 0) {</b>
+<b class="fc"><i>178</i>&nbsp;               String errorText = &quot;One of the values you chose is out of range&quot;;</b>
+<b class="fc"><i>179</i>&nbsp;                views.get(indexOfCurrentPlayer).sendError(errorText);</b>
+<b class="fc"><i>180</i>&nbsp;                views.get(indexOfCurrentPlayer).sendAskWorkersPosition();</b>
+<b class="fc"><i>181</i>&nbsp;                return;</b>
+<i>182</i>&nbsp;            }
+<b class="fc"><i>183</i>&nbsp;            Slot slot1 = game.getBoard().getSlot(row1, column1);</b>
+<b class="fc"><i>184</i>&nbsp;            Slot slot2 = game.getBoard().getSlot(row2, column2);</b>
+<b class="fc"><i>185</i>&nbsp;            if (slot1 == slot2) {</b>
+<b class="fc"><i>186</i>&nbsp;                String errorText = &quot;You must choose two different slots&quot;;</b>
+<b class="fc"><i>187</i>&nbsp;                views.get(indexOfCurrentPlayer).sendError(errorText);</b>
+<b class="fc"><i>188</i>&nbsp;                views.get(indexOfCurrentPlayer).sendAskWorkersPosition();</b>
+<b class="fc"><i>189</i>&nbsp;                return;</b>
+<i>190</i>&nbsp;            }
+<b class="fc"><i>191</i>&nbsp;            if (slot1.isOccupied() || slot2.isOccupied()) {</b>
+<b class="fc"><i>192</i>&nbsp;                String errorText = &quot;One of these slots has been already chosen&quot;;</b>
+<b class="fc"><i>193</i>&nbsp;                views.get(indexOfCurrentPlayer).sendError(errorText);</b>
+<b class="fc"><i>194</i>&nbsp;                views.get(indexOfCurrentPlayer).sendAskWorkersPosition();</b>
+<b class="fc"><i>195</i>&nbsp;                return;</b>
+<i>196</i>&nbsp;            }
+<b class="fc"><i>197</i>&nbsp;            Worker chosenWorkerMale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.MALE);</b>
+<b class="fc"><i>198</i>&nbsp;            game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerMale, game.getBoard().getSlot(row1, column1));</b>
+<b class="fc"><i>199</i>&nbsp;            Worker chosenWorkerFemale = game.getPlayer(indexOfCurrentPlayer).getWorker(Gender.FEMALE);</b>
+<b class="fc"><i>200</i>&nbsp;            game.getPlayer(indexOfCurrentPlayer).putWorkerOnSlot(chosenWorkerFemale, game.getBoard().getSlot(row2, column2));</b>
+<b class="fc"><i>201</i>&nbsp;            sendAnAdviceDuringGame(&quot;The workers have been initially set&quot;);</b>
+<b class="fc"><i>202</i>&nbsp;            incrementIndex();</b>
+<b class="fc"><i>203</i>&nbsp;            if(indexOfCurrentPlayer == 0) {</b>
+<b class="fc"><i>204</i>&nbsp;                turn = new TurnController(views, game, indexOfCurrentPlayer, this);</b>
+<b class="fc"><i>205</i>&nbsp;                turn.startTurn();</b>
+<i>206</i>&nbsp;            }
+<i>207</i>&nbsp;            else {
+<b class="fc"><i>208</i>&nbsp;                views.get(indexOfCurrentPlayer).sendAskWorkersPosition();</b>
+<b class="fc"><i>209</i>&nbsp;                sendWhoseIsTheTurn();</b>
+<i>210</i>&nbsp;            }
+<b class="fc"><i>211</i>&nbsp;        }</b>
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;    /**
+<i>214</i>&nbsp;     * This method creates the order that will be follow during the game.
+<i>215</i>&nbsp;     * The first player has been chosen by the Challenger, then the order remains the same.
+<i>216</i>&nbsp;     * It must be called at the start of the game.
+<i>217</i>&nbsp;     */
+<i>218</i>&nbsp;    private void newRoundOrder() {
+<b class="fc"><i>219</i>&nbsp;        game.createNewPlayersList(chosenPlayer);</b>
+<b class="fc"><i>220</i>&nbsp;        orderViews();</b>
+<b class="fc"><i>221</i>&nbsp;    }</b>
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    /**
+<i>224</i>&nbsp;     * This method creates the order of the round for the whole game and then it sends all the public information
+<i>225</i>&nbsp;     * to all the players.
+<i>226</i>&nbsp;     */
+<i>227</i>&nbsp;     private void startGame() {
+<b class="fc"><i>228</i>&nbsp;        newRoundOrder();</b>
+<b class="fc"><i>229</i>&nbsp;        ArrayList&lt;String&gt; usernames = new ArrayList&lt;&gt;(numberOfPlayers);</b>
+<b class="fc"><i>230</i>&nbsp;        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(numberOfPlayers);</b>
+<b class="fc"><i>231</i>&nbsp;        ArrayList&lt;GodName&gt; godNames = new ArrayList&lt;&gt;(numberOfPlayers);</b>
+<b class="fc"><i>232</i>&nbsp;        for (Player player : game.getPlayers() ) {</b>
+<b class="fc"><i>233</i>&nbsp;            usernames.add(player.getUsername());</b>
+<b class="fc"><i>234</i>&nbsp;            colors.add(player.getColor());</b>
+<b class="fc"><i>235</i>&nbsp;            godNames.add(player.getGodName());</b>
+<b class="fc"><i>236</i>&nbsp;        }</b>
+<b class="fc"><i>237</i>&nbsp;        for (VirtualView view : views) {</b>
+<b class="fc"><i>238</i>&nbsp;            view.sendPublicInformation(usernames, colors, godNames);</b>
+<b class="fc"><i>239</i>&nbsp;        }</b>
+<i>240</i>&nbsp;
+<b class="fc"><i>241</i>&nbsp;        views.get(indexOfCurrentPlayer).sendAskWorkersPosition();</b>
+<b class="fc"><i>242</i>&nbsp;        sendWhoseIsTheTurn();</b>
+<b class="fc"><i>243</i>&nbsp;    }</b>
+<i>244</i>&nbsp;
+<i>245</i>&nbsp;    /**
+<i>246</i>&nbsp;     * Add a view to the ArrayList views.
+<i>247</i>&nbsp;     * @param view the view that has to be added.
+<i>248</i>&nbsp;     */
+<i>249</i>&nbsp;    private void setView(VirtualView view) {
+<b class="fc"><i>250</i>&nbsp;        this.views.add(view);</b>
+<i>251</i>&nbsp;
+<b class="fc"><i>252</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="fc"><i>253</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc"><i>254</i>&nbsp;                game.getBoard().getSlot(i, j).addSlotListener(view);</b>
+<i>255</i>&nbsp;            }
+<i>256</i>&nbsp;        }
+<i>257</i>&nbsp;
+<b class="fc"><i>258</i>&nbsp;    }</b>
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    private void removeView(VirtualView view) {
+<b class="fc"><i>261</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="fc"><i>262</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc"><i>263</i>&nbsp;                game.getBoard().getSlot(i, j).removeSlotListener(view);</b>
+<i>264</i>&nbsp;            }
+<i>265</i>&nbsp;        }
+<b class="fc"><i>266</i>&nbsp;    }</b>
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    /**
+<i>269</i>&nbsp;     * This method order the ArrayList of Virtual Views the same as the players in the Game class.
+<i>270</i>&nbsp;     * This is because the indexOfCurrentPlayer must refers to the player and to the VirtualView at the same time.
+<i>271</i>&nbsp;     */
+<i>272</i>&nbsp;    private void orderViews() {
+<i>273</i>&nbsp;        VirtualView temp;
+<b class="fc"><i>274</i>&nbsp;        for(int i=0; i&lt;game.getNumberOfPlayers(); i++) {</b>
+<b class="fc"><i>275</i>&nbsp;            if (!game.getPlayer(i).getUsername().equals(views.get(i).getUsername()))</b>
+<b class="fc"><i>276</i>&nbsp;                for(int j=0; j&lt;game.getNumberOfPlayers(); j++) {</b>
+<b class="fc"><i>277</i>&nbsp;                    if (views.get(j).getUsername().equals(game.getPlayer(i).getUsername())) {</b>
+<b class="fc"><i>278</i>&nbsp;                        temp = views.get(i);</b>
+<b class="fc"><i>279</i>&nbsp;                        views.set(i, views.get(j));</b>
+<b class="fc"><i>280</i>&nbsp;                        views.set(j, temp);</b>
+<i>281</i>&nbsp;                    }
+<i>282</i>&nbsp;                }
+<i>283</i>&nbsp;        }
+<b class="fc"><i>284</i>&nbsp;    }</b>
+<i>285</i>&nbsp;
+<i>286</i>&nbsp;    /**
+<i>287</i>&nbsp;     * This method create a new turn of the game and makes it start.
+<i>288</i>&nbsp;     */
+<i>289</i>&nbsp;    public void changeTurn() {
+<b class="fc"><i>290</i>&nbsp;        incrementIndex();</b>
+<b class="fc"><i>291</i>&nbsp;        turn = new TurnController(views, game, indexOfCurrentPlayer, this);</b>
+<b class="fc"><i>292</i>&nbsp;        turn.startTurn();</b>
+<b class="fc"><i>293</i>&nbsp;    }</b>
+<i>294</i>&nbsp;
+<i>295</i>&nbsp;    /**
+<i>296</i>&nbsp;     * This method increments the index of the current player. If it is equal to the number of player,
+<i>297</i>&nbsp;     * a new round is starting.
+<i>298</i>&nbsp;     */
+<i>299</i>&nbsp;    private void incrementIndex() {
+<b class="fc"><i>300</i>&nbsp;        if (indexOfCurrentPlayer&lt;numberOfPlayers-1)</b>
+<b class="fc"><i>301</i>&nbsp;            indexOfCurrentPlayer++;</b>
+<i>302</i>&nbsp;        else
+<b class="fc"><i>303</i>&nbsp;            indexOfCurrentPlayer=0;</b>
+<b class="fc"><i>304</i>&nbsp;    }</b>
+<i>305</i>&nbsp;
+<i>306</i>&nbsp;    /**
+<i>307</i>&nbsp;     * This method is used just in the case when the third player lose the game.
+<i>308</i>&nbsp;     * It fixes the index of the other players and start a new turn.
+<i>309</i>&nbsp;     */
+<i>310</i>&nbsp;    private void fixIndexAndStart() {
+<b class="fc"><i>311</i>&nbsp;        if (indexOfCurrentPlayer == 2)</b>
+<b class="fc"><i>312</i>&nbsp;            indexOfCurrentPlayer = 0;</b>
+<b class="fc"><i>313</i>&nbsp;        turn = new TurnController(views, game, indexOfCurrentPlayer, this);</b>
+<b class="fc"><i>314</i>&nbsp;        turn.startTurn();</b>
+<b class="fc"><i>315</i>&nbsp;    }</b>
+<i>316</i>&nbsp;
+<i>317</i>&nbsp;    /**
+<i>318</i>&nbsp;     * This method sends an advice to all the players, except for the one who is playing,
+<i>319</i>&nbsp;     * to inform them about who is playing in the current turn.
+<i>320</i>&nbsp;     */
+<i>321</i>&nbsp;    void sendWhoseIsTheTurn() {
+<b class="fc"><i>322</i>&nbsp;        for (VirtualView view : views) {</b>
+<b class="fc"><i>323</i>&nbsp;            if (!(view.getUsername().equals(views.get(indexOfCurrentPlayer).getUsername())))</b>
+<b class="fc"><i>324</i>&nbsp;                view.sendImportant( views.get(indexOfCurrentPlayer).getUsername() , MessageType.TURN);</b>
+<b class="fc"><i>325</i>&nbsp;        }</b>
+<b class="fc"><i>326</i>&nbsp;    }</b>
+<i>327</i>&nbsp;
+<i>328</i>&nbsp;    /**
+<i>329</i>&nbsp;     * This method deletes a losing player from the game and notifies all the players.
+<i>330</i>&nbsp;     * If the players were just two, it also declares the winner and ends the game.
+<i>331</i>&nbsp;     */
+<i>332</i>&nbsp;    void removeLosingPlayer(String username) {
+<i>333</i>&nbsp;
+<b class="fc"><i>334</i>&nbsp;        if (game.getNumberOfPlayers() == 2) {</b>
+<b class="fc"><i>335</i>&nbsp;            incrementIndex();</b>
+<b class="fc"><i>336</i>&nbsp;            endGame(game.getPlayer(indexOfCurrentPlayer).getUsername());</b>
+<i>337</i>&nbsp;        }
+<i>338</i>&nbsp;        else {
+<b class="fc"><i>339</i>&nbsp;            for (VirtualView view : views) {</b>
+<b class="fc"><i>340</i>&nbsp;                view.sendImportant(username, MessageType.LOSING);</b>
+<b class="fc"><i>341</i>&nbsp;            }</b>
+<i>342</i>&nbsp;
+<b class="fc"><i>343</i>&nbsp;            game.checkWhenPlayerIsDeleted(game.getPlayer(indexOfCurrentPlayer).getGodName());</b>
+<i>344</i>&nbsp;
+<b class="fc"><i>345</i>&nbsp;            game.getPlayer(indexOfCurrentPlayer).deleteWorkers();</b>
+<b class="fc"><i>346</i>&nbsp;            game.removePlayer(game.getPlayer(indexOfCurrentPlayer));</b>
+<b class="fc"><i>347</i>&nbsp;            views.get(indexOfCurrentPlayer).sendYouAreOutOfTheGame(false);</b>
+<b class="fc"><i>348</i>&nbsp;            views.get(indexOfCurrentPlayer).removeVirtualViewListener(this);</b>
+<b class="fc"><i>349</i>&nbsp;            removeView(views.get(indexOfCurrentPlayer));</b>
+<b class="fc"><i>350</i>&nbsp;            views.remove(views.get(indexOfCurrentPlayer));</b>
+<i>351</i>&nbsp;
+<b class="fc"><i>352</i>&nbsp;            setNumberOfPlayers(2);</b>
+<b class="fc"><i>353</i>&nbsp;            game.setNumberOfPlayers(2);</b>
+<b class="fc"><i>354</i>&nbsp;            orderViews();</b>
+<b class="fc"><i>355</i>&nbsp;            fixIndexAndStart();</b>
+<i>356</i>&nbsp;        }
+<b class="fc"><i>357</i>&nbsp;    }</b>
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;    /**
+<i>360</i>&nbsp;     * This method close the game when someone has won.
+<i>361</i>&nbsp;     */
+<i>362</i>&nbsp;    void endGame(String username) {
+<b class="fc"><i>363</i>&nbsp;        game.setActive(false);</b>
+<b class="fc"><i>364</i>&nbsp;        for (VirtualView view : views) {</b>
+<b class="fc"><i>365</i>&nbsp;            view.sendImportant(username, MessageType.WINNING);</b>
+<b class="fc"><i>366</i>&nbsp;            view.sendYouAreOutOfTheGame(true);</b>
+<b class="fc"><i>367</i>&nbsp;        }</b>
+<b class="fc"><i>368</i>&nbsp;    }</b>
+<i>369</i>&nbsp;
+<i>370</i>&nbsp;    /**
+<i>371</i>&nbsp;     * This method sends to all the players the information about the evolution of the game,
+<i>372</i>&nbsp;     * for example which player has just build, or which player has chosen the worker to use.
+<i>373</i>&nbsp;     * @param changes the action which has to be communicated.
+<i>374</i>&nbsp;     */
+<i>375</i>&nbsp;    void sendAnAdviceDuringGame(String changes){
+<b class="fc"><i>376</i>&nbsp;        for (VirtualView view : views) {</b>
+<b class="fc"><i>377</i>&nbsp;            view.sendImportant( changes , MessageType.DURING_TURN);</b>
+<b class="fc"><i>378</i>&nbsp;        }</b>
+<b class="fc"><i>379</i>&nbsp;    }</b>
+<i>380</i>&nbsp;
+<i>381</i>&nbsp;    /**
+<i>382</i>&nbsp;     * This method implements the update of the Observer Pattern.
+<i>383</i>&nbsp;     * It&#39;s called every time the virtual view receives a message from the
+<i>384</i>&nbsp;     * client side, so its content is notified to the controller.
+<i>385</i>&nbsp;     * @param visitableObject the content of the message.
+<i>386</i>&nbsp;     */
+<i>387</i>&nbsp;    @Override
+<i>388</i>&nbsp;    public void update(Visitable visitableObject) {
+<b class="nc"><i>389</i>&nbsp;        visitableObject.accept(controllerVisitor);</b>
+<b class="nc"><i>390</i>&nbsp;    }</b>
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;    /**
+<i>393</i>&nbsp;     * This method sets all the elements to null.
+<i>394</i>&nbsp;     * It&#39;s used in the tests to clear the game.
+<i>395</i>&nbsp;     */
+<i>396</i>&nbsp;    void clearController() {
+<b class="fc"><i>397</i>&nbsp;        this.numberOfPlayers = 0;</b>
+<b class="fc"><i>398</i>&nbsp;        this.views = null;</b>
+<b class="fc"><i>399</i>&nbsp;        this.game = null;</b>
+<b class="fc"><i>400</i>&nbsp;        this.indexOfCurrentPlayer = 0;</b>
+<b class="fc"><i>401</i>&nbsp;        this.turn = null;</b>
+<b class="fc"><i>402</i>&nbsp;        this.controllerVisitor = null;</b>
+<b class="fc"><i>403</i>&nbsp;    }</b>
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;    ArrayList&lt;VirtualView&gt; getViews() {
+<b class="fc"><i>406</i>&nbsp;        return views;</b>
+<i>407</i>&nbsp;    }
+<i>408</i>&nbsp;
+<i>409</i>&nbsp;    public int getNumberOfPlayers() {
+<b class="fc"><i>410</i>&nbsp;        return numberOfPlayers;</b>
+<i>411</i>&nbsp;    }
+<i>412</i>&nbsp;
+<i>413</i>&nbsp;    public Game getGame() {
+<b class="fc"><i>414</i>&nbsp;        return game;</b>
+<i>415</i>&nbsp;    }
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;    int getIndexOfCurrentPlayer() {
+<b class="fc"><i>418</i>&nbsp;        return indexOfCurrentPlayer;</b>
+<i>419</i>&nbsp;    }
+<i>420</i>&nbsp;
+<i>421</i>&nbsp;    public void setIndexOfCurrentPlayer(int indexOfCurrentPlayer) {
+<b class="fc"><i>422</i>&nbsp;        this.indexOfCurrentPlayer = indexOfCurrentPlayer;</b>
+<b class="fc"><i>423</i>&nbsp;    }</b>
+<i>424</i>&nbsp;
+<i>425</i>&nbsp;    public ArrayList&lt;GodName&gt; getAvailableGods() {
+<b class="fc"><i>426</i>&nbsp;        return availableGods;</b>
+<i>427</i>&nbsp;    }
+<i>428</i>&nbsp;
+<i>429</i>&nbsp;    public TurnController getTurn() {
+<b class="nc"><i>430</i>&nbsp;        return turn;</b>
+<i>431</i>&nbsp;    }
+<i>432</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 18:37</div>
+</div>
+</body>
+</html>

@@ -18,8 +18,8 @@ public interface ClientHandlerListener {
     
     /**
      * This message sets the max number of players chosen by the first player.
-     *
      * @param message it contains the max number of players.
+     * @param clientHandler the {@link ClientHandler} who choose the number of players
      */
     void setPlayersNumber(RequestPlayersNumber message, ClientHandler clientHandler);
     

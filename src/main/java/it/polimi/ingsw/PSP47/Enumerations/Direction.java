@@ -62,7 +62,7 @@ public enum Direction {
      * @param originColumn is the column of the slot where the worker was at the origin
      * @param destinationRow is the row of the slot where the worker was at the destination
      * @param destinationColumn is the column of the slot where the worker was at the destionation
-     * @return
+     * @return the direction obtained
      */
     public static Direction getDirectionGivenSlots( int originRow, int originColumn ,int destinationRow, int destinationColumn ){
 

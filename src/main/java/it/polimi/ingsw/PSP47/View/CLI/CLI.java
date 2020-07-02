@@ -53,6 +53,7 @@ public class CLI extends ViewObservable implements View  {
     /**
      * This method is used to ask username and color.
      */
+    @Override
     public void askFirstConnection(){
         String username = askUsername();
         Color color= askColorWorkers();
@@ -126,7 +127,7 @@ public class CLI extends ViewObservable implements View  {
     /**
      * This method starts the thread that will be the network handler
     */
-    public void setConnection () {
+    private void setConnection () {
         String ipAddress = askServerIpAddress(in);
         NetworkHandler networkHandler;
         try {
@@ -160,11 +161,6 @@ public class CLI extends ViewObservable implements View  {
 
         clearConsole();
         return address;
-    }
-
-
-    public void coloredPrint(String text){
-        out.println(AnsiCode.getAnsiByName(gameView.getMyColor().toString()) + text + AnsiCode.ANSI_RESET);
     }
 
     /**
@@ -210,6 +206,7 @@ public class CLI extends ViewObservable implements View  {
     /**
      * This method asks the user where he/she wants to put the worker
      */
+    @Override
     public void askWhereToPositionWorkers() {
         int[] newRowAndColumn = new int[4];
 

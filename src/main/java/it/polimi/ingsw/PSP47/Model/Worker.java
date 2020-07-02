@@ -32,6 +32,7 @@ public class Worker {
      * The method {@link Slot#setWorker(Worker)} mustn't be called.
      *
      * @param slot slot where {@link Worker} is going to be placed
+     * @return true if the slot has been set correctly, false otherwise
      */
     public boolean setSlot(Slot slot) {
         this.slot = slot;

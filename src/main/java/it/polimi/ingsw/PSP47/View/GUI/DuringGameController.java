@@ -259,6 +259,7 @@ public class DuringGameController extends ViewObservable{
 
     /**
      * method that depending on the moment(current scene) handles the click on the grid differently
+     * @param event the click of the mouse on the gridPane
      */
     @FXML
     void gridClick(MouseEvent event) {

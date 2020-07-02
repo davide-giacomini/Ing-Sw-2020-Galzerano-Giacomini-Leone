@@ -110,6 +110,7 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
     /**
      * This method sends an advice to the client.
      * @param text the String that contains the advice.
+     * @param messageType the type of Important message that will be sent
      */
     public void sendImportant(String text, MessageType messageType) {
         clientHandler.sendImportant(text, messageType);
@@ -117,6 +118,7 @@ public class VirtualView extends VirtualViewObservable implements SlotListener {
 
     /**
      * This method sends the player who has lost.
+     * @param endGame true if the game is ended, false otherwise
      */
     public void sendYouAreOutOfTheGame(boolean endGame) {
         clientHandler.gameOver(endGame);

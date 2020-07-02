@@ -36,6 +36,7 @@ public abstract class ClientHandlerObservable {
      * It notifies that the message {@link RequestPlayersNumber} came to the server.
      *
      * @param message the message which contains the max number of players chosen by the player for the game.
+     * @param clientHandler the ClientHandler that has to be notified
      */
     public void notifyPlayersNumber(RequestPlayersNumber message, ClientHandler clientHandler) {
         for (ClientHandlerListener clientHandlerListener : clientHandlerListeners){

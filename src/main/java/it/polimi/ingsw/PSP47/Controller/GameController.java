@@ -35,6 +35,7 @@ public class GameController implements VirtualViewListener {
      * choose the gods that can be used in this game.
      * @param numberOfPlayers the number of player of the game which is chosen by the first player who connect.
      * @param mapUserColor usernames and colors of each player.
+     * @param mapUserVirtualView usernames and Virtual Views of each player
      */
     public GameController(int numberOfPlayers, HashMap<String,Color> mapUserColor, HashMap<String, VirtualView> mapUserVirtualView){
         this.numberOfPlayers = numberOfPlayers;
@@ -99,6 +100,7 @@ public class GameController implements VirtualViewListener {
     /**
      * Update the model with the gods that will be used in the game.
      * @param gods list of chosen gods.
+     * @param chosenPlayer the username of the first player
      */
     public void setGods(ArrayList<GodName> gods, String chosenPlayer) {
         for (GodName god : gods) {
@@ -168,6 +170,7 @@ public class GameController implements VirtualViewListener {
      * This method set both workers into their correspondent slots, checking if they're already occupied,
      * if they are two different slots or if they are out of range. If all these checks are negative
      * the slots are setted, otherwise the method sends an error and asks again.
+     * @param RowsAndColumns the initial positions of the workers that will be set
      */
     public void setWorkers( int[] RowsAndColumns)  {
             int row1 = RowsAndColumns[0];
@@ -328,6 +331,7 @@ public class GameController implements VirtualViewListener {
     /**
      * This method deletes a losing player from the game and notifies all the players.
      * If the players were just two, it also declares the winner and ends the game.
+     * @param username the username of a loser
      */
     void removeLosingPlayer(String username) {
 
@@ -358,6 +362,7 @@ public class GameController implements VirtualViewListener {
 
     /**
      * This method close the game when someone has won.
+     * @param username the username of the winner
      */
     void endGame(String username) {
         game.setActive(false);
