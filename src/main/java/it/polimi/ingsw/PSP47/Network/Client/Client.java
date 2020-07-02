@@ -39,7 +39,7 @@ public class Client {
     }
     
     private String askView(Scanner scanner) {
-        System.out.println("You want to play with CLI or GUI?");
+        System.out.println("Do you want to play with CLI or GUI?");
         String viewChoice = scanner.nextLine();
         
         

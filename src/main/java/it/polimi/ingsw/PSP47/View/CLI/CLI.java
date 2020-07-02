@@ -413,8 +413,8 @@ public class CLI extends ViewObservable implements View  {
         if(gameView.getMyUsername().equals(usernameWinner))
             printSupport.printWin(out);
         else {
-            theLoserIs("");
-            showImportantMessage(usernameWinner + " WON.\n\n");
+            showImportantMessage(usernameWinner + " WON.\n");
+            theLoserIs(gameView.getMyUsername());
         }
     }
 

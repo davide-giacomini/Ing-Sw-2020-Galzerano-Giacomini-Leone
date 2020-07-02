@@ -67,7 +67,7 @@ The following jars have been used for the delivery of the project, they can be u
 
 ### Advanced features developed
 * Multiple Games
-* Advanced Gods:  **Chronus, Hera, Hestia, Triton, Zeus**  
+* Advanced Gods:  *Chronus, Hera, Hestia, Triton, Zeus*  
 
 ## Execution of the JAR
 ### Client
