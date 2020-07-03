@@ -1,0 +1,688 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CLI</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.View.CLI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CLI (it.polimi.ingsw.PSP47.View.CLI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CLI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 276)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.View.CLI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.*;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Slot;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.NetworkConnectionUtil;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP47.Network.Client.NetworkHandler;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP47.View.GameView;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP47.View.View;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP47.View.ViewObservable;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.*;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.io.IOException;
+<i>13</i>&nbsp;import java.io.PrintStream;
+<i>14</i>&nbsp;import java.util.*;
+<i>15</i>&nbsp;import java.util.concurrent.TimeUnit;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;public class CLI extends ViewObservable implements View  {
+<i>18</i>&nbsp;    private GameView gameView;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    private PrintSupport printSupport;
+<i>21</i>&nbsp;    private Scanner in;
+<i>22</i>&nbsp;    private PrintStream out;
+<i>23</i>&nbsp;    
+<i>24</i>&nbsp;
+<b class="nc"><i>25</i>&nbsp;    public CLI() {</b>
+<b class="nc"><i>26</i>&nbsp;        this.in = new Scanner(System.in);</b>
+<b class="nc"><i>27</i>&nbsp;        this.out = new PrintStream(System.out);</b>
+<b class="nc"><i>28</i>&nbsp;        gameView = new GameView();</b>
+<b class="nc"><i>29</i>&nbsp;        printSupport = new PrintSupport();</b>
+<b class="nc"><i>30</i>&nbsp;        showTitle();</b>
+<b class="nc"><i>31</i>&nbsp;        setConnection();</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * This method is used to print the initial Santorini Logo
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    private void showTitle() {
+<i>39</i>&nbsp;
+<b class="nc"><i>40</i>&nbsp;        String intro =&quot;Welcome to the Digital Version of Santorini Board Game, \n&quot; +</b>
+<i>41</i>&nbsp;                      &quot;programmers:AriannaGalzerano-DavideGiacomini-MonicaLeone\n&quot; +
+<i>42</i>&nbsp;                      &quot;Before starting please insert the required parameters...\n&quot;;
+<b class="nc"><i>43</i>&nbsp;         printSupport.printTitle(out) ;</b>
+<i>44</i>&nbsp;        try {
+<b class="nc"><i>45</i>&nbsp;            TimeUnit.MILLISECONDS.sleep(500);</b>
+<b class="nc"><i>46</i>&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc"><i>47</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>48</i>&nbsp;        }</b>
+<b class="nc"><i>49</i>&nbsp;        printSupport.printDotSequence(out);</b>
+<b class="nc"><i>50</i>&nbsp;        out.println(AnsiCode.ANSI_CYAN + intro + AnsiCode.ANSI_RESET);</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * This method is used to ask username and color.
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    @Override
+<i>57</i>&nbsp;    public void askFirstConnection(){
+<b class="nc"><i>58</i>&nbsp;        String username = askUsername();</b>
+<b class="nc"><i>59</i>&nbsp;        Color color= askColorWorkers();</b>
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;        clearConsole();</b>
+<b class="nc"><i>62</i>&nbsp;        VisitableInformation visitableInformation = new VisitableInformation();</b>
+<b class="nc"><i>63</i>&nbsp;        visitableInformation.setUsername(username);</b>
+<b class="nc"><i>64</i>&nbsp;        visitableInformation.setColor(color);</b>
+<b class="nc"><i>65</i>&nbsp;        notifyViewListener(visitableInformation);</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    /**
+<i>70</i>&nbsp;     * This method asks for the username
+<i>71</i>&nbsp;     * @return string which becomes the username of the player
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    public String askUsername () {
+<b class="nc"><i>74</i>&nbsp;        String username = null;</b>
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;        do {
+<b class="nc"><i>77</i>&nbsp;            out.println(&quot;Insert your Username and press &quot; + AnsiCode.ANSI_ENTER_KEY + &quot; : &quot;);</b>
+<b class="nc"><i>78</i>&nbsp;            if (in.hasNextLine()){</b>
+<b class="nc"><i>79</i>&nbsp;                username = in.nextLine();</b>
+<b class="nc"><i>80</i>&nbsp;                if(username.equals(&quot;&quot;)) {</b>
+<b class="nc"><i>81</i>&nbsp;                 printSupport.printError(out);</b>
+<b class="nc"><i>82</i>&nbsp;                out.println(AnsiCode.ANSI_RED + &quot;Username not inserted or wrong!\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>83</i>&nbsp;                username = null;</b>
+<i>84</i>&nbsp;            }}
+<b class="nc"><i>85</i>&nbsp;        }while (username== null);</b>
+<i>86</i>&nbsp;
+<b class="nc"><i>87</i>&nbsp;        clearConsole();</b>
+<b class="nc"><i>88</i>&nbsp;        return username;</b>
+<i>89</i>&nbsp;    }
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    /**
+<i>92</i>&nbsp;     * This method asks the user which color he/she wants for the workers
+<i>93</i>&nbsp;     * @return string which indicates the name of the color
+<i>94</i>&nbsp;     */
+<i>95</i>&nbsp;    public Color askColorWorkers() {
+<b class="nc"><i>96</i>&nbsp;        String color = null;</b>
+<b class="nc"><i>97</i>&nbsp;        Color acceptableColor = null;</b>
+<b class="nc"><i>98</i>&nbsp;        out.println(&quot;Here are the possible workers&#39; colors : &quot;);</b>
+<b class="nc"><i>99</i>&nbsp;        out.println(AnsiCode.ANSI_BLUE + AnsiCode.ANSI_WORKER  + &quot; This is blue&quot;);</b>
+<b class="nc"><i>100</i>&nbsp;        out.println(AnsiCode.ANSI_YELLOW + AnsiCode.ANSI_WORKER + &quot; This is yellow&quot;);</b>
+<b class="nc"><i>101</i>&nbsp;        out.println(AnsiCode.ANSI_GREEN + AnsiCode.ANSI_WORKER +&quot; This is green&quot;);</b>
+<b class="nc"><i>102</i>&nbsp;        out.println(AnsiCode.ANSI_RED + AnsiCode.ANSI_WORKER +&quot; This is red&quot;);</b>
+<b class="nc"><i>103</i>&nbsp;        out.println(AnsiCode.ANSI_WHITE + AnsiCode.ANSI_WORKER + &quot; This is white&quot;);</b>
+<b class="nc"><i>104</i>&nbsp;        out.println(AnsiCode.ANSI_CYAN + AnsiCode.ANSI_WORKER + &quot; This is cyan&quot;);</b>
+<b class="nc"><i>105</i>&nbsp;        out.println(AnsiCode.ANSI_PURPLE + AnsiCode.ANSI_WORKER + &quot; This is purple&quot; + AnsiCode.ANSI_RESET);</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;        do {
+<b class="nc"><i>108</i>&nbsp;            out.println(&quot;\nInsert the color you prefer :  &quot;);</b>
+<b class="nc"><i>109</i>&nbsp;            if (in.hasNextLine()) {</b>
+<b class="nc"><i>110</i>&nbsp;                color = in.nextLine();</b>
+<b class="nc"><i>111</i>&nbsp;                acceptableColor = Color.getColorByName(color);</b>
+<b class="nc"><i>112</i>&nbsp;                if (acceptableColor == Color.WRONGCOLOR) {</b>
+<b class="nc"><i>113</i>&nbsp;                    color = null;</b>
+<b class="nc"><i>114</i>&nbsp;                    printSupport.printError(out);</b>
+<b class="nc"><i>115</i>&nbsp;                    out.println(AnsiCode.ANSI_RED +&quot;Color not available! \n&quot;+ AnsiCode.ANSI_RESET);</b>
+<i>116</i>&nbsp;                }
+<i>117</i>&nbsp;            }else {
+<b class="nc"><i>118</i>&nbsp;                printSupport.printError(out);</b>
+<b class="nc"><i>119</i>&nbsp;                out.println(AnsiCode.ANSI_RED + &quot;Color not inserted! \n&quot; + AnsiCode.ANSI_RESET);</b>
+<i>120</i>&nbsp;            }
+<b class="nc"><i>121</i>&nbsp;        }while (color == null);</b>
+<i>122</i>&nbsp;
+<b class="nc"><i>123</i>&nbsp;        clearConsole();</b>
+<b class="nc"><i>124</i>&nbsp;        return acceptableColor;</b>
+<i>125</i>&nbsp;    }
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    /**
+<i>128</i>&nbsp;     * This method starts the thread that will be the network handler
+<i>129</i>&nbsp;    */
+<i>130</i>&nbsp;    private void setConnection () {
+<b class="nc"><i>131</i>&nbsp;        String ipAddress = askServerIpAddress(in);</b>
+<i>132</i>&nbsp;        NetworkHandler networkHandler;
+<i>133</i>&nbsp;        try {
+<b class="nc"><i>134</i>&nbsp;            networkHandler = NetworkConnectionUtil.setConnection(this, ipAddress);</b>
+<b class="nc"><i>135</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>136</i>&nbsp;            printSupport.printError(out);</b>
+<b class="nc"><i>137</i>&nbsp;            out.println(&quot;Server unreachable.&quot;);</b>
+<i>138</i>&nbsp;            return;
+<b class="nc"><i>139</i>&nbsp;        }</b>
+<b class="nc"><i>140</i>&nbsp;        out.println(&quot;Connected to the address &quot; + ipAddress);</b>
+<b class="nc"><i>141</i>&nbsp;        addViewListener(networkHandler);</b>
+<i>142</i>&nbsp;    }
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    /**
+<i>145</i>&nbsp;     * This method asks the client the address to connect to.
+<i>146</i>&nbsp;     *
+<i>147</i>&nbsp;     * @param scanner the input scanner.
+<i>148</i>&nbsp;     * @return the ip address to connect to.
+<i>149</i>&nbsp;     */
+<i>150</i>&nbsp;    private String askServerIpAddress (Scanner scanner) {
+<i>151</i>&nbsp;        String address;
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;        do {
+<b class="nc"><i>154</i>&nbsp;            System.out.println(&quot;Insert address : &quot;);</b>
+<b class="nc"><i>155</i>&nbsp;            address = scanner.nextLine();</b>
+<b class="nc"><i>156</i>&nbsp;            if(address.equals(&quot;&quot;)) {</b>
+<b class="nc"><i>157</i>&nbsp;                System.out.println( &quot;Address not inserted or wrong!\n&quot;);</b>
+<b class="nc"><i>158</i>&nbsp;                address = null;</b>
+<i>159</i>&nbsp;            }
+<b class="nc"><i>160</i>&nbsp;        }while (address== null);</b>
+<i>161</i>&nbsp;
+<b class="nc"><i>162</i>&nbsp;        clearConsole();</b>
+<b class="nc"><i>163</i>&nbsp;        return address;</b>
+<i>164</i>&nbsp;    }
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;    /**
+<i>167</i>&nbsp;     * This method asks the user which of the worker he/she wants to use
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    @Override
+<i>170</i>&nbsp;    public void askWhichWorkerToUse() {
+<b class="nc"><i>171</i>&nbsp;        int[] newRowAndColumn = new int[2];</b>
+<i>172</i>&nbsp;
+<b class="nc"><i>173</i>&nbsp;        out.println(&quot;Insert the slot of the worker you want to use :  &quot;);</b>
+<b class="nc"><i>174</i>&nbsp;        out.println(&quot;Insert Row and press &quot; + AnsiCode.ANSI_ENTER_KEY + &quot; :  &quot;);</b>
+<i>175</i>&nbsp;        do {
+<i>176</i>&nbsp;            try {
+<b class="nc"><i>177</i>&nbsp;                newRowAndColumn[0] = Integer.parseInt(in.nextLine())-1;</b>
+<b class="nc"><i>178</i>&nbsp;            } catch (NumberFormatException e) {</b>
+<b class="nc"><i>179</i>&nbsp;                printSupport.printError(out);</b>
+<b class="nc"><i>180</i>&nbsp;                out.println(AnsiCode.ANSI_RED + &quot;Insert a number !\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>181</i>&nbsp;                newRowAndColumn[0] = 9000;</b>
+<b class="nc"><i>182</i>&nbsp;            }</b>
+<i>183</i>&nbsp;
+<b class="nc"><i>184</i>&nbsp;        }while (newRowAndColumn[0] == 9000);</b>
+<i>185</i>&nbsp;
+<b class="nc"><i>186</i>&nbsp;        out.println(&quot;Insert Column and press&quot; + AnsiCode.ANSI_ENTER_KEY + &quot;: &quot;);</b>
+<i>187</i>&nbsp;        do {
+<i>188</i>&nbsp;            try {
+<b class="nc"><i>189</i>&nbsp;                newRowAndColumn[1] = Integer.parseInt(in.nextLine())-1;</b>
+<b class="nc"><i>190</i>&nbsp;            } catch (NumberFormatException e) {</b>
+<b class="nc"><i>191</i>&nbsp;                printSupport.printError(out);</b>
+<b class="nc"><i>192</i>&nbsp;                out.println(AnsiCode.ANSI_RED + &quot;Insert a number !\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>193</i>&nbsp;                newRowAndColumn[1] = 9000;</b>
+<b class="nc"><i>194</i>&nbsp;            }</b>
+<i>195</i>&nbsp;
+<b class="nc"><i>196</i>&nbsp;        }while (newRowAndColumn[1] == 9000);</b>
+<i>197</i>&nbsp;
+<b class="nc"><i>198</i>&nbsp;        clearConsole();</b>
+<b class="nc"><i>199</i>&nbsp;        VisitableRowsAndColumns visitableRowsAndColumns = new VisitableRowsAndColumns();</b>
+<b class="nc"><i>200</i>&nbsp;        visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);</b>
+<b class="nc"><i>201</i>&nbsp;        notifyViewListener(visitableRowsAndColumns);</b>
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    /**
+<i>207</i>&nbsp;     * This method asks the user where he/she wants to put the worker
+<i>208</i>&nbsp;     */
+<i>209</i>&nbsp;    @Override
+<i>210</i>&nbsp;    public void askWhereToPositionWorkers() {
+<b class="nc"><i>211</i>&nbsp;        int[] newRowAndColumn = new int[4];</b>
+<i>212</i>&nbsp;
+<b class="nc"><i>213</i>&nbsp;                out.println(&quot;Choose where to  Initially position your workers :  &quot;);</b>
+<b class="nc"><i>214</i>&nbsp;                out.println(&quot;Worker MALE :&quot;);</b>
+<i>215</i>&nbsp;
+<b class="nc"><i>216</i>&nbsp;                out.println(&quot;Insert Row and press&quot; + AnsiCode.ANSI_ENTER_KEY + &quot;:  &quot;);</b>
+<i>217</i>&nbsp;                do {
+<i>218</i>&nbsp;                    try {
+<b class="nc"><i>219</i>&nbsp;                        newRowAndColumn[0] = Integer.parseInt(in.nextLine())-1;</b>
+<b class="nc"><i>220</i>&nbsp;                    } catch (NumberFormatException e) {</b>
+<b class="nc"><i>221</i>&nbsp;                        printSupport.printError(out);</b>
+<b class="nc"><i>222</i>&nbsp;                        out.println(AnsiCode.ANSI_RED + &quot;Insert a number !\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>223</i>&nbsp;                        newRowAndColumn[0] = 9000;</b>
+<b class="nc"><i>224</i>&nbsp;                    }</b>
+<i>225</i>&nbsp;
+<b class="nc"><i>226</i>&nbsp;                }while (newRowAndColumn[0] == 9000);</b>
+<i>227</i>&nbsp;
+<b class="nc"><i>228</i>&nbsp;                out.println(&quot;Insert Column and press &quot; + AnsiCode.ANSI_ENTER_KEY + &quot; : &quot;);</b>
+<i>229</i>&nbsp;                do {
+<i>230</i>&nbsp;                    try {
+<b class="nc"><i>231</i>&nbsp;                        newRowAndColumn[1] = Integer.parseInt(in.nextLine())-1;</b>
+<b class="nc"><i>232</i>&nbsp;                    } catch (NumberFormatException e) {</b>
+<b class="nc"><i>233</i>&nbsp;                        printSupport.printError(out);</b>
+<b class="nc"><i>234</i>&nbsp;                        out.println(AnsiCode.ANSI_RED + &quot;Insert a number !\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>235</i>&nbsp;                        newRowAndColumn[1] = 9000;</b>
+<b class="nc"><i>236</i>&nbsp;                    }</b>
+<i>237</i>&nbsp;
+<b class="nc"><i>238</i>&nbsp;                }while (newRowAndColumn[1] == 9000);</b>
+<b class="nc"><i>239</i>&nbsp;                out.println(&quot;Worker FEMALE :&quot;);</b>
+<b class="nc"><i>240</i>&nbsp;                out.println(&quot;Insert Row and press &quot; + AnsiCode.ANSI_ENTER_KEY + &quot; :  &quot;);</b>
+<i>241</i>&nbsp;                do {
+<i>242</i>&nbsp;                    try {
+<b class="nc"><i>243</i>&nbsp;                        newRowAndColumn[2] = Integer.parseInt(in.nextLine())-1;</b>
+<b class="nc"><i>244</i>&nbsp;                     } catch (NumberFormatException e) {</b>
+<b class="nc"><i>245</i>&nbsp;                        printSupport.printError(out);</b>
+<b class="nc"><i>246</i>&nbsp;                        out.println(AnsiCode.ANSI_RED + &quot;Insert a number !\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>247</i>&nbsp;                        newRowAndColumn[2] = 9000;</b>
+<b class="nc"><i>248</i>&nbsp;                    }</b>
+<i>249</i>&nbsp;
+<b class="nc"><i>250</i>&nbsp;                }while (newRowAndColumn[2] == 9000);</b>
+<i>251</i>&nbsp;
+<b class="nc"><i>252</i>&nbsp;                out.println(&quot;Insert Column and press &quot; + AnsiCode.ANSI_ENTER_KEY + &quot; : &quot;);</b>
+<i>253</i>&nbsp;                do {
+<i>254</i>&nbsp;                    try {
+<b class="nc"><i>255</i>&nbsp;                        newRowAndColumn[3] = Integer.parseInt(in.nextLine())-1;</b>
+<b class="nc"><i>256</i>&nbsp;                    } catch (NumberFormatException e) {</b>
+<b class="nc"><i>257</i>&nbsp;                        printSupport.printError(out);</b>
+<b class="nc"><i>258</i>&nbsp;                        out.println(AnsiCode.ANSI_RED + &quot;Insert a number !\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>259</i>&nbsp;                        newRowAndColumn[3] = 9000;</b>
+<b class="nc"><i>260</i>&nbsp;                    }</b>
+<i>261</i>&nbsp;
+<b class="nc"><i>262</i>&nbsp;                }while (newRowAndColumn[3] == 9000);</b>
+<i>263</i>&nbsp;
+<b class="nc"><i>264</i>&nbsp;        clearConsole();</b>
+<b class="nc"><i>265</i>&nbsp;        VisitableInitialPositions visitableRowsAndColumns = new VisitableInitialPositions();</b>
+<b class="nc"><i>266</i>&nbsp;        visitableRowsAndColumns.setRowsAndColumns(newRowAndColumn);</b>
+<b class="nc"><i>267</i>&nbsp;        notifyViewListener(visitableRowsAndColumns);</b>
+<i>268</i>&nbsp;    }
+<i>269</i>&nbsp;
+<i>270</i>&nbsp;    /**
+<i>271</i>&nbsp;     * This method asks only one of the users (the challenger) which gods will be used during the game
+<i>272</i>&nbsp;     * and which player will play first.
+<i>273</i>&nbsp;     * @param usernames the list of usernames of the players.
+<i>274</i>&nbsp;     */
+<i>275</i>&nbsp;    @Override
+<i>276</i>&nbsp;    public void challengerWillChooseThreeGods(ArrayList&lt;String&gt; usernames) {
+<b class="nc"><i>277</i>&nbsp;        ArrayList&lt;GodName&gt; godsChosen = new ArrayList&lt;&gt;();</b>
+<i>278</i>&nbsp;        String god ;
+<i>279</i>&nbsp;        GodName godName ;
+<i>280</i>&nbsp;
+<b class="nc"><i>281</i>&nbsp;        String firstPlayer = null;</b>
+<i>282</i>&nbsp;
+<b class="nc"><i>283</i>&nbsp;        int i = 0;</b>
+<i>284</i>&nbsp;
+<b class="nc"><i>285</i>&nbsp;        out.println(&quot;Hey you! You have been picked as &quot; +AnsiCode.ANSI_GREEN+&quot; Challenger! &quot; + AnsiCode.ANSI_RESET);</b>
+<i>286</i>&nbsp;
+<b class="nc"><i>287</i>&nbsp;        out.println(&quot;Here are the gods and their powers: &quot;);</b>
+<i>288</i>&nbsp;
+<b class="nc"><i>289</i>&nbsp;        out.println(AnsiCode.ANSI_BG_CYAN +&quot;#1 Apollo&quot;+ AnsiCode.ANSI_RESET+ &quot;– You may move your worker onto a space occupied by an opponent’s builder. Their builder will be moved to the space your builder was just on.&quot;);</b>
+<i>290</i>&nbsp;
+<b class="nc"><i>291</i>&nbsp;        out.println(AnsiCode.ANSI_BG_CYAN +&quot;#2 Artemis&quot;+ AnsiCode.ANSI_RESET+ &quot; – You may move your builders two spaces but you may not move back to the space you started your turn on.&quot;);</b>
+<i>292</i>&nbsp;
+<b class="nc"><i>293</i>&nbsp;        out.println(AnsiCode.ANSI_BG_CYAN +&quot;#3 Athena&quot;+ AnsiCode.ANSI_RESET+ &quot; – If you moved one of your workers up one level on your previous turn, your opponent may not move up a level on their turn.&quot;);</b>
+<i>294</i>&nbsp;
+<b class="nc"><i>295</i>&nbsp;        out.println(AnsiCode.ANSI_BG_CYAN +&quot;#4 Atlas&quot;+ AnsiCode.ANSI_RESET+ &quot; – Your builders can build a dome on any level including the ground.&quot;);</b>
+<i>296</i>&nbsp;
+<b class="nc"><i>297</i>&nbsp;        out.println(AnsiCode.ANSI_BG_CYAN +&quot;#5 Demeter&quot;+ AnsiCode.ANSI_RESET+ &quot; – Your builders can build twice on your turn, but may not build twice on the same space.&quot;);</b>
+<i>298</i>&nbsp;
+<b class="nc"><i>299</i>&nbsp;        out.println(AnsiCode.ANSI_BG_CYAN +&quot;#6 Hephaestus&quot;+ AnsiCode.ANSI_RESET+ &quot; – Your builders can build twice on the same space. They may not use this ability to place a dome though.&quot;);</b>
+<i>300</i>&nbsp;
+<b class="nc"><i>301</i>&nbsp;        out.println(AnsiCode.ANSI_BG_CYAN +&quot;#7 Minotaur&quot;+ AnsiCode.ANSI_RESET+ &quot; – You may move your builder onto a space occupied by an opponent’s builder if the next space in the same direction is unoccupied. You will push the other player’s builder into the next space in the same direction.&quot;);</b>
+<i>302</i>&nbsp;
+<b class="nc"><i>303</i>&nbsp;        out.println(AnsiCode.ANSI_BG_CYAN +&quot;#8 Pan&quot;+ AnsiCode.ANSI_RESET+ &quot; – If one of your builders moves down two spaces in one movement you will automatically win the game.&quot;);</b>
+<i>304</i>&nbsp;
+<b class="nc"><i>305</i>&nbsp;        out.println(AnsiCode.ANSI_BG_CYAN +&quot;#9 Prometheus&quot;+ AnsiCode.ANSI_RESET+ &quot; – If you don’t move up a level during your turn you may build before and after you move.&quot;);</b>
+<i>306</i>&nbsp;
+<b class="nc"><i>307</i>&nbsp;        out.println(AnsiCode.ANSI_BG_GREEN+ &quot;#10 Hestia&quot;+ AnsiCode.ANSI_RESET+ &quot; - Your worker may build one additional time. The additional build cannot be on a perimeter space.&quot;);</b>
+<i>308</i>&nbsp;
+<b class="nc"><i>309</i>&nbsp;        out.println(AnsiCode.ANSI_BG_GREEN+ &quot;#11 Hera&quot;+ AnsiCode.ANSI_RESET+ &quot; - An opponent cannot win by moving on to a perimeter space.&quot;);</b>
+<i>310</i>&nbsp;
+<b class="nc"><i>311</i>&nbsp;        out.println(AnsiCode.ANSI_BG_GREEN+&quot;#12 Chronus&quot;+ AnsiCode.ANSI_RESET+ &quot; - You also win when there are at least five complete Towers on the board.&quot;);</b>
+<i>312</i>&nbsp;
+<b class="nc"><i>313</i>&nbsp;        out.println(AnsiCode.ANSI_BG_GREEN+&quot;#13 Triton&quot;+ AnsiCode.ANSI_RESET+ &quot; - Each time your Worker moves onto a perimeter space (ground or block), it may immediately move again.&quot;);</b>
+<i>314</i>&nbsp;
+<b class="nc"><i>315</i>&nbsp;        out.println(AnsiCode.ANSI_BG_GREEN+&quot;#14 Zeus&quot;+ AnsiCode.ANSI_RESET+ &quot; - your Worker may build under itself in its current space, forcing it up one level. You do not win by forcing yourself up the 3rd level.&quot;);</b>
+<i>316</i>&nbsp;
+<i>317</i>&nbsp;        do {
+<b class="nc"><i>318</i>&nbsp;            out.println(&quot;Choose which god you want to add in the list : you can choose &quot; + gameView.getNumberOfPlayers() );</b>
+<i>319</i>&nbsp;
+<b class="nc"><i>320</i>&nbsp;            if (in.hasNextLine()){</b>
+<b class="nc"><i>321</i>&nbsp;                god = in.nextLine();</b>
+<b class="nc"><i>322</i>&nbsp;                godName = GodName.getGodsNameByName(god);</b>
+<i>323</i>&nbsp;
+<b class="nc"><i>324</i>&nbsp;                if(godName == GodName.WRONGGODNAME || godsChosen.contains(godName)) {</b>
+<b class="nc"><i>325</i>&nbsp;                    printSupport.printError(out);</b>
+<b class="nc"><i>326</i>&nbsp;                    out.println(AnsiCode.ANSI_RED +&quot;God already chosen or wrong!\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>327</i>&nbsp;                    i--;</b>
+<i>328</i>&nbsp;                }else{
+<b class="nc"><i>329</i>&nbsp;                    godsChosen.add(godName);</b>
+<i>330</i>&nbsp;                }
+<i>331</i>&nbsp;            }else {
+<b class="nc"><i>332</i>&nbsp;                printSupport.printError(out);</b>
+<b class="nc"><i>333</i>&nbsp;                out.println(AnsiCode.ANSI_RED + &quot;God not inserted! \n&quot; + AnsiCode.ANSI_RESET);</b>
+<i>334</i>&nbsp;            }
+<b class="nc"><i>335</i>&nbsp;            i++;</b>
+<i>336</i>&nbsp;
+<b class="nc"><i>337</i>&nbsp;        }while (i &lt; gameView.getNumberOfPlayers());</b>
+<i>338</i>&nbsp;
+<b class="nc"><i>339</i>&nbsp;        out.println(&quot;Now you have to choose the first player of the game between &quot;);</b>
+<i>340</i>&nbsp;
+<b class="nc"><i>341</i>&nbsp;        for (int j = 0; j&lt;gameView.getNumberOfPlayers(); j++) {</b>
+<b class="nc"><i>342</i>&nbsp;            out.println(AnsiCode.ANSI_GREEN + usernames.get(j) + &quot; &quot; + AnsiCode.ANSI_RESET);</b>
+<i>343</i>&nbsp;        }
+<i>344</i>&nbsp;
+<i>345</i>&nbsp;        do{
+<b class="nc"><i>346</i>&nbsp;            out.println(&quot;Write the username of the one you choose: &quot;);</b>
+<b class="nc"><i>347</i>&nbsp;            if (in.hasNextLine()) {</b>
+<b class="nc"><i>348</i>&nbsp;                firstPlayer = in.nextLine();</b>
+<i>349</i>&nbsp;
+<b class="nc"><i>350</i>&nbsp;                if (!usernames.contains(firstPlayer)) {</b>
+<b class="nc"><i>351</i>&nbsp;                    firstPlayer = null;</b>
+<b class="nc"><i>352</i>&nbsp;                    printSupport.printError(out);</b>
+<b class="nc"><i>353</i>&nbsp;                    out.println(AnsiCode.ANSI_RED + &quot;You must choose one of these names! \n&quot; + AnsiCode.ANSI_RESET);</b>
+<i>354</i>&nbsp;                }
+<i>355</i>&nbsp;            }
+<b class="nc"><i>356</i>&nbsp;        }while (firstPlayer == null);</b>
+<i>357</i>&nbsp;
+<b class="nc"><i>358</i>&nbsp;        clearConsole();</b>
+<b class="nc"><i>359</i>&nbsp;        VisitableListOfGods visitableGods = new VisitableListOfGods();</b>
+<b class="nc"><i>360</i>&nbsp;        visitableGods.setGodNames(godsChosen);</b>
+<b class="nc"><i>361</i>&nbsp;        visitableGods.setChosenPlayer(firstPlayer);</b>
+<b class="nc"><i>362</i>&nbsp;        notifyViewListener(visitableGods);</b>
+<i>363</i>&nbsp;    }
+<i>364</i>&nbsp;
+<i>365</i>&nbsp;    /**
+<i>366</i>&nbsp;     * This method makes the user choose his/her god between the ones already chosen by the challenger
+<i>367</i>&nbsp;     * @param godsChosen is the array of the available gods (chosen by the challenger)
+<i>368</i>&nbsp;     */
+<i>369</i>&nbsp;    @Override
+<i>370</i>&nbsp;    public void chooseYourGod(ArrayList&lt;GodName&gt; godsChosen){
+<b class="nc"><i>371</i>&nbsp;        String god = null;</b>
+<b class="nc"><i>372</i>&nbsp;        GodName godName = null;</b>
+<i>373</i>&nbsp;
+<b class="nc"><i>374</i>&nbsp;        out.println(&quot;These are the available gods :&quot;);</b>
+<b class="nc"><i>375</i>&nbsp;        for (GodName g: godsChosen){</b>
+<b class="nc"><i>376</i>&nbsp;            out.println( g) ;</b>
+<b class="nc"><i>377</i>&nbsp;        }</b>
+<i>378</i>&nbsp;
+<i>379</i>&nbsp;
+<i>380</i>&nbsp;        do {
+<b class="nc"><i>381</i>&nbsp;            out.println(&quot;Pick one: &quot;);</b>
+<b class="nc"><i>382</i>&nbsp;            if (in.hasNextLine()){</b>
+<b class="nc"><i>383</i>&nbsp;                god = in.nextLine();</b>
+<b class="nc"><i>384</i>&nbsp;                godName = GodName.getGodsNameByName(god);</b>
+<i>385</i>&nbsp;
+<b class="nc"><i>386</i>&nbsp;                if(godName == GodName.WRONGGODNAME || god.equals(&quot;&quot;)) {</b>
+<b class="nc"><i>387</i>&nbsp;                    printSupport.printError(out);</b>
+<b class="nc"><i>388</i>&nbsp;                    out.println(AnsiCode.ANSI_RED + &quot;God not available or wrong!\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>389</i>&nbsp;                    god = null;</b>
+<i>390</i>&nbsp;                }else{
+<b class="nc"><i>391</i>&nbsp;                    gameView.setMyGod(godName);</b>
+<i>392</i>&nbsp;                }
+<i>393</i>&nbsp;            }else {
+<b class="nc"><i>394</i>&nbsp;                printSupport.printError(out);</b>
+<b class="nc"><i>395</i>&nbsp;                out.println(AnsiCode.ANSI_RED + &quot;God not inserted! \n&quot; + AnsiCode.ANSI_RESET);</b>
+<i>396</i>&nbsp;            }
+<b class="nc"><i>397</i>&nbsp;        }while (god == null);</b>
+<i>398</i>&nbsp;
+<i>399</i>&nbsp;
+<b class="nc"><i>400</i>&nbsp;        clearConsole();</b>
+<b class="nc"><i>401</i>&nbsp;        VisitableGod visitableGodChosen = new VisitableGod();</b>
+<b class="nc"><i>402</i>&nbsp;        visitableGodChosen.setGodName(godName);</b>
+<b class="nc"><i>403</i>&nbsp;        notifyViewListener(visitableGodChosen);</b>
+<i>404</i>&nbsp;    }
+<i>405</i>&nbsp;
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;    /**
+<i>408</i>&nbsp;     * This method tells the username of the winner
+<i>409</i>&nbsp;     * @param usernameWinner is the username of the winner
+<i>410</i>&nbsp;     */
+<i>411</i>&nbsp;    @Override
+<i>412</i>&nbsp;    public void theWinnerIs(String usernameWinner ){
+<b class="nc"><i>413</i>&nbsp;        if(gameView.getMyUsername().equals(usernameWinner))</b>
+<b class="nc"><i>414</i>&nbsp;            printSupport.printWin(out);</b>
+<i>415</i>&nbsp;        else {
+<b class="nc"><i>416</i>&nbsp;            theLoserIs(&quot;&quot;);</b>
+<b class="nc"><i>417</i>&nbsp;            showImportantMessage(usernameWinner + &quot; WON.\n\n&quot;);</b>
+<i>418</i>&nbsp;        }
+<i>419</i>&nbsp;    }
+<i>420</i>&nbsp;
+<i>421</i>&nbsp;    /**
+<i>422</i>&nbsp;     * This method tells the username of the winner
+<i>423</i>&nbsp;     */
+<i>424</i>&nbsp;    @Override
+<i>425</i>&nbsp;    public void theLoserIs(String usernameLoser){
+<b class="nc"><i>426</i>&nbsp;        if (gameView.getMyUsername().equals(usernameLoser)) {</b>
+<b class="nc"><i>427</i>&nbsp;            printSupport.printLost(out);</b>
+<i>428</i>&nbsp;        }else{
+<b class="nc"><i>429</i>&nbsp;            showImportantMessage(usernameLoser+&quot; has just lost but the Game must go on!\n&quot;);</b>
+<i>430</i>&nbsp;        }
+<i>431</i>&nbsp;
+<i>432</i>&nbsp;    }
+<i>433</i>&nbsp;
+<i>434</i>&nbsp;    /**
+<i>435</i>&nbsp;     * This method prints an advice about who is currently playing.
+<i>436</i>&nbsp;     * @param usernameOnTurn username of the player who&#39;s doing its turn
+<i>437</i>&nbsp;     */
+<i>438</i>&nbsp;    @Override
+<i>439</i>&nbsp;    public void othersTurn(String usernameOnTurn) {
+<b class="nc"><i>440</i>&nbsp;        if (usernameOnTurn != null &amp;&amp; gameView.isStart()) {</b>
+<b class="nc"><i>441</i>&nbsp;            printSupport.printDotSequence(out);</b>
+<b class="nc"><i>442</i>&nbsp;            out.println(&quot;It&#39;s &quot; + usernameOnTurn + &quot;&#39;s Turn . . . Please Wait &quot;);</b>
+<b class="nc"><i>443</i>&nbsp;            printSupport.printWait(out);</b>
+<b class="nc"><i>444</i>&nbsp;        }else if(usernameOnTurn != null){</b>
+<b class="nc"><i>445</i>&nbsp;            printSupport.printDotSequence(out);</b>
+<b class="nc"><i>446</i>&nbsp;            out.println(usernameOnTurn);</b>
+<b class="nc"><i>447</i>&nbsp;            printSupport.printWait(out);</b>
+<i>448</i>&nbsp;        }
+<i>449</i>&nbsp;    }
+<i>450</i>&nbsp;
+<i>451</i>&nbsp;    @Override
+<i>452</i>&nbsp;    public void whileOnGame(String changes) {
+<b class="nc"><i>453</i>&nbsp;        if (!gameView.isMyTurn()) {</b>
+<b class="nc"><i>454</i>&nbsp;            clearConsole();</b>
+<b class="nc"><i>455</i>&nbsp;            showImportantMessage(changes + &quot;\n\n&quot;);</b>
+<b class="nc"><i>456</i>&nbsp;            printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);</b>
+<i>457</i>&nbsp;        }else{
+<b class="nc"><i>458</i>&nbsp;            clearConsole();</b>
+<b class="nc"><i>459</i>&nbsp;            printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);</b>
+<i>460</i>&nbsp;        }
+<i>461</i>&nbsp;
+<i>462</i>&nbsp;    }
+<i>463</i>&nbsp;
+<i>464</i>&nbsp;    @Override
+<i>465</i>&nbsp;    public GameView getGameView() {
+<b class="nc"><i>466</i>&nbsp;        return gameView;</b>
+<i>467</i>&nbsp;    }
+<i>468</i>&nbsp;
+<i>469</i>&nbsp;    /**
+<i>470</i>&nbsp;     * This method resets the color to the default one when called
+<i>471</i>&nbsp;     * @param o is the out console where I apply the reset
+<i>472</i>&nbsp;     */
+<i>473</i>&nbsp;    public void reset( PrintStream o) {
+<b class="nc"><i>474</i>&nbsp;        o.println(AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>475</i>&nbsp;        o.flush();</b>
+<i>476</i>&nbsp;    }
+<i>477</i>&nbsp;
+<i>478</i>&nbsp;    /**
+<i>479</i>&nbsp;     * This method is used to ask the numbers of players of the game
+<i>480</i>&nbsp;     */
+<i>481</i>&nbsp;    @Override
+<i>482</i>&nbsp;    public void askNumberOfPlayers() {
+<i>483</i>&nbsp;        int num ;
+<i>484</i>&nbsp;
+<b class="nc"><i>485</i>&nbsp;        out.println(&quot;Do you want to play in a game with two or three players?\n&quot; +</b>
+<i>486</i>&nbsp;                &quot;Insert a number between 2 and 3: &quot; + AnsiCode.ANSI_ENTER_KEY);
+<i>487</i>&nbsp;            do {
+<i>488</i>&nbsp;                try {
+<b class="nc"><i>489</i>&nbsp;                    num = Integer.parseInt(in.nextLine());</b>
+<b class="nc"><i>490</i>&nbsp;                } catch (NumberFormatException e) {</b>
+<b class="nc"><i>491</i>&nbsp;                    printSupport.printError(out);</b>
+<b class="nc"><i>492</i>&nbsp;                    out.println(AnsiCode.ANSI_RED + &quot;Insert a number !\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>493</i>&nbsp;                    num = 0;</b>
+<b class="nc"><i>494</i>&nbsp;                }</b>
+<i>495</i>&nbsp;
+<b class="nc"><i>496</i>&nbsp;            }while (num &lt; 2 || num &gt; 3);</b>
+<i>497</i>&nbsp;
+<b class="nc"><i>498</i>&nbsp;        clearConsole();</b>
+<b class="nc"><i>499</i>&nbsp;        VisitableInt visitableNumber = new VisitableInt(num);</b>
+<b class="nc"><i>500</i>&nbsp;        notifyViewListener(visitableNumber);</b>
+<i>501</i>&nbsp;    }
+<i>502</i>&nbsp;
+<i>503</i>&nbsp;    /**
+<i>504</i>&nbsp;     * This is the basic method to ask what the user wants to do in its turn.
+<i>505</i>&nbsp;     */
+<i>506</i>&nbsp;    @Override
+<i>507</i>&nbsp;    public void askAction(){
+<i>508</i>&nbsp;
+<b class="nc"><i>509</i>&nbsp;        out.println(&quot;\n\nHere are the possible actions:  move direction  /  build direction  /  buildDome direction / end / quit &quot;);</b>
+<b class="nc"><i>510</i>&nbsp;        out.println(&quot;The available directions are : &quot;+ Arrays.toString(Direction.values())+ &quot;\n&quot;);</b>
+<i>511</i>&nbsp;
+<i>512</i>&nbsp;
+<b class="nc"><i>513</i>&nbsp;        String line = null;</b>
+<i>514</i>&nbsp;        String[] stringParts ;
+<b class="nc"><i>515</i>&nbsp;        Action actionInserted =null ;</b>
+<b class="nc"><i>516</i>&nbsp;        Direction directionInserted= null;</b>
+<i>517</i>&nbsp;        do {
+<b class="nc"><i>518</i>&nbsp;            out.println(&quot;Insert action :&quot;);</b>
+<i>519</i>&nbsp;
+<b class="nc"><i>520</i>&nbsp;            if (in.hasNextLine()) {</b>
+<b class="nc"><i>521</i>&nbsp;                line = in.nextLine();</b>
+<b class="nc"><i>522</i>&nbsp;                stringParts = line.split(&quot; &quot;);</b>
+<b class="nc"><i>523</i>&nbsp;                actionInserted = Action.getActionByName(stringParts[0]);</b>
+<b class="nc"><i>524</i>&nbsp;                if (stringParts.length&gt;1)</b>
+<b class="nc"><i>525</i>&nbsp;                directionInserted = Direction.getDirectionByName(stringParts[1]);</b>
+<i>526</i>&nbsp;
+<b class="nc"><i>527</i>&nbsp;                if((actionInserted == Action.WRONGACTION) || (!(actionInserted.equals(Action.END) || actionInserted.equals(Action.QUIT)) &amp;&amp; (directionInserted == Direction.WRONGDIRECTION || directionInserted == null)) ||((actionInserted.equals(Action.END) || actionInserted.equals(Action.QUIT)) &amp;&amp; stringParts.length &gt;1) || (line.equals(&quot;&quot;))){</b>
+<b class="nc"><i>528</i>&nbsp;                    printSupport.printError(out);</b>
+<b class="nc"><i>529</i>&nbsp;                    out.println(AnsiCode.ANSI_RED + &quot;Problems in the way you inserted the commands!\n&quot;+ AnsiCode.ANSI_RESET);</b>
+<b class="nc"><i>530</i>&nbsp;                    line = null;</b>
+<i>531</i>&nbsp;                }
+<b class="nc"><i>532</i>&nbsp;                else if(actionInserted.equals(Action.QUIT)){</b>
+<b class="nc"><i>533</i>&nbsp;                    notifyEndConnection();</b>
+<i>534</i>&nbsp;                    return;
+<i>535</i>&nbsp;                }
+<i>536</i>&nbsp;            }
+<i>537</i>&nbsp;
+<b class="nc"><i>538</i>&nbsp;        } while (line == null);</b>
+<i>539</i>&nbsp;
+<b class="nc"><i>540</i>&nbsp;        VisitableActionAndDirection visitableActionAndDirection = new VisitableActionAndDirection();</b>
+<b class="nc"><i>541</i>&nbsp;        visitableActionAndDirection.setAction(actionInserted);</b>
+<b class="nc"><i>542</i>&nbsp;        visitableActionAndDirection.setDirection(directionInserted);</b>
+<b class="nc"><i>543</i>&nbsp;        notifyViewListener(visitableActionAndDirection);</b>
+<i>544</i>&nbsp;    }
+<i>545</i>&nbsp;
+<i>546</i>&nbsp;    /**
+<i>547</i>&nbsp;     * This method is used to show the initial public information about all the clients in the game
+<i>548</i>&nbsp;     */
+<i>549</i>&nbsp;    @Override
+<i>550</i>&nbsp;    public void showPublicInformation(){
+<i>551</i>&nbsp;        ArrayList&lt;String&gt; usernames ;
+<i>552</i>&nbsp;        ArrayList&lt;Color&gt; colors ;
+<i>553</i>&nbsp;        ArrayList &lt;GodName&gt; gods ;
+<i>554</i>&nbsp;
+<b class="nc"><i>555</i>&nbsp;        usernames = gameView.getUsernames();</b>
+<b class="nc"><i>556</i>&nbsp;        colors = gameView.getColors();</b>
+<b class="nc"><i>557</i>&nbsp;        gods = gameView.getGods();</b>
+<b class="nc"><i>558</i>&nbsp;        printSupport.printUsersAndColorsAndGods(usernames, colors, gods, gameView.getNumberOfPlayers(), out);</b>
+<b class="nc"><i>559</i>&nbsp;        clearConsole();</b>
+<i>560</i>&nbsp;    }
+<i>561</i>&nbsp;
+<i>562</i>&nbsp;    /**
+<i>563</i>&nbsp;     * This method prints an error message.
+<i>564</i>&nbsp;     * @param text the text about the kind of error.
+<i>565</i>&nbsp;     */
+<i>566</i>&nbsp;    @Override
+<i>567</i>&nbsp;    public void showErrorMessage(String text) {
+<b class="nc"><i>568</i>&nbsp;        printSupport.printError(out);</b>
+<b class="nc"><i>569</i>&nbsp;        out.println(AnsiCode.ANSI_RED +text + AnsiCode.ANSI_RESET);</b>
+<i>570</i>&nbsp;    }
+<i>571</i>&nbsp;
+<i>572</i>&nbsp;    /**
+<i>573</i>&nbsp;     * This method prints an information about the game.
+<i>574</i>&nbsp;     * @param text the text about the information.
+<i>575</i>&nbsp;     */
+<i>576</i>&nbsp;    @Override
+<i>577</i>&nbsp;    public void showImportantMessage(String text) {
+<b class="nc"><i>578</i>&nbsp;        out.println(AnsiCode.ANSI_GREEN +text + AnsiCode.ANSI_RESET);</b>
+<i>579</i>&nbsp;    }
+<i>580</i>&nbsp;
+<i>581</i>&nbsp;    /**
+<i>582</i>&nbsp;     * Clears the console
+<i>583</i>&nbsp;     */
+<i>584</i>&nbsp;    private void clearConsole() {
+<b class="nc"><i>585</i>&nbsp;        out.print(AnsiCode.ANSI_CLEARCONSOLE);</b>
+<b class="nc"><i>586</i>&nbsp;        out.flush();</b>
+<i>587</i>&nbsp;    }
+<i>588</i>&nbsp;
+<i>589</i>&nbsp;    public void showEnd(){
+<b class="nc"><i>590</i>&nbsp;        printSupport.printGoodBye(out);</b>
+<i>591</i>&nbsp;    }
+<i>592</i>&nbsp;
+<i>593</i>&nbsp;    @Override
+<i>594</i>&nbsp;    public void showNewBoard(Slot slot) {
+<b class="nc"><i>595</i>&nbsp;        printSupport.buildSlot(slot);</b>
+<i>596</i>&nbsp;    }
+<i>597</i>&nbsp;
+<i>598</i>&nbsp;    @Override
+<i>599</i>&nbsp;    public void showGame() {
+<b class="nc"><i>600</i>&nbsp;        printSupport.createEmptyBoard();</b>
+<b class="nc"><i>601</i>&nbsp;        printSupport.printCurrBoard(printSupport.getBOARD_PARTS(), out);</b>
+<i>602</i>&nbsp;    }
+<i>603</i>&nbsp;
+<i>604</i>&nbsp;
+<i>605</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 18:37</div>
+</div>
+</body>
+</html>

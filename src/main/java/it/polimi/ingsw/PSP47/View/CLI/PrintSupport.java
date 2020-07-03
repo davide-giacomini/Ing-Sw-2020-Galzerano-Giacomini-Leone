@@ -101,7 +101,7 @@ public class PrintSupport {
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+               // e.printStackTrace();
             }
         }
         out.print("\n"+ AnsiCode.ANSI_RESET);

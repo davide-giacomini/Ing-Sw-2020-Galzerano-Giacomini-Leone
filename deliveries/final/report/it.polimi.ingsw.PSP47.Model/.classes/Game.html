@@ -1,0 +1,295 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Game</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.Model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Game (it.polimi.ingsw.PSP47.Model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Game</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (20/ 20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,7%
+  </span>
+  <span class="absValue">
+    (76/ 82)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.Model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.Model.Gods.Athena;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.util.ArrayList;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * This class contains all the elements of a game.
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public class Game {
+<i>12</i>&nbsp;    private boolean isActive;
+<i>13</i>&nbsp;    private final Board board;
+<i>14</i>&nbsp;    private int numberOfPlayers;
+<i>15</i>&nbsp;    private Player challenger;
+<i>16</i>&nbsp;    private ArrayList&lt;Player&gt; players;
+<i>17</i>&nbsp;
+<b class="fc"><i>18</i>&nbsp;    public Game(int numberOfPlayers) {</b>
+<b class="fc"><i>19</i>&nbsp;        this.isActive = true;</b>
+<b class="fc"><i>20</i>&nbsp;        this.numberOfPlayers = numberOfPlayers;</b>
+<b class="fc"><i>21</i>&nbsp;        players = new ArrayList&lt;&gt;(numberOfPlayers);</b>
+<b class="fc"><i>22</i>&nbsp;        board = new Board();</b>
+<b class="fc"><i>23</i>&nbsp;    }</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    public void addPlayer(Player player) {
+<b class="fc"><i>26</i>&nbsp;        players.add(player);</b>
+<b class="fc"><i>27</i>&nbsp;    }</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public Player getChallenger() {
+<b class="fc"><i>30</i>&nbsp;        return challenger;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public void setChallenger(Player challenger) {
+<b class="fc"><i>34</i>&nbsp;        this.challenger = challenger;</b>
+<b class="fc"><i>35</i>&nbsp;    }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public ArrayList&lt;Player&gt; getPlayers() {
+<b class="fc"><i>38</i>&nbsp;        return new ArrayList&lt;&gt;(players);</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;    public Player getPlayer(int i) { return players.get(i); }</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    public int getNumberOfPlayers() {
+<b class="fc"><i>44</i>&nbsp;        return numberOfPlayers;</b>
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public void setNumberOfPlayers(int numberOfPlayers) {
+<b class="fc"><i>48</i>&nbsp;        this.numberOfPlayers = numberOfPlayers;</b>
+<b class="fc"><i>49</i>&nbsp;    }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    public boolean isActive() {
+<b class="fc"><i>52</i>&nbsp;        return isActive;</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    public void setActive(boolean active) {
+<b class="fc"><i>56</i>&nbsp;        isActive = active;</b>
+<b class="fc"><i>57</i>&nbsp;    }</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    public Board getBoard() {
+<b class="fc"><i>60</i>&nbsp;        return board;</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * This method put the challenger in the last position.
+<i>65</i>&nbsp;     */
+<i>66</i>&nbsp;    public void putChallengerAtLastPosition() {
+<b class="fc"><i>67</i>&nbsp;        int index = 3;</b>
+<b class="fc"><i>68</i>&nbsp;        for (int i=0; i&lt;numberOfPlayers; i++) {</b>
+<b class="fc"><i>69</i>&nbsp;            if (players.get(i) == challenger)</b>
+<b class="fc"><i>70</i>&nbsp;                index = i;</b>
+<i>71</i>&nbsp;        }
+<b class="fc"><i>72</i>&nbsp;        if (index == 0 &amp;&amp; numberOfPlayers == 2) {</b>
+<b class="fc"><i>73</i>&nbsp;            players.set(0, players.get(1));</b>
+<b class="fc"><i>74</i>&nbsp;            players.set(1, challenger);</b>
+<i>75</i>&nbsp;        }
+<b class="fc"><i>76</i>&nbsp;        else if (index == 0 &amp;&amp; numberOfPlayers == 3) {</b>
+<b class="fc"><i>77</i>&nbsp;            players.set(0, players.get(1));</b>
+<b class="fc"><i>78</i>&nbsp;            players.set(1, players.get(2));</b>
+<b class="fc"><i>79</i>&nbsp;            players.set(2, challenger);</b>
+<i>80</i>&nbsp;        }
+<b class="fc"><i>81</i>&nbsp;        else if (index == 1 &amp;&amp; numberOfPlayers == 3) {</b>
+<b class="fc"><i>82</i>&nbsp;            players.set(1,players.get(2));</b>
+<b class="fc"><i>83</i>&nbsp;            players.set(2, challenger);</b>
+<i>84</i>&nbsp;        }
+<b class="fc"><i>85</i>&nbsp;    }</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    /**
+<i>88</i>&nbsp;     * This method replaces the ArrayList players with a new ArrayList with the players
+<i>89</i>&nbsp;     * in the order chosen by the Challenger (he decided the first player, then the order has to
+<i>90</i>&nbsp;     * remains equal).
+<i>91</i>&nbsp;     * @param chosenPlayer the player chosen by the Challenger to be first.
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    public void createNewPlayersList(String chosenPlayer) {
+<b class="fc"><i>94</i>&nbsp;        int index = -1;</b>
+<b class="fc"><i>95</i>&nbsp;        ArrayList&lt;Player&gt; newArray = new ArrayList&lt;&gt;(numberOfPlayers);</b>
+<b class="fc"><i>96</i>&nbsp;        for (int i=0; i&lt;numberOfPlayers; i++) {</b>
+<b class="fc"><i>97</i>&nbsp;            if (players.get(i).getUsername().equals(chosenPlayer))</b>
+<b class="fc"><i>98</i>&nbsp;                index = i;</b>
+<i>99</i>&nbsp;        }
+<b class="fc"><i>100</i>&nbsp;        if (index == 0)</b>
+<b class="fc"><i>101</i>&nbsp;            newArray = players;</b>
+<b class="fc"><i>102</i>&nbsp;        else if (index == 1 &amp;&amp; numberOfPlayers == 3) {</b>
+<b class="nc"><i>103</i>&nbsp;            newArray.add(players.get(index));</b>
+<b class="nc"><i>104</i>&nbsp;            newArray.add(players.get(2));</b>
+<b class="nc"><i>105</i>&nbsp;            newArray.add(players.get(0));</b>
+<i>106</i>&nbsp;        }
+<b class="fc"><i>107</i>&nbsp;        else if (index == numberOfPlayers - 1) {</b>
+<b class="fc"><i>108</i>&nbsp;            newArray.add(players.get(index));</b>
+<b class="fc"><i>109</i>&nbsp;            newArray.add(players.get(0));</b>
+<b class="fc"><i>110</i>&nbsp;            if (numberOfPlayers == 3)</b>
+<b class="fc"><i>111</i>&nbsp;                newArray.add(players.get(1));</b>
+<i>112</i>&nbsp;        }
+<b class="fc"><i>113</i>&nbsp;        players = newArray;</b>
+<b class="fc"><i>114</i>&nbsp;    }</b>
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    /**
+<i>118</i>&nbsp;     * This method returns the player who has a specific username.
+<i>119</i>&nbsp;     * @param username the username that you want to found the correspondent player.
+<i>120</i>&nbsp;     * @return the player instance.
+<i>121</i>&nbsp;     */
+<i>122</i>&nbsp;    public Player getPlayer (String username) {
+<b class="fc"><i>123</i>&nbsp;        for(int i=0; i&lt;numberOfPlayers; i++) {</b>
+<b class="fc"><i>124</i>&nbsp;            if (username.equals(players.get(i).getUsername()))</b>
+<b class="fc"><i>125</i>&nbsp;                return players.get(i);</b>
+<i>126</i>&nbsp;        }
+<b class="nc"><i>127</i>&nbsp;        return null;</b>
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    public void removePlayer (Player player) {
+<b class="fc"><i>131</i>&nbsp;        players.remove(player);</b>
+<b class="fc"><i>132</i>&nbsp;    }</b>
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * This method checks if the player who has just moved is Athena.
+<i>136</i>&nbsp;     * If he is and if he has just moved up, he makes move up impossible to all the other players.
+<i>137</i>&nbsp;     * If he hasn&#39;t moved up, the other players can.
+<i>138</i>&nbsp;     * Otherwise, it does nothing.
+<i>139</i>&nbsp;     * @param player the player who has just moved.
+<i>140</i>&nbsp;     */
+<i>141</i>&nbsp;    public void checkIfPlayersCanMoveUp(Player player) {
+<b class="fc"><i>142</i>&nbsp;        if (player.getGod().getName().equals(&quot;Athena&quot;)) {</b>
+<b class="fc"><i>143</i>&nbsp;            boolean moveUp = ((Athena)player.getGod()).isMoveUp();</b>
+<b class="fc"><i>144</i>&nbsp;            for (int i = 0; i&lt;numberOfPlayers; i++) {</b>
+<b class="fc"><i>145</i>&nbsp;                if (getPlayer(i) != null &amp;&amp; getPlayer(i) != player) {</b>
+<b class="fc"><i>146</i>&nbsp;                    getPlayer(i).setCannotMoveUp(moveUp);</b>
+<i>147</i>&nbsp;                }
+<i>148</i>&nbsp;            }
+<i>149</i>&nbsp;        }
+<b class="fc"><i>150</i>&nbsp;    }</b>
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;    /**
+<i>153</i>&nbsp;     * This method is called after every move.
+<i>154</i>&nbsp;     * It checks if a player has just won the game.
+<i>155</i>&nbsp;     * There are two cases: if there is a player with the Hera card there is another control in addition to
+<i>156</i>&nbsp;     * check if the player has just move up in a third level.
+<i>157</i>&nbsp;     * In fact, to win he must also not be on a perimeter slot of be Hera.
+<i>158</i>&nbsp;     * @param currentWorker the worker that do the winning move.
+<i>159</i>&nbsp;     * @param currentPlayer the player who has just moved.
+<i>160</i>&nbsp;     * @return true if the player has won, false otherwise.
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    public boolean checkWinningCondition(Worker currentWorker, Player currentPlayer) {
+<b class="fc"><i>163</i>&nbsp;        Player heraPlayer = checkIfTheGodIsPresent(GodName.HERA);</b>
+<b class="fc"><i>164</i>&nbsp;        if (heraPlayer != null)</b>
+<b class="fc"><i>165</i>&nbsp;            return currentPlayer.isWinning() &amp;&amp; !(currentWorker.getSlot().isPerimeterSlot() &amp;&amp; !(currentPlayer == heraPlayer));</b>
+<i>166</i>&nbsp;        else
+<b class="fc"><i>167</i>&nbsp;            return currentPlayer.isWinning();</b>
+<i>168</i>&nbsp;    }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /**
+<i>171</i>&nbsp;     * This method is called after every build.
+<i>172</i>&nbsp;     * It checks if a player has just won the game.
+<i>173</i>&nbsp;     * It happens if there is a player with the Chronus card and if there are five complete towers on the board.
+<i>174</i>&nbsp;     * @return the player who has won, null if no one won.
+<i>175</i>&nbsp;     */
+<i>176</i>&nbsp;    public Player checkWinningCondition() {
+<b class="fc"><i>177</i>&nbsp;        Player chronusPlayer = checkIfTheGodIsPresent(GodName.CHRONUS);</b>
+<b class="fc"><i>178</i>&nbsp;        if (chronusPlayer != null &amp;&amp; board.getCountDomes() == 5)</b>
+<b class="fc"><i>179</i>&nbsp;            return chronusPlayer;</b>
+<i>180</i>&nbsp;        else
+<b class="fc"><i>181</i>&nbsp;            return null;</b>
+<i>182</i>&nbsp;    }
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    /**
+<i>185</i>&nbsp;     * This method checks if a god is present in the game and returns its player.
+<i>186</i>&nbsp;     * Otherwise, it returns null.
+<i>187</i>&nbsp;     * @param godName the god that must be checked
+<i>188</i>&nbsp;     * @return the player who has the god, null if there isn&#39;t.
+<i>189</i>&nbsp;     */
+<i>190</i>&nbsp;    private Player checkIfTheGodIsPresent(GodName godName) {
+<b class="fc"><i>191</i>&nbsp;        for(Player playerToCheck : players){</b>
+<b class="fc"><i>192</i>&nbsp;            if (playerToCheck.getGod().getName().equals(godName.getGod())) {</b>
+<b class="fc"><i>193</i>&nbsp;                return playerToCheck;</b>
+<i>194</i>&nbsp;            }
+<b class="fc"><i>195</i>&nbsp;        }</b>
+<b class="fc"><i>196</i>&nbsp;        return null;</b>
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * This method checks if there are any parameters which have to be reset if a specific god isn&#39;t part of the game anymore.
+<i>201</i>&nbsp;     * In fact, if Athena is out of the game, all the players can always move up during their turns.
+<i>202</i>&nbsp;     * @param godName the name of the god which has been deleted by the game.
+<i>203</i>&nbsp;     */
+<i>204</i>&nbsp;    public void checkWhenPlayerIsDeleted(GodName godName) {
+<b class="fc"><i>205</i>&nbsp;        if (godName == GodName.ATHENA) {</b>
+<b class="nc"><i>206</i>&nbsp;            for (int i = 0; i &lt; numberOfPlayers; i++) {</b>
+<b class="nc"><i>207</i>&nbsp;                players.get(i).setCannotMoveUp(false);</b>
+<i>208</i>&nbsp;            }
+<i>209</i>&nbsp;        }
+<b class="fc"><i>210</i>&nbsp;    }</b>
+<i>211</i>&nbsp;}
+<i>212</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 18:37</div>
+</div>
+</body>
+</html>

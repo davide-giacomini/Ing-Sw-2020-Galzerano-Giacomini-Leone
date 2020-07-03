@@ -105,7 +105,7 @@ public class GUI extends Application implements View {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return loader.getController();
     }
@@ -242,7 +242,7 @@ public class GUI extends Application implements View {
                 winnerStage.show();
 
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         });
     }
@@ -279,7 +279,7 @@ public class GUI extends Application implements View {
                 loserStage.initModality(Modality.APPLICATION_MODAL);
                 loserStage.show();
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         });
     }

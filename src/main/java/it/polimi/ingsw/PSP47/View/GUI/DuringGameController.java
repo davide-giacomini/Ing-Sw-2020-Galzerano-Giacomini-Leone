@@ -281,7 +281,6 @@ public class DuringGameController extends ViewObservable{
             gameView.updateMoment(CurrentMoment.WAIT);
             changeText(); // now the user cannot keep on clicking but has to wait, both if its his turn or not, until the request is accepted by the server
         }else if (gameView.getCurrentMoment() == CurrentMoment.WAIT ){ //if I am in this moment I cannot click
-            //TODO davide -> io questo lo cambierei in un non alert ma poi vediamo
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setContentText("Please wait for your Turn!");
             a.show();

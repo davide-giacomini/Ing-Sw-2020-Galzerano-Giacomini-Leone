@@ -35,17 +35,17 @@ The following class diagrams are a representation of the design chosen by our gr
 
 - [Initial UML Model](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/UML/InitialUML_Model.png)
 - [Initial UML Controller and Network](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/UML/InitialUML_Controller_and_Network.png)
-- [Final UML](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/UML/Total_FinalUML.png)
-- [Final UML Model](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/UML/Model_FinalUML.png)
-- [Final UML Network](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/UML/Network_FinalUML.png)
-- [Final UML View](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/UML/View_FinalUML.png)
+- [Final UML](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/final/UML/Total_FinalUML.png)
+- [Final UML Model](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/final/UML/Model_FinalUML.png)
+- [Final UML Network](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/final/UML/Network_FinalUML.png)
+- [Final UML View](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/final/UML/View_FinalUML.png)
 
 ### JavaDoc
-The following documentation includes a description of all of the classes and methods implemented, based on the documentation generator for the Java language, which can be read at this address: [Javadoc](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/javaDoc)
+The following documentation includes a description of all of the classes and methods implemented, based on the documentation generator for the Java language, which can be read at this address: [Javadoc](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/final/javaDoc)
 
 ### Tests with Coverage
 To check the proper functioning of the project, a number of tests were executed, the percentages of coverage reached is over 90% for Controller and Model packages, as required from the project specifics.
-More details are available at the following link: [Report Coverage](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/finalCoverage)
+More details are available at the following link: [Report Coverage](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/final/report)
 
 <a name="built"></a>
 ## Built with
@@ -68,7 +68,7 @@ More details are available at the following link: [Report Coverage](https://gith
 
 
 ### Jars
-The following jars have been used for the delivery of the project, they can be used to run the game in accordance with the descriptions given in the introduction. The details on how to run the system will be defined in the section __Execution of the jar__. The folder which contains Client and Server is at the following address : [Jars](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/jar)
+The following jars have been used for the delivery of the project, they can be used to run the game in accordance with the descriptions given in the introduction. The details on how to run the system will be defined in the section __Execution of the jar__. The folder which contains Client and Server is at the following address : [Jars](https://github.com/davide-giacomini/Ing-Sw-2020-Galzerano-Giacomini-Leone/tree/master/deliveries/final/jar)
 
 ## Execution of the JAR
 ### Client

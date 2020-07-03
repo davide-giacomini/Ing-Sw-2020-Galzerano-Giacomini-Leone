@@ -1,0 +1,664 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChallengerController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP47.View.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChallengerController (it.polimi.ingsw.PSP47.View.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChallengerController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 39)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 149)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP47.View.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP47.Enumerations.GodName;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP47.View.ViewObservable;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP47.Visitor.VisitableListOfGods;
+<i>6</i>&nbsp;import javafx.event.ActionEvent;
+<i>7</i>&nbsp;import javafx.fxml.FXML;
+<i>8</i>&nbsp;import javafx.scene.control.CheckBox;
+<i>9</i>&nbsp;import javafx.scene.effect.DropShadow;
+<i>10</i>&nbsp;import javafx.scene.image.ImageView;
+<i>11</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>12</i>&nbsp;import javafx.scene.layout.AnchorPane;
+<i>13</i>&nbsp;import javafx.scene.layout.BorderPane;
+<i>14</i>&nbsp;import javafx.scene.text.Text;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.util.ArrayList;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;/**
+<i>19</i>&nbsp; * This class is the controller of the challenger.fxml scene.
+<i>20</i>&nbsp; * In this scene are chosen the gods that will be used during the game and the player
+<i>21</i>&nbsp; * who will play first during the turn.
+<i>22</i>&nbsp; */
+<b class="nc"><i>23</i>&nbsp;public class ChallengerController extends ViewObservable {</b>
+<i>24</i>&nbsp;
+<b class="nc"><i>25</i>&nbsp;    private ArrayList&lt;GodName&gt; godNames = new ArrayList&lt;&gt;();</b>
+<i>26</i>&nbsp;    private int numberOfPlayers;
+<b class="nc"><i>27</i>&nbsp;    private String chosenPlayer = null;</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    @FXML
+<i>30</i>&nbsp;    private AnchorPane mainPane;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    @FXML
+<i>33</i>&nbsp;    private ImageView Apollo;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    @FXML
+<i>36</i>&nbsp;    private ImageView Athena;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    @FXML
+<i>39</i>&nbsp;    private ImageView Artemis;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    @FXML
+<i>42</i>&nbsp;    private ImageView Atlas;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    @FXML
+<i>45</i>&nbsp;    private ImageView Chronus;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    @FXML
+<i>48</i>&nbsp;    private ImageView Demeter;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    @FXML
+<i>51</i>&nbsp;    private ImageView Hephaestus;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    @FXML
+<i>54</i>&nbsp;    private ImageView Hera;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    @FXML
+<i>57</i>&nbsp;    private ImageView Hestia;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    @FXML
+<i>60</i>&nbsp;    private ImageView Minotaur;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    @FXML
+<i>63</i>&nbsp;    private ImageView Pan;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    @FXML
+<i>66</i>&nbsp;    private ImageView Prometheus;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    @FXML
+<i>69</i>&nbsp;    private ImageView Triton;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    @FXML
+<i>72</i>&nbsp;    private ImageView Zeus;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    @FXML
+<i>75</i>&nbsp;    private Text godPower;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    @FXML
+<i>78</i>&nbsp;    private CheckBox first;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    @FXML
+<i>81</i>&nbsp;    private CheckBox second;
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    @FXML
+<i>84</i>&nbsp;    private CheckBox third;
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * This method makes empty the text on the bottom of the scene and deletes the shadow effect on every card.
+<i>88</i>&nbsp;     * @param event the exit of the mouse from a card area.
+<i>89</i>&nbsp;     */
+<i>90</i>&nbsp;    @FXML
+<i>91</i>&nbsp;    void exit(MouseEvent event) {
+<b class="nc"><i>92</i>&nbsp;        godPower.setText(&quot;&quot;);</b>
+<b class="nc"><i>93</i>&nbsp;        Apollo.setEffect(null);</b>
+<b class="nc"><i>94</i>&nbsp;        Artemis.setEffect(null);</b>
+<b class="nc"><i>95</i>&nbsp;        Athena.setEffect(null);</b>
+<b class="nc"><i>96</i>&nbsp;        Atlas.setEffect(null);</b>
+<b class="nc"><i>97</i>&nbsp;        Chronus.setEffect(null);</b>
+<b class="nc"><i>98</i>&nbsp;        Demeter.setEffect(null);</b>
+<b class="nc"><i>99</i>&nbsp;        Hephaestus.setEffect(null);</b>
+<b class="nc"><i>100</i>&nbsp;        Hera.setEffect(null);</b>
+<b class="nc"><i>101</i>&nbsp;        Hestia.setEffect(null);</b>
+<b class="nc"><i>102</i>&nbsp;        Minotaur.setEffect(null);</b>
+<b class="nc"><i>103</i>&nbsp;        Pan.setEffect(null);</b>
+<b class="nc"><i>104</i>&nbsp;        Prometheus.setEffect(null);</b>
+<b class="nc"><i>105</i>&nbsp;        Triton.setEffect(null);</b>
+<b class="nc"><i>106</i>&nbsp;        Zeus.setEffect(null);</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    /**
+<i>110</i>&nbsp;     * This method sets a shadow Effect on the Apollo Card and print his power on the bottom of the scene.
+<i>111</i>&nbsp;     * @param event the enter of the mouse in the Apollo card.
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    @FXML
+<i>114</i>&nbsp;    void onApollo(MouseEvent event) {
+<b class="nc"><i>115</i>&nbsp;        Apollo.setEffect(new DropShadow());</b>
+<b class="nc"><i>116</i>&nbsp;        godPower.setText(&quot;Apollo – You may move your worker onto a space occupied by an opponent’s builder. Their builder will be moved to the space your builder was just on.&quot;);</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    /**
+<i>120</i>&nbsp;     * This method sets a shadow Effect on the Artemis Card and print his power on the bottom of the scene.
+<i>121</i>&nbsp;     * @param event the enter of the mouse in the Artemis card.
+<i>122</i>&nbsp;     */
+<i>123</i>&nbsp;    @FXML
+<i>124</i>&nbsp;    void onArtemis(MouseEvent event) {
+<b class="nc"><i>125</i>&nbsp;        Artemis.setEffect(new DropShadow());</b>
+<b class="nc"><i>126</i>&nbsp;        godPower.setText(&quot;Artemis – You may move your builders two spaces but you may not move back to the space you started your turn on.&quot;);</b>
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    /**
+<i>130</i>&nbsp;     * This method sets a shadow Effect on the Athena Card and print his power on the bottom of the scene.
+<i>131</i>&nbsp;     * @param event the enter of the mouse in the Athena card.
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    @FXML
+<i>134</i>&nbsp;    void onAthena(MouseEvent event) {
+<b class="nc"><i>135</i>&nbsp;        Athena.setEffect(new DropShadow());</b>
+<b class="nc"><i>136</i>&nbsp;        godPower.setText(&quot;Athena – If you moved one of your workers up one level on your previous turn, your opponent may not move up a level on their turn.&quot;);</b>
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    /**
+<i>140</i>&nbsp;     * This method sets a shadow Effect on the Atlas Card and print his power on the bottom of the scene.
+<i>141</i>&nbsp;     * @param event the enter of the mouse in the Atlas card.
+<i>142</i>&nbsp;     */
+<i>143</i>&nbsp;    @FXML
+<i>144</i>&nbsp;    void onAtlas(MouseEvent event) {
+<b class="nc"><i>145</i>&nbsp;        Atlas.setEffect(new DropShadow());</b>
+<b class="nc"><i>146</i>&nbsp;        godPower.setText(&quot;Atlas – Your builders can build a dome on any level including the ground.&quot;);</b>
+<i>147</i>&nbsp;    }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    /**
+<i>150</i>&nbsp;     * This method sets a shadow Effect on the Chronus Card and print his power on the bottom of the scene.
+<i>151</i>&nbsp;     * @param event the enter of the mouse in the Chronus card.
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    @FXML
+<i>154</i>&nbsp;    void onChronus(MouseEvent event) {
+<b class="nc"><i>155</i>&nbsp;        Chronus.setEffect(new DropShadow());</b>
+<b class="nc"><i>156</i>&nbsp;        godPower.setText(&quot;Chronus - You also win when there are at least five complete Towers on the board.&quot;+</b>
+<i>157</i>&nbsp;                &quot;[NOT AVAILABLE IN THREE PLAYERS]&quot;);
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    }
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;    /**
+<i>162</i>&nbsp;     * This method sets a shadow Effect on the Demeter Card and print his power on the bottom of the scene.
+<i>163</i>&nbsp;     * @param event the enter of the mouse in the Demeter card.
+<i>164</i>&nbsp;     */
+<i>165</i>&nbsp;    @FXML
+<i>166</i>&nbsp;    void onDemeter(MouseEvent event) {
+<b class="nc"><i>167</i>&nbsp;        Demeter.setEffect(new DropShadow());</b>
+<b class="nc"><i>168</i>&nbsp;        godPower.setText(&quot;Demeter – Your builders can build twice on your turn, but may not build twice on the same space.&quot;);</b>
+<i>169</i>&nbsp;    }
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    /**
+<i>172</i>&nbsp;     * This method sets a shadow Effect on the Hephaestus Card and print his power on the bottom of the scene.
+<i>173</i>&nbsp;     * @param event the enter of the mouse in the Hephaestus card.
+<i>174</i>&nbsp;     */
+<i>175</i>&nbsp;    @FXML
+<i>176</i>&nbsp;    void onHephaestus(MouseEvent event) {
+<b class="nc"><i>177</i>&nbsp;        Hephaestus.setEffect(new DropShadow());</b>
+<b class="nc"><i>178</i>&nbsp;        godPower.setText(&quot;Hephaestus – Your builders can build twice on the same space. They may not use this ability to place a dome though.&quot;);</b>
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;    }
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * This method sets a shadow Effect on the Hera Card and print his power on the bottom of the scene.
+<i>184</i>&nbsp;     * @param event the enter of the mouse in the Hera card.
+<i>185</i>&nbsp;     */
+<i>186</i>&nbsp;    @FXML
+<i>187</i>&nbsp;    void onHera(MouseEvent event) {
+<b class="nc"><i>188</i>&nbsp;        Hera.setEffect(new DropShadow());</b>
+<b class="nc"><i>189</i>&nbsp;        godPower.setText(&quot;Hera - An opponent cannot win by moving on to a perimeter space.&quot;);</b>
+<i>190</i>&nbsp;    }
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    /**
+<i>193</i>&nbsp;     * This method sets a shadow Effect on the Hestia Card and print his power on the bottom of the scene.
+<i>194</i>&nbsp;     * @param event the enter of the mouse in the Hestia card.
+<i>195</i>&nbsp;     */
+<i>196</i>&nbsp;    @FXML
+<i>197</i>&nbsp;    void onHestia(MouseEvent event) {
+<b class="nc"><i>198</i>&nbsp;        Hestia.setEffect(new DropShadow());</b>
+<b class="nc"><i>199</i>&nbsp;        godPower.setText(&quot;Hestia - Your worker may build one additional time. The additional build cannot be on a perimeter space.&quot;);</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    /**
+<i>203</i>&nbsp;     * This method sets a shadow Effect on the Minotaur Card and print his power on the bottom of the scene.
+<i>204</i>&nbsp;     * @param event the enter of the mouse in the Minotaur card.
+<i>205</i>&nbsp;     */
+<i>206</i>&nbsp;    @FXML
+<i>207</i>&nbsp;    void onMinotaur(MouseEvent event) {
+<b class="nc"><i>208</i>&nbsp;        Minotaur.setEffect(new DropShadow());</b>
+<b class="nc"><i>209</i>&nbsp;        godPower.setText(&quot;Minotaur – You may move your builder onto a space occupied by an opponent’s builder if the next space in the same direction is unoccupied. You will push the other player’s builder into the next space in the same direction.&quot;);</b>
+<i>210</i>&nbsp;    }
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    /**
+<i>213</i>&nbsp;     * This method sets a shadow Effect on the Pan Card and print his power on the bottom of the scene.
+<i>214</i>&nbsp;     * @param event the enter of the mouse in the Pan card.
+<i>215</i>&nbsp;     */
+<i>216</i>&nbsp;    @FXML
+<i>217</i>&nbsp;    void onPan(MouseEvent event) {
+<b class="nc"><i>218</i>&nbsp;        Pan.setEffect(new DropShadow());</b>
+<b class="nc"><i>219</i>&nbsp;        godPower.setText(&quot;Pan – If one of your builders moves down two spaces in one movement you will automatically win the game.&quot;);</b>
+<i>220</i>&nbsp;    }
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    /**
+<i>223</i>&nbsp;     * This method sets a shadow Effect on the Prometheus Card and print his power on the bottom of the scene.
+<i>224</i>&nbsp;     * @param event the enter of the mouse in the Prometheus card.
+<i>225</i>&nbsp;     */
+<i>226</i>&nbsp;    @FXML
+<i>227</i>&nbsp;    void onPrometheus(MouseEvent event) {
+<b class="nc"><i>228</i>&nbsp;        Prometheus.setEffect(new DropShadow());</b>
+<b class="nc"><i>229</i>&nbsp;        godPower.setText(&quot;Prometheus – If you don’t move up a level during your turn you may build before and after you move.&quot;);</b>
+<i>230</i>&nbsp;    }
+<i>231</i>&nbsp;
+<i>232</i>&nbsp;    /**
+<i>233</i>&nbsp;     * This method sets a shadow Effect on the Triton Card and print his power on the bottom of the scene.
+<i>234</i>&nbsp;     * @param event the enter of the mouse in the Triton card.
+<i>235</i>&nbsp;     */
+<i>236</i>&nbsp;    @FXML
+<i>237</i>&nbsp;    void onTriton(MouseEvent event) {
+<b class="nc"><i>238</i>&nbsp;        Triton.setEffect(new DropShadow());</b>
+<b class="nc"><i>239</i>&nbsp;        godPower.setText(&quot;Triton - Each time your Worker moves onto a perimeter space (ground or block), it may immediately move again.&quot;);</b>
+<i>240</i>&nbsp;    }
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;    /**
+<i>243</i>&nbsp;     * This method sets a shadow Effect on the Zeus Card and print his power on the bottom of the scene.
+<i>244</i>&nbsp;     * @param event the enter of the mouse in the Zeus card.
+<i>245</i>&nbsp;     */
+<i>246</i>&nbsp;    @FXML
+<i>247</i>&nbsp;    void onZeus(MouseEvent event) {
+<b class="nc"><i>248</i>&nbsp;        Zeus.setEffect(new DropShadow());</b>
+<b class="nc"><i>249</i>&nbsp;        godPower.setText(&quot;Zeus - your Worker may build under itself in its current space, forcing it up one level. You do not win by forcing yourself up the 3rd level.&quot;);</b>
+<i>250</i>&nbsp;    }
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;    /**
+<i>253</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>254</i>&nbsp;     * If they are not, it adds Apollo on the list.
+<i>255</i>&nbsp;     * @param event the click of the mouse on the Apollo card.
+<i>256</i>&nbsp;     */
+<i>257</i>&nbsp;    @FXML
+<i>258</i>&nbsp;    void selectApollo(MouseEvent event) {
+<b class="nc"><i>259</i>&nbsp;        if (checkIfYetChose())</b>
+<i>260</i>&nbsp;            return;
+<b class="nc"><i>261</i>&nbsp;        if (!godNames.contains(GodName.APOLLO)) {</b>
+<b class="nc"><i>262</i>&nbsp;            godNames.add(GodName.APOLLO);</b>
+<b class="nc"><i>263</i>&nbsp;            Apollo.setDisable(true);</b>
+<b class="nc"><i>264</i>&nbsp;            notifyAndWait();</b>
+<i>265</i>&nbsp;        }
+<i>266</i>&nbsp;    }
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    /**
+<i>269</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>270</i>&nbsp;     * If they are not, it adds Artemis on the list.
+<i>271</i>&nbsp;     * @param event the click of the mouse on the Artemis card.
+<i>272</i>&nbsp;     */
+<i>273</i>&nbsp;    @FXML
+<i>274</i>&nbsp;    void selectArtemis(MouseEvent event) {
+<b class="nc"><i>275</i>&nbsp;        if (checkIfYetChose())</b>
+<i>276</i>&nbsp;            return;
+<b class="nc"><i>277</i>&nbsp;        if (!godNames.contains(GodName.ARTEMIS)) {</b>
+<b class="nc"><i>278</i>&nbsp;            godNames.add(GodName.ARTEMIS);</b>
+<b class="nc"><i>279</i>&nbsp;            Artemis.setDisable(true);</b>
+<b class="nc"><i>280</i>&nbsp;            notifyAndWait();</b>
+<i>281</i>&nbsp;        }
+<i>282</i>&nbsp;    }
+<i>283</i>&nbsp;
+<i>284</i>&nbsp;    /**
+<i>285</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>286</i>&nbsp;     * If they are not, it adds Athena on the list.
+<i>287</i>&nbsp;     * @param event the click of the mouse on the Athena card.
+<i>288</i>&nbsp;     */
+<i>289</i>&nbsp;    @FXML
+<i>290</i>&nbsp;    void selectAthena(MouseEvent event) {
+<b class="nc"><i>291</i>&nbsp;        if (checkIfYetChose())</b>
+<i>292</i>&nbsp;            return;
+<b class="nc"><i>293</i>&nbsp;        if (!godNames.contains(GodName.ATHENA)) {</b>
+<b class="nc"><i>294</i>&nbsp;            godNames.add(GodName.ATHENA);</b>
+<b class="nc"><i>295</i>&nbsp;            Athena.setDisable(true);</b>
+<b class="nc"><i>296</i>&nbsp;            notifyAndWait();</b>
+<i>297</i>&nbsp;        }
+<i>298</i>&nbsp;    }
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;    /**
+<i>301</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>302</i>&nbsp;     * If they are not, it adds Atlas on the list.
+<i>303</i>&nbsp;     * @param event the click of the mouse on the Atlas card.
+<i>304</i>&nbsp;     */
+<i>305</i>&nbsp;    @FXML
+<i>306</i>&nbsp;    void selectAtlas(MouseEvent event) {
+<b class="nc"><i>307</i>&nbsp;        if (checkIfYetChose())</b>
+<i>308</i>&nbsp;            return;
+<b class="nc"><i>309</i>&nbsp;        if (!godNames.contains(GodName.ATLAS)) {</b>
+<b class="nc"><i>310</i>&nbsp;            godNames.add(GodName.ATLAS);</b>
+<b class="nc"><i>311</i>&nbsp;            Atlas.setDisable(true);</b>
+<b class="nc"><i>312</i>&nbsp;            notifyAndWait();</b>
+<i>313</i>&nbsp;        }
+<i>314</i>&nbsp;    }
+<i>315</i>&nbsp;
+<i>316</i>&nbsp;    /**
+<i>317</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>318</i>&nbsp;     * If they are not, it adds Chronus on the list.
+<i>319</i>&nbsp;     * @param event the click of the mouse on the Chronus card.
+<i>320</i>&nbsp;     */
+<i>321</i>&nbsp;    @FXML
+<i>322</i>&nbsp;    void selectChronus(MouseEvent event) {
+<b class="nc"><i>323</i>&nbsp;        if (checkIfYetChose())</b>
+<i>324</i>&nbsp;            return;
+<b class="nc"><i>325</i>&nbsp;        if (!godNames.contains(GodName.CHRONUS)) {</b>
+<b class="nc"><i>326</i>&nbsp;            godNames.add(GodName.CHRONUS);</b>
+<b class="nc"><i>327</i>&nbsp;            Chronus.setDisable(true);</b>
+<b class="nc"><i>328</i>&nbsp;            notifyAndWait();</b>
+<i>329</i>&nbsp;        }
+<i>330</i>&nbsp;    }
+<i>331</i>&nbsp;
+<i>332</i>&nbsp;    /**
+<i>333</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>334</i>&nbsp;     * If they are not, it adds Demeter on the list.
+<i>335</i>&nbsp;     * @param event the click of the mouse on the Demeter card.
+<i>336</i>&nbsp;     */
+<i>337</i>&nbsp;    @FXML
+<i>338</i>&nbsp;    void selectDemeter(MouseEvent event) {
+<b class="nc"><i>339</i>&nbsp;        if (checkIfYetChose())</b>
+<i>340</i>&nbsp;            return;
+<b class="nc"><i>341</i>&nbsp;        if (!godNames.contains(GodName.DEMETER)) {</b>
+<b class="nc"><i>342</i>&nbsp;            godNames.add(GodName.DEMETER);</b>
+<b class="nc"><i>343</i>&nbsp;            Demeter.setDisable(true);</b>
+<b class="nc"><i>344</i>&nbsp;            notifyAndWait();</b>
+<i>345</i>&nbsp;        }
+<i>346</i>&nbsp;    }
+<i>347</i>&nbsp;
+<i>348</i>&nbsp;    /**
+<i>349</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>350</i>&nbsp;     * If they are not, it adds Hephaestus on the list.
+<i>351</i>&nbsp;     * @param event the click of the mouse on the Hephaestus card.
+<i>352</i>&nbsp;     */
+<i>353</i>&nbsp;    @FXML
+<i>354</i>&nbsp;    void selectHephaestus(MouseEvent event) {
+<b class="nc"><i>355</i>&nbsp;        if (checkIfYetChose())</b>
+<i>356</i>&nbsp;            return;
+<b class="nc"><i>357</i>&nbsp;        if (!godNames.contains(GodName.HEPHAESTUS)) {</b>
+<b class="nc"><i>358</i>&nbsp;            godNames.add(GodName.HEPHAESTUS);</b>
+<b class="nc"><i>359</i>&nbsp;            Hephaestus.setDisable(true);</b>
+<b class="nc"><i>360</i>&nbsp;            notifyAndWait();</b>
+<i>361</i>&nbsp;        }
+<i>362</i>&nbsp;    }
+<i>363</i>&nbsp;
+<i>364</i>&nbsp;    /**
+<i>365</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>366</i>&nbsp;     * If they are not, it adds Hera on the list.
+<i>367</i>&nbsp;     * @param event the click of the mouse on the Hera card.
+<i>368</i>&nbsp;     */
+<i>369</i>&nbsp;    @FXML
+<i>370</i>&nbsp;    void selectHera(MouseEvent event) {
+<b class="nc"><i>371</i>&nbsp;        if (checkIfYetChose())</b>
+<i>372</i>&nbsp;            return;
+<b class="nc"><i>373</i>&nbsp;        if (!godNames.contains(GodName.HERA)) {</b>
+<b class="nc"><i>374</i>&nbsp;            godNames.add(GodName.HERA);</b>
+<b class="nc"><i>375</i>&nbsp;            Hera.setDisable(true);</b>
+<b class="nc"><i>376</i>&nbsp;            notifyAndWait();</b>
+<i>377</i>&nbsp;        }
+<i>378</i>&nbsp;    }
+<i>379</i>&nbsp;
+<i>380</i>&nbsp;    /**
+<i>381</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>382</i>&nbsp;     * If they are not, it adds Hestia on the list.
+<i>383</i>&nbsp;     * @param event the click of the mouse on the Hestia card.
+<i>384</i>&nbsp;     */
+<i>385</i>&nbsp;    @FXML
+<i>386</i>&nbsp;    void selectHestia(MouseEvent event) {
+<b class="nc"><i>387</i>&nbsp;        if (checkIfYetChose())</b>
+<i>388</i>&nbsp;            return;
+<b class="nc"><i>389</i>&nbsp;        if (!godNames.contains(GodName.HESTIA)) {</b>
+<b class="nc"><i>390</i>&nbsp;            godNames.add(GodName.HESTIA);</b>
+<b class="nc"><i>391</i>&nbsp;            Hestia.setDisable(true);</b>
+<b class="nc"><i>392</i>&nbsp;            notifyAndWait();</b>
+<i>393</i>&nbsp;        }
+<i>394</i>&nbsp;    }
+<i>395</i>&nbsp;
+<i>396</i>&nbsp;    /**
+<i>397</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>398</i>&nbsp;     * If they are not, it adds Minotaur on the list.
+<i>399</i>&nbsp;     * @param event the click of the mouse on the Minotaur card.
+<i>400</i>&nbsp;     */
+<i>401</i>&nbsp;    @FXML
+<i>402</i>&nbsp;    void selectMinotaur(MouseEvent event) {
+<b class="nc"><i>403</i>&nbsp;        if (checkIfYetChose())</b>
+<i>404</i>&nbsp;            return;
+<b class="nc"><i>405</i>&nbsp;        if (!godNames.contains(GodName.MINOTAUR)) {</b>
+<b class="nc"><i>406</i>&nbsp;            godNames.add(GodName.MINOTAUR);</b>
+<b class="nc"><i>407</i>&nbsp;            Minotaur.setDisable(true);</b>
+<b class="nc"><i>408</i>&nbsp;            notifyAndWait();</b>
+<i>409</i>&nbsp;        }
+<i>410</i>&nbsp;    }
+<i>411</i>&nbsp;
+<i>412</i>&nbsp;    /**
+<i>413</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>414</i>&nbsp;     * If they are not, it adds Pan on the list.
+<i>415</i>&nbsp;     * @param event the click of the mouse on the Pan card.
+<i>416</i>&nbsp;     */
+<i>417</i>&nbsp;    @FXML
+<i>418</i>&nbsp;    void selectPan(MouseEvent event) {
+<b class="nc"><i>419</i>&nbsp;        if (checkIfYetChose())</b>
+<i>420</i>&nbsp;            return;
+<b class="nc"><i>421</i>&nbsp;        if (!godNames.contains(GodName.PAN)) {</b>
+<b class="nc"><i>422</i>&nbsp;            godNames.add(GodName.PAN);</b>
+<b class="nc"><i>423</i>&nbsp;            Pan.setDisable(true);</b>
+<b class="nc"><i>424</i>&nbsp;            notifyAndWait();</b>
+<i>425</i>&nbsp;        }
+<i>426</i>&nbsp;    }
+<i>427</i>&nbsp;
+<i>428</i>&nbsp;    /**
+<i>429</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>430</i>&nbsp;     * If they are not, it adds Prometheus on the list.
+<i>431</i>&nbsp;     * @param event the click of the mouse on the Prometheus card.
+<i>432</i>&nbsp;     */
+<i>433</i>&nbsp;    @FXML
+<i>434</i>&nbsp;    void selectPrometheus(MouseEvent event) {
+<b class="nc"><i>435</i>&nbsp;        if (checkIfYetChose())</b>
+<i>436</i>&nbsp;            return;
+<b class="nc"><i>437</i>&nbsp;        if (!godNames.contains(GodName.PROMETHEUS)) {</b>
+<b class="nc"><i>438</i>&nbsp;            godNames.add(GodName.PROMETHEUS);</b>
+<b class="nc"><i>439</i>&nbsp;            Prometheus.setDisable(true);</b>
+<b class="nc"><i>440</i>&nbsp;            notifyAndWait();</b>
+<i>441</i>&nbsp;        }
+<i>442</i>&nbsp;    }
+<i>443</i>&nbsp;
+<i>444</i>&nbsp;    /**
+<i>445</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>446</i>&nbsp;     * If they are not, it adds Triton on the list.
+<i>447</i>&nbsp;     * @param event the click of the mouse on the Triton card.
+<i>448</i>&nbsp;     */
+<i>449</i>&nbsp;    @FXML
+<i>450</i>&nbsp;    void selectTriton(MouseEvent event) {
+<b class="nc"><i>451</i>&nbsp;        if (checkIfYetChose())</b>
+<i>452</i>&nbsp;            return;
+<b class="nc"><i>453</i>&nbsp;        if (!godNames.contains(GodName.TRITON)) {</b>
+<b class="nc"><i>454</i>&nbsp;            godNames.add(GodName.TRITON);</b>
+<b class="nc"><i>455</i>&nbsp;            Triton.setDisable(true);</b>
+<b class="nc"><i>456</i>&nbsp;            notifyAndWait();</b>
+<i>457</i>&nbsp;        }
+<i>458</i>&nbsp;    }
+<i>459</i>&nbsp;
+<i>460</i>&nbsp;    /**
+<i>461</i>&nbsp;     * This method controls if the gods has already been chosen.
+<i>462</i>&nbsp;     * If they are not, it adds Zeus on the list.
+<i>463</i>&nbsp;     * @param event the click of the mouse on the Zeus card.
+<i>464</i>&nbsp;     */
+<i>465</i>&nbsp;    @FXML
+<i>466</i>&nbsp;    void selectZeus(MouseEvent event) {
+<b class="nc"><i>467</i>&nbsp;        if (checkIfYetChose())</b>
+<i>468</i>&nbsp;            return;
+<b class="nc"><i>469</i>&nbsp;        if (!godNames.contains(GodName.ZEUS)) {</b>
+<b class="nc"><i>470</i>&nbsp;            godNames.add(GodName.ZEUS);</b>
+<b class="nc"><i>471</i>&nbsp;            Zeus.setDisable(true);</b>
+<b class="nc"><i>472</i>&nbsp;            notifyAndWait();</b>
+<i>473</i>&nbsp;        }
+<i>474</i>&nbsp;    }
+<i>475</i>&nbsp;
+<i>476</i>&nbsp;    /**
+<i>477</i>&nbsp;     * This method handles the click on the first player in the checkbox.
+<i>478</i>&nbsp;     * @param event the click of the mouse in the checkbox.
+<i>479</i>&nbsp;     */
+<i>480</i>&nbsp;    @FXML
+<i>481</i>&nbsp;    void OnTheFirst(ActionEvent event) {
+<b class="nc"><i>482</i>&nbsp;        if (first.isSelected()) {</b>
+<b class="nc"><i>483</i>&nbsp;            second.setSelected(false);</b>
+<b class="nc"><i>484</i>&nbsp;            third.setSelected(false);</b>
+<b class="nc"><i>485</i>&nbsp;            chosenPlayer = first.getText();</b>
+<i>486</i>&nbsp;        }
+<b class="nc"><i>487</i>&nbsp;        notifyAndWait();</b>
+<i>488</i>&nbsp;    }
+<i>489</i>&nbsp;
+<i>490</i>&nbsp;    /**
+<i>491</i>&nbsp;     * This method handles the click on the second player in the checkbox.
+<i>492</i>&nbsp;     * @param event the click of the mouse in the checkbox.
+<i>493</i>&nbsp;     */
+<i>494</i>&nbsp;    @FXML
+<i>495</i>&nbsp;    void OnTheSecond(ActionEvent event) {
+<b class="nc"><i>496</i>&nbsp;        if (second.isSelected()) {</b>
+<b class="nc"><i>497</i>&nbsp;            first.setSelected(false);</b>
+<b class="nc"><i>498</i>&nbsp;            third.setSelected(false);</b>
+<b class="nc"><i>499</i>&nbsp;            chosenPlayer = second.getText();</b>
+<i>500</i>&nbsp;        }
+<b class="nc"><i>501</i>&nbsp;        notifyAndWait();</b>
+<i>502</i>&nbsp;    }
+<i>503</i>&nbsp;
+<i>504</i>&nbsp;    /**
+<i>505</i>&nbsp;     * This method handles the click on the third player in the checkbox.
+<i>506</i>&nbsp;     * @param event the click of the mouse in the checkbox.
+<i>507</i>&nbsp;     */
+<i>508</i>&nbsp;    @FXML
+<i>509</i>&nbsp;    void OnTheThird(ActionEvent event) {
+<b class="nc"><i>510</i>&nbsp;        if (third.isSelected()) {</b>
+<b class="nc"><i>511</i>&nbsp;            second.setSelected(false);</b>
+<b class="nc"><i>512</i>&nbsp;            first.setSelected(false);</b>
+<b class="nc"><i>513</i>&nbsp;            chosenPlayer = third.getText();</b>
+<i>514</i>&nbsp;        }
+<b class="nc"><i>515</i>&nbsp;        notifyAndWait();</b>
+<i>516</i>&nbsp;    }
+<i>517</i>&nbsp;
+<i>518</i>&nbsp;    /**
+<i>519</i>&nbsp;     * This method sets the name of the first player.
+<i>520</i>&nbsp;     * @param firstPlayer the username of the player.
+<i>521</i>&nbsp;     */
+<i>522</i>&nbsp;    void setFirstPlayer(String firstPlayer) {
+<b class="nc"><i>523</i>&nbsp;        first.setText(firstPlayer);</b>
+<i>524</i>&nbsp;    }
+<i>525</i>&nbsp;
+<i>526</i>&nbsp;    /**
+<i>527</i>&nbsp;     * This method sets the name of the second player.
+<i>528</i>&nbsp;     * @param secondPlayer the username of the player.
+<i>529</i>&nbsp;     */
+<i>530</i>&nbsp;    void setSecondPlayer(String secondPlayer) {
+<b class="nc"><i>531</i>&nbsp;        second.setText(secondPlayer);</b>
+<i>532</i>&nbsp;    }
+<i>533</i>&nbsp;
+<i>534</i>&nbsp;    /**
+<i>535</i>&nbsp;     * This method sets the name of the first player.
+<i>536</i>&nbsp;     * If it&#39;s null, then the game has only two players, and the checkBox
+<i>537</i>&nbsp;     * became no more visible.
+<i>538</i>&nbsp;     * @param thirdPlayer the username of the player.
+<i>539</i>&nbsp;     */
+<i>540</i>&nbsp;    void setThirdPlayer(String thirdPlayer) {
+<b class="nc"><i>541</i>&nbsp;        if (thirdPlayer != null)</b>
+<b class="nc"><i>542</i>&nbsp;            third.setText(thirdPlayer);</b>
+<i>543</i>&nbsp;        else {
+<b class="nc"><i>544</i>&nbsp;            third.setVisible(false);</b>
+<i>545</i>&nbsp;            // This is graphically useful to eliminate the hole given by the absence of the third player.
+<b class="nc"><i>546</i>&nbsp;            AnchorPane.setRightAnchor(mainPane.getChildren().get(5), 220.0);</b>
+<b class="nc"><i>547</i>&nbsp;            AnchorPane.setLeftAnchor(mainPane.getChildren().get(5), 220.0);</b>
+<i>548</i>&nbsp;        }
+<i>549</i>&nbsp;    }
+<i>550</i>&nbsp;
+<i>551</i>&nbsp;    public void setNumberOfPlayers(int numberOfPlayers) {
+<b class="nc"><i>552</i>&nbsp;        this.numberOfPlayers = numberOfPlayers;</b>
+<i>553</i>&nbsp;    }
+<i>554</i>&nbsp;
+<i>555</i>&nbsp;    /**
+<i>556</i>&nbsp;     * This method checks if all of the parameters have been chosen.
+<i>557</i>&nbsp;     * If they have been, it notifies the networkHandler; otherwise, it does nothing.
+<i>558</i>&nbsp;     */
+<i>559</i>&nbsp;    private void notifyAndWait() {
+<b class="nc"><i>560</i>&nbsp;        if (godNames.size() == numberOfPlayers &amp;&amp; chosenPlayer != null) {</b>
+<b class="nc"><i>561</i>&nbsp;            VisitableListOfGods visitableListOfGods = new VisitableListOfGods();</b>
+<b class="nc"><i>562</i>&nbsp;            visitableListOfGods.setGodNames(godNames);</b>
+<b class="nc"><i>563</i>&nbsp;            visitableListOfGods.setChosenPlayer(chosenPlayer);</b>
+<b class="nc"><i>564</i>&nbsp;            notifyViewListener(visitableListOfGods);</b>
+<b class="nc"><i>565</i>&nbsp;            mainPane.setDisable(true);</b>
+<i>566</i>&nbsp;        }
+<i>567</i>&nbsp;    }
+<i>568</i>&nbsp;
+<i>569</i>&nbsp;    /**
+<i>570</i>&nbsp;     * This method checks if have already been chosen enough cards.
+<i>571</i>&nbsp;     * If they are, the text on the bottom of the scene is set with an advice.
+<i>572</i>&nbsp;     * @return true if the gods have already been chosen, false otherwise.
+<i>573</i>&nbsp;     */
+<i>574</i>&nbsp;    private boolean checkIfYetChose() {
+<b class="nc"><i>575</i>&nbsp;        if (godNames.size() == numberOfPlayers) {</b>
+<b class="nc"><i>576</i>&nbsp;            godPower.setText(&quot;You have already chose enough cards, you can&#39;t select another one&quot;);</b>
+<b class="nc"><i>577</i>&nbsp;            return true;</b>
+<i>578</i>&nbsp;        }
+<b class="nc"><i>579</i>&nbsp;        return false;</b>
+<i>580</i>&nbsp;    }
+<i>581</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 18:37</div>
+</div>
+</body>
+</html>

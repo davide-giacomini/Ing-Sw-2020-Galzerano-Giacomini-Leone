@@ -586,7 +586,7 @@ public class CLI extends ViewObservable implements View  {
     }
 
     public void showEnd(){
-        if (!gameView.isStart() || gameView.isMyTurn() && gameView.getCurrentMoment()!=CurrentMoment.LOSE)
+        if (!gameView.isStart() || gameView.isMyTurn() && (gameView.getCurrentMoment()!=CurrentMoment.LOSE && gameView.getCurrentMoment()!=CurrentMoment.WIN ))
             showErrorMessage("A player disconnected unexpectedly. Game over.\n");
         
         printSupport.printGoodBye(out);
