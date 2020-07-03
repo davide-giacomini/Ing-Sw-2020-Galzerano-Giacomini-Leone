@@ -556,7 +556,6 @@ public class CLI extends ViewObservable implements View  {
         colors = gameView.getColors();
         gods = gameView.getGods();
         printSupport.printUsersAndColorsAndGods(usernames, colors, gods, gameView.getNumberOfPlayers(), out);
-        clearConsole();
     }
 
     /**
@@ -587,6 +586,9 @@ public class CLI extends ViewObservable implements View  {
     }
 
     public void showEnd(){
+        if (!gameView.isStart() || gameView.isMyTurn() && gameView.getCurrentMoment()!=CurrentMoment.LOSE)
+            showErrorMessage("A player disconnected unexpectedly. Game over.\n");
+        
         printSupport.printGoodBye(out);
         System.exit(0);
     }

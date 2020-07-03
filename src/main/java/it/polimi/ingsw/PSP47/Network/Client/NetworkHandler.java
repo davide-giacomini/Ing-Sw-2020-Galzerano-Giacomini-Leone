@@ -117,8 +117,6 @@ public class NetworkHandler implements Runnable, ViewListener {
         }
 
         view.showEnd();
-//        System.out.println(messageExecutor.isShutdown());
-//        System.out.println(messageExecutor.isTerminated());
     }
 
     /**
@@ -137,6 +135,14 @@ public class NetworkHandler implements Runnable, ViewListener {
         @Override
         public void run() {
             switch (message.getMessageType()) {
+                case WINNING:
+                    view.getGameView().updateMoment(CurrentMoment.WIN);
+                    view.theWinnerIs(((ImportantMessage) message).getText());
+                    break;
+                case LOSING:
+                    view.getGameView().updateMoment(CurrentMoment.LOSE);
+                    view.theLoserIs(((ImportantMessage) message).getText());
+                    break;
                 case FIRST_CONNECTION:
                     view.getGameView().updateMoment(CurrentMoment.START);
                     handleFirstConnection();
@@ -188,14 +194,6 @@ public class NetworkHandler implements Runnable, ViewListener {
                     YouAreTheChallenger messageNames = (YouAreTheChallenger) message;
                     ArrayList<String>usernames = messageNames.getUsernames();
                     view.challengerWillChooseThreeGods(usernames);
-                    break;
-                case LOSING:
-                    view.getGameView().updateMoment(CurrentMoment.LOSE);
-                    view.theLoserIs(((ImportantMessage) message).getText());
-                    break;
-                case WINNING:
-                    view.getGameView().updateMoment(CurrentMoment.WIN);
-                    view.theWinnerIs(((ImportantMessage) message).getText());
                     break;
                 case START_GAME:
                     view.getGameView().setStart(true);

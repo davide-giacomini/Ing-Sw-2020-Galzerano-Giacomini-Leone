@@ -89,6 +89,7 @@ After this line, on the terminal it is asked to the user to choose between the C
 or 
 >CLI
 >
+Please note: in order to have a pleasant experience with the CLI use the full screen.
 
 ### Server
 The execution of the server jar is possible through the following command:

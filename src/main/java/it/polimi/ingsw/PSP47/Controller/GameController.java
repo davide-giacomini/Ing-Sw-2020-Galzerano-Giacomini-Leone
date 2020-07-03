@@ -368,6 +368,8 @@ public class GameController implements VirtualViewListener {
         game.setActive(false);
         for (VirtualView view : views) {
             view.sendImportant(username, MessageType.WINNING);
+        }
+        for (VirtualView view : views) {
             view.sendYouAreOutOfTheGame(true);
         }
     }
