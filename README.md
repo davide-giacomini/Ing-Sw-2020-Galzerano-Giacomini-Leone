@@ -1,11 +1,5 @@
 # Final Project of Software Engineering - a.a. 2019-2020
 ![picture](src/main/Resources/Images/ReadMePicture.jpg)
-
-## List of Authors:
-
- - *Galzerano Arianna - Matricola: 886979*
- - *Giacomini Davide - Matricola: 889237*
- - *Leone Monica - Matricola 889321*
  
 ## Getting Started
 This project was developed as a computer version of a game for the final examination of the Software Engineering course at Politecnico di Milano. 
@@ -96,6 +90,12 @@ The execution of the server jar is possible through the following command:
 ```
 java -jar server.jar 
 ```
+
+## List of Authors:
+
+ - *[Arianna Galzerano](https://github.com/arigalzi)*
+ - *[Davide Giacomini](https://github.com/davide-giacomini)*
+ - *[Monica Leone](https://github.com/MonicaLeone)*
 
 ### End
 We wish you a safe journey in our virtual world, please have fun and remember to follow the rules! :)
