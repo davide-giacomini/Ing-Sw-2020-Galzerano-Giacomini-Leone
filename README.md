@@ -96,6 +96,6 @@ java -jar server.jar
  - *[Arianna Galzerano](https://github.com/arigalzi)*
  - *[Davide Giacomini](https://github.com/davide-giacomini)*
  - *[Monica Leone](https://github.com/MonicaLeone)*
-
+ 
 ### End
 We wish you a safe journey in our virtual world, please have fun and remember to follow the rules! :)
